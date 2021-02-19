@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_COM
@@ -62,7 +62,7 @@ line level    source
                   #endif
   52            },//管理员
   53            {
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 2   
 
   54              STR_ID_SETTING,
   55              AUD_ID_SYS_SETTING
@@ -126,7 +126,7 @@ line level    source
  113              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
                   #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 3   
 
  116            },//继续添加请按#，返回请按*
  117            {
@@ -190,7 +190,7 @@ line level    source
  175              AUD_ID_PWD_OLD_NEW_NOT_SAME
  176              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 4   
 
                   #endif
  179            },//新旧密码不能一致
@@ -254,7 +254,7 @@ line level    source
  237              STR_ID_CLR_PWD_CONFIRM,
  238              AUD_ID_CLR_PWD_CONFIRM
  239              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 5   
 
                   ,0xff
                   #endif
@@ -318,7 +318,7 @@ line level    source
  299              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
                   #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 6   
 
  302            },//指纹已满，请联系管理员
  303            {
@@ -382,7 +382,7 @@ line level    source
                   #endif
  362            },//号指纹按#确认删除，取消请按*
  363            {
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 7   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 7   
 
  364              STR_ID_PRESS_DEL_FP_AGAIN,
  365              AUD_ID_PRESS_DEL_FP_AGAIN
@@ -446,7 +446,7 @@ line level    source
                   ,0xff
                   #endif
  425            },//号RF卡添加成功
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 8   
 
  426            {
  427              STR_ID_RFCARD_EXIST,
@@ -510,7 +510,7 @@ line level    source
  485              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
                   #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 9   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 9   
 
  488            },//RF卡不存在，请重新输入
  489            {
@@ -574,7 +574,7 @@ line level    source
  547              STR_ID_INPUT_NEW_ADMIN_PWD_AGAIN,
  548              AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN
  549              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 10  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 10  
 
                   ,0xff
                   #endif
@@ -638,7 +638,7 @@ line level    source
  609            {
  610              STR_ID_CLOSE_PRO_AUDIO_FAIL,
  611              AUD_ID_CLOSE_PRO_AUDIO_FAIL
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 11  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 11  
 
  612              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
@@ -702,7 +702,7 @@ line level    source
  671            },//恢复出厂设置成功
  672            {
  673              STR_ID_RESTORE_FAIL,
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 12  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 12  
 
  674              AUD_ID_RESTORE_FAIL
  675              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -766,7 +766,7 @@ line level    source
                   #endif
  734            },//指纹错误，请重试
  735            {
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 13  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 13  
 
  736              STR_ID_RF_WRONG_TRY,
  737              AUD_ID_RFCARD_WRONG_TRY
@@ -830,7 +830,7 @@ line level    source
                   ,0xff
                   #endif
  797            },//请测试所有按键
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 14  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 14  
 
  798            {
  799              STR_ID_FM_MOTO,
@@ -894,7 +894,7 @@ line level    source
  857              #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
                   #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:29:52 PAGE 15  
+C51 COMPILER V9.59.0.0   MMI_COM                                                           02/19/2021 17:34:46 PAGE 15  
 
  860            },
  861            {

@@ -11,6 +11,7 @@
 #include "mmi_fs.h"
 #include "mmi_bsp.h"
 #include "mmi_motor.h"
+#include "mmi_wifi.h"
 
 static unsigned char g_sys_door_open_flag = 0;
 
@@ -18,6 +19,9 @@ static unsigned int g_timer2_sleep_count = 0;
 static unsigned int g_timer2_count = 0;
 static unsigned int g_timer2_set_count = 0;
 static unsigned char g_timer2_flag = 0;
+
+static unsigned char g_wifi_check_flag = 0;
+static unsigned char g_wifi_check_count = 0;
 
 timer2_delay_pro g_timer2_delay_pro = 0;
 
@@ -31,7 +35,8 @@ timer2_delay_pro g_timer2_delay_pro = 0;
 #define MMI_TIMER_DOOR_OPEN_COUNT	(MMI_TIMER_DOOR_OPEN/MMI_TIMER_BASE_TIME)
 #define MMI_TIMER_MOTOR 	 	300
 #define MMI_TIMER_MOTOR_COUNT	(MMI_TIMER_MOTOR/MMI_TIMER_BASE_TIME)
-
+#define MMI_WIFI_SETTING_DELAY  60000
+#define MMI_WIFI_SETTING_DELAY_COUNT (MMI_WIFI_SETTING_DELAY/MMI_TIMER_BASE_TIME)
 /*
 function: system enter sleep
 parameter: 
@@ -73,9 +78,9 @@ parameter:
 return :
 	none
 */
-void mmi_dq_sys_lock_init_suc(void)
+void mmi_dq_sys_lock_add_admin_suc(void)
 {
-	mmi_dq_fs_set_init_flag(FDS_INIT_LOCK_SUC);
+	mmi_dq_fs_set_admin_status(1);
 	
 	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 }
@@ -152,6 +157,7 @@ void mmi_dq_sys_door_open(sys_open_type type)
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DOOR_OPEN);
 
 	mmi_dq_motor_turn_right();
+	//mmi_dq_wifi_open_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_open_cb);
 }
 
@@ -179,6 +185,7 @@ return :
 void mmi_dq_sys_door_close(void)
 {
 	mmi_dq_motor_turn_back();
+	//mmi_dq_wifi_close_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_close_cb);
 }
 
@@ -212,7 +219,7 @@ void mmi_dq_sys_time_out_handle(void)
 	}
 	else if(state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2)
 	{
-		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+		if(mmi_dq_fs_get_admin_status() == 0)
 			g_timer2_sleep_count = 0;
 		else
 		{
@@ -222,7 +229,7 @@ void mmi_dq_sys_time_out_handle(void)
 	}
 	else if(state == SYS_STATUS_ADD_ADMIN_PWD)
 	{
-		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+		if(mmi_dq_fs_get_admin_status() == 0)
 		{
 			g_timer2_sleep_count = 0;
 			mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD);
@@ -253,10 +260,19 @@ void timer2_event_handler(void)
 		g_timer2_count++;
 		if(g_timer2_count >= g_timer2_set_count)
 		{
-			//dqiot_drv_timer2_stop();
 			g_timer2_flag = 2;
 			g_timer2_count = 0;
 			//mmi_dq_ms_set_msg_que(QUE_EVENT_TIMER_END,QUE_PRO_LOW,0);
+		}
+	}
+
+	if(g_wifi_check_flag == 1)
+	{
+		g_wifi_check_count++;
+		if(g_wifi_check_count >= 4)
+		{
+			g_wifi_check_flag = 2;
+			g_wifi_check_count = 0;
 		}
 	}
 	
@@ -293,6 +309,36 @@ parameter:
 return :
 	none
 */
+unsigned char mmi_dq_sys_get_wifi_check_flag(void)
+{
+	if(g_wifi_check_flag == 2)
+	{
+		g_wifi_check_flag = 0;
+		return 1;
+	}
+	return 0;
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_set_wifi_check(void)
+{
+	g_wifi_check_count = 0;
+	g_wifi_check_flag = 1;
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
 void mmi_dq_sys_sleep_timer_reset(void)
 {
 	g_timer2_sleep_count = 0;
@@ -316,6 +362,7 @@ unsigned char mmi_dq_sys_get_timer2_flag(void)
 	}
 	return 0;
 }
+
 /*
 function: 
 parameter: 
@@ -699,13 +746,38 @@ void mmi_dq_sys_restore_lock(void)
 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK);
 }
 
-
+/*
+parameter: 
+	none
+return :
+	none
+*/
 static void mmi_dq_sys_restore_lock_con(void)
 {
 	mmi_dq_aud_play_with_id(AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM);
 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK_CON);
 }
 
+/*
+parameter: 
+	none
+return :
+	none
+*/
+static void mmi_dq_sys_wifi_setting(void)
+{
+	if(0 == mmi_dq_wifi_setting())
+	{
+		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+		mmi_dq_sys_set_wifi_check();
+	}
+}
 
 typedef struct sys_menu_t
 {
@@ -732,9 +804,7 @@ const sys_menu_t sys_menu_tree[] =
 	{STR_ID_SYSTEM,STR_ID_ADMIN,0},
 	{STR_ID_SYSTEM,STR_ID_SETTING,0},
 	{STR_ID_SYSTEM,STR_ID_RESTORE,mmi_dq_sys_restore_lock},
-#ifdef __PREIPHERAL_WIFI_UH010_SUPPORT__
-	{STR_ID_SYSTEM,STR_ID_WIFI,mmi_dq_wifi_setting},
-#endif
+	{STR_ID_SYSTEM,STR_ID_WIFI,mmi_dq_sys_wifi_setting},
 	
 
 	{STR_ID_SYSTEM2,STR_ID_ADMIN,0},

@@ -28,6 +28,25 @@ parameter:
 return :
 	none
 */
+void dqiot_drv_key_led_gpio_deinit(void)
+{
+	gpio_init(KEY_LED_1_PORT,KEY_LED_1_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_init(KEY_LED_2_PORT,KEY_LED_2_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_init(KEY_LED_3_PORT,KEY_LED_3_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
+	gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
+	gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
+
+	return;
+}
+
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
 void dqiot_drv_key_led_on(void)
 {
 	gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
@@ -69,6 +88,25 @@ void dqiot_drv_rgb_led_gpio_init(void)
 
 	return;
 }
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void dqiot_drv_rgb_led_gpio_deinit(void)
+{
+	gpio_init(RGB_LED_R_PORT,RGB_LED_R_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_init(RGB_LED_G_PORT,RGB_LED_G_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_init(RGB_LED_B_PORT,RGB_LED_B_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(RGB_LED_R_PORT,RGB_LED_R_PIN);
+	gpio_bit_reset(RGB_LED_G_PORT,RGB_LED_G_PIN);
+	gpio_bit_reset(RGB_LED_B_PORT,RGB_LED_B_PIN);
+
+	return;
+}
+
 
 /*
 parameter: 

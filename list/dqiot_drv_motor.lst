@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:29:47 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:34:40 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_MOTOR
@@ -41,13 +41,13 @@ line level    source
   30          */
   31          void dqiot_drv_motor_gpio_deinit(void)
   32          {
-  33   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_OUT);
+  33   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_IN_FLOATING);
   34   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
   35   1      
-  36   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_OUT);
+  36   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_IN_FLOATING);
   37   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
   38   1      
-  39   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_OUT);
+  39   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_IN_FLOATING);
   40   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
   41   1        return;
   42   1      }
@@ -62,7 +62,7 @@ line level    source
   51          void dqiot_drv_motor_init(void)
   52          {
   53   1        
-C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:29:47 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:34:40 PAGE 2   
 
   54   1        return;
   55   1      }
@@ -114,7 +114,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    160    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

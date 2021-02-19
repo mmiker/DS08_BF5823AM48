@@ -47,13 +47,13 @@ return :
 */
 void dqiot_drv_audio_gpio_deinit(void)
 {
-	gpio_init(AUD_BUSY_PORT,AUD_BUSY_PIN,GPIO_MODE_OUT);
+	gpio_init(AUD_BUSY_PORT,AUD_BUSY_PIN,GPIO_MODE_IN_FLOATING);
 	gpio_bit_reset(AUD_BUSY_PORT,AUD_BUSY_PIN);
 	
-	gpio_init(AUD_DATA_PORT,AUD_DATA_PIN,GPIO_MODE_OUT);
+	gpio_init(AUD_DATA_PORT,AUD_DATA_PIN,GPIO_MODE_IN_FLOATING);
 	gpio_bit_reset(AUD_DATA_PORT,AUD_DATA_PIN);
 
-	gpio_init(AUD_RST_PORT,AUD_RST_PIN,GPIO_MODE_OUT);
+	gpio_init(AUD_RST_PORT,AUD_RST_PIN,GPIO_MODE_IN_FLOATING);
 	gpio_bit_reset(AUD_RST_PORT,AUD_RST_PIN);
 	
 	return;
@@ -267,11 +267,11 @@ void timer0_event_handler(void)
 		//extern void mmi_dq_sys_aud_end(void);
 		if(audio_cache[0]==0)
 		{
-			audio_flag = 0;
 			audio_section = 0;
 			dqiot_drv_timer0_stop();
 			//mmi_dq_sys_aud_end();
 			audio_play_end_flag = 1;
+			audio_flag = 0;
 		}
 		else
 		{

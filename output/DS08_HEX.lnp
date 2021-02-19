@@ -14,6 +14,8 @@
 ".\output\dqiot_drv_reset.obj",
 ".\output\dqiot_drv_rfid.obj",
 ".\output\dqiot_drv_touch.obj",
+".\output\dqiot_drv_wifi.obj",
+".\output\iic_master.obj",
 ".\byd_api\byd_key_v1.0.3.LIB",
 ".\output\iso14443.obj",
 ".\output\byd_mifare.obj",
@@ -49,7 +51,9 @@
 ".\output\mmi_rfid.obj",
 ".\output\mmi_rst.obj",
 ".\output\mmi_fs.obj",
-".\output\mmi_motor.obj" 
+".\output\mmi_motor.obj",
+".\output\mmi_fm.obj",
+".\output\mmi_wifi.obj" 
 TO ".\output\DS08_HEX" 
 
 PRINT(".\list\DS08_HEX.map") REMOVEUNUSED 

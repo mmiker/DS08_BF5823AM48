@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:29:46 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:34:40 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_LED
@@ -39,95 +39,133 @@ line level    source
   28          return :
   29            none
   30          */
-  31          void dqiot_drv_key_led_on(void)
+  31          void dqiot_drv_key_led_gpio_deinit(void)
   32          {
-  33   1        gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
-  34   1        gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
-  35   1        gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
-  36   1      
-  37   1        return;
-  38   1      }
-  39          
-  40          /*
-  41          parameter: 
-  42            none
-  43          return :
-  44            none
-  45          */
-  46          void dqiot_drv_key_led_off(void)
-  47          {
-  48   1        gpio_bit_set(KEY_LED_1_PORT,KEY_LED_1_PIN);
-  49   1        gpio_bit_set(KEY_LED_2_PORT,KEY_LED_2_PIN);
-  50   1        gpio_bit_set(KEY_LED_3_PORT,KEY_LED_3_PIN);
-  51   1      
-  52   1        return;
-  53   1      }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:29:46 PAGE 2   
+  33   1        gpio_init(KEY_LED_1_PORT,KEY_LED_1_PIN,GPIO_MODE_IN_FLOATING);
+  34   1        gpio_init(KEY_LED_2_PORT,KEY_LED_2_PIN,GPIO_MODE_IN_FLOATING);
+  35   1        gpio_init(KEY_LED_3_PORT,KEY_LED_3_PIN,GPIO_MODE_IN_FLOATING);
+  36   1        gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
+  37   1        gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
+  38   1        gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
+  39   1      
+  40   1        return;
+  41   1      }
+  42          
+  43          
+  44          /*
+  45          parameter: 
+  46            none
+  47          return :
+  48            none
+  49          */
+  50          void dqiot_drv_key_led_on(void)
+  51          {
+  52   1        gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
+  53   1        gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
+C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:34:40 PAGE 2   
 
-  54          
-  55          /*
-  56          parameter: 
-  57            none
-  58          return :
-  59            none
-  60          */
-  61          void dqiot_drv_rgb_led_gpio_init(void)
-  62          {
-  63   1        gpio_init(RGB_LED_R_PORT,RGB_LED_R_PIN,GPIO_MODE_OUT);
-  64   1        gpio_init(RGB_LED_G_PORT,RGB_LED_G_PIN,GPIO_MODE_OUT);
-  65   1        gpio_init(RGB_LED_B_PORT,RGB_LED_B_PIN,GPIO_MODE_OUT);
-  66   1        gpio_bit_reset(RGB_LED_R_PORT,RGB_LED_R_PIN);
-  67   1        gpio_bit_reset(RGB_LED_G_PORT,RGB_LED_G_PIN);
-  68   1        gpio_bit_reset(RGB_LED_B_PORT,RGB_LED_B_PIN);
-  69   1      
-  70   1        return;
-  71   1      }
-  72          
-  73          /*
-  74          parameter: 
-  75            none
-  76          return :
-  77            none
-  78          */
-  79          void dqiot_drv_rgb_led_on(void)
-  80          {
-  81   1        gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
-  82   1        gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
-  83   1        gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
-  84   1      
-  85   1        return;
-  86   1      }
-  87          
-  88          /*
-  89          parameter: 
-  90            none
-  91          return :
-  92            none
-  93          */
-  94          void dqiot_drv_rgb_led_off(void)
-  95          {
-  96   1        gpio_bit_set(KEY_LED_1_PORT,KEY_LED_1_PIN);
-  97   1        gpio_bit_set(KEY_LED_2_PORT,KEY_LED_2_PIN);
-  98   1        gpio_bit_set(KEY_LED_3_PORT,KEY_LED_3_PIN);
-  99   1      
- 100   1        return;
- 101   1      }
- 102          
- 103          #endif
+  54   1        gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
+  55   1      
+  56   1        return;
+  57   1      }
+  58          
+  59          /*
+  60          parameter: 
+  61            none
+  62          return :
+  63            none
+  64          */
+  65          void dqiot_drv_key_led_off(void)
+  66          {
+  67   1        gpio_bit_set(KEY_LED_1_PORT,KEY_LED_1_PIN);
+  68   1        gpio_bit_set(KEY_LED_2_PORT,KEY_LED_2_PIN);
+  69   1        gpio_bit_set(KEY_LED_3_PORT,KEY_LED_3_PIN);
+  70   1      
+  71   1        return;
+  72   1      }
+  73          
+  74          /*
+  75          parameter: 
+  76            none
+  77          return :
+  78            none
+  79          */
+  80          void dqiot_drv_rgb_led_gpio_init(void)
+  81          {
+  82   1        gpio_init(RGB_LED_R_PORT,RGB_LED_R_PIN,GPIO_MODE_OUT);
+  83   1        gpio_init(RGB_LED_G_PORT,RGB_LED_G_PIN,GPIO_MODE_OUT);
+  84   1        gpio_init(RGB_LED_B_PORT,RGB_LED_B_PIN,GPIO_MODE_OUT);
+  85   1        gpio_bit_reset(RGB_LED_R_PORT,RGB_LED_R_PIN);
+  86   1        gpio_bit_reset(RGB_LED_G_PORT,RGB_LED_G_PIN);
+  87   1        gpio_bit_reset(RGB_LED_B_PORT,RGB_LED_B_PIN);
+  88   1      
+  89   1        return;
+  90   1      }
+  91          
+  92          /*
+  93          parameter: 
+  94            none
+  95          return :
+  96            none
+  97          */
+  98          void dqiot_drv_rgb_led_gpio_deinit(void)
+  99          {
+ 100   1        gpio_init(RGB_LED_R_PORT,RGB_LED_R_PIN,GPIO_MODE_IN_FLOATING);
+ 101   1        gpio_init(RGB_LED_G_PORT,RGB_LED_G_PIN,GPIO_MODE_IN_FLOATING);
+ 102   1        gpio_init(RGB_LED_B_PORT,RGB_LED_B_PIN,GPIO_MODE_IN_FLOATING);
+ 103   1        gpio_bit_reset(RGB_LED_R_PORT,RGB_LED_R_PIN);
+ 104   1        gpio_bit_reset(RGB_LED_G_PORT,RGB_LED_G_PIN);
+ 105   1        gpio_bit_reset(RGB_LED_B_PORT,RGB_LED_B_PIN);
+ 106   1      
+ 107   1        return;
+ 108   1      }
+ 109          
+ 110          
+ 111          /*
+ 112          parameter: 
+ 113            none
+ 114          return :
+ 115            none
+C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:34:40 PAGE 3   
+
+ 116          */
+ 117          void dqiot_drv_rgb_led_on(void)
+ 118          {
+ 119   1        gpio_bit_reset(KEY_LED_1_PORT,KEY_LED_1_PIN);
+ 120   1        gpio_bit_reset(KEY_LED_2_PORT,KEY_LED_2_PIN);
+ 121   1        gpio_bit_reset(KEY_LED_3_PORT,KEY_LED_3_PIN);
+ 122   1      
+ 123   1        return;
+ 124   1      }
+ 125          
+ 126          /*
+ 127          parameter: 
+ 128            none
+ 129          return :
+ 130            none
+ 131          */
+ 132          void dqiot_drv_rgb_led_off(void)
+ 133          {
+ 134   1        gpio_bit_set(KEY_LED_1_PORT,KEY_LED_1_PIN);
+ 135   1        gpio_bit_set(KEY_LED_2_PORT,KEY_LED_2_PIN);
+ 136   1        gpio_bit_set(KEY_LED_3_PORT,KEY_LED_3_PIN);
+ 137   1      
+ 138   1        return;
+ 139   1      }
+ 140          
+ 141          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    180    ----
+   CODE SIZE        =    276    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----
    HDATA SIZE       =   ----    ----
-C51 COMPILER V9.59.0.0   DQIOT_DRV_LED                                                     02/19/2021 17:29:46 PAGE 3   
-
    XDATA CONST SIZE =   ----    ----
    FAR CONST SIZE   =   ----    ----
 END OF MODULE INFORMATION.

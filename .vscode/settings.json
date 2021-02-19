@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "mcu02_lvdt.h": "c",
-        "mmi_fps.h": "c",
-        "main.h": "c",
-        "byd_adc.h": "c"
-    }
-}

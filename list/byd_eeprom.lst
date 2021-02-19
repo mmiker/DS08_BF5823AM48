@@ -1,0 +1,117 @@
+C51 COMPILER V9.59.0.0   BYD_EEPROM                                                        01/15/2021 17:11:11 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_EEPROM
+OBJECT MODULE PLACED IN .\output\byd_eeprom.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\byd_eeprom.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include
+                    -;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_
+                    -rfid;.\mmi_inc) DEBUG PRINT(.\list\byd_eeprom.lst) TABS(2) OBJECT(.\output\byd_eeprom.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  byd_eeprom.c
+   3              \brief eeprom app
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-28, V1.0.0, app for byd
+  10          */
+  11          
+  12          #include "byd_eeprom.h"
+  13          
+  14          /*
+  15          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  16          芯片配置字CFG_EEPROM_SEL选择main_block最后1K作为eeprom
+  17          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  18          */
+  19          
+  20          /*!
+  21              \brief      eeprom write example
+  22              \param[in]  none
+  23              \param[out] none
+  24              \retval     none
+  25          */
+  26          ErrStatus byd_eeprom_write(void)
+  27          {
+  28   1          uint8_t ret,j;
+  29   1        uint16_t i;
+  30   1      
+  31   1        eeprom_erase_time(9);
+  32   1      
+  33   1        eeprom_select(0);
+  34   1      
+  35   1        eeprom_erase_page(0);//擦除1K
+  36   1        
+  37   1        for(i=0;i<1024;i++)//写一页
+  38   1        {
+  39   2          ret = eeprom_write_byte(0,i,0xaa);
+  40   2          if(ret==ERROR) 
+  41   2          {
+  42   3            return ERROR;
+  43   3          }
+  44   2        }
+  45   1      
+  46   1      
+  47   1        eeprom_select(1);//选择NVR作为eeprom,总共2*512byte
+  48   1        for(j=0;j<2;j++)
+  49   1        {
+  50   2          eeprom_erase_page(j);//擦除512byte
+  51   2          for(i=0;i<512;i++)//写一页
+  52   2          {
+  53   3            ret = eeprom_write_byte(j,i,i+j);
+C51 COMPILER V9.59.0.0   BYD_EEPROM                                                        01/15/2021 17:11:11 PAGE 2   
+
+  54   3            if(ret==ERROR) 
+  55   3            {
+  56   4              return ERROR;
+  57   4            }
+  58   3          }
+  59   2        }
+  60   1      
+  61   1        return SUCCESS;
+  62   1      }
+  63          
+  64          /*!
+  65              \brief      eeprom read example
+  66              \param[in]  none
+  67              \param[out] none
+  68              \retval     none
+  69          */
+  70          void byd_eeprom_read(uint8_t *pbuf)
+  71          {
+  72   1          uint16_t i;
+  73   1      
+  74   1        eeprom_select(0);
+  75   1        for(i = 0; i < 1024; i++)
+  76   1        {
+  77   2          pbuf[i] = eeprom_read_byte(0,i);//读第一页
+  78   2        }
+  79   1      
+  80   1        eeprom_select(1);
+  81   1        for(i = 0; i < 512; i++)
+  82   1        {
+  83   2          pbuf[i] = eeprom_nvr_read_byte(0,i);//读第一页
+  84   2            pbuf[i+512] = eeprom_nvr_read_byte(1,i);//读第二页
+  85   2        }
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    356    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

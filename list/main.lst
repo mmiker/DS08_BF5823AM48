@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:29:46 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:34:38 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -22,9 +22,9 @@ line level    source
   11          #include "mmi_sys.h"
   12          #include "mmi_audio.h"
   13          #include "mmi_bsp.h"
-  14          //#include "stdio.h"
-  15          
-  16          #define LVDT_EN 1 /* lvdtµçÑ¹¼ì²â */
+  14          #include "mmi_fm.h"
+  15          //#include "stdio.h"
+  16          
   17          #define ADCVDT_EN 1 /* adcµçÑ¹¼ì²â */
   18          
   19          extern uint16_t timer0_count;
@@ -51,89 +51,83 @@ line level    source
   40          int main(void)
   41          {
   42   1        unsigned char i = 0;
-  43   1      
-  44   1        WDT_DISABLE();
-  45   1      
-  46   1        system_init();
-  47   1      
-  48   1        mmi_dq_bsp_init();
-  49   1      
-  50   1        mmi_dq_key_init();
-  51   1      
-  52   1        mmi_dq_fp_init();
-  53   1      
-C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:29:46 PAGE 2   
+  43   1        WDT_DISABLE();
+  44   1      
+  45   1        system_init();
+  46   1      
+  47   1        mmi_dq_bsp_init();
+  48   1      
+  49   1        mmi_dq_key_init();
+  50   1      
+  51   1        mmi_dq_fp_init();
+  52   1      
+  53   1        mmi_dq_rfid_init();
+C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:34:38 PAGE 2   
 
-  54   1        mmi_dq_rfid_init();
-  55   1      
-  56   1        mmi_dq_aud_init();
-  57   1      
-  58   1        byd_adc_init();
-  59   1      
-  60   1        wdt_init(WDT_TIME_2304MS);
-  61   1      
-  62   1        WDT_ENABLE();
-  63   1      
-  64   1      #if LVDT_EN     //ÊµÊ±¼ì²â
-  65   1        lvdt_init(1); /* µçÑ¹¼ì²â³õÊ¼»¯ */
-  66   1      #endif
+  54   1      
+  55   1        mmi_dq_aud_init();
+  56   1      
+  57   1        byd_adc_init();
+  58   1      
+  59   1        wdt_init(WDT_TIME_2304MS);
+  60   1      
+  61   1      #if ADCVDT_EN //¿ª»ú¼ì²â
+  62   1        if (adc_VolT() == 1)
+  63   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+  64   1      #endif
+  65   1      
+  66   1        //WDT_ENABLE();
   67   1      
-  68   1      #if ADCVDT_EN //¿ª»ú¼ì²â
-  69   1        adc_VolT(); /* adcµçÑ¹¼ì²â3.55v */
-  70   1      #endif
-  71   1      
-  72   1        mmi_dq_sys_init();
-  73   1      
-  74   1        if (mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
-  75   1        {
-  76   2          //mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
-  77   2      
-  78   2          mmi_dq_sys_chg_admin_pwd();
-  79   2        }
-  80   1        else
-  81   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-  82   1      
-  83   1        //printf("main while satrt");
-  84   1      
-  85   1        while (1)
-  86   1        {
-  87   2      #if LVDT_EN
-  88   2          lvdt_VolT(); /* µçÑ¹¼ì²â3v */
-  89   2      #endif
-  90   2      
-  91   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
-  92   2          {
-  93   3            //TIMER2_ENABLE();
-  94   3      
-  95   3            lowpower_idle();
-  96   3      
-  97   3            mmi_sleep_task_proc();
-  98   3          }
-  99   2          else if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 100   2          {
- 101   3            WDT_CTRL = WDT_TIME_2304MS;
- 102   3      
- 103   3            mmi_wait_sleep_task_proc();
- 104   3          }
- 105   2          else
- 106   2          {
- 107   3            mmi_task_proc();
- 108   3          }
- 109   2      
- 110   2          mmi_dq_ms_sys_msg_handle();
- 111   2        }
- 112   1      }
+  68   1        mmi_dq_sys_init();
+  69   1      
+  70   1      #if 0
+                if(mmi_dq_fs_get_factory_flag() == 0)
+                {
+                  mmi_dq_factory_mode_test_start();
+                }
+                else
+              #endif
+  77   1        if (mmi_dq_fs_get_admin_status() == 0)
+  78   1        {
+  79   2          mmi_dq_sys_chg_admin_pwd();
+  80   2        }
+  81   1        else
+  82   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+  83   1      
+  84   1        //printf("main while satrt");
+  85   1      
+  86   1        while (1)
+  87   1        {
+  88   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+  89   2          {
+  90   3            lowpower_idle();
+  91   3      
+  92   3            mmi_sleep_task_proc();
+  93   3          }
+  94   2          else
+  95   2          {
+  96   3            WDT_CTRL = WDT_TIME_2304MS;
+  97   3      
+  98   3            mmi_task_proc();
+  99   3          }
+ 100   2      
+ 101   2          mmi_dq_ms_sys_msg_handle();
+ 102   2      
+ 103   2          if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+ 104   2            mmi_wait_sleep_task_proc();
+ 105   2        }
+ 106   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:29:46 PAGE 3   
-
-   CODE SIZE        =    142    ----
+   CODE SIZE        =    138    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   MAIN                                                              02/19/2021 17:34:38 PAGE 3   
+
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----
    HDATA SIZE       =   ----    ----

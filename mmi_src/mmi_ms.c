@@ -15,6 +15,8 @@
 #include "dqiot_drv_fp.h"
 #include "delay.h"
 #include "mmi_fs.h"
+#include "mmi_fm.h"
+#include "mmi_wifi.h"
 //#include "stdio.h"
 
 unsigned char input_key_1[PWD_INPUT_MAX_LEN];
@@ -82,6 +84,8 @@ void mmi_task_proc(void)
 	if (mmi_dq_fp_work() != 0)
 		mmi_dq_ms_set_msg_que(QUE_EVENT_FP, QUE_PRO_LOW, 0);
 
+	if (mmi_dq_sys_get_wifi_check_flag() != 0)
+		mmi_dq_ms_set_msg_que(QUE_EVENT_WIFI_CHECK, QUE_PRO_LOW, 0);
 	return;
 }
 
@@ -102,15 +106,15 @@ void mmi_sleep_task_proc(void)
 		time_count = 0;
 		ret = mmi_dq_rfid_check();
 	}
-	if ((ret == RET_SUCESS) || (mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() == 0) || (gpio_bit_get(FP_INT_PORT, FP_INT_PIN) == 0))
-	//if(mmi_dq_key_check() != 0)
+	if ((ret == RET_SUCESS) || (mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() == 0) || (mmi_dq_fp_get_pin() == 0))
 	{
 		key_last_value = mmi_dq_get_key_map(dqiot_drv_get_touch_value());
 		mmi_dq_sys_wake_up();
 		mmi_dq_fp_init(); //握手、点灯
-		return;
 	}
 
+	if (mmi_dq_sys_get_wifi_check_flag() != 0)
+		mmi_dq_ms_set_msg_que(QUE_EVENT_WIFI_CHECK, QUE_PRO_LOW, 0);
 	return;
 }
 
@@ -125,7 +129,7 @@ void mmi_wait_sleep_task_proc(void)
 	//unsigned int timer1_count = 0;
 
 	//if((mmi_dq_rfid_check() == RET_SUCESS) || (mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() == 0))
-	if ((mmi_dq_key_check() == 0) && (mmi_dq_aud_get_state() == 0) && (mmi_dq_rst_get_pin() != 0))
+	if ((key_last_value == KEY_INVALID) && (mmi_dq_aud_get_state() == 0) && (mmi_dq_rst_get_pin() != 0) && (mmi_dq_fp_get_pin() != 0))
 	{
 		mmi_dq_sys_enter_sleep();
 	}
@@ -171,13 +175,16 @@ void mmi_dq_ms_sys_msg_handle(void)
 			mmi_ms_rfid_opt_fun(sys_msg_que.que_data);
 			break;
 		case QUE_EVENT_RST:
-
+			mmi_ms_reset_opt_fun();
 			break;
 		case QUE_EVENT_AUDIO_END:
 
 			break;
 		case QUE_EVENT_TIMER_END:
 			mmi_dq_sys_delay_event_pro();
+			break;
+		case QUE_EVENT_WIFI_CHECK:
+			mmi_dq_wifi_check_connect();
 			break;
 		default:
 			break;
@@ -277,7 +284,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 					mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 				else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
 					mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-				else if (!((SYS_STATUS_ADD_ADMIN_PWD == status) && (FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())))
+				else if (!((SYS_STATUS_ADD_ADMIN_PWD == status) && (0 == mmi_dq_fs_get_admin_status())))
 					mmi_dq_sys_show_cur_menu_list();
 				break;
 			}
@@ -371,8 +378,11 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
 								else
 									mmi_dq_aud_play_with_id(AUD_ID_CHG_ADMIN_PWD_SUCESS);
-								if (FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())
-									mmi_dq_sys_lock_init_suc(); //mmi_dq_sys_chg_admin_fp_No1();
+								if (0 == mmi_dq_fs_get_admin_status())
+								{
+									//mmi_dq_sys_lock_add_admin_suc();
+									mmi_dq_sys_chg_admin_fp_No1();
+								}
 								else
 									mmi_dq_sys_show_cur_menu_list();
 							}
@@ -424,8 +434,6 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 	//case SYS_STATUS_INPUT_ADMIN_FP:
 	case SYS_STATUS_ADD_FP:
 	case SYS_STATUS_DEL_FP:
-	case SYS_STATUS_ADD_ADMIN_FP1:
-	case SYS_STATUS_ADD_ADMIN_FP2:
 	//case SYS_STATUS_INPUT_RFID:
 	case SYS_STATUS_ADD_RFID:
 	case SYS_STATUS_DEL_RFID:
@@ -433,6 +441,17 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 		{
 			mmi_dq_aud_play_key_tone();
 			mmi_dq_sys_show_cur_menu_list();
+		}
+		break;
+	case SYS_STATUS_ADD_ADMIN_FP1:
+	case SYS_STATUS_ADD_ADMIN_FP2:
+		if (key_val == KEY_S)
+		{
+			mmi_dq_aud_play_key_tone();
+			if (0 == mmi_dq_fs_get_admin_status())
+				mmi_dq_sys_lock_add_admin_suc();
+			else
+				mmi_dq_sys_show_cur_menu_list();
 		}
 		break;
 	case SYS_STATUS_CLR_PWD:
@@ -458,11 +477,8 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				mmi_dq_sys_show_cur_menu_list();
 				break;
 			case SYS_STATUS_CLR_FP:
-				if (RET_SUCESS == mmi_dq_fs_clr_pwd())
-				{
-					mmi_dq_fp_empty(); /* 清空指纹 */
+				if (RET_SUCESS == mmi_dq_fs_clr_fp())
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_SUCESS);
-				}
 				else
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_FAIL);
 				mmi_dq_sys_show_cur_menu_list();
@@ -515,6 +531,52 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			mmi_dq_sys_exe_menu_fun(key_val - 1);
 		}
 		break;
+	case SYS_STATUS_FM_MODE:
+	{
+		unsigned char str = mmi_dq_factory_mode_get_test_project();
+		if (str == STR_ID_KEY)
+		{
+			mmi_dq_aud_play_key_num(key_val);
+			mmi_dq_factory_mode_key_test(key_val);
+		}
+		else if (str == STR_ID_MOTO)
+		{
+			if (key_val == KEY_S)
+			{
+				mmi_dq_aud_play_key_tone();
+				mmi_dq_factory_mode_motor_test_back();
+				if (mmi_dq_fs_get_factory_flag() != 0)
+					mmi_dq_factory_mode_test_stop();
+				else
+				{
+					delay_ms(600);
+					mmi_dq_factory_mode_motor_test();
+				}
+			}
+			else if (key_val == KEY_H)
+			{
+				mmi_dq_aud_play_key_tone();
+				mmi_dq_factory_mode_motor_test_back();
+				mmi_dq_factory_mode_test_item_result(STR_ID_MOTO, 1);
+			}
+		}
+		else if (mmi_dq_fs_get_factory_flag() != 0)
+		{
+			mmi_dq_aud_play_key_tone();
+			mmi_dq_factory_mode_test_stop();
+		}
+	}
+	break;
+	case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
+		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+		break;
+	case SYS_STATUS_WIFI_MODE:
+		if (key_val == KEY_S)
+		{
+			mmi_dq_aud_play_key_tone();
+			mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+		}
+		break;
 	default:
 		break;
 	}
@@ -533,35 +595,25 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 	unsigned short index = 0;
 	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
 
-	if ((status != SYS_STATUS_INPUT_FP && status != SYS_STATUS_ADD_FP && status != SYS_STATUS_DEL_FP && status != SYS_STATUS_ADD_ADMIN_FP1 && status != SYS_STATUS_ADD_ADMIN_FP2)
-		//|| (status == SYS_STATUS_FM_MODE && STR_ID_RF_CARD != mmi_dq_factory_mode_get_test_project())
-	)
+	if ((status != SYS_STATUS_INPUT_FP && status != SYS_STATUS_ADD_FP && status != SYS_STATUS_DEL_FP && status != SYS_STATUS_ADD_ADMIN_FP1 && status != SYS_STATUS_ADD_ADMIN_FP2) || (status == SYS_STATUS_FM_MODE && STR_ID_RF_CARD != mmi_dq_factory_mode_get_test_project()))
 		return;
 
 #ifdef __LOCK_AUDIO_SUPPORT__
-	mmi_dq_aud_play_key_tone();
+	mmi_dq_aud_stop();
 #endif
+
 	retval = mmi_dq_fp_get_image();
 	if (retval == 0)
 	{
 		retval = mmi_dq_fp_gen_char(opt_time);
-		dqiot_drv_log_output("mmi_dq_fp_gen_char opt_time\r\n");
-		dqiot_drv_log_output_data('#', opt_time);
 		if (retval == 0)
 		{
 			retval = mmi_dq_fp_high_speed_search(opt_time, &index);
-			dqiot_drv_log_output("mmi_dq_fp_high_speed_search index\r\n");
-			dqiot_drv_log_output_data('#', index);
 			if (retval == 0)
 			{
 				if (status == SYS_STATUS_INPUT_FP)
 				{
-					retval = mmi_dq_fs_check_fp(index, FDS_USE_TYPE_ALL);
-					dqiot_drv_log_output("mmi_dq_fs_check_fp in input\r\n");
-					dqiot_drv_log_output("mmi_dq_fs_check_fp index\r\n");
-					dqiot_drv_log_output_data('#', index);
-					dqiot_drv_log_output("mmi_dq_fs_check_fp retval\r\n");
-					dqiot_drv_log_output_data('#', retval);
+					retval = mmi_dq_fs_check_fp((unsigned char)index, FDS_USE_TYPE_ALL);
 					if (retval == RET_SUCESS)
 					{
 						mmi_dq_fp_light(FP_GREEN);
@@ -580,12 +632,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 				}
 				else if (status == SYS_STATUS_DEL_FP)
 				{
-					retval = mmi_dq_fs_check_fp(index, FDS_USE_TYPE_USER);
-					dqiot_drv_log_output("mmi_dq_fs_check_fp in del\r\n");
-					dqiot_drv_log_output("mmi_dq_fs_check_fp index\r\n");
-					dqiot_drv_log_output_data('#', index);
-					dqiot_drv_log_output("mmi_dq_fs_check_fp retval\r\n");
-					dqiot_drv_log_output_data('#', retval);
+					retval = mmi_dq_fs_check_fp((unsigned char)index, FDS_USE_TYPE_USER);
 					if (retval == RET_SUCESS)
 					{
 						if (opt_time == OPT_ONE_TIME)
@@ -597,18 +644,12 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 						else
 						{
 							retval = mmi_dq_fp_match();
-							if (retval == 0 || retval == 255)
+							if (retval == 0 || retval == 255) //返回0xff
 							{
-								retval = mmi_dq_fs_del_fp(index, FDS_USE_TYPE_USER);
-								dqiot_drv_log_output("mmi_dq_fs_del_fp retval\r\n");
-								dqiot_drv_log_output_data('#', retval);
-								dqiot_drv_log_output("mmi_dq_fs_del_fp index\r\n");
-								dqiot_drv_log_output_data('#', index);
+								retval = mmi_dq_fs_del_fp((unsigned char)index, FDS_USE_TYPE_USER);
 								if (retval == RET_SUCESS)
 								{
 									retval = mmi_dq_fp_delete(index);
-									dqiot_drv_log_output("delete index\r\n");
-									dqiot_drv_log_output_data('#', index);
 								}
 								if (retval == 0)
 								{
@@ -617,8 +658,6 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 								}
 								else
 								{
-									dqiot_drv_log_output("fs_del_fp failed\r\n");
-									dqiot_drv_log_output(EnsureMessage(retval));
 									mmi_dq_fp_light(FP_RED);
 									mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
 								}
@@ -626,8 +665,6 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 							}
 							else
 							{
-								dqiot_drv_log_output("fp_match failed\r\n");
-								dqiot_drv_log_output(EnsureMessage(retval));
 								mmi_dq_fp_light(FP_RED);
 								mmi_dq_aud_play_with_id(AUD_ID_FP_TWICE_NOT_SAME);
 							}
@@ -645,8 +682,6 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 			{
 				if (status == SYS_STATUS_INPUT_FP)
 				{
-					dqiot_drv_log_output("high_speed_search failed in input\r\n");
-					dqiot_drv_log_output(EnsureMessage(retval));
 					mmi_dq_fp_light(FP_RED);
 					mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
 				}
@@ -673,7 +708,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 									{
 										if (retval == 0)
 										{
-											retval = mmi_dq_fs_set_fp(index, FDS_USE_TYPE_USER);
+											retval = mmi_dq_fs_set_fp((unsigned char)index, FDS_USE_TYPE_USER);
+											if (retval != 0)
+												mmi_dq_fp_delete(index);
 										}
 										if (retval == 0)
 										{
@@ -682,7 +719,6 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 										}
 										else
 										{
-											dqiot_drv_log_output("store_char/fs_set_fp failed\r\n");
 											mmi_dq_fp_light(FP_RED);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
 										}
@@ -697,12 +733,12 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 										if (retval == 0)
 										{
 											mmi_dq_fp_light(FP_GREEN);
-											// mmi_dq_factory_mode_test_item_result(STR_ID_FINGERPRINT, 1);
+											mmi_dq_factory_mode_test_item_result(STR_ID_FINGERPRINT, 1);
 										}
 										else
 										{
 											mmi_dq_fp_light(FP_RED);
-											// mmi_dq_factory_mode_test_item_result(STR_ID_FINGERPRINT, 0);
+											mmi_dq_factory_mode_test_item_result(STR_ID_FINGERPRINT, 0);
 										}
 									}
 								}
@@ -716,7 +752,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 								retval = mmi_dq_fp_store_char(0, index);
 								if (retval == 0)
 								{
-									retval = mmi_dq_fs_set_fp(index, FDS_USE_TYPE_ADMIN);
+									retval = mmi_dq_fs_set_fp((unsigned char)index, FDS_USE_TYPE_ADMIN);
 								}
 								if (retval == 0)
 								{
@@ -728,12 +764,19 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 									mmi_dq_fp_light(FP_RED);
 									mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
 								}
-								mmi_dq_sys_show_cur_menu_list();
+								if (0 == mmi_dq_fs_get_admin_status())
+								{
+									if (status == SYS_STATUS_ADD_ADMIN_FP1)
+										mmi_dq_sys_chg_admin_fp_No2();
+									else
+										mmi_dq_sys_lock_add_admin_suc();
+								}
+								else
+									mmi_dq_sys_show_cur_menu_list();
 							}
 						}
 						else
 						{
-							dqiot_drv_log_output("reg_module failed\r\n");
 							mmi_dq_fp_light(FP_RED);
 							mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL_RETRY);
 						}
@@ -748,26 +791,13 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 				}
 				else if (status == SYS_STATUS_DEL_FP)
 				{
-					dqiot_drv_log_output("high_speed_search failed in del\r\n");
-					dqiot_drv_log_output(EnsureMessage(retval));
 					mmi_dq_fp_light(FP_RED);
 					mmi_dq_aud_play_with_id(AUD_ID_FP_NOT_EXIST);
 				}
 			}
 			return;
 		}
-		else
-		{
-			dqiot_drv_log_output("gen_char failed\r\n");
-			dqiot_drv_log_output(EnsureMessage(retval));
-		}
 	}
-	else
-	{
-		dqiot_drv_log_output("get_image failed\r\n");
-		dqiot_drv_log_output(EnsureMessage(retval));
-	}
-
 	mmi_dq_fp_light(FP_RED);
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP_AGAIN);
 	return;
@@ -785,12 +815,34 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 	unsigned char index = 0;
 	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
 
-	if (status != SYS_STATUS_INPUT_RFID && status != SYS_STATUS_ADD_RFID && status != SYS_STATUS_DEL_RFID)
+	if ((status != SYS_STATUS_INPUT_RFID && status != SYS_STATUS_ADD_RFID && status != SYS_STATUS_DEL_RFID) || (status == SYS_STATUS_FM_MODE && STR_ID_RF_CARD != mmi_dq_factory_mode_get_test_project()))
 		return;
 
 #ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_stop();
 #endif
+	if (status == SYS_STATUS_FM_MODE)
+	{
+		retval = mmi_dq_rfid_gen_char(opt_time);
+		if (retval == RET_SUCESS)
+		{
+			if (opt_time == OPT_ONE_TIME)
+			{
+				mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD_AGAIN);
+				opt_time = OPT_TWO_TIME;
+			}
+			else
+			{
+				retval = mmi_dq_rfid_match();
+				if (retval == RET_SUCESS)
+					mmi_dq_factory_mode_test_item_result(STR_ID_RF_CARD, 1);
+				else
+					mmi_dq_aud_play_with_id(AUD_ID_RFCARD_NOT_SAME);
+				opt_time = OPT_ONE_TIME;
+			}
+		}
+		return;
+	}
 
 	retval = mmi_dq_rfid_search_by_temp(&index);
 	if (retval == RET_SUCESS)
@@ -877,6 +929,23 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 	}
 
 	return;
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_ms_reset_opt_fun(void)
+{
+	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
+
+	if (status == SYS_STATUS_FM_MODE && STR_ID_RESET == mmi_dq_factory_mode_get_test_project())
+	{
+		mmi_dq_factory_mode_reset_test();
+		return;
+	}
 }
 
 #endif

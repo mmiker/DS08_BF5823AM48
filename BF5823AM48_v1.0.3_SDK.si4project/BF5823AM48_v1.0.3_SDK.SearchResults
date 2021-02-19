@@ -2989,3 +2989,693 @@ mmi_audio.c (mmi_src) line 102 : 	AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,
 mmi_dq_aud_play_with_id in mmi_audio.c (mmi_src) : 	else if(aud_id == AUD_ID_SYSTEM)
 mmi_audio.h (mmi_inc) line 214 : 	AUD_ID_SYSTEM = 138+AUD_BASE_ID_MAX,//系统
 mmi_com.c (mmi_src) line 12 : 		AUD_ID_SYSTEM
+---- mmi_dq_fs_get_init_flag Matches (7 in 5 files) ----
+main in main.c (source) : 	if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+mmi_fs.c (mmi_src) line 679 : unsigned char mmi_dq_fs_get_init_flag(void)
+mmi_fs.h (mmi_inc) line 248 : unsigned char mmi_dq_fs_get_init_flag(void);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(!((SYS_STATUS_ADD_ADMIN_PWD == status) && (FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 									if(FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+---- FDS_INIT_LOCK_SUC Matches (4 in 3 files) ----
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 	if(FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 		g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
+mmi_fs.h (mmi_inc) line 28 : 	FDS_INIT_LOCK_SUC = 0x01,
+mmi_dq_sys_lock_init_suc in mmi_sys.c (mmi_src) : 	mmi_dq_fs_set_init_flag(FDS_INIT_LOCK_SUC);
+---- FDS_INIT_INVALID Matches (6 in 4 files) ----
+main in main.c (source) : 	if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+mmi_fs.h (mmi_inc) line 32 : 	FDS_INIT_INVALID = 0xFF
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(!((SYS_STATUS_ADD_ADMIN_PWD == status) && (FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 									if(FDS_INIT_INVALID == mmi_dq_fs_get_init_flag())
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+---- admin_status Matches (2 in 2 files) ----
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 		g_dq_fs_init_set.admin_status = 0;
+mmi_fs_setting in mmi_fs.h (mmi_inc) : 	unsigned char admin_status;
+---- mmi_dq_sys_lock_init_suc Matches (3 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 										mmi_dq_sys_lock_init_suc();//mmi_dq_sys_chg_admin_fp_No1();
+mmi_sys.c (mmi_src) line 76 : void mmi_dq_sys_lock_init_suc(void)
+mmi_sys.h (mmi_inc) line 40 : void mmi_dq_sys_lock_init_suc(void);
+---- BASE_STATUS_M_IDLE Matches (1 in 1 files) ----
+mmi_dq_factory_mode_test_stop in mmi_fm.c (mmi_src) : 			mmi_dq_ms_set_machine_status(BASE_STATUS_M_IDLE);
+---- BASE_STATUS_IDLE Matches (0 in 0 files) ----
+---- AUD_ID_FM_MOTO Matches (2 in 2 files) ----
+mmi_audio.h (mmi_inc) line 228 : 	AUD_ID_FM_MOTO = 33+AUD_BASE_ID_MAX,
+mmi_com.c (mmi_src) line 800 : 		AUD_ID_FM_MOTO
+---- mmi_dq_factory_mode_test_stop Matches (5 in 3 files) ----
+mmi_fm.c (mmi_src) line 157 : void mmi_dq_factory_mode_test_stop(void)
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 			mmi_dq_factory_mode_test_stop();
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 				mmi_dq_factory_mode_test_stop();
+mmi_fm.h (mmi_inc) line 37 : void mmi_dq_factory_mode_test_stop(void);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_factory_mode_test_stop();
+---- mmi_dq_factory_mode_test_start Matches (2 in 2 files) ----
+mmi_fm.c (mmi_src) line 143 : void mmi_dq_factory_mode_test_start(void)
+mmi_fm.h (mmi_inc) line 29 : void mmi_dq_factory_mode_test_start(void);
+---- FP_COLOR Matches (5 in 2 files) ----
+mmi_fps.c (mmi_src) line 206 : void mmi_dq_fp_light(FP_COLOR light_id)
+mmi_fps.c (mmi_src) line 217 : FP_COLOR mmi_dq_fp_get_light(void)
+mmi_fps.h (mmi_inc) line 8 : typedef enum FP_COLOR
+FP_COLOR in mmi_fps.h (mmi_inc) : }FP_COLOR;
+mmi_fps.h (mmi_inc) line 75 : void mmi_dq_fp_light(FP_COLOR light_id);
+---- FP_BLUE Matches (3 in 3 files) ----
+FP_Light in dqiot_fp_sy.c (source) : 			case FP_BLUE:
+dqiot_fp_sy.h (include) line 28 : 	FP_BLUE,
+FP_COLOR in mmi_fps.h (mmi_inc) : 	FP_BLUE = 0x00,
+---- FP_CHAR_BUFF_2 Matches (1 in 1 files) ----
+FP_BUFF in mmi_fps.h (mmi_inc) : 	FP_CHAR_BUFF_2 = 0x02,
+---- opt_time Matches (26 in 1 files) ----
+mmi_ms.c (mmi_src) line 24 : OPERATE_TIME opt_time = OPT_TIME_INVALID;
+mmi_ms_pwd_init_var in mmi_ms.c (mmi_src) : 	opt_time = OPT_ONE_TIME;
+mmi_ms_opt_time_init in mmi_ms.c (mmi_src) : 	opt_time = OPT_ONE_TIME;
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							opt_time = OPT_TWO_TIME;
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(opt_time == OPT_TWO_TIME)
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 		retval = mmi_dq_fp_gen_char(opt_time);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_fp_high_speed_search(opt_time,&index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == FPS_MAX_INPUT_TIME)
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TIME_INVALID;
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					opt_time++;
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 	opt_time = OPT_TIME_INVALID;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_rfid_gen_char(opt_time);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TWO_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_ONE_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_rfid_gen_char(opt_time);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TWO_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_ONE_TIME;
+---- opt_time Matches (27 in 1 files) ----
+mmi_ms.c (mmi_src) line 24 : OPERATE_TIME opt_time = OPT_TIME_INVALID;
+mmi_ms_pwd_init_var in mmi_ms.c (mmi_src) : 	opt_time = OPT_ONE_TIME;
+mmi_ms_opt_time_init in mmi_ms.c (mmi_src) : 	opt_time = OPT_ONE_TIME;
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							opt_time = OPT_TWO_TIME;
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						else if(opt_time == OPT_TWO_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					if(opt_time == OPT_ONE_TIME)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(opt_time == OPT_TWO_TIME)
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 		retval = mmi_dq_fp_gen_char(opt_time);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_fp_high_speed_search(opt_time,&index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == FPS_MAX_INPUT_TIME)
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TIME_INVALID;
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					opt_time++;
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 	opt_time = OPT_TIME_INVALID;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 		retval = mmi_dq_rfid_gen_char(opt_time);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_rfid_gen_char(opt_time);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TWO_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_ONE_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_rfid_gen_char(opt_time);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 				if(opt_time == OPT_ONE_TIME)
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_TWO_TIME;
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 					opt_time = OPT_ONE_TIME;
+---- printf Matches (13 in 5 files) ----
+SPI_FLASH_PageWrite in byd_spi_flash.c (source) :      //printf("\n\r Err: SPI_FLASH_PageWrite too large!");
+dqiot_drv_rfid_check in dqiot_drv_rfid.c (source) : 	//printf("adc value %d\n",adc_value);
+main in main.c (source) : 	//printf("main while satrt");
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 						//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 						//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 						//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 						//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 					//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 					//printf("mmi_dq_fds_write  error  %d\n",i);
+mmi_dq_fds_write in mmi_fs.c (mmi_src) : 	//printf("mmi_dq_fds_write  suc\n");
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 		//printf("mmi_dq_fs_init init error");
+mmi_dq_ms_set_msg_que in mmi_ms.c (mmi_src) : 	//printf("mmi_dq_ms_set_msg_que  event : %d",q_event);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 	//printf("mmi_ms_pwd_opt_fun status: 0x%x  key: %d",status,key_val);
+---- iic_master_init Matches (1 in 1 files) ----
+iic_master.c (source) line 10 : void iic_master_init(void)
+---- iic_master_start Matches (4 in 2 files) ----
+iic_master.c (source) line 24 : void iic_master_start(void)
+iic_master_writer_data in iic_master.c (source) :     iic_master_start();
+iic_master_read_data in iic_master.c (source) :     iic_master_start();                
+iic_master.h (include) line 32 : void iic_master_start(void);
+---- iic_master_writer_data Matches (1 in 1 files) ----
+iic_master.c (source) line 165 : void iic_master_writer_data(uint8_t device_addr, uint8_t *writedata, uint8_t length)  
+---- iic_master_start Matches (4 in 2 files) ----
+iic_master.c (source) line 24 : void iic_master_start(void)
+iic_master_writer_data in iic_master.c (source) :     iic_master_start();
+iic_master_read_data in iic_master.c (source) :     iic_master_start();                
+iic_master.h (include) line 32 : void iic_master_start(void);
+---- iic_sendbyte_and_getnack Matches (5 in 2 files) ----
+iic_master.c (source) line 93 : bit iic_sendbyte_and_getnack(uint8_t send_data)
+iic_master_writer_data in iic_master.c (source) :     if (iic_sendbyte_and_getnack(device_addr & ~0x01)) {   
+iic_master_writer_data in iic_master.c (source) :         if (iic_sendbyte_and_getnack(writedata[i])) {
+iic_master_read_data in iic_master.c (source) :     if (iic_sendbyte_and_getnack(device_addr | 0x01)) {
+iic_master.h (include) line 37 : bit iic_sendbyte_and_getnack(uint8_t send_data);
+---- DATAA Matches (31 in 4 files) ----
+iic_master.h (include) line 17 : #define SET_SDA()   DATAA |= 0x10
+iic_master.h (include) line 18 : #define CLR_SDA()   DATAA &= ~0x10
+iic_master.h (include) line 21 : #define SDA()       DATAA & 0x10
+iic_master.h (include) line 23 : #define SET_SCL()   DATAA |= 0x08
+iic_master.h (include) line 24 : #define CLR_SCL()   DATAA &= ~0x08
+gpio_bit_set in mcu02_gpio.c (Library\byd_standard_peripheral\source) : 			DATAA |= gpio_pin;break;
+gpio_bit_reset in mcu02_gpio.c (Library\byd_standard_peripheral\source) : 			DATAA &= ~gpio_pin;break;
+gpio_bit_get in mcu02_gpio.c (Library\byd_standard_peripheral\source) : 			value = DATAA & gpio_pin ? 1 : 0;break;
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 54 : #define SET_PA0_L DATAA &= ~0x01
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 55 : #define SET_PA1_L DATAA &= ~0x02
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 56 : #define SET_PA2_L DATAA &= ~0x04
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 57 : #define SET_PA3_L DATAA &= ~0x08
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 59 : #define SET_PA0_H DATAA |= 0x01
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 60 : #define SET_PA1_H DATAA |= 0x02
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 61 : #define SET_PA2_H DATAA |= 0x04
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 62 : #define SET_PA3_H DATAA |= 0x08
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 64 : #define GET_PA0 (DATAA&0x01)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 65 : #define GET_PA1 (DATAA&0x02)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 66 : #define GET_PA2 (DATAA&0x04)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 67 : #define GET_PA3 (DATAA&0x08)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 747 : #define GPIOA_BIT_SET(x)  	DATAA |= (x)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 755 : #define GPIOA_BIT_RESET(x)  DATAA &= ~(x)
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 764 : #define SET_GPIOA_DATA(x)  DATAA = x
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 772 : #define GET_GPIOA_DATA()  DATAA
+mcu02_gpio.h (Library\byd_standard_peripheral\include) line 780 : #define GET_GPIOA_BIT(x)  (DATAA & x)
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 135 : sfr DATAA         			=  0xF8;
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 264 : /*  DATAA  */
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 265 : sbit PA0  = DATAA^0;
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 266 : sbit PA1  = DATAA^1;
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 267 : sbit PA2  = DATAA^2;
+mcu02_sfr.h (Library\byd_standard_peripheral\include) line 268 : sbit PA3  = DATAA^3;
+---- iic_master.h Matches (3 in 3 files) ----
+dqiot_drv_wifi.c (source) line 5 : #include "iic_master.h"
+iic_master.c (source) line 1 : #include "iic_master.h"
+iic_master.h (include) line 2 :     \file  iic_master.h
+---- UH010_Write_Byte Matches (22 in 1 files) ----
+dqiot_drv_wifi.c (source) line 88 : unsigned char UH010_Write_Byte(unsigned char *send,unsigned char send_len)
+wifi_net_connect_send in dqiot_drv_wifi.c (source) : 	if(UH010_Write_Byte(data,2) == 0)
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_ask in dqiot_drv_wifi.c (source) : 	if(UH010_Write_Byte(data,2) == 0)
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_wake_up in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_sleep_mode in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_add_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_del_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_add_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_del_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_wifi in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_key in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_door_close in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_via_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_pw_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_fp_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_rf_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_lowpower_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+---- uart_get_buf Matches (8 in 1 files) ----
+dqiot_drv.c (source) line 26 : unsigned char uart_get_buf[UART0_GET_DATA_LEN];
+dqiot_drv_uart0A_init in dqiot_drv.c (source) : 	memset(uart_get_buf,0x00,sizeof(uart_get_buf));
+dqiot_drv_uart0B_init in dqiot_drv.c (source) : 	memset(uart_get_buf,0x00,sizeof(uart_get_buf));
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 			uart_get_buf[uart_getbuflen++] = UART0_BUF;
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 				uart_get_buf[uart_getbuflen++] = UART0_BUF;
+dqiot_drv_get_uart0_data in dqiot_drv.c (source) : 	return uart_get_buf[len];
+---- mmi_dq_wifi_setting Matches (2 in 2 files) ----
+mmi_sys.c (mmi_src) line 779 : 	{STR_ID_SYSTEM,STR_ID_WIFI,mmi_dq_wifi_setting},
+mmi_wifi.c (mmi_src) line 27 : void mmi_dq_wifi_setting(void)
+---- mmi_dq_fs_get_admin_status Matches (8 in 6 files) ----
+main in main.c (source) : 	else if(mmi_dq_fs_get_admin_status() == 0)
+mmi_dq_factory_mode_test_stop in mmi_fm.c (mmi_src) : 		if(mmi_dq_fs_get_admin_status() == 0)
+mmi_fs.c (mmi_src) line 730 : unsigned char mmi_dq_fs_get_admin_status(void)
+mmi_fs.h (mmi_inc) line 281 : unsigned char mmi_dq_fs_get_admin_status(void);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(!((SYS_STATUS_ADD_ADMIN_PWD == status) && (1 == mmi_dq_fs_get_admin_status())))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 									if(0 == mmi_dq_fs_get_admin_status())
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_admin_status() == 0)
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		if(mmi_dq_fs_get_admin_status() == 0)
+---- mmi_dq_fs_set_admin_status Matches (3 in 3 files) ----
+mmi_fs.c (mmi_src) line 741 : void mmi_dq_fs_set_admin_status(unsigned char status)
+mmi_fs.h (mmi_inc) line 289 : void mmi_dq_fs_set_admin_status(unsigned char status);
+mmi_dq_sys_lock_add_admin_suc in mmi_sys.c (mmi_src) : 	mmi_dq_fs_set_admin_status(1);
+---- wifi_check_times Matches (4 in 1 files) ----
+mmi_wifi.c (mmi_src) line 8 : static unsigned int wifi_check_times = 0;
+mmi_dq_wifi_setting in mmi_wifi.c (mmi_src) : 	wifi_check_times = 0;
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 	wifi_check_times++;
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 	else if(wifi_check_times >= 150)
+---- mmi_dq_fp_delete Matches (4 in 3 files) ----
+mmi_fps.c (mmi_src) line 132 : unsigned short mmi_dq_fp_delete(unsigned short index)
+mmi_dq_fs_clr_fp in mmi_fs.c (mmi_src) : 				//fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									retval = mmi_dq_fp_delete(index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											retval = mmi_dq_fp_delete(index);
+---- mmi_dq_fp_delete Matches (4 in 3 files) ----
+mmi_fps.c (mmi_src) line 132 : unsigned short mmi_dq_fp_delete(unsigned short index)
+mmi_dq_fs_clr_fp in mmi_fs.c (mmi_src) : 				//fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									retval = mmi_dq_fp_delete(index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											retval = mmi_dq_fp_delete(index);
+---- AUD_ID_FM_KEY_INPUT Matches (3 in 3 files) ----
+mmi_audio.h (mmi_inc) line 227 : 	AUD_ID_FM_KEY_INPUT = AUD_BASE_ID_FM_KEY_INPUT,//请测试所有按键
+mmi_com.c (mmi_src) line 793 : 		AUD_ID_FM_KEY_INPUT
+mmi_dq_factory_mode_test_item_select in mmi_fm.c (mmi_src) : 			mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
+---- mmi_dq_fs_set_factory_flag Matches (3 in 3 files) ----
+mmi_dq_factory_mode_test_item_result in mmi_fm.c (mmi_src) : 		mmi_dq_fs_set_factory_flag(g_fm_flag);
+mmi_fs.c (mmi_src) line 707 : RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag)
+mmi_fs.h (mmi_inc) line 265 : RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag);
+---- touch_out_count Matches (5 in 1 files) ----
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 	static uint8_t touch_out_count = 0;
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 			touch_out_count = 0;
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 			touch_out_count++;
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 			if(touch_out_count>2)
+mmi_dq_factory_mode_key_test in mmi_fm.c (mmi_src) : 				touch_out_count = 0;
+---- data Matches (158 in 20 files) ----
+byd_adc.c (source) line 83 :     \brief      get adc data
+byd_adc.c (source) line 87 :     \retval     adc data
+byd_adc.c (source) line 134 :     \brief      data sort 
+byd_adc.c (source) line 167 :     \brief      filter adc data 
+byd_adc.c (source) line 168 :     \param[in]  buffer:	data array
+byd_adc.c (source) line 169 : 				count:	data number
+byd_adc.c (source) line 173 :     \retval     filter data 
+byd_adc.c (source) line 217 :     \brief      adc data handle 
+byd_adc.c (source) line 220 :     \retval     adc data
+byd_ctk.c (source) line 327 :     \retval     csd data
+{anonbyd_parameter_struct} in byd_ctk.h (include) : 	uint8_t filterenable;/*enable or disable filter csd data*/
+byd_ctk.h (include) line 157 : /* get csd data */
+byd_ctk_api.h (include) line 18 : //extern bit g_bCsdFilterEnable;           /*filter the csd data*/   
+byd_ctk_api.h (include) line 53 :     \brief      get sensor data
+iic_isr_func in byd_iic.c (source) : 			IICBUF = iic_rx_data[iic_cnt];/* master read the first data when iic_config_para.scl_lock_rd_en = SCL_LOCK_RD_ENABLE */
+iic_isr_func in byd_iic.c (source) : 			IICBUFFER = iic_rx_data[iic_cnt];/* master read the second data when iic_config_para.scl_lock_rd_en = SCL_LOCK_RD_DISABLE,
+iic_isr_func in byd_iic.c (source) : 				IICBUF = iic_rx_data[iic_cnt];	/* master read the remain data when iic_config_para.scl_lock_rd_en = SCL_LOCK_RD_ENABLE */
+iic_isr_func in byd_iic.c (source) : 				IICBUFFER = iic_rx_data[iic_cnt];/* master read the remain data when iic_config_para.scl_lock_rd_en = SCL_LOCK_RD_DISABLE */
+iic_isr_func in byd_iic.c (source) : 			iic_tx_data[iic_cnt] = IICBUF;	/* master write data to slave device */
+iic_isr_func in byd_iic.c (source) : 			   IICBUFFER = iic_rx_data[0]; /* first data must ready befor master read when scl_lock_rd_en = SCL_LOCK_RD_DISABLE */
+byd_spi_flash.c (source) line 227 : * Input          : - pBuffer : pointer to the buffer  containing the data to be
+SPI_FLASH_PageWrite in byd_spi_flash.c (source) :   /* while there is data to be written on the FLASH */
+byd_spi_flash.c (source) line 292 : * Description    : Writes block of data to the FLASH. In this function, the
+byd_spi_flash.c (source) line 294 : * Input          : - pBuffer : pointer to the buffer  containing the data to be
+byd_spi_flash.c (source) line 402 : * Description    : Reads a block of data from the FLASH.
+byd_spi_flash.c (source) line 403 : * Input          : - pBuffer : pointer to the buffer that receives the data read
+SPI_FLASH_BufferRead_Normal in byd_spi_flash.c (source) :   while (NumByteToRead--) /* while there is data to be read */
+wifi_net_connect_send in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_net_connect_send in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_NET_CON;
+wifi_net_connect_send in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_net_connect_send in dqiot_drv_wifi.c (source) : 	if(UH010_Write_Byte(data,2) == 0)
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_NET_STATE;
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_net_connect_state in dqiot_drv_wifi.c (source) : 	UH010_ReadDatas(data,0,data_2,2);
+wifi_open_ask in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_ask in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_WF_OPEN_ASK;
+wifi_open_ask in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_ask in dqiot_drv_wifi.c (source) : 	if(UH010_Write_Byte(data,2) == 0)
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_WF_OPEN_REPLY;
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_reply_get in dqiot_drv_wifi.c (source) : 	UH010_ReadDatas(data,0,data_2,2);
+wifi_wake_up in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_wake_up in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_WAKEUP;
+wifi_wake_up in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_wake_up in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_sleep_mode in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_sleep_mode in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_SLEEP;
+wifi_sleep_mode in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_sleep_mode in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_add_password in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_add_password in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_ADD_PW;
+wifi_add_password in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_add_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_del_password in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_del_password in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_DEL_PW;
+wifi_del_password in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_del_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_add_fp in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_add_fp in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_ADD_FP;
+wifi_add_fp in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_add_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_del_fp in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_del_fp in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_DEL_FP;
+wifi_del_fp in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_del_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_wifi in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_by_wifi in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_WF_OPEN;
+wifi_open_by_wifi in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_by_wifi in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_password in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_by_password in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_PW_OPEN;
+wifi_open_by_password in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_by_password in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_RF_OPEN;
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_fp in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_by_fp in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_FP_OPEN;
+wifi_open_by_fp in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_by_fp in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_open_by_key in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_open_by_key in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_KEY_OPEN;
+wifi_open_by_key in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_open_by_key in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_door_close in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_door_close in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_CLOSE;
+wifi_door_close in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_door_close in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_via_alarm in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_via_alarm in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_VIA_ALARM;
+wifi_via_alarm in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_via_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_pw_alarm in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_pw_alarm in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_PW_ALARM;
+wifi_pw_alarm in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_pw_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_fp_alarm in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_fp_alarm in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_FP_ALARM;
+wifi_fp_alarm in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_fp_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_rf_alarm in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_rf_alarm in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_RF_ALARM;
+wifi_rf_alarm in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_rf_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+wifi_lowpower_alarm in dqiot_drv_wifi.c (source) : 	uint8_t data[2];
+wifi_lowpower_alarm in dqiot_drv_wifi.c (source) : 	data[0] = WIFI_CMD_LOWPOWER_ALARM;
+wifi_lowpower_alarm in dqiot_drv_wifi.c (source) : 	data[1] = 100;
+wifi_lowpower_alarm in dqiot_drv_wifi.c (source) : 	UH010_Write_Byte(data,2);
+dqiot_fp_sy.c (source) line 79 :   * @param  data;传输的数据
+dqiot_fp_sy.c (source) line 504 : unsigned char PS_WriteReg(unsigned char RegNum,unsigned char DATA)
+PS_WriteReg in dqiot_fp_sy.c (source) : 	AS608_SendData(DATA);
+PS_WriteReg in dqiot_fp_sy.c (source) : 	temp = RegNum+DATA+0x01+0x05+0x0E;
+iic_master.c (source) line 57 :     \retval     receive data
+iso14443.h (byd_rfid) line 40 : extern u16 ComputeCrc(u8 CRCType, u8 *Data, char Length);
+mcu02_eeprom.c (Library\byd_standard_peripheral\source) line 69 :     \retval     data
+mcu02_eeprom.c (Library\byd_standard_peripheral\source) line 209 :     \retval     data
+mcu02_flash.c (Library\byd_standard_peripheral\source) line 57 :     \retval     data
+mcu02_flash.c (Library\byd_standard_peripheral\source) line 70 :     \retval     data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 58 :     \brief      data parity
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 95 :     \brief      rfid transmit data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 96 :     \param[in]  buf:data pointer
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 97 : 	\param[in]	len:the number of data(len=0~31)          
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 146 :     \param[in]  buf:data pointer
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 147 : 	\param[in]	lenBit:the number of data bit          
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 313 :     \param[in]  buf:data pointer
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 314 : 	\param[in]	len:the number of data(len=2~31)          
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 374 :     \param[in]  buf:data pointer
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 375 : 	\param[in]	len:the number of data         
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 428 :     \brief      rfid receive data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 429 :     \param[in]  buf: receive data buffer
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 431 : 	\param[in]  len: the number of receive data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 432 :     \param[out] receive data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 486 :     \brief      receive data error bit
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 506 :     \param[out] receive data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 507 :     \retval     status: ERROR-none ,SUCCESS-receive data
+mcu02_rfid.c (Library\byd_standard_peripheral\source) line 529 :     \retval     receive data bit
+mcu02_sm4.c (Library\byd_standard_peripheral\source) line 27 :     \brief      read encrypting or decrypting data
+mcu02_sm4.c (Library\byd_standard_peripheral\source) line 43 :     \brief      write encrypting or decrypting data
+mcu02_sm4.c (Library\byd_standard_peripheral\source) line 59 :     \brief      read key data
+mcu02_sm4.c (Library\byd_standard_peripheral\source) line 75 :     \brief      write key data
+mcu02_spi.c (Library\byd_standard_peripheral\source) line 16 :     \param[in]  tx_addr: spi transmit data addr 
+mcu02_spi.c (Library\byd_standard_peripheral\source) line 17 : 				rx_addr: spi save receive data addr
+mcu02_spi.c (Library\byd_standard_peripheral\source) line 75 :     \param[in]  dat: send data
+mcu02_spi.c (Library\byd_standard_peripheral\source) line 77 :     \retval     receive data
+mcu02_system.c (Library\byd_standard_peripheral\source) line 17 :                 apb_sfr_data: write apb sfr data
+mcu02_system.c (Library\byd_standard_peripheral\source) line 31 :     \retval     data read from apb sfr
+mcu02_timer.c (Library\byd_standard_peripheral\source) line 16 : uint8_t data TH0_reload = 0,TL0_reload = 0;
+mcu02_timer.c (Library\byd_standard_peripheral\source) line 17 : uint8_t data TH1_reload = 0,TL1_reload = 0;
+mcu02_timer.h (Library\byd_standard_peripheral\include) line 104 : extern uint8_t data TH0_reload,TL0_reload;
+mcu02_timer.h (Library\byd_standard_peripheral\include) line 105 : extern uint8_t data TH1_reload,TL1_reload;
+mcu02_uart.c (Library\byd_standard_peripheral\source) line 42 : 				dat :send data
+mcu02_uart.c (Library\byd_standard_peripheral\source) line 63 :     \retval     receive data
+mcu02_uart.h (Library\byd_standard_peripheral\include) line 50 : /* data mode define */
+---- mmi_dq_motor_stop Matches (6 in 4 files) ----
+mmi_dq_factory_mode_motor_test in mmi_fm.c (mmi_src) : 	mmi_dq_motor_stop();
+mmi_dq_factory_mode_motor_test_back in mmi_fm.c (mmi_src) : 	mmi_dq_motor_stop();
+mmi_motor.c (mmi_src) line 39 : void mmi_dq_motor_stop(void)
+mmi_motor.h (mmi_inc) line 29 : void mmi_dq_motor_stop(void);
+mmi_dq_sys_door_open_cb in mmi_sys.c (mmi_src) : 	mmi_dq_motor_stop();
+mmi_dq_sys_door_close_cb in mmi_sys.c (mmi_src) : 	mmi_dq_motor_stop();
+---- mmi_dq_sys_lock_add_admin_suc Matches (5 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 										//mmi_dq_sys_lock_add_admin_suc();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_sys_lock_add_admin_suc();
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 										mmi_dq_sys_lock_add_admin_suc();
+mmi_sys.c (mmi_src) line 80 : void mmi_dq_sys_lock_add_admin_suc(void)
+mmi_sys.h (mmi_inc) line 40 : void mmi_dq_sys_lock_add_admin_suc(void);
+---- mmi_dq_fs_check_fp Matches (5 in 3 files) ----
+mmi_fs.c (mmi_src) line 435 : RET_VAL mmi_dq_fs_check_fp(unsigned char fp_index, fds_use_type type)
+mmi_dq_fs_del_fp in mmi_fs.c (mmi_src) : 	if(mmi_dq_fs_check_fp(fp_index,type) == RET_SUCESS)
+mmi_fs.h (mmi_inc) line 141 : RET_VAL mmi_dq_fs_check_fp(unsigned short fp_index, fds_use_type type);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					retval = mmi_dq_fs_check_fp(index,FDS_USE_TYPE_ALL);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					retval = mmi_dq_fs_check_fp(index,FDS_USE_TYPE_USER);
+---- dqiot_drv_enter_sleep Matches (3 in 3 files) ----
+dqiot_drv.c (source) line 114 : void dqiot_drv_enter_sleep(void)
+dqiot_drv.h (include) line 59 : void dqiot_drv_enter_sleep(void);
+mmi_dq_bsp_enter_sleep in mmi_bsp.c (mmi_src) : 	dqiot_drv_enter_sleep();
+---- mmi_dq_bsp_enter_sleep Matches (3 in 3 files) ----
+mmi_bsp.c (mmi_src) line 48 : void mmi_dq_bsp_enter_sleep(void)
+mmi_bsp.h (mmi_inc) line 30 : void mmi_dq_bsp_enter_sleep(void);
+mmi_dq_sys_enter_sleep in mmi_sys.c (mmi_src) : 	mmi_dq_bsp_enter_sleep();
+---- mmi_dq_sys_enter_sleep Matches (4 in 3 files) ----
+mmi_wait_sleep_task_proc in mmi_ms.c (mmi_src) : 		mmi_dq_sys_enter_sleep();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						//mmi_dq_sys_enter_sleep();
+mmi_sys.c (mmi_src) line 94 : void mmi_dq_sys_enter_sleep(void)
+mmi_sys.h (mmi_inc) line 49 : void mmi_dq_sys_enter_sleep(void);
+---- dqiot_drv_uart0A_init Matches (2 in 2 files) ----
+dqiot_drv.c (source) line 372 : void dqiot_drv_uart0A_init(void)
+dqiot_drv.h (include) line 127 : void dqiot_drv_uart0A_init(void);
+---- dqiot_drv_uart0B_init Matches (5 in 3 files) ----
+dqiot_drv_wake_up in dqiot_drv.c (source) : 	dqiot_drv_uart0B_init();
+dqiot_drv.c (source) line 413 : void dqiot_drv_uart0B_init(void)
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 	//dqiot_drv_uart0B_init();
+dqiot_drv.h (include) line 134 : void dqiot_drv_uart0B_init(void);
+mmi_dq_fp_init in mmi_fps.c (mmi_src) : 	dqiot_drv_uart0B_init();
+---- SYS_STATUS_WAIT_FOR_ENTER_SLEEP Matches (9 in 4 files) ----
+main in main.c (source) : 		if(SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
+mmi_ms.h (mmi_inc) line 51 : 	SYS_STATUS_WAIT_FOR_ENTER_SLEEP = 0x60,
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
+---- RFID_DISABLE Matches (5 in 4 files) ----
+dqiot_drv_enter_sleep in dqiot_drv.c (source) : 	//RFID_DISABLE();
+dqiot_drv_rfid_check in dqiot_drv_rfid.c (source) : 	RFID_DISABLE();
+dqiot_drv_rfid_get_card_number in dqiot_drv_rfid.c (source) : 	RFID_DISABLE();
+rfid_enter_lowpower_config in mcu02_rfid.c (Library\byd_standard_peripheral\source) : 	RFID_DISABLE();//RFID关闭       	
+mcu02_rfid.h (Library\byd_standard_peripheral\include) line 90 : #define RFID_DISABLE()                RFID_CFG &= ~0x01//RFID关闭
+---- SYS_STATUS_WAIT_FOR_ENTER_SLEEP Matches (9 in 4 files) ----
+main in main.c (source) : 		if(SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
+mmi_ms.h (mmi_inc) line 51 : 	SYS_STATUS_WAIT_FOR_ENTER_SLEEP = 0x60,
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
+---- csd_sensor_disable_all Matches (2 in 2 files) ----
+mcu02_csd.c (Library\byd_standard_peripheral\source) line 140 : void csd_sensor_disable_all(void)
+mcu02_csd.h (Library\byd_standard_peripheral\include) line 230 : void csd_sensor_disable_all(void);
+---- UART0_DISABLE Matches (2 in 2 files) ----
+dqiot_drv_enter_sleep in dqiot_drv.c (source) : 	UART0_DISABLE();
+mcu02_uart.h (Library\byd_standard_peripheral\include) line 84 : #define UART0_DISABLE()			UART0_CON1 &= ~0x40
+---- CSD_LOWPOWER_ENABLE Matches (3 in 2 files) ----
+byd_ctk.c (source) line 76 : 	CSD_LOWPOWER_ENABLE, //uint8_t csd_lowpower     /* enable or disable csd lowpower function */
+mcu02_csd.h (Library\byd_standard_peripheral\include) line 49 : #define CSD_LOWPOWER_ENABLE    1
+mcu02_csd.h (Library\byd_standard_peripheral\include) line 129 : csd lowpower work: CSD_LOWPOWER_ENABLE
+---- mmi_dq_wifi_open_door Matches (3 in 3 files) ----
+mmi_dq_sys_door_open in mmi_sys.c (mmi_src) : 	mmi_dq_wifi_open_door();
+mmi_wifi.c (mmi_src) line 86 : void mmi_dq_wifi_open_door(void)
+mmi_wifi.h (mmi_inc) line 43 : void mmi_dq_wifi_open_door(void);
+---- mmi_dq_sys_door_open Matches (5 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_sys_door_open(SYS_OPEN_BY_PASSWORD);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_door_open(SYS_OPEN_BY_FP);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			mmi_dq_sys_door_open(SYS_OPEN_BY_RFID);
+mmi_sys.c (mmi_src) line 142 : void mmi_dq_sys_door_open(sys_open_type type)
+mmi_sys.h (mmi_inc) line 67 : void mmi_dq_sys_door_open(sys_open_type type);
+---- SYS_STATUS_DOOR_OPEN Matches (2 in 2 files) ----
+mmi_ms.h (mmi_inc) line 46 : 	SYS_STATUS_DOOR_OPEN = 0x52,
+mmi_dq_sys_door_open in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_DOOR_OPEN);
+---- WIFI_ADDR Matches (5 in 2 files) ----
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		if (iic_sendbyte_and_getnack(WIFI_ADDR)) {   
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01)) {
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		  if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01)) {
+UH010_Write_Byte in dqiot_drv_wifi.c (source) :     if (iic_sendbyte_and_getnack(WIFI_ADDR & ~0x01)) {   
+dqiot_drv_wifi.h (include) line 7 : #define WIFI_ADDR 0x60
+---- VBAT_TEST_PORT Matches (3 in 2 files) ----
+dqiot_drv_gpio_init in dqiot_drv.c (source) : 	gpio_init(VBAT_TEST_PORT,VBAT_TEST_PIN,GPIO_MODE_IN_FLOATING);
+dqiot_drv_gpio_init in dqiot_drv.c (source) : 	gpio_bit_reset(VBAT_TEST_PORT,VBAT_TEST_PIN);
+dqiot_gpio.h (include) line 61 : #define VBAT_TEST_PORT		GPIOG
+---- CHAR_BUFFER1 Matches (1 in 1 files) ----
+dqiot_fp_sy.h (include) line 8 : #define CHAR_BUFFER1 0x01
+---- mmi_dq_fs_get_rfid_unuse_index Matches (2 in 2 files) ----
+mmi_fs.c (mmi_src) line 516 : unsigned char mmi_dq_fs_get_rfid_unuse_index(void)
+mmi_fs.h (mmi_inc) line 176 : unsigned char mmi_dq_fs_get_rfid_unuse_index(void);
+---- ADC_DISABLE Matches (3 in 3 files) ----
+byd_adc_init in byd_adc.c (source) :     ADC_DISABLE();			
+dqiot_drv_rfid_check in dqiot_drv_rfid.c (source) : 	ADC_DISABLE();
+mcu02_adc.h (Library\byd_standard_peripheral\include) line 32 : #define ADC_DISABLE()           REG_ADDR = PD_ANA;REG_DATA |= 0x01
+---- uart_send_buf Matches (4 in 1 files) ----
+dqiot_drv.c (source) line 27 : //unsigned char uart_send_buf[UART0_SEND_DATA_LEN];
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 	//memset(uart_send_buf,0x00,sizeof(uart_send_buf));
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 	//memcpy(uart_send_buf,p_data,length);
+---- uint8 Matches (0 in 0 files) ----
+---- FP_Get_Light Matches (3 in 3 files) ----
+dqiot_fp_sy.c (source) line 871 : FP_COLOR_E FP_Get_Light(void)
+dqiot_fp_sy.h (include) line 77 : FP_COLOR_E FP_Get_Light(void);
+mmi_dq_fp_get_light in mmi_fps.c (mmi_src) : 	retval = FP_Get_Light();
+---- mmi_dq_fp_get_light Matches (1 in 1 files) ----
+mmi_fps.c (mmi_src) line 257 : FP_COLOR_E mmi_dq_fp_get_light(void)
+---- PS_GetEcho Matches (2 in 2 files) ----
+dqiot_fp_sy.c (source) line 290 : unsigned char PS_GetEcho(void)
+dqiot_fp_sy.h (include) line 61 :  unsigned char PS_GetEcho(void);
+---- AS608_EnterSleep Matches (1 in 1 files) ----
+dqiot_fp_sy.h (include) line 76 : //void AS608_EnterSleep(void);
+---- PS_Connect Matches (2 in 2 files) ----
+dqiot_fp_sy.c (source) line 550 : unsigned char PS_Connect(unsigned long *PS_Addr)
+dqiot_fp_sy.h (include) line 70 :  //unsigned char PS_Connect(unsigned long *PS_Addr);//检查STM32与指纹模块的通信连接
+---- ReceiveInfo Matches (3 in 1 files) ----
+dqiot_fp_sy.c (source) line 21 : unsigned short  ReceiveInfo( unsigned char *rec_data);
+ReturnFlag in dqiot_fp_sy.c (source) : 	//*i = ReceiveInfo(uart_rec_buff);
+dqiot_fp_sy.c (source) line 256 : unsigned char  ReceiveInfo( unsigned char *rec_data)
+---- fp_temp_mode Matches (1 in 1 files) ----
+dqiot_fp_sy.c (source) line 13 : static unsigned char fp_temp_mode = 0;
+---- fp_flag Matches (3 in 1 files) ----
+dqiot_fp_sy.c (source) line 17 : static FP_TYPE fp_flag = FP_NONE;
+fp_get_type in dqiot_fp_sy.c (source) : 	return fp_flag;
+FP_Light in dqiot_fp_sy.c (source) : //	if(fp_flag == FP_LT5X)
+---- ps_start_flag Matches (6 in 1 files) ----
+dqiot_fp_sy.c (source) line 19 : static unsigned char ps_start_flag = 0;
+PS_UART_Callback in dqiot_fp_sy.c (source) : 		ps_start_flag = 1;
+AS608_PackHead in dqiot_fp_sy.c (source) : 	while(ps_start_flag==0&&delay_times>0)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//if(ps_start_flag == 0)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//else if(ps_start_flag == 1)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//	ps_start_flag = 2;
+---- PS_UART_Callback Matches (1 in 1 files) ----
+dqiot_fp_sy.c (source) line 66 : static void PS_UART_Callback(unsigned char send_data)
+---- UART_Callback Matches (1 in 1 files) ----
+dqiot_fp_sy.c (source) line 47 : static void UART_Callback(unsigned char send_data)
+---- ReturnFlag Matches (14 in 1 files) ----
+dqiot_fp_sy.c (source) line 251 : unsigned char  ReturnFlag( unsigned char *i)
+PS_GetEcho in dqiot_fp_sy.c (source) : 	//sure=ReturnFlag(&p);
+PS_GetImage in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_GenChar in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_Match in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_RegModel in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_StoreChar in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_DeletChar in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_HighSpeedSearch in dqiot_fp_sy.c (source) : 	// ensure = ReturnFlag(&rc);
+PS_Empty in dqiot_fp_sy.c (source) : 	// sure = ReturnFlag(&p);
+PS_WriteReg in dqiot_fp_sy.c (source) : 	sure=ReturnFlag(&p);
+PS_ReadSysPara in dqiot_fp_sy.c (source) : 	ensure=ReturnFlag(&p);
+PS_ValidTempleteNum in dqiot_fp_sy.c (source) : 	// ensure = ReturnFlag(&p);
+FP_Light in dqiot_fp_sy.c (source) : 		//sure=ReturnFlag(&p);
+---- mmi_dq_fp_delete Matches (7 in 4 files) ----
+mmi_fps.c (mmi_src) line 156 : unsigned char mmi_dq_fp_delete(unsigned short index)
+mmi_fps.h (mmi_inc) line 84 : unsigned char mmi_dq_fp_delete(unsigned short index);
+mmi_fps.h (mmi_inc) line 124 : unsigned char mmi_dq_fp_delete(unsigned short index);
+mmi_dq_fs_clr_fp in mmi_fs.c (mmi_src) : 				//fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									retval = mmi_dq_fp_delete(index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 												mmi_dq_fp_delete(index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											retval = mmi_dq_fp_delete(index);
+---- UART0_GET_DATA_LEN Matches (3 in 2 files) ----
+dqiot_drv.c (source) line 26 : static unsigned char uart_get_buf[UART0_GET_DATA_LEN];
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 			if(uart_getbuflen >= UART0_GET_DATA_LEN )
+dqiot_drv.h (include) line 30 : #define UART0_GET_DATA_LEN	20
+---- mmi_dq_fp_get_image Matches (3 in 3 files) ----
+mmi_fps.c (mmi_src) line 65 : unsigned char mmi_dq_fp_get_image(void)
+mmi_fps.h (mmi_inc) line 43 : unsigned short mmi_dq_fp_get_image(void);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 	retval = mmi_dq_fp_get_image();
+---- mmi_dq_fps_set_irq_handle_cb Matches (2 in 2 files) ----
+mmi_fps.c (mmi_src) line 28 : void mmi_dq_fps_set_irq_handle_cb(fp_irq_handle_callback cb)
+mmi_fps.h (mmi_inc) line 52 : void mmi_dq_fps_set_irq_handle_cb(fp_irq_handle_callback cb);
+---- adc_VolT Matches (3 in 3 files) ----
+byd_adc.c (source) line 149 : unsigned char adc_VolT(void)
+byd_adc.h (include) line 33 : void adc_VolT(void);
+main in main.c (source) : 	if(adc_VolT() == 1) 	
+---- wifi_lowpower_flag Matches (3 in 1 files) ----
+mmi_wifi.c (mmi_src) line 210 : uint8_t wifi_lowpower_flag = 0;
+mmi_dq_wifi_lowpower_alarm in mmi_wifi.c (mmi_src) : 	if(wifi_lowpower_flag == 0)
+mmi_dq_wifi_lowpower_alarm in mmi_wifi.c (mmi_src) : 		wifi_lowpower_flag = 1;
+---- mmi_dq_fp_get_pin Matches (3 in 2 files) ----
+mmi_fps.c (mmi_src) line 280 : unsigned char mmi_dq_fp_get_pin(void)
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 	if((ret == RET_SUCESS) || (mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() == 0)||(mmi_dq_fp_get_pin() == 0))
+mmi_wait_sleep_task_proc in mmi_ms.c (mmi_src) : 	if((key_last_value == KEY_INVALID) && (mmi_dq_aud_get_state() == 0) && (mmi_dq_rst_get_pin() != 0) && (mmi_dq_fp_get_pin() != 0))
+---- mmi_dq_fp_high_speed_search Matches (3 in 3 files) ----
+mmi_fps.c (mmi_src) line 199 : unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id,unsigned short *index)
+mmi_fps.h (mmi_inc) line 59 : unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id,unsigned short *index);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 			retval = mmi_dq_fp_high_speed_search(opt_time,&index);
+---- mmi_dq_fp_search Matches (2 in 2 files) ----
+mmi_fps.c (mmi_src) line 222 : unsigned char mmi_dq_fp_search(unsigned char Buf_id,unsigned short *index)
+mmi_fps.h (mmi_inc) line 123 : unsigned char mmi_dq_fp_search(unsigned char Buf_id, unsigned short *index);
+---- mmi_dq_wifi_setting Matches (3 in 3 files) ----
+mmi_sys.c (mmi_src) line 782 : 	//{STR_ID_SYSTEM,STR_ID_WIFI,mmi_dq_wifi_setting},
+mmi_wifi.c (mmi_src) line 42 : void mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : void mmi_dq_wifi_setting(void);
+---- mmi_dq_wifi_connected_suc Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 80 : void mmi_dq_wifi_connected_suc(void)
+mmi_wifi.h (mmi_inc) line 27 : void mmi_dq_wifi_connected_suc(void);
+---- mmi_dq_wifi_connected_fail Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 63 : void mmi_dq_wifi_connected_fail(void)
+mmi_wifi.h (mmi_inc) line 19 : void mmi_dq_wifi_connected_fail(void);
+---- mmi_dq_wifi_setting Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 42 : unsigned char mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : unsigned char mmi_dq_wifi_setting(void);
+---- g_wifi_check_flag Matches (6 in 1 files) ----
+mmi_sys.c (mmi_src) line 23 : static unsigned char g_wifi_check_flag = 0;
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 1)
+timer2_event_handler in mmi_sys.c (mmi_src) : 			g_wifi_check_flag = 2;
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 2)
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 		g_wifi_check_flag = 0;
+mmi_dq_sys_set_wifi_check in mmi_sys.c (mmi_src) : 	g_wifi_check_flag = 1;
+---- mmi_dq_wifi_check_connect Matches (3 in 3 files) ----
+mmi_dq_ms_sys_msg_handle in mmi_ms.c (mmi_src) : 				mmi_dq_wifi_check_connect();
+mmi_wifi.c (mmi_src) line 97 : void mmi_dq_wifi_check_connect(void)
+mmi_wifi.h (mmi_inc) line 35 : void mmi_dq_wifi_check_connect(void);
+---- dqiot_drv_uart0_sendData Matches (20 in 5 files) ----
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(&num,1);
+M1_Example in byd_mifare.c (byd_rfid) : 		   dqiot_drv_uart0_sendData(aucBlkBuf,18);
+dqiot_drv.c (source) line 511 : void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length)
+dqiot_drv.h (include) line 159 : void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length);
+drv_fp_test in dqiot_drv_fp.c (source) : 	dqiot_drv_uart0_sendData(test_data,16);
+AS608_SendData in dqiot_fp_sy.c (source) : 	dqiot_drv_uart0_sendData(&send_data, 1);
+---- ps_start_flag Matches (6 in 1 files) ----
+dqiot_fp_sy.c (source) line 19 : //static unsigned char ps_start_flag = 0;
+dqiot_fp_sy.c (source) line 70 : //		ps_start_flag = 1;
+AS608_PackHead in dqiot_fp_sy.c (source) : 	while(ps_start_flag==0&&delay_times>0)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//if(ps_start_flag == 0)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//else if(ps_start_flag == 1)
+AS608_PackHead in dqiot_fp_sy.c (source) : 	//	ps_start_flag = 2;
+---- uart_tx_byte Matches (5 in 4 files) ----
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 		uart_tx_byte(UART0,p_data[i]);
+putchar in dqiot_drv.c (source) :      uart_tx_byte(UART0,c);
+AS608_SendData in dqiot_fp_sy.c (source) : 	uart_tx_byte(send_data);
+mcu02_uart.c (Library\byd_standard_peripheral\source) line 46 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
+mcu02_uart.h (Library\byd_standard_peripheral\include) line 154 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat);
+---- uart_getbuflen Matches (10 in 2 files) ----
+dqiot_drv.c (source) line 29 : static unsigned char uart_getbuflen = 0;
+dqiot_drv_uart0A_init in dqiot_drv.c (source) : 	// uart_getbuflen = 0;
+dqiot_drv_uart0B_init in dqiot_drv.c (source) : 	// uart_getbuflen = 0;
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 			if(uart_getbuflen >= UART0_GET_DATA_LEN )
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 				uart_get_buf[uart_getbuflen++] = UART0_BUF;
+dqiot_drv_clr_uart0_data in dqiot_drv.c (source) : 	uart_getbuflen = 0;
+JudgeStr in dqiot_fp_sy.c (source) : 		if (uart_getbuflen >= 9 + length)
+JudgeStr in dqiot_fp_sy.c (source) : 			for (i = 0; i < uart_getbuflen; i++)
+JudgeStr in dqiot_fp_sy.c (source) : 				for (i; i < uart_getbuflen; i++)
+PS_GetImage in dqiot_fp_sy.c (source) : 	uart_getbuflen = 0;
+---- uart_tx_byte Matches (5 in 4 files) ----
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 		uart_tx_byte(UART0,p_data[i]);
+putchar in dqiot_drv.c (source) :      uart_tx_byte(UART0,c);
+AS608_SendData in dqiot_fp_sy.c (source) : 	uart_tx_byte(send_data);
+mcu02_uart.c (Library\byd_standard_peripheral\source) line 46 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
+mcu02_uart.h (Library\byd_standard_peripheral\include) line 154 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat);

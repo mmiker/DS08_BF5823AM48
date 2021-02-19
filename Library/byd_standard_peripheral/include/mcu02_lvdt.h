@@ -32,10 +32,8 @@
 #define LVDT_IPL_SET(x)         IPL2 &= ~0x02;IPL2 |= (x<<1)  /* set interrupt priority */ 
 
 /* function declarations */
-extern u16 volL; /* 0:电压低;1:电压正常 */
 /* lvdt init */
-void lvdt_init(uint8_t vth_sel);//电压检测初始化
-void lvdt_VolT(void);//电压检测
+void lvdt_init(uint8_t vth_sel);
 
 
 #endif

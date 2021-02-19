@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_LVDT                                                        02/19/2021 17:29:50 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_LVDT                                                        02/19/2021 17:34:43 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_LVDT
@@ -22,66 +22,30 @@ line level    source
   10          */
   11          
   12          #include "mcu02_lvdt.h"
-  13          #include "mmi_audio.h"
-  14          #include "dqiot_drv.h"
-  15          #include "delay.h"
-  16          
-  17          /**
-  18            * @brief  电压检测初始化
-  19            * @param  vth_sel;
-  20            * 0: 2.7v,
-  21            * 1: 3v,
-  22            * 2: 3.8v,
-  23            * 3: 4.2v
-  24            * @return none
-  25            * @note   none
-  26            * @see    none
-  27            */
-  28          void lvdt_init(uint8_t vth_sel)
-  29          {
-  30   1          LVDT_VOL_SET(vth_sel);  //设置电压检测值
-  31   1          LVDT_INT_DOWN_FLAG_CLR; //清除电压下降中断标志
-  32   1          LVDT_INT_UP_FLAG_CLR;   //清除电压上升中断标志
-  33   1          LVDT_IPL_SET(LOW);      //设置中断优先级
-  34   1          LVDT_INT_ENABLE();      //启用中断
-  35   1          LVDT_ENABLE();          //使能电压检测
-  36   1      }
-  37          
-  38          /**
-  39            * @brief  电压检测
-  40            * @param  none  
-  41            * @return none
-  42            * @note   none
-  43            * @see    none
-  44            */
-  45          void lvdt_VolT(void)
-  46          {
-  47   1          // u16 volL = 1; /* 0:电压低;1:电压正常 */
-  48   1      
-  49   1          if (GET_INT_LVDT_FLAG_STATE(INT_VOL_UP_FLAG)) //电压低
-  50   1          {
-  51   2              // volL = 0;
-  52   2              LVDT_INT_DOWN_FLAG_CLR; //清除电压下降中断标志
-C51 COMPILER V9.59.0.0   MCU02_LVDT                                                        02/19/2021 17:29:50 PAGE 2   
-
-  53   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
-  54   2          }
-  55   1          if (GET_INT_LVDT_FLAG_STATE(INT_VOL_DOWN_FLAG)) //电压正常
-  56   1          {
-  57   2              // volL = 1;
-  58   2              LVDT_INT_UP_FLAG_CLR; //清除电压上升中断标志
-  59   2          }
-  60   1      
-  61   1          // if (volL == 0)
-  62   1          // {
-  63   1          //     delay_ms(2000);
-  64   1          //     mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
-  65   1          // }
-  66   1      }
+  13          
+  14          /*!
+  15              \brief      lvdt init
+  16              \param[in]  vth_sel:
+  17                            0 : 2.7v
+  18                      1 : 3v
+  19                      2 : 3.8v
+  20                      3 : 4.2v        
+  21              \param[out] none
+  22              \retval     none
+  23          */
+  24          void lvdt_init(uint8_t vth_sel)
+  25          { 
+  26   1        LVDT_VOL_SET(vth_sel);
+  27   1          LVDT_INT_DOWN_FLAG_CLR;//清除中断标志位
+  28   1        LVDT_INT_UP_FLAG_CLR;
+  29   1        LVDT_IPL_SET(LOW);
+  30   1        LVDT_INT_ENABLE();
+  31   1        LVDT_ENABLE();  
+  32   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     46    ----
+   CODE SIZE        =     24    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

@@ -1,0 +1,657 @@
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_SPI_FLASH
+OBJECT MODULE PLACED IN .\output\byd_spi_flash.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\byd_spi_flash.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\incl
+                    -ude;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\b
+                    -yd_rfid;.\mmi_inc) DEBUG PRINT(.\list\byd_spi_flash.lst) TABS(2) OBJECT(.\output\byd_spi_flash.obj)
+
+line level    source
+
+   1          #include "byd_spi_flash.h"
+   2          
+   3          
+   4          /*******************************************************************************
+   5          * Function Name  : SPI_FLASH_SendByte
+   6          * Description    : spi_flash 读写通信
+   7          * Input          : 发送数据
+   8          * Output         : None
+   9          * Return         : 接收数据
+  10          *******************************************************************************/
+  11          uint8_t SPI_FLASH_SendByte(uint8_t dat)
+  12          { 
+  13   1        return spi_sendbyte(dat); 
+  14   1      }
+  15          /*******************************************************************************
+  16          * Function Name  : SPI_FLASH_SectorErase
+  17          * Description    : Erases the specified FLASH sector.
+  18          * Input          : SectorAddr: address of the sector to erase.
+  19          * Output         : None
+  20          * Return         : 0:succed 1:fail
+  21          *******************************************************************************/
+  22          uint8_t SPI_FLASH_SectorErase(uint32_t SectorAddr)
+  23          {
+  24   1        uint8_t FLASH_Status,error_flag = RT_OK;
+  25   1        /* Send write enable instruction */
+  26   1        SPI_FLASH_WriteEnable();
+  27   1        SPI_FLASH_WaitForWriteEnd();
+  28   1        /* Sector Erase */
+  29   1        /* Select the FLASH: Chip Select low */
+  30   1        macSPI_FLASH_CS_ENABLE();
+  31   1        /* Send Sector Erase instruction */
+  32   1        SPI_FLASH_SendByte(W25X_SectorErase);
+  33   1        /* Send SectorAddr high nibble address byte */
+  34   1        SPI_FLASH_SendByte((SectorAddr & 0xFF0000) >> 16);
+  35   1        /* Send SectorAddr medium nibble address byte */
+  36   1        SPI_FLASH_SendByte((SectorAddr & 0xFF00) >> 8);
+  37   1        /* Send SectorAddr low nibble address byte */
+  38   1        SPI_FLASH_SendByte(SectorAddr & 0xFF);
+  39   1        /* Deselect the FLASH: Chip Select high */
+  40   1        macSPI_FLASH_CS_DISABLE();
+  41   1        delay_us(2);
+  42   1        macSPI_FLASH_CS_ENABLE();
+  43   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+  44   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+  45   1        if((FLASH_Status & WIP_Flag) == RESET)
+  46   1        {
+  47   2          error_flag = RT_FAIL;
+  48   2        }
+  49   1        macSPI_FLASH_CS_DISABLE();
+  50   1        
+  51   1        /* Wait the end of Flash writing */
+  52   1        SPI_FLASH_WaitForWriteEnd();
+  53   1      
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 2   
+
+  54   1        return error_flag;
+  55   1      }
+  56          /*******************************************************************************
+  57          * Function Name  : FLASH_PageErase 页擦除 256byte
+  58          * Description    : Erases the specified FLASH page.
+  59          * Input          : SectorAddr: address of the page to erase.
+  60          * Output         : None
+  61          * Return         : 0:succed 1:fail
+  62          *******************************************************************************/
+  63          uint8_t SPI_FLASH_PageErase(uint32_t PageAddr)
+  64          {
+  65   1        uint8_t FLASH_Status,error_flag = RT_OK;
+  66   1        /* Send write enable instruction */
+  67   1        SPI_FLASH_WriteEnable();
+  68   1        SPI_FLASH_WaitForWriteEnd();
+  69   1        /* Sector Erase */
+  70   1        /* Select the FLASH: Chip Select low */
+  71   1        macSPI_FLASH_CS_ENABLE();
+  72   1        /* Send Sector Erase instruction */
+  73   1        SPI_FLASH_SendByte(W25X_PageErase);
+  74   1        /* Send SectorAddr high nibble address byte */
+  75   1        SPI_FLASH_SendByte(((PageAddr & 0xFF0000) >> 16));
+  76   1        /* Send SectorAddr medium nibble address byte */
+  77   1        SPI_FLASH_SendByte(((PageAddr & 0xFF00) >> 8));
+  78   1        /* Send SectorAddr low nibble address byte */
+  79   1        SPI_FLASH_SendByte(PageAddr & 0xFF);
+  80   1        /* Deselect the FLASH: Chip Select high */
+  81   1        macSPI_FLASH_CS_DISABLE();
+  82   1        delay_us(2);
+  83   1        macSPI_FLASH_CS_ENABLE();
+  84   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+  85   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+  86   1        if((FLASH_Status & WIP_Flag) == RESET)
+  87   1        {
+  88   2         error_flag = RT_FAIL;
+  89   2        }
+  90   1        macSPI_FLASH_CS_DISABLE();  
+  91   1        
+  92   1        /* Wait the end of Flash writing */
+  93   1        SPI_FLASH_WaitForWriteEnd();
+  94   1        
+  95   1        return error_flag;
+  96   1      }
+  97          //Added by sean zhu.
+  98          /*******************************************************************************
+  99          * Function Name  : FLASH_Block32kErase 32K 块擦除 32*1024 bytes
+ 100          * Description    : Erases the specified FLASH Block.
+ 101          * Input          : BlockAddr: address of the block to erase.
+ 102          * Output         : None
+ 103          * Return         : 0:succed 1:fail
+ 104          *******************************************************************************/
+ 105          uint8_t SPI_FLASH_Block32kErase(uint32_t BlockAddr)
+ 106          {
+ 107   1        uint8_t FLASH_Status,error_flag = RT_OK;
+ 108   1        
+ 109   1        /* Send write enable instruction */
+ 110   1        SPI_FLASH_WriteEnable();
+ 111   1        SPI_FLASH_WaitForWriteEnd();
+ 112   1        /* Sector Erase */
+ 113   1        /* Select the FLASH: Chip Select low */
+ 114   1        macSPI_FLASH_CS_ENABLE();
+ 115   1        /* Send Sector Erase instruction */
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 3   
+
+ 116   1        SPI_FLASH_SendByte(W25X_Block32KErase);
+ 117   1        /* Send SectorAddr high nibble address byte */
+ 118   1        SPI_FLASH_SendByte((BlockAddr & 0xFF0000) >> 16);
+ 119   1        /* Send SectorAddr medium nibble address byte */
+ 120   1        SPI_FLASH_SendByte((BlockAddr & 0xFF00) >> 8);
+ 121   1        /* Send SectorAddr low nibble address byte */
+ 122   1        SPI_FLASH_SendByte(BlockAddr & 0xFF);
+ 123   1        /* Deselect the FLASH: Chip Select high */
+ 124   1        macSPI_FLASH_CS_DISABLE();
+ 125   1        delay_us(2);
+ 126   1        
+ 127   1        macSPI_FLASH_CS_ENABLE();
+ 128   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+ 129   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+ 130   1        if((FLASH_Status & WIP_Flag) == RESET)
+ 131   1        {
+ 132   2          error_flag = RT_FAIL;
+ 133   2        }
+ 134   1        macSPI_FLASH_CS_DISABLE();  
+ 135   1        
+ 136   1        /* Wait the end of Flash writing */
+ 137   1        SPI_FLASH_WaitForWriteEnd();
+ 138   1        
+ 139   1        return error_flag;
+ 140   1      
+ 141   1      }
+ 142          //Added by sean zhu.
+ 143          /*******************************************************************************
+ 144          * Function Name  : FLASH_Block64kErase 64k 块擦除 64*1024 bytes
+ 145          * Description    : Erases the specified FLASH block.
+ 146          * Input          : BlockAddr: address of the block to erase.
+ 147          * Output         : None
+ 148          * Return         : 0:succed 1:fail
+ 149          *******************************************************************************/
+ 150          uint8_t SPI_FLASH_Block64kErase(uint32_t BlockAddr)
+ 151          {
+ 152   1        uint8_t FLASH_Status,error_flag = RT_OK;
+ 153   1        
+ 154   1        /* Send write enable instruction */
+ 155   1        SPI_FLASH_WriteEnable();
+ 156   1        SPI_FLASH_WaitForWriteEnd();
+ 157   1        /* Sector Erase */
+ 158   1        /* Select the FLASH: Chip Select low */
+ 159   1        macSPI_FLASH_CS_ENABLE();
+ 160   1        /* Send Sector Erase instruction */
+ 161   1        SPI_FLASH_SendByte(W25X_BlockErase);
+ 162   1        /* Send SectorAddr high nibble address byte */
+ 163   1        SPI_FLASH_SendByte((BlockAddr & 0xFF0000) >> 16);
+ 164   1        /* Send SectorAddr medium nibble address byte */
+ 165   1        SPI_FLASH_SendByte((BlockAddr & 0xFF00) >> 8);
+ 166   1        /* Send SectorAddr low nibble address byte */
+ 167   1        SPI_FLASH_SendByte(BlockAddr & 0xFF);
+ 168   1        /* Deselect the FLASH: Chip Select high */
+ 169   1        macSPI_FLASH_CS_DISABLE();
+ 170   1        delay_us(2);
+ 171   1        
+ 172   1        macSPI_FLASH_CS_ENABLE();
+ 173   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+ 174   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+ 175   1        if((FLASH_Status & WIP_Flag) == RESET)
+ 176   1        {
+ 177   2          error_flag = RT_FAIL;
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 4   
+
+ 178   2        }
+ 179   1        macSPI_FLASH_CS_DISABLE();  
+ 180   1        
+ 181   1        /* Wait the end of Flash writing */
+ 182   1        SPI_FLASH_WaitForWriteEnd();
+ 183   1        
+ 184   1        return error_flag;
+ 185   1      
+ 186   1      }
+ 187          /*******************************************************************************
+ 188          * Function Name  : SPI_FLASH_BulkErase
+ 189          * Description    : Erases the entire FLASH.
+ 190          * Input          : None
+ 191          * Output         : None
+ 192          * Return         : 0:succed 1:fail
+ 193          *******************************************************************************/
+ 194          uint8_t SPI_FLASH_BulkErase(void)
+ 195          {
+ 196   1        uint8_t FLASH_Status,error_flag = RT_OK;
+ 197   1        /* Send write enable instruction */
+ 198   1        SPI_FLASH_WriteEnable();
+ 199   1        
+ 200   1        /* Bulk Erase */
+ 201   1        /* Select the FLASH: Chip Select low */
+ 202   1        macSPI_FLASH_CS_ENABLE();
+ 203   1        /* Send Bulk Erase instruction  */
+ 204   1        SPI_FLASH_SendByte(W25X_ChipErase);
+ 205   1        /* Deselect the FLASH: Chip Select high */
+ 206   1        macSPI_FLASH_CS_DISABLE();
+ 207   1        delay_us(2);
+ 208   1        
+ 209   1        macSPI_FLASH_CS_ENABLE();
+ 210   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+ 211   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+ 212   1        if((FLASH_Status & WIP_Flag) == RESET)
+ 213   1        {
+ 214   2          error_flag = RT_FAIL;
+ 215   2        }
+ 216   1        macSPI_FLASH_CS_DISABLE();
+ 217   1        /* Wait the end of Flash writing */
+ 218   1        SPI_FLASH_WaitForWriteEnd();
+ 219   1        return error_flag;
+ 220   1      }
+ 221          
+ 222          /*******************************************************************************
+ 223          * Function Name  : SPI_FLASH_PageWrite
+ 224          * Description    : Writes more than one byte to the FLASH with a single WRITE
+ 225          *                  cycle(Page WRITE sequence). The number of byte can't exceed
+ 226          *                  the FLASH page size.
+ 227          * Input          : - pBuffer : pointer to the buffer  containing the data to be
+ 228          *                    written to the FLASH.
+ 229          *                  - WriteAddr : FLASH's internal address to write to.
+ 230          *                  - NumByteToWrite : number of bytes to write to the FLASH,
+ 231          *                    must be equal or less than "SPI_FLASH_PageSize" value.
+ 232          * Output         : None
+ 233          * Return         : 0:succed 1:fail
+ 234          *******************************************************************************/
+ 235          uint8_t SPI_FLASH_PageWrite(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
+ 236          {
+ 237   1        uint8_t FLASH_Status,error_flag = RT_OK;
+ 238   1        /* Enable the write access to the FLASH */
+ 239   1        SPI_FLASH_WriteEnable();
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 5   
+
+ 240   1      
+ 241   1        /* Select the FLASH: Chip Select low */
+ 242   1        macSPI_FLASH_CS_ENABLE();
+ 243   1        /* Send "Write to Memory " instruction */
+ 244   1        SPI_FLASH_SendByte(W25X_PageProgram);
+ 245   1        /* Send WriteAddr high nibble address byte to write to */
+ 246   1        SPI_FLASH_SendByte((WriteAddr & 0xFF0000) >> 16);
+ 247   1        /* Send WriteAddr medium nibble address byte to write to */
+ 248   1        SPI_FLASH_SendByte((WriteAddr & 0xFF00) >> 8);
+ 249   1        /* Send WriteAddr low nibble address byte to write to */
+ 250   1        SPI_FLASH_SendByte(WriteAddr & 0xFF);
+ 251   1      
+ 252   1        if(NumByteToWrite > SPI_FLASH_PerWritePageSize)
+ 253   1        {
+ 254   2           NumByteToWrite = SPI_FLASH_PerWritePageSize;
+ 255   2           //printf("\n\r Err: SPI_FLASH_PageWrite too large!");
+ 256   2        }
+ 257   1      #if SPI_HIGH_SPEED_EN==0
+ 258   1        /* while there is data to be written on the FLASH */
+ 259   1        while (NumByteToWrite--)
+ 260   1        {
+ 261   2          /* Send the current byte */
+ 262   2          SPI_FLASH_SendByte(*pBuffer);
+ 263   2          /* Point on the next byte to be written */
+ 264   2          pBuffer++;
+ 265   2        }
+ 266   1      #else
+                if(NumByteToWrite != 0x00){
+                  spi_high_speed_comm((uint16_t)pBuffer,0,NumByteToWrite,HALF_DUPLEX_TX);
+                  wait_spi_high_comm_end();
+                }
+              #endif
+ 272   1        /* Deselect the FLASH: Chip Select high */
+ 273   1        macSPI_FLASH_CS_DISABLE();
+ 274   1      
+ 275   1        delay_us(2);
+ 276   1        macSPI_FLASH_CS_ENABLE();
+ 277   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+ 278   1        FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+ 279   1        if((FLASH_Status & WIP_Flag) == RESET)
+ 280   1        {
+ 281   2           error_flag = RT_FAIL;
+ 282   2        }
+ 283   1        macSPI_FLASH_CS_DISABLE();
+ 284   1      
+ 285   1        /* Wait the end of Flash writing */
+ 286   1        SPI_FLASH_WaitForWriteEnd();
+ 287   1      
+ 288   1        return error_flag;
+ 289   1      }
+ 290          /*******************************************************************************
+ 291          * Function Name  : SPI_FLASH_BufferWrite_Normal
+ 292          * Description    : Writes block of data to the FLASH. In this function, the
+ 293          *                  number of WRITE cycles are reduced, using Page WRITE sequence.
+ 294          * Input          : - pBuffer : pointer to the buffer  containing the data to be
+ 295          *                    written to the FLASH.
+ 296          *                  - WriteAddr : FLASH's internal address to write to.
+ 297          *                  - NumByteToWrite : number of bytes to write to the FLASH.
+ 298          * Output         : None
+ 299          * Return         : None
+ 300          *******************************************************************************/
+ 301          uint8_t SPI_FLASH_BufferWrite_Normal(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 6   
+
+ 302          {
+ 303   1        uint8_t NumOfPage = 0, NumOfSingle = 0, Addr = 0, count = 0, temp = 0;
+ 304   1        uint8_t error_flag = RT_OK;
+ 305   1      
+ 306   1        Addr = WriteAddr % SPI_FLASH_PageSize;
+ 307   1        count = SPI_FLASH_PageSize - Addr;
+ 308   1        NumOfPage =  NumByteToWrite / SPI_FLASH_PageSize;
+ 309   1        NumOfSingle = NumByteToWrite % SPI_FLASH_PageSize;
+ 310   1      
+ 311   1        if (Addr == 0) /* WriteAddr is SPI_FLASH_PageSize aligned  */
+ 312   1        {
+ 313   2          if (NumOfPage == 0) /* NumByteToWrite < SPI_FLASH_PageSize */
+ 314   2          {
+ 315   3            SPI_FLASH_PageWrite(pBuffer, WriteAddr, NumByteToWrite);
+ 316   3          }
+ 317   2          else /* NumByteToWrite > SPI_FLASH_PageSize */
+ 318   2          {
+ 319   3            while (NumOfPage--)
+ 320   3            {
+ 321   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, SPI_FLASH_PageSize);
+ 322   4          if(error_flag)return RT_FAIL;
+ 323   4              WriteAddr +=  SPI_FLASH_PageSize;
+ 324   4              pBuffer += SPI_FLASH_PageSize;
+ 325   4            }
+ 326   3      
+ 327   3            SPI_FLASH_PageWrite(pBuffer, WriteAddr, NumOfSingle);
+ 328   3          }
+ 329   2        }
+ 330   1        else /* WriteAddr is not SPI_FLASH_PageSize aligned  */
+ 331   1        {
+ 332   2          if (NumOfPage == 0) /* NumByteToWrite < SPI_FLASH_PageSize */
+ 333   2          {
+ 334   3            if (NumOfSingle > count) /* (NumByteToWrite + WriteAddr) > SPI_FLASH_PageSize */
+ 335   3            {
+ 336   4              temp = NumOfSingle - count;
+ 337   4      
+ 338   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, count);
+ 339   4          if(error_flag)return RT_FAIL;
+ 340   4              WriteAddr +=  count;
+ 341   4              pBuffer += count;
+ 342   4      
+ 343   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, temp);
+ 344   4          if(error_flag)return RT_FAIL;
+ 345   4            }
+ 346   3            else
+ 347   3            {
+ 348   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, NumByteToWrite);
+ 349   4          if(error_flag)return RT_FAIL;
+ 350   4            }
+ 351   3          }
+ 352   2          else /* NumByteToWrite > SPI_FLASH_PageSize */
+ 353   2          {
+ 354   3            NumByteToWrite -= count;
+ 355   3            NumOfPage =  NumByteToWrite / SPI_FLASH_PageSize;
+ 356   3            NumOfSingle = NumByteToWrite % SPI_FLASH_PageSize;
+ 357   3      
+ 358   3            error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, count);
+ 359   3          if(error_flag)return RT_FAIL;
+ 360   3            WriteAddr +=  count;
+ 361   3            pBuffer += count;
+ 362   3      
+ 363   3            while (NumOfPage--)
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 7   
+
+ 364   3            {
+ 365   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, SPI_FLASH_PageSize);
+ 366   4          if(error_flag)return RT_FAIL;
+ 367   4              WriteAddr +=  SPI_FLASH_PageSize;
+ 368   4              pBuffer += SPI_FLASH_PageSize;
+ 369   4            }
+ 370   3      
+ 371   3            if (NumOfSingle != 0)
+ 372   3            {
+ 373   4              error_flag = SPI_FLASH_PageWrite(pBuffer, WriteAddr, NumOfSingle);
+ 374   4          if(error_flag)return RT_FAIL;
+ 375   4            }
+ 376   3          }
+ 377   2        }
+ 378   1        return 0;
+ 379   1      }
+ 380          
+ 381          /*******************************************************************************
+ 382          * Function Name  : SPI_FLASH_WriteEnable
+ 383          * Description    : Enables the write access to the FLASH.
+ 384          * Input          : None
+ 385          * Output         : None
+ 386          * Return         : None
+ 387          *******************************************************************************/
+ 388          void SPI_FLASH_WriteEnable(void)
+ 389          {
+ 390   1        /* Select the FLASH: Chip Select low */
+ 391   1        macSPI_FLASH_CS_ENABLE();
+ 392   1      
+ 393   1        /* Send "Write Enable" instruction */
+ 394   1        SPI_FLASH_SendByte(W25X_WriteEnable);
+ 395   1      
+ 396   1        /* Deselect the FLASH: Chip Select high */
+ 397   1        macSPI_FLASH_CS_DISABLE();
+ 398   1      }
+ 399          
+ 400          /*******************************************************************************
+ 401          * Function Name  : SPI_FLASH_BufferRead_Normal
+ 402          * Description    : Reads a block of data from the FLASH.
+ 403          * Input          : - pBuffer : pointer to the buffer that receives the data read
+ 404          *                    from the FLASH.
+ 405          *                  - ReadAddr : FLASH's internal address to read from.
+ 406          *                  - NumByteToRead : number of bytes to read from the FLASH.
+ 407          * Output         : None
+ 408          * Return         : None
+ 409          *******************************************************************************/
+ 410          void SPI_FLASH_BufferRead_Normal(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead)
+ 411          {
+ 412   1        /* Select the FLASH: Chip Select low */
+ 413   1        macSPI_FLASH_CS_ENABLE();
+ 414   1      
+ 415   1        /* Send "Read from Memory " instruction */
+ 416   1        SPI_FLASH_SendByte(W25X_ReadData);
+ 417   1      
+ 418   1        /* Send ReadAddr high nibble address byte to read from */
+ 419   1        SPI_FLASH_SendByte((ReadAddr & 0xFF0000) >> 16);
+ 420   1        /* Send ReadAddr medium nibble address byte to read from */
+ 421   1        SPI_FLASH_SendByte((ReadAddr& 0xFF00) >> 8);
+ 422   1        /* Send ReadAddr low nibble address byte to read from */
+ 423   1        SPI_FLASH_SendByte(ReadAddr & 0xFF);
+ 424   1      #if SPI_HIGH_SPEED_EN==0
+ 425   1        while (NumByteToRead--) /* while there is data to be read */
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 8   
+
+ 426   1        {
+ 427   2          /* Read a byte from the FLASH */
+ 428   2          *pBuffer = SPI_FLASH_SendByte(Dummy_Byte);
+ 429   2          /* Point to the next location where the byte read will be saved */
+ 430   2          pBuffer++;
+ 431   2        }
+ 432   1      #else
+                if(NumByteToRead != 0x00){
+                  spi_high_speed_comm(0,(uint16_t)pBuffer,NumByteToRead,HALF_DUPLEX_RX);
+                  wait_spi_high_comm_end();
+                }
+              #endif
+ 438   1        /* Deselect the FLASH: Chip Select high */
+ 439   1        macSPI_FLASH_CS_DISABLE();
+ 440   1      }
+ 441          /*******************************************************************************
+ 442          * Function Name  : SPI_FLASH_WaitForWriteEnd
+ 443          * Description    : Polls the status of the Write In Progress (WIP) flag in the
+ 444          *                  FLASH's status  register  and  loop  until write  opertaion
+ 445          *                  has completed.
+ 446          * Input          : None
+ 447          * Output         : None
+ 448          * Return         : None
+ 449          *******************************************************************************/
+ 450          void SPI_FLASH_WaitForWriteEnd(void)
+ 451          {
+ 452   1        uint8_t FLASH_Status = 0;
+ 453   1      
+ 454   1        /* Select the FLASH: Chip Select low */
+ 455   1        macSPI_FLASH_CS_ENABLE();
+ 456   1      
+ 457   1        /* Send "Read Status Register" instruction */
+ 458   1        SPI_FLASH_SendByte(W25X_ReadStatusReg);
+ 459   1      
+ 460   1        /* Loop as long as the memory is busy with a write cycle */
+ 461   1        do
+ 462   1        {
+ 463   2          /* Send a dummy byte to generate the clock needed by the FLASH
+ 464   2          and put the value of the status register in FLASH_Status variable */
+ 465   2          FLASH_Status = SPI_FLASH_SendByte(Dummy_Byte);   
+ 466   2        }
+ 467   1        while ((FLASH_Status & WIP_Flag) == SET); /* Write in progress */
+ 468   1      
+ 469   1        /* Deselect the FLASH: Chip Select high */
+ 470   1        macSPI_FLASH_CS_DISABLE();
+ 471   1      }
+ 472          
+ 473          /*******************************************************************************
+ 474          * Function Name  : FLASH_ReadID
+ 475          * Description    : Read the FLASH id.
+ 476          * Input          : None
+ 477          * Output         : None
+ 478          * Return         : FLASH id
+ 479          *******************************************************************************/
+ 480          uint32_t SPI_FLASH_ReadID(void)
+ 481          {
+ 482   1        uint32_t Temp = 0;
+ 483   1        uint8_t Temp0 = 0, Temp1 = 0, Temp2 = 0;
+ 484   1      
+ 485   1        /* Select the FLASH: Chip Select low */
+ 486   1        macSPI_FLASH_CS_ENABLE();
+ 487   1      
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 9   
+
+ 488   1        /* Send "RDID " instruction */
+ 489   1        SPI_FLASH_SendByte(W25X_JedecDeviceID);//W25X_DeviceID
+ 490   1        
+ 491   1        /* Read a byte from the FLASH */
+ 492   1        Temp0 = SPI_FLASH_SendByte(Dummy_Byte);
+ 493   1        Temp1 = SPI_FLASH_SendByte(Dummy_Byte);
+ 494   1        Temp2 = SPI_FLASH_SendByte(Dummy_Byte);
+ 495   1      
+ 496   1        /* Deselect the FLASH: Chip Select high */
+ 497   1         macSPI_FLASH_CS_DISABLE();
+ 498   1      
+ 499   1        Temp = (Temp0 << 16) | (Temp1 << 8) | Temp2;
+ 500   1        return Temp;
+ 501   1      }
+ 502          
+ 503          void SPI_FLASH_ReadUID(uint8_t *p_uid)
+ 504          {
+ 505   1        uint8_t i,Temp = 0;
+ 506   1        
+ 507   1        /* Select the FLASH: Chip Select low */
+ 508   1        macSPI_FLASH_CS_ENABLE();
+ 509   1      
+ 510   1        /* Send "RDID " instruction */
+ 511   1        SPI_FLASH_SendByte(W25X_ReadUID);//W25X_UID
+ 512   1        /* Read a byte from the FLASH */  
+ 513   1        Temp =  SPI_FLASH_SendByte(Dummy_Byte);
+ 514   1        /* Read a byte from the FLASH */  
+ 515   1        Temp =  SPI_FLASH_SendByte(Dummy_Byte);
+ 516   1        /* Read a byte from the FLASH */  
+ 517   1        Temp =  SPI_FLASH_SendByte(Dummy_Byte);
+ 518   1        Temp =  SPI_FLASH_SendByte(Dummy_Byte);
+ 519   1        
+ 520   1        for(i=0; i<16; i++)
+ 521   1        {
+ 522   2          p_uid[i] = SPI_FLASH_SendByte(Dummy_Byte);
+ 523   2        }
+ 524   1        /* Deselect the FLASH: Chip Select high */
+ 525   1        macSPI_FLASH_CS_DISABLE();
+ 526   1      
+ 527   1      }
+ 528          
+ 529          /*******************************************************************************
+ 530          * Function Name  : SET_FLASH_DeepPowerDown
+ 531          * Description    : set the FLASH enter DeepPowerDown mode.
+ 532          * Input          : None
+ 533          * Output         : None
+ 534          * Return         : none
+ 535          *******************************************************************************/
+ 536          void SET_FLASH_DeepPowerDown(void)
+ 537          {
+ 538   1      
+ 539   1        /* Select the FLASH: Chip Select low */
+ 540   1        macSPI_FLASH_CS_ENABLE();
+ 541   1      
+ 542   1        /* Send "W25X_PowerDown " instruction */
+ 543   1        SPI_FLASH_SendByte(W25X_PowerDown);
+ 544   1       
+ 545   1        /* Deselect the FLASH: Chip Select high */
+ 546   1         macSPI_FLASH_CS_DISABLE();
+ 547   1      
+ 548   1      }
+ 549          /*******************************************************************************
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 10  
+
+ 550          * Function Name  : Release_FLASH_from_DeepPowerDown
+ 551          * Description    : Release the FLASH from DeepPowerDown mode.
+ 552          * Input          : None
+ 553          * Output         : None
+ 554          * Return         : 0
+ 555          *******************************************************************************/
+ 556          void Release_FLASH_from_DeepPowerDown(void)
+ 557          {
+ 558   1      
+ 559   1        /* Select the FLASH: Chip Select low */
+ 560   1        macSPI_FLASH_CS_ENABLE();
+ 561   1      
+ 562   1        /* Send "W25X_PowerDown " instruction */
+ 563   1        SPI_FLASH_SendByte(W25X_ReleasePowerDown);
+ 564   1       
+ 565   1        /* Deselect the FLASH: Chip Select high */
+ 566   1         macSPI_FLASH_CS_DISABLE();
+ 567   1      
+ 568   1      }
+ 569          
+ 570          #if 0
+              /*!
+                  \brief      spi work example
+                  \param[in]  none
+                  \param[out] none
+                  \retval     none
+              */
+              uint8_t xdata spi_tx_data_test[1024];
+              uint8_t xdata spi_rx_data_test[1024];
+              void byd_spi_work(void)
+              {
+                  uint8_t ret;
+                  uint16_t i;
+                uint32_t uiFlashId; 
+              
+                for(i=0;i<1024;i++)
+                {
+                  spi_tx_data_test[i] = i;
+                  spi_rx_data_test[i] = 0x00;
+                }
+                    
+                  uiFlashId = SPI_FLASH_ReadID();
+                if((uiFlashId>>8)!=0x8560)
+                {
+                  uiFlashId = SPI_FLASH_ReadID();
+                  if((uiFlashId>>8)!=0x8560)
+                    return;
+                }
+              
+                ret = SPI_FLASH_SectorErase(Sector_0_Address);
+                if(ret)return;
+              
+                ret = SPI_FLASH_BufferWrite_Normal(spi_tx_data_test,Sector_0_Address,1024);
+                if(ret)return;
+              
+                SPI_FLASH_BufferRead_Normal(spi_rx_data_test,Sector_0_Address,1024);  
+                
+              }
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.59.0.0   BYD_SPI_FLASH                                                     01/15/2021 17:11:11 PAGE 11  
+
+   CODE SIZE        =   2013    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      62
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

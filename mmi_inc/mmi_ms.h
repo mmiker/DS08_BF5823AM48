@@ -4,9 +4,9 @@
 #include "mmi_queue.h"
 #include "mmi_com.h"
 
-#define PWD_INPUT_MAX_LEN	32
+#define PWD_INPUT_MAX_LEN	8
 #define PWD_INPUT_MIN_LEN	6
-#define FPS_MAX_INPUT_TIME 	OPT_TWO_TIME
+#define FPS_MAX_INPUT_TIME 	OPT_THREE_TIME
 
 typedef enum
 {
@@ -46,9 +46,12 @@ typedef enum
 	SYS_STATUS_DOOR_OPEN = 0x52,
 	SYS_STATUS_SYS_MENU = 0x53,
 	SYS_STATUS_FM_MODE = 0x54,
+	SYS_STATUS_WIFI_MODE = 0x55,
 	
 	SYS_STATUS_WAIT_FOR_ENTER_SLEEP = 0x60,
 	SYS_STATUS_ENTER_SLEEP = 0x61,
+
+	SYS_STATUS_LOW_POWER = 0x70,
 
 	SYS_STATUS_INVALID = 0xFF,
 }SYS_BASE_STATUS;
@@ -167,6 +170,13 @@ return :
 */
 void mmi_ms_rfid_opt_fun(unsigned char rfid_val);
 
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_ms_reset_opt_fun(void);
 
 #endif //__MMI_MS_H__
 

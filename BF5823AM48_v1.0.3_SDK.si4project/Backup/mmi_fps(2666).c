@@ -39,7 +39,7 @@ void mmi_dq_fp_init(void)
 {
 	dqiot_drv_fp_poweron();	
 	
-	// dqiot_drv_uart0B_init();
+	//dqiot_drv_uart0B_init();
 	return;
 }
 

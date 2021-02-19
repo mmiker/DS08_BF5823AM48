@@ -30,7 +30,7 @@ void iic_master_start(void)
     CLR_SDA();
     delay_us(1);
     CLR_SCL();
-    delay_us(1);
+    //delay_us(30);
 }
 
 /*!

@@ -11,9 +11,9 @@
 #include "mmi_sys.h"
 #include "mmi_audio.h"
 #include "mmi_bsp.h"
+#include "mmi_fm.h"
 //#include "stdio.h"
 
-#define LVDT_EN 1	/* lvdtµçÑ¹¼ì²â */
 #define ADCVDT_EN 1 /* adcµçÑ¹¼ì²â */
 
 extern uint16_t timer0_count;
@@ -40,7 +40,6 @@ void system_init(void)
 int main(void)
 {
 	unsigned char i = 0;
-
 	WDT_DISABLE();
 
 	system_init();
@@ -59,22 +58,24 @@ int main(void)
 
 	wdt_init(WDT_TIME_2304MS);
 
-	WDT_ENABLE();
-
-#if LVDT_EN		  //ÊµÊ±¼ì²â
-	lvdt_init(1); /* µçÑ¹¼ì²â³õÊ¼»¯ */
+#if ADCVDT_EN //¿ª»ú¼ì²â
+	if (adc_VolT() == 1)
+		mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
 #endif
 
-#if ADCVDT_EN	//¿ª»ú¼ì²â
-	adc_VolT(); /* adcµçÑ¹¼ì²â3.55v */
-#endif
+	//WDT_ENABLE();
 
 	mmi_dq_sys_init();
 
-	if (mmi_dq_fs_get_init_flag() == FDS_INIT_INVALID)
+#if 0
+	if(mmi_dq_fs_get_factory_flag() == 0)
 	{
-		//mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
-
+		mmi_dq_factory_mode_test_start();
+	}
+	else
+#endif
+	if (mmi_dq_fs_get_admin_status() == 0)
+	{
 		mmi_dq_sys_chg_admin_pwd();
 	}
 	else
@@ -84,29 +85,22 @@ int main(void)
 
 	while (1)
 	{
-#if LVDT_EN
-		lvdt_VolT(); /* µçÑ¹¼ì²â3v */
-#endif
-
 		if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
 		{
-			//TIMER2_ENABLE();
-
 			lowpower_idle();
 
 			mmi_sleep_task_proc();
 		}
-		else if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+		else
 		{
 			WDT_CTRL = WDT_TIME_2304MS;
 
-			mmi_wait_sleep_task_proc();
-		}
-		else
-		{
 			mmi_task_proc();
 		}
 
 		mmi_dq_ms_sys_msg_handle();
+
+		if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+			mmi_wait_sleep_task_proc();
 	}
 }

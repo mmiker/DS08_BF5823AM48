@@ -1,0 +1,304 @@
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/19/2021 17:34:47 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FM
+OBJECT MODULE PLACED IN .\output\mmi_fm.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\mmi_fm.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.\
+                    -Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rfi
+                    -d;.\mmi_inc) DEBUG PRINT(.\list\mmi_fm.lst) TABS(2) OBJECT(.\output\mmi_fm.obj)
+
+line level    source
+
+   1          #ifndef __MMI_FM_C__
+   2          #define __MMI_FM_C__
+   3          
+   4          
+   5          #include "mmi_ms.h"
+   6          #include "mmi_fm.h"
+   7          #include "mmi_audio.h"
+   8          #include "mmi_com.h"
+   9          #include "mmi_sys.h"
+  10          #include "mmi_fps.h"
+  11          #include "mmi_rfid.h"
+  12          #include "mmi_fs.h"
+  13          #include "mmi_key.h"
+  14          #include "string.h"
+  15          #include "delay.h"
+  16          #include "mmi_motor.h"
+  17          
+  18          unsigned char g_fm_flag = 0;
+  19          unsigned char g_fm_project = 0;
+  20          static unsigned int g_fm_key_flag = 0;
+  21          
+  22          unsigned char g_fm_result_name[]={
+  23                            STR_ID_KEY,
+  24                    #ifdef __LOCK_OLED_SUPPORT__
+                                STR_ID_KEY_LIGHT,
+                                STR_ID_OLED,
+                        #endif
+  28                    #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+  29                            STR_ID_FINGERPRINT,
+  30                    #endif
+  31                    #ifdef __LOCK_RFID_CARD_SUPPORT__
+  32                            STR_ID_RF_CARD,
+  33                    #endif
+  34                            STR_ID_MOTO,
+  35                    #ifdef __LOCK_OLED_SUPPORT__
+                                STR_ID_SOUND,
+                        #endif
+  38                            STR_ID_RESET,
+  39                            };
+  40          
+  41                            
+  42          #define KEY_ALL (0xFFF)
+  43          
+  44          /*
+  45          parameter: 
+  46            none
+  47          return :
+  48            none
+  49          */
+  50          void mmi_dq_factory_mode_test_item_select(unsigned char item_num)
+  51          {
+  52   1        switch(g_fm_result_name[item_num])
+  53   1        {
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/19/2021 17:34:47 PAGE 2   
+
+  54   2          case STR_ID_KEY:
+  55   2            mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
+  56   2            if(mmi_dq_fs_get_factory_flag()!=0)
+  57   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+  58   2            g_fm_key_flag = 0;
+  59   2            break;
+  60   2      #ifdef __LOCK_OLED_SUPPORT__
+                  case STR_ID_KEY_LIGHT:
+                    break;
+                  case STR_ID_OLED:
+                    break;
+              #endif
+  66   2      #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+  67   2          case STR_ID_FINGERPRINT:
+  68   2            mmi_ms_opt_time_init();
+  69   2            mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+  70   2            if(mmi_dq_fs_get_factory_flag()!=0)
+  71   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+  72   2            break;
+  73   2      #endif
+  74   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
+  75   2          case STR_ID_RF_CARD:
+  76   2            mmi_ms_opt_time_init();
+  77   2            mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+  78   2            if(mmi_dq_fs_get_factory_flag()!=0)
+  79   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+  80   2            break;
+  81   2      #endif
+  82   2          case STR_ID_MOTO:
+  83   2            mmi_dq_aud_play_with_id(AUD_ID_FM_MOTO);
+  84   2            mmi_dq_factory_mode_motor_test();
+  85   2            break;
+  86   2      #ifdef __LOCK_OLED_SUPPORT__
+                  case STR_ID_SOUND:
+                    break;
+              #endif
+  90   2          case STR_ID_RESET:
+  91   2            mmi_dq_aud_play_with_id(AUD_ID_FM_RESET);
+  92   2            if(mmi_dq_fs_get_factory_flag()!=0)
+  93   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+  94   2            break;
+  95   2          default:
+  96   2            break;
+  97   2        }
+  98   1        g_fm_project = g_fm_result_name[item_num];
+  99   1      }
+ 100          
+ 101          
+ 102          
+ 103          /*
+ 104          parameter: 
+ 105            none
+ 106          return :
+ 107            none
+ 108          */
+ 109          void mmi_dq_factory_mode_test_item_result(unsigned char item_name, unsigned char result)
+ 110          {
+ 111   1        unsigned char max = sizeof(g_fm_result_name)/sizeof(unsigned char);
+ 112   1        unsigned char i = 0;
+ 113   1        for(i=0;i<max;i++)
+ 114   1        {
+ 115   2          if(g_fm_result_name[i]==item_name)
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/19/2021 17:34:47 PAGE 3   
+
+ 116   2            break;
+ 117   2        }
+ 118   1      
+ 119   1        g_fm_flag += (result<<i);
+ 120   1        
+ 121   1        i++;
+ 122   1        if(i<max)
+ 123   1          mmi_dq_factory_mode_test_item_select(i);
+ 124   1        else
+ 125   1        {
+ 126   2          mmi_dq_fs_set_factory_flag(g_fm_flag);
+ 127   2          mmi_dq_factory_mode_test_stop();
+ 128   2        }
+ 129   1      }
+ 130          
+ 131          /*
+ 132          parameter: 
+ 133            none
+ 134          return :
+ 135            none
+ 136          */
+ 137          unsigned char mmi_dq_factory_mode_get_test_project(void)
+ 138          {
+ 139   1        return g_fm_project;
+ 140   1      }
+ 141          
+ 142          
+ 143          /*
+ 144          parameter: 
+ 145            none
+ 146          return :
+ 147            none
+ 148          */
+ 149          void mmi_dq_factory_mode_test_start(void)
+ 150          {
+ 151   1        g_fm_flag = 0;
+ 152   1        mmi_dq_factory_mode_test_item_select(0);
+ 153   1        mmi_dq_ms_set_sys_state(SYS_STATUS_FM_MODE);
+ 154   1        return;
+ 155   1      }
+ 156          
+ 157          /*
+ 158          parameter: 
+ 159            none
+ 160          return :
+ 161            none
+ 162          */
+ 163          void mmi_dq_factory_mode_test_stop(void)
+ 164          {
+ 165   1        //if(mmi_dq_fs_get_factory_flag()!=0)
+ 166   1        {
+ 167   2          if(mmi_dq_fs_get_admin_status() == 0)
+ 168   2            mmi_dq_sys_chg_admin_pwd();
+ 169   2          else
+ 170   2            mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+ 171   2        }
+ 172   1        return;
+ 173   1      }
+ 174          
+ 175          
+ 176          /*
+ 177          parameter: 
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/19/2021 17:34:47 PAGE 4   
+
+ 178            none
+ 179          return :
+ 180            none
+ 181          */
+ 182          void mmi_dq_factory_mode_key_test(unsigned char key_value)
+ 183          {
+ 184   1        static unsigned char touch_out_count = 0;
+ 185   1        if(key_value == KEY_S && mmi_dq_fs_get_factory_flag()!=0)
+ 186   1        {
+ 187   2          if(g_fm_key_flag == 0)
+ 188   2          {
+ 189   3            touch_out_count = 0;
+ 190   3            mmi_dq_factory_mode_test_stop();
+ 191   3          }
+ 192   2          else
+ 193   2          {
+ 194   3            touch_out_count++;
+ 195   3            if(touch_out_count>2)
+ 196   3            {
+ 197   4              touch_out_count = 0;
+ 198   4              mmi_dq_factory_mode_test_stop();
+ 199   4            }
+ 200   3          }
+ 201   2        }
+ 202   1        g_fm_key_flag |= (1<<key_value);
+ 203   1        if(g_fm_key_flag == KEY_ALL)
+ 204   1          mmi_dq_factory_mode_test_item_result(STR_ID_KEY,1);
+ 205   1      }
+ 206          
+ 207          /*
+ 208          parameter: 
+ 209            none
+ 210          return :
+ 211            none
+ 212          */
+ 213          void mmi_dq_factory_mode_fp_test(void)
+ 214          {
+ 215   1        mmi_dq_factory_mode_test_item_result(STR_ID_FINGERPRINT,1);
+ 216   1      
+ 217   1      }
+ 218          
+ 219          /*
+ 220          parameter: 
+ 221            none
+ 222          return :
+ 223            none
+ 224          */
+ 225          void mmi_dq_factory_mode_rfid_test(void)
+ 226          {
+ 227   1        mmi_dq_factory_mode_test_item_result(STR_ID_RF_CARD,1);
+ 228   1      
+ 229   1      }
+ 230          
+ 231          /*
+ 232          parameter: 
+ 233            none
+ 234          return :
+ 235            none
+ 236          */
+ 237          void mmi_dq_factory_mode_motor_test(void)
+ 238          {
+ 239   1        mmi_dq_motor_turn_right();
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/19/2021 17:34:47 PAGE 5   
+
+ 240   1        delay_ms(300);
+ 241   1        mmi_dq_motor_stop();
+ 242   1      }
+ 243          
+ 244          /*
+ 245          parameter: 
+ 246            none
+ 247          return :
+ 248            none
+ 249          */
+ 250          void mmi_dq_factory_mode_motor_test_back(void)
+ 251          {
+ 252   1        mmi_dq_motor_turn_back();
+ 253   1        delay_ms(300);
+ 254   1        mmi_dq_motor_stop();
+ 255   1      }
+ 256          
+ 257          /*
+ 258          parameter: 
+ 259            none
+ 260          return :
+ 261            none
+ 262          */
+ 263          void mmi_dq_factory_mode_reset_test(void)
+ 264          {
+ 265   1        mmi_dq_factory_mode_test_item_result(STR_ID_RESET,1);
+ 266   1      }
+ 267          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    392    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     14       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

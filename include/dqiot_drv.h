@@ -13,6 +13,7 @@
 #include "dqiot_gpio.h"
 #include "dqiot_drv_audio.h"
 #include "dqiot_drv_fp.h"
+#include "dqiot_fp_sy.h"
 #include "dqiot_drv_motor.h"
 #include "dqiot_drv_led.h"
 #include "dqiot_drv_reset.h"
@@ -33,10 +34,7 @@
 #define RFID_TIMER_COUNT	5  //base 10ms
 
 
-extern unsigned char uart_send_buf[UART0_SEND_DATA_LEN];
-extern unsigned char uart_get_buf[UART0_GET_DATA_LEN];
-extern unsigned char uart_sendbuflen;
-extern unsigned char uart_getbuflen;
+
 /*
 parameter: 
 	none
@@ -150,10 +148,15 @@ parameter:
 return :
 	none
 */
-void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length);
+void dqiot_drv_clr_uart0_data(void);
 
-void dqiot_drv_log_output(unsigned char *string);
-void dqiot_drv_log_output_data(unsigned char sym, unsigned char out_data);
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length);
 
 /*
 parameter: 

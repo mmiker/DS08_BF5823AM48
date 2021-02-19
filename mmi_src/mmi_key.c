@@ -64,40 +64,40 @@ unsigned char mmi_dq_get_key_map(unsigned char index)
 	switch(index)
 	{
 		case 0:
-			key_val = KEY_3;
-			break;
-		case 1:
-			key_val = KEY_2;
-			break;
-		case 2:
-			key_val = KEY_1;
-			break;
-		case 3:
-			key_val = KEY_6;
-			break;
-		case 4:
-			key_val = KEY_9;
-			break;
-		case 5:
-			key_val = KEY_H;
-			break;
-		case 6:
-			key_val = KEY_5;
-			break;
-		case 7:
-			key_val = KEY_4;
-			break;
-		case 8:
-			key_val = KEY_7;
-			break;
-		case 9:
 			key_val = KEY_S;
 			break;
-		case 10:
+		case 1:
 			key_val = KEY_0;
 			break;
-		case 11:
+		case 2:
+			key_val = KEY_H;
+			break;
+		case 3:
+			key_val = KEY_7;
+			break;
+		case 4:
+			key_val = KEY_4;
+			break;
+		case 5:
+			key_val = KEY_1;
+			break;
+		case 6:
 			key_val = KEY_8;
+			break;
+		case 7:
+			key_val = KEY_9;
+			break;
+		case 8:
+			key_val = KEY_6;
+			break;
+		case 9:
+			key_val = KEY_3;
+			break;
+		case 10:
+			key_val = KEY_2;
+			break;
+		case 11:
+			key_val = KEY_5;
 			break;
 		default:
 			break;

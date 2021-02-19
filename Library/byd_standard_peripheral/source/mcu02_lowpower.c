@@ -29,4 +29,3 @@ void lowpower_wait(void)
 {
 	SYS_CLK_CFG |= 0x10;	
 }
-

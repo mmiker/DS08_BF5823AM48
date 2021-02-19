@@ -17,6 +17,14 @@ parameter:
 return :
 	none
 */
+void dqiot_drv_key_led_gpio_deinit(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
 void dqiot_drv_key_led_on(void);
 
 /*
@@ -34,6 +42,14 @@ return :
 	none
 */
 void dqiot_drv_rgb_led_gpio_init(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void dqiot_drv_rgb_led_gpio_deinit(void);
 
 /*
 parameter: 

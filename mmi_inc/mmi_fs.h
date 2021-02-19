@@ -44,6 +44,7 @@ typedef struct mmi_fs_setting
 	sys_open_mode open_mode;
 	unsigned char admin_status;
 	unsigned char factory_flag;
+	unsigned char wifi_flag;
 	//unsigned char touch_sensitivity;
 	//unsigned char unused[3];
 }mmi_fs_setting;
@@ -137,7 +138,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_check_fp(unsigned short fp_index, fds_use_type type);
+RET_VAL mmi_dq_fs_check_fp(unsigned char fp_index, fds_use_type type);
 
 /*
 parameter: 
@@ -172,7 +173,7 @@ parameter:
 return :
 	none
 */
-unsigned short mmi_dq_fs_get_rfid_unuse_index(void);
+unsigned char mmi_dq_fs_get_rfid_unuse_index(void);
 
 /*
 parameter: 
@@ -254,4 +255,53 @@ return :
 	none
 */
 RET_VAL mmi_dq_fs_set_init_flag(unsigned char flag);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_factory_flag(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_admin_status(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_admin_status(unsigned char status);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_wifi_setting(unsigned char flag);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_wifi_setting(void);
+
 #endif

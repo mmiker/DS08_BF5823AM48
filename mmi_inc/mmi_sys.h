@@ -37,7 +37,7 @@ parameter:
 return :
 	none
 */
-void mmi_dq_sys_lock_init_suc(void);
+void mmi_dq_sys_lock_add_admin_suc(void);
 
 /*
 function: system enter sleep
@@ -83,6 +83,24 @@ return :
 	none
 */
 void mmi_dq_sys_show_message_with_id(unsigned char text_id,unsigned long time_msec);
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_sys_get_wifi_check_flag(void);
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_set_wifi_check(void);
 
 /*
 function: 
