@@ -1,0 +1,55 @@
+C51 COMPILER V9.59.0.0   MCU02_LED                                                         02/19/2021 17:29:51 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_LED
+OBJECT MODULE PLACED IN .\output\mcu02_led.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_led.c LARGE OMF2 OPTIMIZE(8
+                    -,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare
+                    -\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_led.lst) TABS(2) OBJECT(.\output\mcu02_led.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_led.c
+   3              \brief led driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-22, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_led.h"
+  13          
+  14          
+  15          /*!
+  16              \brief      led matrix
+  17              \param[in]  com:0~7
+  18            \param[in]  seg:0~0xff
+  19              \param[out] none
+  20              \retval     none
+  21          */
+  22          void led_arr_data(uint8_t com,uint8_t seg)
+  23          {
+  24   1         XBYTE[0x1000+com] = seg;
+  25   1      }
+  26          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     12    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

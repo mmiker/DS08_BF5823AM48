@@ -1,0 +1,363 @@
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_ADC
+OBJECT MODULE PLACED IN .\output\byd_adc.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\byd_adc.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.\
+                    -Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rfi
+                    -d;.\mmi_inc) DEBUG PRINT(.\list\byd_adc.lst) TABS(2) OBJECT(.\output\byd_adc.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  byd_adc.c
+   3              \brief adc app
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-05-08, V1.0.0, app for byd
+  10          */
+  11          
+  12          #include "byd_adc.h"
+  13          #include "byd_init.h"
+  14          #include "delay.h"
+  15          #include "dqiot_gpio.h"
+  16          #include "dqiot_drv.h"
+  17          #include "mmi_audio.h"
+  18          
+  19          #if ADC_MODE == 0
+              volatile bit g_bAdcIntFlag = 0;
+              #endif
+  22          
+  23          #if ADC_HANDLE
+              uint8_t xdata g_ucAdcBaseFlag = 0;
+              uint8_t xdata g_ucAdcBaseline[8];
+              uint8_t xdata g_ucAdcRawdata[ADC_MAX_COUNT];
+              #endif
+  28          
+  29          /*!
+  30              \brief      byd adc init
+  31              \param[in]  none
+  32              \param[out] none
+  33              \retval     none
+  34          */
+  35          void byd_adc_init(void)
+  36          {
+  37   1      #if ADC_HANDLE
+                uint8_t i;
+              #endif
+  40   1      
+  41   1        gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
+  42   1        gpio_init(VBAT_ADC_PORT, VBAT_ADC_PIN, GPIO_MODE_IN_FLOATING);
+  43   1      
+  44   1        ADC_ADCK_SET(ADC_CLK_8M);        /* adc clock */
+  45   1        ADC_CKV_SET(ADC_ANALOG_CLK_8M);      /* adc analog clock */
+  46   1        ADC_SAMBG_SET(1);            /* sampling time sequence and comparison time interval:0~1*/
+  47   1        ADC_SAMDELAY_SET(ADC_SAMPLE_TIME_8_CLK); /* sampling delay time */
+  48   1        ADC_FLTER_SET(ADC_FILTER_ENABLE);    /* filter select */
+  49   1        ADC_ADDR_SET(ADC_CHANNEL_7);       /* adc channel address */
+  50   1        ADC_ADDR_SET(ADC_CHANNEL_6);       /* adc channel address */
+  51   1        ADC_WNUM_SET(31);            /* conversion interval time:2~31*/
+  52   1        ADC_I_SET(3);              /* adc bias current select:0~3*/
+  53   1        ADC_CTRL(2);               /* compare ctrl select:0~3*/
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 2   
+
+  54   1        ADC_SAMP_SET(255);             /* adc sample time:0~255*/
+  55   1      
+  56   1        ADC_VREF_IN_SEL(ADC_VREF_IN_1);       /* input vref vol*/
+  57   1        ADC_VREF_VOL_SEL(ADC_VREF_VOL_OUT_1);   /* output vref vol*/
+  58   1        ADC_VREF_SIGNAL_SEL(ADC_VREF_SIGNAL_OUT_0); /* output vref signal*/
+  59   1      
+  60   1        adc_io_reset();
+  61   1      
+  62   1        ADC_07_PH7_ENABLE(); /*enable adc io*/
+  63   1        ADC_06_PH6_ENABLE(); /*enable adc io*/
+  64   1        //ADC_01_PH1_ENABLE();
+  65   1      
+  66   1        /*!!!!!!!!!恢复IO口功能要关闭adc通道功能!!!!!!!!!*/
+  67   1        //  ADC_00_PH0_DISABLE();
+  68   1        //  ADC_01_PH1_DISABLE();
+  69   1      
+  70   1        ADC_ENABLE(); /*enable adc*/
+  71   1      
+  72   1      /* adc interrupt config*/
+  73   1      #if ADC_MODE == 0
+                INT_ADC_CLR();
+                ADC_IPL_SET(LOW);
+                ADC_INT_ENABLE();
+              #endif
+  78   1      
+  79   1      #if ADC_HANDLE
+                for (i = 0; i < ADC_MAX_COUNT; i++)
+                {
+                  g_ucAdcRawdata[i] = 0;
+                }
+              #endif
+  85   1      }
+  86          
+  87          /**
+  88            * @brief  get adc data
+  89            * @param  adc_channel_addr:ADC_CHANNEL_0~44
+  90            * @return none
+  91            * @note   none
+  92            * @see    none
+  93            */
+  94          uint16_t get_adc_data(uint8_t adc_channel_addr)
+  95          {
+  96   1        uint16_t adc_data;
+  97   1      
+  98   1        ADC_ADDR_SET(adc_channel_addr);
+  99   1      
+ 100   1      #if ADC_MODE == 0
+                g_bAdcIntFlag = 0;
+                ADC_SCAN_EN;
+                while (!g_bAdcIntFlag)
+                {
+                  WDT_CTRL = 7;
+                }
+              #else
+ 108   1      
+ 109   1        ADC_SCAN_EN;
+ 110   1        while (!(IRCON1 & 0x10))
+ 111   1        {
+ 112   2          WDT_CTRL = 7;
+ 113   2        }
+ 114   1        INT_ADC_CLR();
+ 115   1      
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 3   
+
+ 116   1      #endif
+ 117   1      
+ 118   1        adc_data = ((uint16_t)(ADC_RDATAH & 0x0F) << 8) | (uint16_t)ADC_RDATAL;
+ 119   1      
+ 120   1        return adc_data;
+ 121   1      }
+ 122          
+ 123          /**
+ 124            * @brief  获取adc数据的平均值
+ 125            * @param  
+ 126            * adc_channel_addr ADC_CHANNEL_0~44;
+ 127            * times 时间ms
+ 128            * @return none
+ 129            * @note   none
+ 130            * @see    none
+ 131            */
+ 132          uint16_t Get_Adc_Average(uint8_t adc_channel_addr, uint8_t times)
+ 133          {
+ 134   1        uint32_t temp_val = 0;
+ 135   1        uint8_t t;
+ 136   1        for (t = 0; t < times; t++)
+ 137   1        {
+ 138   2          temp_val += get_adc_data(adc_channel_addr);
+ 139   2          delay_ms(5);
+ 140   2        }
+ 141   1        return temp_val / times;
+ 142   1      }
+ 143          
+ 144          /**
+ 145            * @brief  电压计算
+ 146            * @param  none
+ 147            * @return none
+ 148            * @note   none
+ 149            * @see    none
+ 150            */
+ 151          void adc_VolT(void)
+ 152          {
+ 153   1        unsigned int adcx;
+ 154   1        float temp;
+ 155   1      
+ 156   1        gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //开启
+ 157   1      
+ 158   1        adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //获取10ms平均值
+ 159   1        dqiot_drv_log_output("ADC值 is\r\n");
+ 160   1        dqiot_drv_log_output_data('#', (adcx >> 8));
+ 161   1        dqiot_drv_log_output_data('#', adcx);
+ 162   1        temp = (float)adcx * (3.3 / 4095); //计算电压
+ 163   1        adcx = temp;             //获取整数部分值
+ 164   1        dqiot_drv_log_output("电压值 is\r\n");
+ 165   1        dqiot_drv_log_output_data('#', adcx);
+ 166   1        temp -= adcx; //获取小数部分值
+ 167   1        temp *= 1000;
+ 168   1        dqiot_drv_log_output_data('#', temp);
+ 169   1      
+ 170   1        if (temp < 100 && adcx == 1 || adcx < 1) //<3.55v
+ 171   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+ 172   1      
+ 173   1        gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //关闭
+ 174   1      }
+ 175          
+ 176          /*!
+ 177              \brief      adc isr
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 4   
+
+ 178              \param[in]  none
+ 179              \param[out] none
+ 180              \retval     none
+ 181          */
+ 182          #if ADC_MODE == 0
+              void adc_isr(void) interrupt 11
+              {
+                INT_ADC_CLR();
+                g_bAdcIntFlag = 1;
+              }
+              #endif
+ 189          
+ 190          #if ADC_HANDLE
+              /*!
+                  \brief      data sort 
+                  \param[in]  buffer,count
+                  \param[out] none
+                  \retval     sort avedata
+              */
+              uint8_t byd_data_sort(uint8_t *buffer, uint8_t count)
+              {
+                uint8_t i = 0, j = 0;
+                uint8_t temp = 0;
+                uint16_t average = 0;
+              
+                for (i = 0; i < count; i++)
+                {
+                  for (j = i; j < count - 1; j++)
+                  {
+                    if ((*(buffer + i)) >= (*(buffer + j + 1)))
+                    {
+                      temp = (*(buffer + i));
+                      (*(buffer + i)) = (*(buffer + j + 1));
+                      (*(buffer + j + 1)) = temp;
+                    }
+                  }
+                }
+                for (i = 3; i < count - 3; i++)
+                {
+                  average += (*(buffer + i));
+                }
+              
+                return (uint8_t)(average / (count - 6));
+              }
+              
+              /*!
+                  \brief      filter adc data 
+                  \param[in]  buffer: data array
+                      count:  data number
+                      addr: adc channel addr
+                      adc_noise
+                  \param[out] none
+                  \retval     filter data 
+              */
+              uint8_t byd_adcdata(uint8_t addr)
+              {
+                uint8_t i = 0, j = 0;
+                uint8_t avg_cnt = 0;
+              
+                int adc_differ = 0;
+                uint16_t average = 0;
+              
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 5   
+
+                for (i = 0; i < ADC_MAX_COUNT; i++)
+                {
+                  adc_differ = (int)g_ucAdcRawdata[i] - (int)g_ucAdcBaseline[addr];
+                  if (adc_differ >= 0)
+                  {
+                    if (adc_differ <= ADC_NOISE_THRESHOLD)
+                    {
+                      avg_cnt++;
+                      average += g_ucAdcRawdata[i];
+                    }
+                  }
+                  else
+                  {
+                    if (adc_differ >= -((int)ADC_NOISE_THRESHOLD))
+                    {
+                      avg_cnt++;
+                      average += g_ucAdcRawdata[i];
+                    }
+                  }
+                }
+              
+                if (avg_cnt == 0)
+                {
+                  g_ucAdcBaseline[addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT);
+                }
+                else
+                {
+                  g_ucAdcBaseline[addr] = average / avg_cnt;
+                }
+              
+                return g_ucAdcBaseline[addr];
+              }
+              
+              /*!
+                  \brief      adc data handle 
+                  \param[in]  adc channel address
+                  \param[out] none
+                  \retval     adc data
+              */
+              
+              uint8_t byd_adc_handle(uint8_t adc_channel_addr)
+              {
+                uint8_t i;
+              
+                for (i = 0; i < ADC_MAX_COUNT; i++)
+                {
+                  g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4); //ADC转化为8位,存储到数组对应位置处
+                  delay_ms(1);
+                }
+              
+                if ((g_ucAdcBaseFlag & (0x01 << adc_channel_addr)) == 0)
+                {
+                  g_ucAdcBaseFlag |= (0x01 << adc_channel_addr);
+                  g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT); //冒泡排序并取中间的均
+             -值作为初始上电ADC平均值
+                }
+                else
+                {
+                  g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr); //获得处理后的ADC值
+                }
+                return g_ucAdcBaseline[adc_channel_addr];
+              }
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           02/19/2021 17:29:45 PAGE 6   
+
+              #endif
+ 302          
+ 303          /*!
+ 304              \brief      adc work example
+ 305              \param[in]  none
+ 306              \param[out] none
+ 307              \retval     none
+ 308          */
+ 309          
+ 310          void byd_adc_work(void)
+ 311          {
+ 312   1        uint16_t temp;
+ 313   1      
+ 314   1      #if ADC_HANDLE
+                temp = byd_adc_handle(ADC_CHANNEL_0);
+              #else
+ 317   1        temp = get_adc_data(ADC_CHANNEL_0);
+ 318   1      #endif
+ 319   1      }
+ 320          
+ 321          void data_AD()
+ 322          {
+ 323   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    610    ----
+   CONSTANT SIZE    =     23    ----
+   XDATA SIZE       =   ----      15
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

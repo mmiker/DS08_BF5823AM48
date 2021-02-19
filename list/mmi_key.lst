@@ -1,0 +1,158 @@
+C51 COMPILER V9.59.0.0   MMI_KEY                                                           02/19/2021 17:29:52 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_KEY
+OBJECT MODULE PLACED IN .\output\mmi_key.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\mmi_key.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.
+                    -\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rf
+                    -id;.\mmi_inc) DEBUG PRINT(.\list\mmi_key.lst) TABS(2) OBJECT(.\output\mmi_key.obj)
+
+line level    source
+
+   1          #ifndef __MMI_KEY_C__
+   2          #define __MMI_KEY_C__
+   3          
+   4          #include "dqiot_drv.h"
+   5          #include "mmi_feature.h"
+   6          #include "mmi_key.h"
+   7          
+   8          unsigned char g_touch_flag = 0;
+   9          /*
+  10          parameter: 
+  11            none
+  12          return :
+  13            none
+  14          */
+  15          void mmi_dq_key_init(void)
+  16          {
+  17   1        dqiot_drv_touch_init();
+  18   1        return;
+  19   1      }
+  20          
+  21          /*
+  22          parameter: 
+  23            none
+  24          return :
+  25            none
+  26          */
+  27          unsigned char mmi_dq_key_check(void)
+  28          {
+  29   1        return dqiot_drv_touch_check();
+  30   1      }
+  31          
+  32          /*
+  33          parameter: 
+  34            none
+  35          return :
+  36            none
+  37          */
+  38          unsigned char mmi_dq_key_work(void)
+  39          {
+  40   1        return dqiot_drv_touch_work();
+  41   1      }
+  42          
+  43          /*
+  44          parameter: 
+  45            none
+  46          return :
+  47            none
+  48          */
+  49          unsigned char mmi_dq_key_get_value(void)
+  50          {
+  51   1        return dqiot_drv_get_touch_value();
+  52   1      }
+  53          
+C51 COMPILER V9.59.0.0   MMI_KEY                                                           02/19/2021 17:29:52 PAGE 2   
+
+  54          /*
+  55          parameter: 
+  56            none
+  57          return :
+  58            none
+  59          */
+  60          unsigned char mmi_dq_get_key_map(unsigned char index)
+  61          {
+  62   1        unsigned char key_val = KEY_INVALID;
+  63   1        #ifdef __DQ_PROJECT_DS08__
+  64   1        switch(index)
+  65   1        {
+  66   2          case 0:
+  67   2            key_val = KEY_3;
+  68   2            break;
+  69   2          case 1:
+  70   2            key_val = KEY_2;
+  71   2            break;
+  72   2          case 2:
+  73   2            key_val = KEY_1;
+  74   2            break;
+  75   2          case 3:
+  76   2            key_val = KEY_6;
+  77   2            break;
+  78   2          case 4:
+  79   2            key_val = KEY_9;
+  80   2            break;
+  81   2          case 5:
+  82   2            key_val = KEY_H;
+  83   2            break;
+  84   2          case 6:
+  85   2            key_val = KEY_5;
+  86   2            break;
+  87   2          case 7:
+  88   2            key_val = KEY_4;
+  89   2            break;
+  90   2          case 8:
+  91   2            key_val = KEY_7;
+  92   2            break;
+  93   2          case 9:
+  94   2            key_val = KEY_S;
+  95   2            break;
+  96   2          case 10:
+  97   2            key_val = KEY_0;
+  98   2            break;
+  99   2          case 11:
+ 100   2            key_val = KEY_8;
+ 101   2            break;
+ 102   2          default:
+ 103   2            break;
+ 104   2        }
+ 105   1        #endif
+ 106   1        return key_val;
+ 107   1      }
+ 108          
+ 109          /*
+ 110          parameter: 
+ 111            none
+ 112          return :
+ 113            none
+ 114          */
+ 115          void mmi_dq_key_entersleep(void)
+C51 COMPILER V9.59.0.0   MMI_KEY                                                           02/19/2021 17:29:52 PAGE 3   
+
+ 116          {
+ 117   1      #ifdef BYD_CTK_ENABLE
+ 118   1        //TIMER2_ENABLE();
+ 119   1        //CSD_DISABLE();
+ 120   1        //lowpower_idle();
+ 121   1        //TIMER2_DISABLE();
+ 122   1        //CSD_ENABLE();
+ 123   1      #endif
+ 124   1      }
+ 125          #endif//__MMI_KEY_C__
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    113    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,119 @@
+C51 COMPILER V9.59.0.0   MCU02_SM4                                                         02/19/2021 17:29:51 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_SM4
+OBJECT MODULE PLACED IN .\output\mcu02_sm4.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_sm4.c LARGE OMF2 OPTIMIZE(8
+                    -,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare
+                    -\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_sm4.lst) TABS(2) OBJECT(.\output\mcu02_sm4.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_sm4.c
+   3              \brief sm4 driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-03-31, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_sm4.h"
+  13          
+  14          /*!
+  15              \brief      select mode
+  16              \param[in]  mode:ENCRYPT_MODE or DECRYPT_MODE
+  17              \param[out] none
+  18              \retval     none
+  19          */
+  20          void sm4_mode_config(uint8_t mode)
+  21          {
+  22   1          REG_ADDR = SM4_MODE;
+  23   1        REG_DATA = mode;
+  24   1      }
+  25          
+  26          /*!
+  27              \brief      read encrypting or decrypting data
+  28              \param[in]  pbuf
+  29              \param[out] none
+  30              \retval     none
+  31          */
+  32          void read_sm4_data(uint8_t *pbuf)
+  33          {
+  34   1         uint8_t i;
+  35   1         for(i = 0; i < 16; i++)
+  36   1         {
+  37   2             REG_ADDR = SM4_DATA0+i;
+  38   2           pbuf[i] = REG_DATA;
+  39   2         }
+  40   1      }
+  41          
+  42          /*!
+  43              \brief      write encrypting or decrypting data
+  44              \param[in]  pbuf
+  45              \param[out] none
+  46              \retval     none
+  47          */
+  48          void write_sm4_data(uint8_t *pbuf)
+  49          {
+  50   1         uint8_t i;
+  51   1         for(i = 0; i < 16; i++)
+  52   1         {
+  53   2             REG_ADDR = SM4_DATA0+i;
+C51 COMPILER V9.59.0.0   MCU02_SM4                                                         02/19/2021 17:29:51 PAGE 2   
+
+  54   2           REG_DATA = pbuf[i];
+  55   2         }
+  56   1      }
+  57          
+  58          /*!
+  59              \brief      read key data
+  60              \param[in]  pbuf
+  61              \param[out] none
+  62              \retval     none
+  63          */
+  64          void read_sm4_key(uint8_t *pbuf)
+  65          {
+  66   1         uint8_t i;
+  67   1         for(i = 0; i < 16; i++)
+  68   1         {
+  69   2             REG_ADDR = SM4_KEY0+i;
+  70   2           pbuf[i] = REG_DATA;
+  71   2         }
+  72   1      }
+  73          
+  74          /*!
+  75              \brief      write key data
+  76              \param[in]  pbuf
+  77              \param[out] none
+  78              \retval     none
+  79          */
+  80          void write_sm4_key(uint8_t *pbuf)
+  81          {
+  82   1         uint8_t i;
+  83   1         for(i = 0; i < 16; i++)
+  84   1         {
+  85   2             REG_ADDR = SM4_KEY0+i;
+  86   2           REG_DATA = pbuf[i];
+  87   2         }
+  88   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    218    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,54 @@
+C51 COMPILER V9.59.0.0   MCU02_WDT                                                         02/19/2021 17:29:49 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_WDT
+OBJECT MODULE PLACED IN .\output\mcu02_wdt.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_wdt.c LARGE OMF2 OPTIMIZE(8
+                    -,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare
+                    -\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_wdt.lst) TABS(2) OBJECT(.\output\mcu02_wdt.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_wdt.c
+   3              \brief wdt driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-05-09, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_wdt.h"
+  13          #include "mcu02_system.h"
+  14          
+  15          
+  16          /*!
+  17              \brief      wdt_init
+  18              \param[in]  wdt_time:WDT_TIME_xMS           
+  19              \param[out] none
+  20              \retval     none
+  21          */
+  22          void wdt_init(WDT_TIME_enum wdt_time)
+  23          { 
+  24   1        WDT_CTRL = wdt_time;  
+  25   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      3    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,113 @@
+#ifndef __MMI_MS_H__
+#define __MMI_MS_H__
+
+#include "mmi_queue.h"
+
+#define PWD_INPUT_MAX_LEN	32
+#define PWD_INPUT_MIN_LEN	6
+#define FPS_MAX_INPUT_TIME 	OPT_THREE_TIME
+
+typedef enum
+{
+	SYS_STATUS_IDLE = 0x00,
+	SYS_STATUS_INPUT_PWD = 0x01,
+	SYS_STATUS_ADD_PWD = 0x02,
+	SYS_STATUS_DEL_PWD = 0x03,
+
+	SYS_STATUS_INPUT_FPS = 0x11,
+	SYS_STATUS_ADD_FPS = 0x12,
+	SYS_STATUS_DEL_FPS = 0x13,
+
+	SYS_STATUS_INPUT_RFID = 0x21,
+	SYS_STATUS_ADD_RFID = 0x22,
+	SYS_STATUS_DEL_RFID = 0x23,
+
+	SYS_STATUS_INVALID = 0xFF,
+}SYS_BASE_STATUS;
+
+
+typedef enum OPERATE_TIME
+{
+	OPT_ONE_TIME = 0x00,
+	OPT_TWO_TIME = 0x01,
+	OPT_THREE_TIME = 0x02,
+	OPT_FOUR_TIME = 0x03,
+	OPT_TIME_INVALID = 0xFF,
+}OPERATE_TIME;
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_task_proc(void);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_ms_pwd_init_var(void);
+
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_dq_ms_sys_msg_handle(void);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_dq_ms_set_msg_que(SYS_QUEUE_EVENT q_event,SYS_QUEUE_PRO q_pro,uint8_t q_data);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_dq_ms_set_sys_state(SYS_BASE_STATUS state);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+SYS_BASE_STATUS mmi_dq_ms_get_sys_state(void);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_ms_pwd_opt_fun(uint8_t key_val);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_ms_fps_opt_fun(uint8_t fps_val);
+
+/*
+parameter: 
+	none
+return :
+	current machine status
+*/
+void mmi_ms_rfid_opt_fun(uint8_t rfid_val);
+
+
+#endif //__MMI_MS_H__
+

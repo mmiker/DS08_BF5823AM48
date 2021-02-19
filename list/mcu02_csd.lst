@@ -1,0 +1,181 @@
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         02/19/2021 17:29:49 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_CSD
+OBJECT MODULE PLACED IN .\output\mcu02_csd.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_csd.c LARGE OMF2 OPTIMIZE(8
+                    -,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare
+                    -\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_csd.lst) TABS(2) OBJECT(.\output\mcu02_csd.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_csd.c
+   3              \brief csd driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-05-08, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_csd.h"
+  13          #include "mcu02_gpio.h"
+  14          #include "mcu02_system.h"
+  15          
+  16          /*!
+  17              \brief      csd_init
+  18              \param[in]  csd_initpara : csd init parameter
+  19              \param[out] none
+  20              \retval     none
+  21          */
+  22          void csd_init(csd_parameter_struct csd_initpara)
+  23          {
+  24   1      /* csd register config*/    
+  25   1          CSD_VTH_SET(csd_initpara.vth);                    /* vth select */  
+  26   1        CSD_DS_SET(csd_initpara.ds);                  /* detect speed select */
+  27   1        CSD_PRE_CHARGE_SET(csd_initpara.pre_charge);      /* pre charge select time us*/
+  28   1        CSD_PRE_DISCHARGE_SET(csd_initpara.pre_discharge);  /* pre discharge select time us*/
+  29   1        CSD_SW_CLK_SET(csd_initpara.sw_clk_off);        /* enable or disable sw_clk */
+  30   1        CSD_PARALLELMODE_SET(csd_initpara.parallel);        /* enable or disable sns parallel */
+  31   1        CSD_RB_SET(csd_initpara.rb);                  /* rb select */
+  32   1        CSD_RESO_SET(csd_initpara.reso);              /* reso select */
+  33   1        CSD_PRS_DIV_SET(csd_initpara.pre_div);            /* pre select */
+  34   1        
+  35   1        
+  36   1        CSD_LP_EN_SET(csd_initpara.csd_lowpower); 
+  37   1        CSD_ENABLE();
+  38   1        CSD_SCAN_STOP;
+  39   1      
+  40   1      /* csd interrupt config*/ 
+  41   1        INT_CSD_CLR();
+  42   1      
+  43   1        if(csd_initpara.int_status == ENABLE)
+  44   1        {
+  45   2            CSD_IPL_SET(csd_initpara.int_prio);
+  46   2          CSD_INT_ENABLE();
+  47   2        }
+  48   1        else
+  49   1        {
+  50   2          CSD_INT_DISABLE();
+  51   2        }
+  52   1      }
+  53          
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         02/19/2021 17:29:49 PAGE 2   
+
+  54          /*!
+  55              \brief      enable csd sensor
+  56              \param[in]  sensor_addr:0~11,16~47
+  57              \param[out] none
+  58              \retval     none
+  59          */
+  60          void csd_sensor_enable(uint8_t sensor_addr)
+  61          {
+  62   1          uint32_t sensor_en;
+  63   1      
+  64   1        if(sensor_addr<32)
+  65   1          sensor_en = ((uint32_t)0x01<<sensor_addr);
+  66   1        else
+  67   1            sensor_en = ((uint32_t)0x01<<(sensor_addr-32));    
+  68   1      
+  69   1        if(sensor_addr>=32)
+  70   1        {
+  71   2            REG_ADDR = SNS_IO_SEL5;REG_DATA |= ((sensor_en)&0xFF);
+  72   2              REG_ADDR = SNS_IO_SEL6;REG_DATA |= ((sensor_en>>8)&0xFF);
+  73   2            
+  74   2          if(sensor_addr < 36)
+  75   2            TRISA |= ((sensor_en) & 0x0F);
+  76   2          else if(sensor_addr < 38)
+  77   2              TRISB |= ((sensor_en >> 4) & 0x03);
+  78   2          else if(sensor_addr < 44)
+  79   2          {
+  80   3            if(sensor_addr==42 || (sensor_addr==43))
+  81   3                TRISC |= ((sensor_en >> 4) & 0xCF);
+  82   3            else
+  83   3                TRISC |= ((sensor_en >> 6) & 0xCF);
+  84   3          }
+  85   2          else
+  86   2              TRISE |= ((sensor_en >> 12) & 0x0F);
+  87   2        
+  88   2        }
+  89   1        else
+  90   1        {
+  91   2            REG_ADDR = SNS_IO_SEL1;REG_DATA |= ((sensor_en)&0xFF);
+  92   2            REG_ADDR = SNS_IO_SEL2;REG_DATA |= ((sensor_en>>8)&0x0F);
+  93   2            REG_ADDR = SNS_IO_SEL3;REG_DATA |= ((sensor_en>>16)&0xFF);
+  94   2            REG_ADDR = SNS_IO_SEL4;REG_DATA |= ((sensor_en>>24)&0xFF);//open SNS
+  95   2      
+  96   2            TRISB |= ((sensor_en << 2)  & 0xFC);
+  97   2            TRISC |= ((sensor_en >> 2)  & 0x30);
+  98   2            TRISE |= ((sensor_en >> 4)  & 0xF0);
+  99   2            TRISF |= ((sensor_en >> 12) & 0xF0);
+ 100   2            TRISG |= ((sensor_en >> 20) & 0x0F);
+ 101   2            TRISH |= ((sensor_en >> 24) & 0xFF);//input
+ 102   2        }
+ 103   1      }
+ 104          
+ 105          /*!
+ 106              \brief      disable csd sensor
+ 107              \param[in]  sensor_addr:0~11,16~47
+ 108              \param[out] none
+ 109              \retval     none
+ 110          */
+ 111          void csd_sensor_disable(uint8_t sensor_addr)
+ 112          {
+ 113   1          uint32_t sensor_en;
+ 114   1      
+ 115   1        if(sensor_addr<32)
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         02/19/2021 17:29:49 PAGE 3   
+
+ 116   1          sensor_en = ((uint32_t)0x01<<sensor_addr);
+ 117   1        else
+ 118   1            sensor_en = ((uint32_t)0x01<<(sensor_addr-32));    
+ 119   1      
+ 120   1        if(sensor_addr>=32)
+ 121   1        {
+ 122   2            REG_ADDR = SNS_IO_SEL5;REG_DATA &= ~((sensor_en)&0xFF);
+ 123   2              REG_ADDR = SNS_IO_SEL6;REG_DATA &= ~((sensor_en>>8)&0xFF);  
+ 124   2        }
+ 125   1        else
+ 126   1        {
+ 127   2            REG_ADDR = SNS_IO_SEL1;REG_DATA &= ~((sensor_en)&0xFF);
+ 128   2            REG_ADDR = SNS_IO_SEL2;REG_DATA &= ~((sensor_en>>8)&0x0F);
+ 129   2            REG_ADDR = SNS_IO_SEL3;REG_DATA &= ~((sensor_en>>16)&0xFF);
+ 130   2            REG_ADDR = SNS_IO_SEL4;REG_DATA &= ~((sensor_en>>24)&0xFF);
+ 131   2        }
+ 132   1      }
+ 133          
+ 134          /*!
+ 135              \brief      disable all csd sensor
+ 136              \param[in]  none
+ 137              \param[out] none
+ 138              \retval     none
+ 139          */
+ 140          void csd_sensor_disable_all(void)
+ 141          {
+ 142   1          REG_ADDR = SNS_IO_SEL1;REG_DATA = 0;
+ 143   1          REG_ADDR = SNS_IO_SEL2;REG_DATA = 0;
+ 144   1          REG_ADDR = SNS_IO_SEL3;REG_DATA = 0;
+ 145   1          REG_ADDR = SNS_IO_SEL4;REG_DATA = 0;
+ 146   1        REG_ADDR = SNS_IO_SEL5;REG_DATA = 0;
+ 147   1          REG_ADDR = SNS_IO_SEL6;REG_DATA = 0;  
+ 148   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    882    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      20
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

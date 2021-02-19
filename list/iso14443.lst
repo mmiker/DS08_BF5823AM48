@@ -1,0 +1,693 @@
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ISO14443
+OBJECT MODULE PLACED IN .\output\iso14443.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE byd_rfid\iso14443.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include
+                    -;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_
+                    -rfid;.\mmi_inc) DEBUG PRINT(.\list\iso14443.lst) TABS(2) OBJECT(.\output\iso14443.obj)
+
+line level    source
+
+   1          #include "iso14443.h" 
+   2          #include "delay.h"
+   3          #include <string.h>
+   4          
+   5          /***********************************************************
+   6          ** º¯ Êý Ãû: typea_card_send_bit
+   7          ** ¹¦ÄÜÃèÊö: Î»·¢ËÍ
+   8          ** Êä  ¡¡Èë: inByte£ºÐèÒª·¢ËÍµÄÊý¾Ý»º´æ
+   9          **           lenBit£ºÒª·¢ËÍµÄÎ»³¤¶ÈÊý(lenBit´óÓÚ8)
+  10          ** Êä  ¡¡³ö: ÎÞ 
+  11          ***********************************************************/
+  12          #if 1
+  13          void typea_card_send_bit(u8 *inByte,u8 lenBit)
+  14          {
+  15   1      
+  16   1          u8 i,j,m,n;
+  17   1          bit bit_last;
+  18   1          u8 dat;
+  19   1          u8 allbyte,lastbit;    
+  20   1        u8 xdata array_bit[170];
+  21   1            
+  22   1          RFID_BIT_TXD_MODE_ENABLE();
+  23   1          RFID_TXD_STOP_MODE_DISABLE();
+  24   1      
+  25   1          //¼ÆËã×Ü×Ö½ÚÊýºÍ×îºóÎ»³¤¶È
+  26   1          allbyte = lenBit>>3;
+  27   1          lastbit = lenBit&0x07;    
+  28   1          bit_last = 1;
+  29   1        j = 1;
+  30   1      
+  31   1        //·¢ËÍÆðÊ¼Î»
+  32   1          array_bit[0] = send_z();  
+  33   1          
+  34   1          for(m=0; m < allbyte+1; m++)
+  35   1          {
+  36   2            dat=inByte[m];
+  37   2            
+  38   2            if( m < allbyte )
+  39   2          { 
+  40   3            n = 8;    
+  41   3          }
+  42   2            else //×îºóÒ»¸öÎ»´¦Àí            
+  43   2          { 
+  44   3            n = lastbit;     
+  45   3          }
+  46   2            //Î»·¢ËÍ
+  47   2            for(;n>0;n--)
+  48   2            {
+  49   3              if(dat&1)
+  50   3              {
+  51   4                array_bit[j] = send_x();
+  52   4                bit_last = 0;
+  53   4              }
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 2   
+
+  54   3              else 
+  55   3              {
+  56   4                if(bit_last)    
+  57   4            { 
+  58   5               array_bit[j] = send_z(); 
+  59   5            }
+  60   4                else            
+  61   4            { 
+  62   5               array_bit[j] = send_y(); 
+  63   5            }
+  64   4                bit_last = 1;
+  65   4              }
+  66   3              dat>>=1;
+  67   3          j++;
+  68   3            }
+  69   2          
+  70   2          }
+  71   1      
+  72   1        //·¢ËÍ½áÊøÎ»
+  73   1          if(allbyte > 1)
+  74   1          {   
+  75   2            if(bit_last==1) 
+  76   2          {
+  77   3            array_bit[j] = send_z(); 
+  78   3          }
+  79   2            else            
+  80   2          {
+  81   3            array_bit[j] = send_y();       
+  82   3          }
+  83   2          j++;
+  84   2          array_bit[j] = send_y();
+  85   2          }
+  86   1      
+  87   1        RFID_BUF1 = array_bit[0];
+  88   1        RFID_BUF2 = array_bit[1];
+  89   1        RFID_SEND_ENABLE(); 
+  90   1        wait_rfid_tx_complete();
+  91   1        
+  92   1          for(i = 2; i < j; i++)
+  93   1          {
+  94   2           if(i & 0x01)
+  95   2           {
+  96   3            RFID_BUF2 = array_bit[i];     
+  97   3           }
+  98   2           else
+  99   2           {
+ 100   3            RFID_BUF1 = array_bit[i];     
+ 101   3           }     
+ 102   2                             
+ 103   2           wait_rfid_tx_complete();
+ 104   2            
+ 105   2          }
+ 106   1      
+ 107   1        RFID_TXD_STOP_ENABLE();
+ 108   1        wait_rfid_tx_complete();
+ 109   1        
+ 110   1          RFID_SEND_DISABLE();  
+ 111   1        RFID_BIT_TXD_MODE_DISABLE(); 
+ 112   1      }
+ 113          #else
+              void typea_card_send_bit(u8 *inByte,u8 lenBit)
+              {
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 3   
+
+              
+                  u8 m,n;
+                  bit bit_last,buf_flag=0;        
+                u8 temp_bit;
+                bit send_flag = 0;
+                u8 dat;
+                  u8 allbyte,lastbit;
+                    
+                  RFID_BIT_TXD_MODE_ENABLE();
+                  RFID_TXD_STOP_MODE_ENABLE();
+              
+                  //¼ÆËã×Ü×Ö½ÚÊýºÍ×îºóÎ»³¤¶È
+                  allbyte = lenBit>>3;
+                  lastbit = lenBit&0x07;    
+                  bit_last = 1;
+                
+                //·¢ËÍÆðÊ¼Î»
+                  RFID_BUF1 = send_z(); 
+              
+                  for(m=0; m < allbyte+1; m++)
+                  {
+                    dat=inByte[m];
+                    
+                    if(m < allbyte)
+                  { 
+                    n = 8;    
+                  }
+                    else //×îºóÒ»¸öÎ»´¦Àí            
+                  { 
+                    n = lastbit;    
+                  }
+                    //Î»·¢ËÍ
+                    for(;n>0;n--)
+                    {
+                      if(dat&1)
+                      {
+                        temp_bit = send_x();
+                        bit_last = 0;
+                      }
+                      else 
+                      {
+                        if(bit_last)    
+                    { 
+                       temp_bit = send_z(); 
+                    }
+                        else            
+                    { 
+                       temp_bit = send_y(); 
+                    }
+                        bit_last = 1;
+                      }
+                      dat>>=1;
+                      
+                  if(!buf_flag)
+                  {
+                    RFID_BUF2 = temp_bit;
+                    buf_flag = 1;
+                  }
+                  else
+                  {
+                    RFID_BUF1 = temp_bit;
+                    buf_flag = 0;
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 4   
+
+                  }
+                  
+                  if(!send_flag)
+                  {
+                    send_flag = 1;
+                    RFID_SEND_ENABLE();
+                  } 
+                    wait_rfid_tx_complete();
+                    }  
+                  
+                  }
+                    
+                  //·¢ËÍ½áÊøÎ»
+                  if(allbyte > 1)
+                  {   
+                    if(bit_last==1) 
+                  {
+                    temp_bit = send_z();
+                  }
+                    else            
+                  {
+                    temp_bit = send_y();             
+                  }
+              
+                  if(!buf_flag) 
+                  {
+                     RFID_BUF2 = temp_bit;
+                   buf_flag = 1;
+                  }
+                  else
+                  {
+                   RFID_BUF1 = temp_bit;
+                   buf_flag = 0;
+                  }
+                      
+                  wait_rfid_tx_complete();
+              
+                  if(!buf_flag) 
+                  {
+                     RFID_BUF2 = send_y();
+                   buf_flag = 1;
+                  }
+                  else
+                  {
+                   RFID_BUF1 = send_y();
+                   buf_flag = 0;
+                  }
+                      
+                  wait_rfid_tx_complete();
+                  }
+              
+              //·¢ËÍÍê×îºóÒ»¸öbit²»»á²úÉútxÖÐ¶Ï
+                RFID_TXD_STOP_ENABLE();
+                delay_us(10);
+              
+                  RFID_SEND_DISABLE();  
+                RFID_BIT_TXD_MODE_DISABLE();
+                RFID_TXD_STOP_MODE_DISABLE(); 
+              }
+              #endif
+ 238          
+ 239          #if RFID_ANTI_SEL==0
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 5   
+
+              /***********************************************************
+              ** º¯ Êý Ãû: u8 typea_card_receive_bit(u8 *inByte,u8 byteBit,u8 len,u8 *anti_info)
+              ** ¹¦ÄÜÃèÊö: ³åÍ»Ö¡°´Î»½ÓÊÕ´¦Àí
+              ** Êä  ¡¡Èë: Êý¾Ý´æ´¢Ö¸Õë,½ÓÊÕµÚÒ»¸öÊý¾ÝÓÐÐ§bitÊýbyteBit,×Ü½ÓÊÕ¸öÊýlen,½ÓÊÕ´íÎóÐÅÏ¢*anti_info
+              ** Êä  ¡¡³ö: ÎÞ
+              ** ·µ    »Ø: RETURN_NO»òRETURN_OK»òANTIA_ERROR
+              ***********************************************************/
+              u8 typea_card_receive_bit(u8 *inByte,u8 byteBit,u8 len,u8 *anti_info)
+              {
+                u8 i,j,index = 0;
+                u8 sdat;
+                u8 dat=0;
+                u8 error_bit=0xff;
+                u8 rec_bytes=0;
+                
+                RFID_RX_FULL_CLR();
+                RFID_BIT_RXD_MODE_ENABLE();
+                RFID_RECEIVE_ENABLE();
+              
+                if(byteBit)
+                {
+                   index = 1;
+                }
+              
+              //µÚÒ»¸öÆðÊ¼Î»È¥µô  
+                sdat = rfid_rx_bit();
+                if(sdat==0xff)return RETURN_NO;
+              
+                if(byteBit)
+                {
+                  for(j = 0; j < byteBit; j++)
+                  {
+                     sdat = rfid_rx_bit();  
+                     if(sdat==1)
+                      dat |= (0x01<<j);
+              
+                   if(RFID_BIT_ER&0x01)
+                   {
+                      error_bit = j;
+                    rec_bytes = 0;      
+                    goto endle;
+                   }
+                  }
+                  inByte[0] = dat;
+                  rfid_rx_bit();//parity    
+                  inByte++;
+                }
+              
+                dat = 0;
+                for(j = index;j < len;j++)
+                {
+                  //½ÓÊÕÒ»¸ö×Ö½Ú
+                  for(i = 0; i < 8; i++)    
+                {      
+                     sdat = rfid_rx_bit();
+              
+                   if(RFID_BIT_ER&0x01)
+                   {
+                    error_bit = i;
+                    rec_bytes = j;      
+                    goto endle;
+                   }
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 6   
+
+              
+                     if(sdat!=0xff)
+                     dat |= (sdat<<i);
+                     else 
+                     {
+                   *inByte = dat;
+                       dat = (j<<3)+i;
+                   goto endle;
+                     }      
+                  }    
+                  //´¦ÀíÒ»¸ö×Ö½Ú
+                  *inByte = dat;
+                dat=0;
+                rfid_rx_bit();//parity    
+                inByte++;
+                }
+              
+                rfid_rx_bit();//Í¨ÐÅ½áÊø
+                
+              endle:
+              
+                RFID_RECEIVE_DISABLE();
+                RFID_BIT_RXD_MODE_DISABLE();
+              
+                if(error_bit != 0xff)
+                {
+                   anti_info[0] = rec_bytes;
+                 anti_info[1] = error_bit+1;
+                   return ANTIA_ERROR;
+                }
+              
+                return RETURN_OK;
+              }
+              #endif
+ 336          
+ 337          /***********************************************************
+ 338          ** º¯ Êý Ãû: u8 piccWakeupA(uint8_t *ATQA)
+ 339          ** ¹¦ÄÜÃèÊö: »½ÐÑ¿¨
+ 340          ** Êä  ¡¡Èë: ´æ´¢Ö¸Õë
+ 341          ** Êä  ¡¡³ö: ÎÞ
+ 342          ** ·µ    »Ø: RETURN_OK»òRETURN_NO
+ 343          ***********************************************************/ 
+ 344          u8 piccWakeupA(uint8_t *ATQA)
+ 345          {
+ 346   1          u8 temp[2];  
+ 347   1      
+ 348   1          temp[0] = CMD_WUPA;
+ 349   1      
+ 350   1        if(!rfid_transmit(temp,0))
+ 351   1          return RETURN_NO; 
+ 352   1      
+ 353   1        if(!rfid_receive(ATQA,temp,2))
+ 354   1          return RETURN_NO;
+ 355   1      
+ 356   1          return RETURN_OK; 
+ 357   1      }
+ 358          
+ 359          /***********************************************************
+ 360          ** º¯ Êý Ãû: void piccHaltA(void)
+ 361          ** ¹¦ÄÜÃèÊö: ÖÕÖ¹¶Ô¿¨²Ù×÷
+ 362          ** Êä  ¡¡Èë: ÎÞ           
+ 363          ** Êä  ¡¡³ö: ÎÞ
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 7   
+
+ 364          ** ·µ    »Ø: RETURN_OK»òRETURN_NO
+ 365          ***********************************************************/
+ 366          u8 piccHaltA(void)
+ 367          {
+ 368   1          u8 temp[2];  
+ 369   1      //  u16 tlrc;
+ 370   1         
+ 371   1          temp[0] = CMD_HLTA;
+ 372   1        temp[1] = 0x00;
+ 373   1      
+ 374   1      //  tlrc = ComputeCrc(CRC_A,temp,2);
+ 375   1      //  temp[2] = tlrc;
+ 376   1      //  temp[3] = tlrc>>8;
+ 377   1      
+ 378   1          if(!rfid_transmit(temp,2))
+ 379   1          return RETURN_NO; 
+ 380   1      
+ 381   1          return RETURN_OK; 
+ 382   1      }
+ 383          /***********************************************************
+ 384          ** º¯ Êý Ãû: u8 piccSelectA(u8 SEL,u8 *uid, u8 *SAK)
+ 385          ** ¹¦ÄÜÃèÊö: Ñ¡¿¨
+ 386          ** Êä  ¡¡Èë: SELÑ¡ÔñÐòÁÐ£º93H,95H,97H           
+ 387          ** Êä  ¡¡³ö: ÎÞ
+ 388          ** ·µ    »Ø: RETURN_OK»òRETURN_NO
+ 389          ***********************************************************/
+ 390          u8 piccSelectA(u8 SEL,u8 *uid,u8 *SAK,u8 len)
+ 391          {
+ 392   1          u8 i,ret,card_temp[12];
+ 393   1        u16 tlrc;
+ 394   1      
+ 395   1          card_temp[0] = SEL;
+ 396   1          card_temp[1] = 0x70;
+ 397   1      
+ 398   1        for(i = 0; i < len; i++)
+ 399   1        {
+ 400   2            card_temp[2+i] = uid[i];//¼Ó¿¨ºÅ    
+ 401   2        }
+ 402   1          tlrc = ComputeCrc(CRC_A,card_temp,2+len);
+ 403   1          card_temp[2+len]=(u8)tlrc;
+ 404   1          card_temp[3+len]=(u16)tlrc>>8;
+ 405   1      
+ 406   1        ret = rfid_transmit(card_temp,len+4);
+ 407   1          if(ret!=SUCCESS)return RETURN_NO;    
+ 408   1      
+ 409   1        ret = rfid_receive(SAK,card_temp,3);
+ 410   1        if(ret!=SUCCESS)
+ 411   1        {
+ 412   2          return RETURN_NO;
+ 413   2        }
+ 414   1            
+ 415   1        return RETURN_OK;
+ 416   1      }
+ 417          
+ 418          /***********************************************************
+ 419          ** º¯ Êý Ãû: u8 piccAntiA(uint8_t SEL, uint8_t rand_bit, uint8_t *uid)
+ 420          ** ¹¦ÄÜÃèÊö: type A¿¨·À³åÍ»Ñ­»·
+ 421          ** Êä  ¡¡Èë: SELÑ¡ÔñÐòÁÐ£º93H,95H,97H
+ 422          **           randBit Î»³åÍ»Ê±Ñ¡ÔñµÄÊý,0»ò1;
+ 423          **           uid:´æ´¢Ö¸Õë            
+ 424          ** Êä  ¡¡³ö: ÎÞ
+ 425          ** ·µ    »Ø: RETURN_OK»òRETURN_NO
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 8   
+
+ 426          ***********************************************************/
+ 427          u8 piccAntiA(u8 SEL, u8 rand_bit, u8 *uid)
+ 428          { 
+ 429   1          u8 i,ret;
+ 430   1          u8 recUID[10]={0,0,0,0,0};  
+ 431   1        u8 tmpBuf[10];
+ 432   1        u8 recBytes;
+ 433   1      
+ 434   1      #if RFID_ANTI_HANDLE
+                u8 currValidBytes=0, currValidBits=0;
+                  u8 recBits; 
+                  u8 j,NVB;
+                u8 temp[2]={0,0};
+              #endif
+ 440   1      
+ 441   1      #if RFID_ANTI_SEL && RFID_ANTI_HANDLE
+                if(SEL != CMD_CL1)return RETURN_NO;/*Ó²¼þÉè¼Æ·À³åÍ»Ö¡Ö»Ö§³ÖSEL = 0x93*/
+              #endif
+ 444   1      
+ 445   1          /* STEP 1: send SEL + 20H to PICC */
+ 446   1          tmpBuf[0] = SEL;
+ 447   1          tmpBuf[1] = 0x20;
+ 448   1      
+ 449   1      #if RFID_ANTI_SEL && RFID_ANTI_HANDLE    
+                RFID_ANTIC_NVB_SET(0x20);
+                RFID_ANTIC_ENABLE();
+              #endif
+ 453   1      
+ 454   1          ret = rfid_transmit(tmpBuf,2);
+ 455   1        if(ret!=SUCCESS)return RETURN_NO; 
+ 456   1      
+ 457   1          ret = rfid_receive(tmpBuf,&recBytes,5);/*recBytes=0~4¼ÇÂ¼µÚ¼¸¸öbyte·¢Éú³åÍ»*/
+ 458   1        if(SUCCESS == ret)
+ 459   1        {
+ 460   2           for(i = 0;i < 5;i++)
+ 461   2               uid[i] = tmpBuf[i];
+ 462   2      
+ 463   2      #if RFID_ANTI_SEL && RFID_ANTI_HANDLE    
+                    RFID_ANTIC_DISABLE();
+              #endif
+ 466   2           return RETURN_OK;
+ 467   2        }
+ 468   1        else if(ERROR == ret)
+ 469   1        {
+ 470   2      #if RFID_ANTI_SEL && RFID_ANTI_HANDLE    
+                     RFID_ANTIC_DISABLE();
+              #endif
+ 473   2           return RETURN_NO;
+ 474   2        }
+ 475   1      #if RFID_ANTI_HANDLE
+                else  /*µÚÒ»´Î·¢Éú³åÍ»*/
+                {
+                   recBits = rfid_byte_err_bit();/*±ê¼Ç·¢Éú³åÍ»Ê±Êý¾ÝµÄµÚ¼¸¸öbit³ö´í,recBits=1~8,´ú±íbit0~bit7*/
+              
+                   for(i = 0; i < recBytes; i++)
+                   {
+                      recUID[i] = tmpBuf[i];
+                   }
+                   
+              //     tmpBuf[recBytes] &= ~(0x01<<(recBits-1));//°Ñ³ö´íµÄbitÎ»ÖÃÎª0  
+                   recUID[recBytes] = tmpBuf[recBytes]&BITS(recBits);//±£´æÓÐÐ§Êý¾ÝÎ»
+                   
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 9   
+
+                   recUID[recBytes] |= (rand_bit<<(recBits-1));//³åÍ»Î»Ôö¼Órand_bit
+              
+                   currValidBytes = recBytes;//0~4
+                   currValidBits = recBits;//1~8
+                   
+                } 
+              
+                  while(1)
+                {             
+                    WDT_CTRL = 7;
+                        
+                  if(currValidBits)
+                     j = 1;
+                  else
+                     j = 0;
+                         
+                      /* ¼ÆËãÐÂµÄNVB£¬²¢½«µ±Ç°UID+rand_bit´«ËÍ¸øPICC */
+                      NVB = 0x20+((currValidBytes<<4) | currValidBits);
+              
+              #if RFID_ANTI_SEL    
+                  RFID_ANTIC_NVB_SET(NVB);
+              #endif    
+                      tmpBuf[0] = SEL;
+                      tmpBuf[1] = NVB;
+              
+                      for(i=0;i<currValidBytes+j;i++)
+                  {
+                          tmpBuf[2+i] = recUID[i];
+                      }
+              
+              #if RFID_ANTI_SEL==0
+                  rfid_transmit_bit(tmpBuf,((currValidBytes+2)<<3)+currValidBits);
+              #else
+                  rfid_transmit(tmpBuf,currValidBytes+2+j);
+              #endif
+                  
+              
+              #if RFID_ANTI_SEL==0
+                  ret = typea_card_receive_bit(tmpBuf,8-currValidBits,5-currValidBytes,temp);
+              #else
+                  ret = rfid_receive(tmpBuf,&recBytes,5-currValidBytes);
+              #endif
+              
+                  if(ret == ANTIA_ERROR)
+                  {
+              #if RFID_ANTI_SEL==0
+                      recBytes = temp[0];
+                    recBits = temp[1]; 
+              #else
+                    recBits = rfid_byte_err_bit();        
+              #endif
+                    if(recBytes==0) //²»ÍêÕû×Ö½Ú      
+                    {
+              //          tmpBuf[0] &= ~(0x01<<(recBits-1));
+                      recUID[currValidBytes] |= ((tmpBuf[0]&BITS(recBits) )<<currValidBits);//°´Î»Æ´½ÓµÚÒ»¸ö×Ö½Ú
+                      currValidBits += recBits;
+                      recUID[currValidBytes] |= (rand_bit<<(currValidBits-1));
+                      if(currValidBits==8)
+                      {            
+                         currValidBits = 0;
+                         currValidBytes++;
+                      }
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 10  
+
+                    }
+                    else  //ÓÐÍêÕû×Ö½Ú
+                    {           
+                        recUID[currValidBytes] |= ((tmpBuf[0]&(0xFF >> (currValidBits)))<<currValidBits);//°´Î»Æ´½ÓµÚÒ»¸ö×Ö
+             -½Ú
+                      currValidBytes++;
+              
+                      for(i = 1; i < recBytes; i++)
+                        {
+                           recUID[currValidBytes++] = tmpBuf[i];
+                        }
+              
+              //        tmpBuf[recBytes] &= ~(0x01<<(recBits-1));//°Ñ³ö´íµÄbitÎ»ÖÃÎª0
+                      recUID[currValidBytes] = tmpBuf[recBytes]&BITS(recBits);        
+              
+                      recUID[currValidBytes] |= (rand_bit<<(recBits-1));
+              
+                      currValidBits = recBits;
+                    }
+                    
+                  }
+                  else if(ret == SUCCESS)
+                  { 
+                    recBytes = 5-currValidBytes;
+              
+                      recUID[currValidBytes] |= ((tmpBuf[0]&(0xFF >> (currValidBits)))<<currValidBits);//°´Î»Æ´½ÓµÚÒ»¸ö×Ö½
+             -Ú          
+                    currValidBytes++;
+                            
+                    for(i = 1; i < recBytes; i++)
+                      {
+                         recUID[currValidBytes++] = tmpBuf[i];
+                      }
+                    break;        
+                  }
+                  else
+                  {
+                      //Ò»Ö±Î´ÓÐPICCÏìÓ¦
+                    //rand_bit = !rand_bit;
+              #if RFID_ANTI_SEL    
+                      RFID_ANTIC_DISABLE();
+              #endif
+                    return RETURN_NO;
+                  }
+              
+                  }
+              
+              #if RFID_ANTI_SEL    
+                  RFID_ANTIC_DISABLE();
+              #endif
+              
+                memcpy(uid,recUID,5);
+              
+              #endif
+ 602   1          return RETURN_OK;
+ 603   1      }
+*** WARNING C280 IN LINE 427 OF byd_rfid\iso14443.c: 'rand_bit': unreferenced local variable
+ 604          
+ 605          /***********************************************************
+ 606          ** º¯ Êý Ãû: u8 get_card_number(u8 *uid)
+ 607          ** ¹¦ÄÜÃèÊö: »ñÈ¡¿¨ºÅ
+ 608          ** Êä  ¡¡Èë: uid:´æ´¢Ö¸Õë,ÖÁÉÙ12byte»º´æ            
+C51 COMPILER V9.59.0.0   ISO14443                                                          02/19/2021 17:29:47 PAGE 11  
+
+ 609          ** Êä  ¡¡³ö: ÎÞ
+ 610          ** ·µ    »Ø: RETURN_OK»òRETURN_NO
+ 611          ***********************************************************/
+ 612          u8 get_card_number(u8 *uid)
+ 613          {
+ 614   1         u8 tmpbuf[6]={0};
+ 615   1         u8 ret;
+ 616   1         u8 card_type;
+ 617   1      
+ 618   1         RFID_TXD_STOP_MODE_DISABLE();
+ 619   1      
+ 620   1         if(RETURN_OK != piccWakeupA(tmpbuf))
+ 621   1            return RETURN_NO;
+ 622   1         
+ 623   1         card_type = 3 * ( ( tmpbuf[0] & 0xC0 ) >> 6 ) + 4;/*¿¨Æ¬ID³¤¶È,°´×Ö½Ú¼Æ*/
+ 624   1         if( ( 4 != card_type ) ){ return RETURN_NO; }
+ 625   1          
+ 626   1         ret = piccAntiA(CMD_CL1,1,tmpbuf);
+ 627   1         if(ret != RETURN_OK)return RETURN_NO;
+ 628   1      
+ 629   1         memcpy(uid,tmpbuf,5);
+ 630   1          
+ 631   1         ret = piccSelectA(CMD_CL1,uid,tmpbuf,5);
+ 632   1         if(ret != RETURN_OK)return RETURN_NO;
+ 633   1        
+ 634   1         if((tmpbuf[0] & 0x24) == 0x00)
+ 635   1         {
+ 636   2            return RETURN_OK;//M1¿¨
+ 637   2         }
+ 638   1      
+ 639   1         return RETURN_NO;
+ 640   1      }
+ 641          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1000    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----     241
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

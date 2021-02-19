@@ -1,0 +1,322 @@
+C51 COMPILER V9.59.0.0   MCU02_FLASH                                                       02/19/2021 17:29:51 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_FLASH
+OBJECT MODULE PLACED IN .\output\mcu02_flash.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_flash.c LARGE OMF2 OPTIMIZE
+                    -(8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifa
+                    -re\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_flash.lst) TABS(2) OBJECT(.\output\mcu02_flash
+                    -.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_flash.c
+   3              \brief flash driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-06-03, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_flash.h"
+  13          
+  14          /*
+  15          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  16          进入boot升级功能时才能使用以下接口函数对flash进行擦除和编程操作,平时不能用作存储数据功能
+  17          若要存储数据,请参考mcu02_eeprom.c和byd_eeprom.c
+  18          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  19          */
+  20          
+  21          /*!
+  22              \brief      erase time
+  23              \param[in]  erase_time:0~9(0.5*(erase_time+1)ms+0.0652ms)
+  24                             >9(4.5652ms)
+  25              \param[out] none
+  26              \retval     none
+  27          */
+  28          void flash_erase_time(uint8_t erase_time)
+  29          {
+  30   1          SPROG_TIM = (0x1f&erase_time);
+  31   1      }
+  32          /*!
+  33              \brief      erase page
+  34              \param[in]  page_address: the page address to be erased.erase 512bytes
+  35              \param[out] none
+  36              \retval     none
+  37          */
+  38          void flash_erase_page(uint16_t page_address)
+  39          {    
+  40   1        EA = 0; 
+  41   1        SPROG_ADDR_L = page_address&0x00ff;
+  42   1        SPROG_ADDR_H = (page_address&0xff00)>>8;
+  43   1        SPROG_CMD = 0x96;
+  44   1        _nop_();
+  45   1        _nop_();
+  46   1        _nop_();
+  47   1        _nop_();
+  48   1        SPROG_ADDR_L = 0x00;
+  49   1        SPROG_ADDR_H = 0x00;
+  50   1        EA = 1;
+  51   1      }
+  52          
+C51 COMPILER V9.59.0.0   MCU02_FLASH                                                       02/19/2021 17:29:51 PAGE 2   
+
+  53          /*!
+  54              \brief      flash read byte
+  55              \param[in]  page_address:0~0xffff
+  56              \param[out] none
+  57              \retval     data
+  58          */
+  59          uint8_t flash_read_byte(uint16_t page_address)
+  60          { 
+  61   1        uint8_t code *pbuf;
+  62   1        pbuf = (uint8_t code *)page_address; 
+  63   1        return (*pbuf); 
+  64   1      }
+  65          
+  66          /*!
+  67              \brief      flash read byte
+  68              \param[in]  page_address:0~0xffff
+  69              \param[out] none
+  70              \retval     data
+  71          */
+  72          void flash_read(uint8_t *pbuf,uint16_t page_address,uint16_t len)
+  73          { 
+  74   1        uint16_t i;
+  75   1        for(i = 0; i < len; i++)
+  76   1          pbuf[i] = *((uint8_t code *)(page_address+i));  
+  77   1      }
+  78          
+  79          /*!
+  80              \brief      write byte
+  81              \param[in]  page_address:0~0xffff
+  82                  write_byte
+  83              \param[out] none
+  84              \retval     ErrStatus:SUCCESS/ERROR
+  85          */
+  86          ErrStatus flash_write_byte(uint16_t page_address,uint8_t write_byte)
+  87          {
+  88   1        ErrStatus status;
+  89   1      
+  90   1        EA = 0;
+  91   1        SPROG_ADDR_L = page_address&0x00ff;
+  92   1        SPROG_ADDR_H = (page_address&0xff00)>>8;
+  93   1        SPROG_DATA = write_byte;
+  94   1        SPROG_CMD = 0x69;
+  95   1        _nop_();
+  96   1        _nop_();
+  97   1        _nop_();
+  98   1        _nop_();
+  99   1        SPROG_ADDR_L = 0x00;
+ 100   1        SPROG_ADDR_H = 0x00;
+ 101   1      
+ 102   1        if(*((uint8_t code *)page_address) == write_byte)
+ 103   1        {
+ 104   2          status = SUCCESS;
+ 105   2        }
+ 106   1        else
+ 107   1        {
+ 108   2          status = ERROR;
+ 109   2        }
+ 110   1        
+ 111   1        EA = 1;
+ 112   1      
+ 113   1        return status;
+ 114   1          
+C51 COMPILER V9.59.0.0   MCU02_FLASH                                                       02/19/2021 17:29:51 PAGE 3   
+
+ 115   1      }
+ 116          /*!
+ 117              \brief      enter bootloader
+ 118              \param[in]  none
+ 119              \param[out] none
+ 120              \retval     ErrStatus:SUCCESS/ERROR
+ 121          */
+ 122          ErrStatus enter_boot_upgrade(void)
+ 123          {
+ 124   1          ErrStatus status; 
+ 125   1        uint8_t boot_flag;
+ 126   1      
+ 127   1        EA = 0;
+ 128   1      
+ 129   1        SPROG_CMD = 0x12;
+ 130   1          SPROG_CMD = 0x34;
+ 131   1        SPROG_CMD = 0x56;
+ 132   1        SPROG_CMD = 0x78;
+ 133   1        SPROG_CMD = 0x9a;
+ 134   1      
+ 135   1        _nop_();
+ 136   1        _nop_();
+ 137   1        _nop_();
+ 138   1      
+ 139   1        REG_ADDR = FLASH_BOOT_EN;
+ 140   1        boot_flag = REG_DATA;
+ 141   1      
+ 142   1        if(boot_flag)
+ 143   1          status = SUCCESS;
+ 144   1        else
+ 145   1          status = ERROR;
+ 146   1           
+ 147   1        EA = 1;
+ 148   1      
+ 149   1        return status;
+ 150   1      }
+ 151          
+ 152          /*!
+ 153              \brief      exit bootloader
+ 154              \param[in]  none
+ 155              \param[out] none
+ 156              \retval     ErrStatus:SUCCESS/ERROR
+ 157          */
+ 158          ErrStatus exit_boot_upgrade(void)
+ 159          {
+ 160   1          ErrStatus status; 
+ 161   1        uint8_t boot_flag;
+ 162   1      
+ 163   1        EA = 0;
+ 164   1      
+ 165   1        SPROG_CMD = 0xfe;
+ 166   1          SPROG_CMD = 0xdc;
+ 167   1        SPROG_CMD = 0xba;
+ 168   1        SPROG_CMD = 0x98;
+ 169   1        SPROG_CMD = 0x76;
+ 170   1      
+ 171   1        _nop_();
+ 172   1      
+ 173   1        REG_ADDR = FLASH_BOOT_EN;
+ 174   1        boot_flag = REG_DATA;
+ 175   1      
+ 176   1        if(boot_flag==0)
+C51 COMPILER V9.59.0.0   MCU02_FLASH                                                       02/19/2021 17:29:51 PAGE 4   
+
+ 177   1          status = SUCCESS;
+ 178   1        else
+ 179   1          status = ERROR;
+ 180   1           
+ 181   1        EA = 1;
+ 182   1      
+ 183   1        return status;
+ 184   1      }
+ 185          
+ 186          /*!
+ 187              \brief      enter app code
+ 188              \param[in]  offest
+ 189              \param[out] none
+ 190              \retval     ErrStatus:SUCCESS/ERROR
+ 191          */
+ 192          ErrStatus jump_to_app(uint16_t offest)
+ 193          {
+ 194   1          ErrStatus status; 
+ 195   1        uint8_t rom_offset_l;
+ 196   1        uint8_t rom_offset_h;
+ 197   1        uint16_t rom_offset;
+ 198   1      
+ 199   1        EA = 0;
+ 200   1      
+ 201   1        REG_ADDR = BOOT_CMD;
+ 202   1        REG_DATA = 0xff;
+ 203   1      
+ 204   1        REG_ADDR = BOOT_CMD;
+ 205   1        REG_DATA = 0x00;
+ 206   1      
+ 207   1        REG_ADDR = BOOT_CMD;
+ 208   1        REG_DATA = 0x88;
+ 209   1        
+ 210   1        REG_ADDR = BOOT_CMD;
+ 211   1        REG_DATA = 0x55;
+ 212   1      
+ 213   1        REG_ADDR = BOOT_CMD;
+ 214   1        REG_DATA = 0xaa;
+ 215   1        
+ 216   1        _nop_();
+ 217   1      
+ 218   1        REG_ADDR = ROM_OFFSET_L;
+ 219   1        rom_offset_l = REG_DATA;
+ 220   1      
+ 221   1        REG_ADDR = ROM_OFFSET_H;
+ 222   1        rom_offset_h = REG_DATA;
+ 223   1      
+ 224   1        rom_offset = ((uint16_t)rom_offset_h<<8)|rom_offset_l;
+ 225   1      
+ 226   1        if(rom_offset == offest)
+ 227   1          status = SUCCESS;
+ 228   1        else
+ 229   1          status = ERROR;
+ 230   1           
+ 231   1        EA = 1;
+ 232   1      
+ 233   1        return status;
+ 234   1      }
+ 235          
+ 236          /*!
+ 237              \brief      enter boot code
+ 238              \param[in]  none
+C51 COMPILER V9.59.0.0   MCU02_FLASH                                                       02/19/2021 17:29:51 PAGE 5   
+
+ 239              \param[out] none
+ 240              \retval     ErrStatus:SUCCESS/ERROR
+ 241          */
+ 242          ErrStatus jump_to_boot(void)
+ 243          {
+ 244   1          ErrStatus status; 
+ 245   1        uint8_t rom_offset_l;
+ 246   1        uint8_t rom_offset_h;
+ 247   1        uint16_t rom_offset;
+ 248   1      
+ 249   1        EA = 0;
+ 250   1      
+ 251   1        REG_ADDR = BOOT_CMD;
+ 252   1        REG_DATA = 0x37;
+ 253   1      
+ 254   1        REG_ADDR = BOOT_CMD;
+ 255   1        REG_DATA = 0xc8;
+ 256   1      
+ 257   1        REG_ADDR = BOOT_CMD;
+ 258   1        REG_DATA = 0x42;
+ 259   1      
+ 260   1        REG_ADDR = BOOT_CMD;
+ 261   1        REG_DATA = 0x9a;
+ 262   1      
+ 263   1        REG_ADDR = BOOT_CMD;
+ 264   1        REG_DATA = 0x65;
+ 265   1        
+ 266   1        _nop_();
+ 267   1      
+ 268   1        REG_ADDR = ROM_OFFSET_L;
+ 269   1        rom_offset_l = REG_DATA;
+ 270   1      
+ 271   1        REG_ADDR = ROM_OFFSET_H;
+ 272   1        rom_offset_h = REG_DATA;
+ 273   1      
+ 274   1        rom_offset = ((uint16_t)rom_offset_h<<8)|rom_offset_l;
+ 275   1      
+ 276   1        if(rom_offset == 0)
+ 277   1          status = SUCCESS;
+ 278   1        else
+ 279   1          status = ERROR;
+ 280   1           
+ 281   1        EA = 1;
+ 282   1      
+ 283   1        return status;
+ 284   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    391    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

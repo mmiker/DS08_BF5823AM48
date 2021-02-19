@@ -1,0 +1,129 @@
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:29:47 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_MOTOR
+OBJECT MODULE PLACED IN .\output\dqiot_drv_motor.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\dqiot_drv_motor.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\in
+                    -clude;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.
+                    -\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\dqiot_drv_motor.lst) TABS(2) OBJECT(.\output\dqiot_drv_motor.obj)
+
+line level    source
+
+   1          #ifndef __DQIOT_DRV_MOTOR_C__
+   2          #define __DQIOT_DRV_MOTOR_C__
+   3          
+   4          #include "dqiot_drv.h"
+   5          
+   6          /*
+   7          parameter: 
+   8            none
+   9          return :
+  10            none
+  11          */
+  12          void dqiot_drv_motor_gpio_init(void)
+  13          {
+  14   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_OUT);
+  15   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  16   1      
+  17   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_OUT);
+  18   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  19   1      
+  20   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_OUT);
+  21   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  22   1        return;
+  23   1      }
+  24          
+  25          /*
+  26          parameter: 
+  27            none
+  28          return :
+  29            none
+  30          */
+  31          void dqiot_drv_motor_gpio_deinit(void)
+  32          {
+  33   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_OUT);
+  34   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  35   1      
+  36   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_OUT);
+  37   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  38   1      
+  39   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_OUT);
+  40   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  41   1        return;
+  42   1      }
+  43          
+  44          
+  45          /*
+  46          parameter: 
+  47            none
+  48          return :
+  49            none
+  50          */
+  51          void dqiot_drv_motor_init(void)
+  52          {
+  53   1        
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   02/19/2021 17:29:47 PAGE 2   
+
+  54   1        return;
+  55   1      }
+  56          
+  57          /*
+  58          parameter: 
+  59            none
+  60          return :
+  61            none
+  62          */
+  63          void dqiot_drv_motor_turn_right(void)
+  64          {
+  65   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  66   1        gpio_bit_set(MOTOR_A_PORT,MOTOR_A_PIN);
+  67   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  68   1        return;
+  69   1      }
+  70          
+  71          /*
+  72          parameter: 
+  73            none
+  74          return :
+  75            none
+  76          */
+  77          void dqiot_drv_motor_turn_back(void)
+  78          {
+  79   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  80   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  81   1        gpio_bit_set(MOTOR_B_PORT,MOTOR_B_PIN);
+  82   1        return;
+  83   1      }
+  84          
+  85          /*
+  86          parameter: 
+  87            none
+  88          return :
+  89            none
+  90          */
+  91          void dqiot_drv_motor_stop(void)
+  92          {
+  93   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  94   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  95   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  96   1      }
+  97          
+  98          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    160    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

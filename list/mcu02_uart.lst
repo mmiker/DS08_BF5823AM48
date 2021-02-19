@@ -1,0 +1,112 @@
+C51 COMPILER V9.59.0.0   MCU02_UART                                                        02/19/2021 17:29:50 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_UART
+OBJECT MODULE PLACED IN .\output\mcu02_uart.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_uart.c LARGE OMF2 OPTIMIZE(
+                    -8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifar
+                    -e\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_uart.lst) TABS(2) OBJECT(.\output\mcu02_uart.ob
+                    -j)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_uart.c
+   3              \brief uart driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-15, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_uart.h"
+  13          
+  14          /*!
+  15              \brief      uart0 and uart1 init
+  16              \param[in]  uart_port: UART0 or UART1
+  17                  baudrate : UART_BAUDRATE_xx
+  18              \param[out] none
+  19              \retval     none
+  20          */
+  21          void uart_baudrate_config(UART_PORT_enum uart_port,uint32_t baudrate)
+  22          {
+  23   1          uint16_t tmp;
+  24   1      
+  25   1        tmp = (uint16_t)((UART_BUS_CLK >> 4) / baudrate);
+  26   1      
+  27   1        if(uart_port == UART0){
+  28   2            
+  29   2          UART0_BDL = (uint8_t)tmp;
+  30   2          UART0_CON2 |= ((tmp >> 8) & 0x03);    
+  31   2      
+  32   2        }else{
+  33   2          
+  34   2          UART1_BDL = (uint8_t)tmp;
+  35   2          UART1_CON2 |= ((tmp >> 8) & 0x03);    
+  36   2        }
+  37   1      }
+  38          
+  39          /*!
+  40              \brief      uart send byte
+  41              \param[in]  uart_port: UART0/UART1
+  42                  dat :send data
+  43              \param[out] none
+  44              \retval     none
+  45          */
+  46          void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
+  47          {
+  48   1        if(uart_port == UART0){
+  49   2          UART0_BUF = dat;
+  50   2          while((UART0_STATE & TX_EMPTY_FLAG) == 0x00);
+  51   2          CLR_UART0_TX_STATE();
+  52   2        }else if(uart_port == UART1){
+C51 COMPILER V9.59.0.0   MCU02_UART                                                        02/19/2021 17:29:50 PAGE 2   
+
+  53   2          UART1_BUF = dat;
+  54   2          while((UART1_STATE & TX_EMPTY_FLAG) == 0x00);
+  55   2          CLR_UART1_TX_STATE();
+  56   2        }
+  57   1      }
+  58          
+  59          /*!
+  60              \brief      uart receive byte
+  61              \param[in]  uart_port: UART0/UART1
+  62              \param[out] none
+  63              \retval     receive data
+  64          */
+  65          uint8_t uart_rx_byte(UART_PORT_enum uart_port)
+  66          {
+  67   1        uint8_t dat;
+  68   1        if(uart_port == UART0){
+  69   2          while((UART0_STATE & RX_FULL_FLAG) == 0x00);
+  70   2          dat = UART0_BUF;
+  71   2          CLR_UART0_RX_STATE(); 
+  72   2        }else if(uart_port == UART1){
+  73   2          while((UART1_STATE & RX_FULL_FLAG) == 0x00);
+  74   2          dat = UART1_BUF;
+  75   2          CLR_UART1_RX_STATE(); 
+  76   2        }
+  77   1        return dat;
+  78   1      }   
+  79              
+  80              
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    127    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       5
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

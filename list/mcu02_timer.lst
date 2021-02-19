@@ -1,0 +1,71 @@
+C51 COMPILER V9.59.0.0   MCU02_TIMER                                                       02/19/2021 17:29:50 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_TIMER
+OBJECT MODULE PLACED IN .\output\mcu02_timer.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_timer.c LARGE OMF2 OPTIMIZE
+                    -(8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifa
+                    -re\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_timer.lst) TABS(2) OBJECT(.\output\mcu02_timer
+                    -.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_timer.c
+   3              \brief timer driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2018 BYD
+   8          
+   9              2020-07-16, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_timer.h"
+  13          #include "mcu02_system.h"
+  14          #include "mcu02_clock.h"
+  15          
+  16          uint8_t data TH0_reload = 0,TL0_reload = 0;
+  17          uint8_t data TH1_reload = 0,TL1_reload = 0;
+  18          
+  19          
+  20          /*!
+  21              \brief      timer0 or timer1 init
+  22              \param[in]  timer_port: TIMER0 or TIMER1
+  23              \param[out] none
+  24              \retval     none
+  25          */
+  26          void timer0_1_init(TIMER_enum timer_port)
+  27          { 
+  28   1        if(timer_port == TIMER0){
+  29   2          
+  30   2          TH0_reload = TH0;
+  31   2          TL0_reload = TL0;   
+  32   2          
+  33   2        }else if(timer_port == TIMER1){
+  34   2          
+  35   2          TH1_reload = TH1;
+  36   2          TL1_reload = TL1;   
+  37   2        }
+  38   1      }
+  39          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     26    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+C51 COMPILER V9.59.0.0   MCU02_TIMER                                                       02/19/2021 17:29:50 PAGE 2   
+
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,285 @@
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/19/2021 17:29:49 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_GPIO
+OBJECT MODULE PLACED IN .\output\mcu02_gpio.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_gpio.c LARGE OMF2 OPTIMIZE(
+                    -8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifar
+                    -e\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_gpio.lst) TABS(2) OBJECT(.\output\mcu02_gpio.ob
+                    -j)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_gpio.c
+   3              \brief gpio driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-10, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_gpio.h"
+  13          #include "mcu02_system.h"
+  14          
+  15          /*!
+  16              \brief      gpio init
+  17              \param[in]  gpio_port: GPIOA/GPIOB/GPIOC/GPIOE/GPIOF/GPIOG/GPIOH
+  18                  gpio_pin : GPIO_PIN_(x),x = (0..7)
+  19                  gpio_mode : gpio mode
+  20                    GPIO_MODE_IN_FLOATING : floating input mode
+  21                    GPIO_MODE_IPU : pull-up input mode 
+  22                    GPIO_MODE_OUT : GPIO output 
+  23                    GPIO_MODE_OUT_OD : GPIO output with open-drain,only PC4/PC5/PE4/PE5
+  24              \param[out] none
+  25              \retval     none
+  26          */
+  27          void gpio_init(GPIO_PORT_enum gpio_port,uint8_t gpio_pin,GPIO_MODE_enum gpio_mode)
+  28          {
+  29   1        switch(gpio_port){
+  30   2          case GPIOA:
+  31   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+  32   3              TRISA |= gpio_pin;
+  33   3              REG_ADDR = PU_PA;
+  34   3                    REG_DATA &= (~gpio_pin);        
+  35   3            }else if(gpio_mode == GPIO_MODE_IPU){
+  36   3              TRISA |= gpio_pin;
+  37   3                      REG_ADDR = PU_PA;
+  38   3                    REG_DATA |= (gpio_pin);
+  39   3            }else if(gpio_mode == GPIO_MODE_OUT){
+  40   3              TRISA &= ~gpio_pin;
+  41   3            }
+  42   2      
+  43   2            break;
+  44   2      
+  45   2          case GPIOB:
+  46   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+  47   3              TRISB |= gpio_pin;
+  48   3                      REG_ADDR = PU_PB;
+  49   3                    REG_DATA &= (~gpio_pin);
+  50   3            }else if(gpio_mode == GPIO_MODE_IPU){
+  51   3              TRISB |= gpio_pin;
+  52   3                      REG_ADDR = PU_PB;
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/19/2021 17:29:49 PAGE 2   
+
+  53   3                    REG_DATA |= (gpio_pin);
+  54   3            }else if(gpio_mode == GPIO_MODE_OUT){
+  55   3              TRISB &= ~gpio_pin;
+  56   3            }
+  57   2      
+  58   2            break;
+  59   2      
+  60   2          case GPIOC:
+  61   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+  62   3              TRISC |= gpio_pin;
+  63   3                      REG_ADDR = PU_PC;
+  64   3                    REG_DATA &= (~gpio_pin);
+  65   3            }else if(gpio_mode == GPIO_MODE_IPU){
+  66   3              TRISC |= gpio_pin;
+  67   3                      REG_ADDR = PU_PC;
+  68   3                    REG_DATA |= (gpio_pin);
+  69   3            }else if(gpio_mode == GPIO_MODE_OUT){
+  70   3              TRISC &= ~gpio_pin;
+  71   3              if(gpio_pin & 0x30){//PC4,PC5
+  72   4                          REG_ADDR = ODRAIN_EN;
+  73   4                        REG_DATA &= ~((gpio_pin&0x30)>>4);
+  74   4              }
+  75   3            }else if(gpio_mode == GPIO_MODE_OUT_OD){
+  76   3              TRISC &= ~gpio_pin;
+  77   3              REG_ADDR = ODRAIN_EN;
+  78   3                    REG_DATA |= ((gpio_pin&0x30)>>4);
+  79   3            }
+  80   2      
+  81   2            break;
+  82   2          
+  83   2          case GPIOE:
+  84   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+  85   3              TRISE |= gpio_pin;
+  86   3                      REG_ADDR = PU_PE;
+  87   3                    REG_DATA &= (~gpio_pin);
+  88   3            }else if(gpio_mode == GPIO_MODE_IPU){
+  89   3              TRISE |= gpio_pin;
+  90   3                      REG_ADDR = PU_PE;
+  91   3                    REG_DATA |= (gpio_pin);
+  92   3            }else if(gpio_mode == GPIO_MODE_OUT){
+  93   3              TRISE &= ~gpio_pin;
+  94   3              if(gpio_pin & 0x30){//PE4,PE5
+  95   4                REG_ADDR = ODRAIN_EN;
+  96   4                        REG_DATA &= ~((gpio_pin&0x30)>>2);
+  97   4              }
+  98   3            }else if(gpio_mode == GPIO_MODE_OUT_OD){
+  99   3              TRISE &= ~gpio_pin;
+ 100   3                      REG_ADDR = ODRAIN_EN;
+ 101   3                    REG_DATA |= ((gpio_pin&0x30)>>2);
+ 102   3            }
+ 103   2      
+ 104   2            break;
+ 105   2      
+ 106   2          case GPIOF:
+ 107   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+ 108   3              TRISF |= gpio_pin;
+ 109   3                      REG_ADDR = PU_PF;
+ 110   3                    REG_DATA &= (~gpio_pin);
+ 111   3            }else if(gpio_mode == GPIO_MODE_IPU){
+ 112   3              TRISF |= gpio_pin;
+ 113   3                      REG_ADDR = PU_PF;
+ 114   3                    REG_DATA |= (gpio_pin);
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/19/2021 17:29:49 PAGE 3   
+
+ 115   3            }else if(gpio_mode == GPIO_MODE_OUT){
+ 116   3              TRISF &= ~gpio_pin;
+ 117   3            }
+ 118   2      
+ 119   2            break;
+ 120   2      
+ 121   2          case GPIOG:
+ 122   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+ 123   3              TRISG |= gpio_pin;
+ 124   3                      REG_ADDR = PU_PG;
+ 125   3                    REG_DATA &= (~gpio_pin);
+ 126   3            }else if(gpio_mode == GPIO_MODE_IPU){
+ 127   3              TRISG |= gpio_pin;
+ 128   3                      REG_ADDR = PU_PG;
+ 129   3                    REG_DATA |= (gpio_pin);
+ 130   3            }else if(gpio_mode == GPIO_MODE_OUT){
+ 131   3              TRISG &= ~gpio_pin;
+ 132   3            }
+ 133   2      
+ 134   2            break;
+ 135   2      
+ 136   2          case GPIOH:
+ 137   2            if(gpio_mode == GPIO_MODE_IN_FLOATING){
+ 138   3              TRISH |= gpio_pin;
+ 139   3                      REG_ADDR = PU_PH;
+ 140   3                    REG_DATA &= (~gpio_pin);
+ 141   3            }else if(gpio_mode == GPIO_MODE_IPU){
+ 142   3              TRISH |= gpio_pin;
+ 143   3                      REG_ADDR = PU_PH;
+ 144   3                    REG_DATA |= (gpio_pin);
+ 145   3            }else if(gpio_mode == GPIO_MODE_OUT){
+ 146   3              TRISH &= ~gpio_pin;
+ 147   3            }
+ 148   2      
+ 149   2            break;
+ 150   2          default:
+ 151   2            break;
+ 152   2        }
+ 153   1      }
+ 154          
+ 155          /*!
+ 156              \brief      gpio bit set
+ 157              \param[in]  gpio_port: GPIOA/GPIOB/GPIOC/GPIOE/GPIOF/GPIOG/GPIOH
+ 158                  gpio_pin : GPIO_PIN_(x),x = (0..7)
+ 159              \param[out] none
+ 160              \retval     none
+ 161          */
+ 162          void gpio_bit_set(GPIO_PORT_enum gpio_port,uint8_t gpio_pin)
+ 163          {
+ 164   1        switch(gpio_port)
+ 165   1        {
+ 166   2          case GPIOA:
+ 167   2            DATAA |= gpio_pin;break;
+ 168   2          case GPIOB:
+ 169   2            DATAB |= gpio_pin;break;
+ 170   2          case GPIOC:
+ 171   2            DATAC |= gpio_pin;break;    
+ 172   2          case GPIOE:
+ 173   2            DATAE |= gpio_pin;break;
+ 174   2          case GPIOF:
+ 175   2            DATAF |= gpio_pin;break;
+ 176   2          case GPIOG:
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/19/2021 17:29:49 PAGE 4   
+
+ 177   2            DATAG |= gpio_pin;break;
+ 178   2          case GPIOH:
+ 179   2            DATAH |= gpio_pin;break;
+ 180   2          default:
+ 181   2            break;
+ 182   2        }
+ 183   1      }
+ 184          
+ 185          /*!
+ 186              \brief      gpio bit reset
+ 187              \param[in]  gpio_port: GPIOA/GPIOB/GPIOC/GPIOE/GPIOF/GPIOG/GPIOH
+ 188                  gpio_pin : GPIO_PIN_(x),x = (0..7)
+ 189              \param[out] none
+ 190              \retval     none
+ 191          */
+ 192          void gpio_bit_reset(GPIO_PORT_enum gpio_port,uint8_t gpio_pin)
+ 193          { 
+ 194   1        switch(gpio_port)
+ 195   1        {
+ 196   2          case GPIOA:
+ 197   2            DATAA &= ~gpio_pin;break;
+ 198   2          case GPIOB:
+ 199   2            DATAB &= ~gpio_pin;break;
+ 200   2          case GPIOC:
+ 201   2            DATAC &= ~gpio_pin;break;   
+ 202   2          case GPIOE:
+ 203   2            DATAE &= ~gpio_pin;break;
+ 204   2          case GPIOF:
+ 205   2            DATAF &= ~gpio_pin;break;
+ 206   2          case GPIOG:
+ 207   2            DATAG &= ~gpio_pin;break;
+ 208   2          case GPIOH:
+ 209   2            DATAH &= ~gpio_pin;break;
+ 210   2          default:
+ 211   2            break;
+ 212   2        }
+ 213   1      }
+ 214          
+ 215          
+ 216          /*!
+ 217              \brief      gpio bit get
+ 218              \param[in]  gpio_port: GPIOA/GPIOB/GPIOC/GPIOE/GPIOF/GPIOG/GPIOH
+ 219                  gpio_pin : GPIO_PIN_(x),x = (0..7)
+ 220              \param[out] none
+ 221              \retval     none
+ 222          */
+ 223          uint8_t gpio_bit_get(GPIO_PORT_enum gpio_port,uint8_t gpio_pin)
+ 224          { 
+ 225   1        uint8_t value;
+ 226   1        switch(gpio_port)
+ 227   1        {
+ 228   2          case GPIOA:
+ 229   2            value = DATAA & gpio_pin ? 1 : 0;break;
+ 230   2          case GPIOB:
+ 231   2            value = DATAB & gpio_pin ? 1 : 0;break;
+ 232   2          case GPIOC:
+ 233   2            value = DATAC & gpio_pin ? 1 : 0;break;   
+ 234   2          case GPIOE:
+ 235   2            value = DATAE & gpio_pin ? 1 : 0;break;
+ 236   2          case GPIOF:
+ 237   2            value = DATAF & gpio_pin ? 1 : 0;break;
+ 238   2          case GPIOG:
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/19/2021 17:29:49 PAGE 5   
+
+ 239   2            value = DATAG & gpio_pin ? 1 : 0;break;
+ 240   2          case GPIOH:
+ 241   2            value = DATAH & gpio_pin ? 1 : 0;break;
+ 242   2          default:
+ 243   2            break;
+ 244   2        }
+ 245   1        return value;
+ 246   1      }
+ 247          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    633    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

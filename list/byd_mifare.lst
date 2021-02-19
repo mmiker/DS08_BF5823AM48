@@ -1,0 +1,156 @@
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        02/19/2021 17:29:47 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_MIFARE
+OBJECT MODULE PLACED IN .\output\byd_mifare.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE byd_rfid\byd_mifare.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inclu
+                    -de;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\by
+                    -d_rfid;.\mmi_inc) DEBUG PRINT(.\list\byd_mifare.lst) TABS(2) OBJECT(.\output\byd_mifare.obj)
+
+line level    source
+
+   1          #include "byd_mifare.h" 
+   2          #include "iso14443.h"
+   3          #include "delay.h"
+   4          #include "dqiot_drv.h"
+   5          
+   6          /***********************************************************
+   7          ** 函 数 名: u8 M1_PwdChange(u8 blockAddr, u8 *key_a, u8 *key_b)
+   8          ** 功能描述: M1卡修改扇区密码
+   9          ** 输  　入: blockAddr 要操作的扇区块地址
+  10                       key_a 密钥A
+  11                 key_b 密钥B
+  12          ** 输  　出: 无
+  13          ** 返    回: RETURN_OK或RETURN_NO
+  14          ***********************************************************/
+  15          u8 M1_PwdChange(u8 blockAddr, u8 *key_a, u8 *key_b)
+  16          {
+  17   1          u8 tmpBuf[16];
+  18   1      
+  19   1          tmpBuf[0]    =   key_a[0];
+  20   1          tmpBuf[1]    =   key_a[1];
+  21   1          tmpBuf[2]    =   key_a[2];
+  22   1          tmpBuf[3]    =   key_a[3];
+  23   1          tmpBuf[4]    =   key_a[4];
+  24   1          tmpBuf[5]    =   key_a[5];
+  25   1          tmpBuf[6]    =   0xff;
+  26   1          tmpBuf[7]    =   0x07;
+  27   1          tmpBuf[8]    =   0x80;
+  28   1          tmpBuf[9]    =   0x69;          // ffH 07H 80H 69H 是默认的控制字
+  29   1          tmpBuf[10]   =   key_b[0];
+  30   1          tmpBuf[11]   =   key_b[1];
+  31   1          tmpBuf[12]   =   key_b[2];
+  32   1          tmpBuf[13]   =   key_b[3];
+  33   1          tmpBuf[14]   =   key_b[4];
+  34   1          tmpBuf[15]   =   key_b[5];
+  35   1      
+  36   1        if(RETURN_OK == MifareOperations( 'w', blockAddr, blockAddr, tmpBuf))
+  37   1        {
+  38   2           return  RETURN_OK;
+  39   2        }
+  40   1          
+  41   1        return RETURN_NO;
+  42   1      }
+  43          
+  44          /***********************************************************
+  45          ** 函 数 名: u8 M1_Example(u8 *uid)
+  46          ** 功能描述: M1卡使用示例,前提读到正确卡号
+  47          ** 输  　入: 卡号
+  48          ** 输  　出: 无
+  49          ** 返    回: RETURN_OK或RETURN_NO
+  50          ***********************************************************/
+  51          u8 M1_Example(u8 *uid)
+  52          {
+  53   1          u8 ret = RETURN_NO;
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        02/19/2021 17:29:47 PAGE 2   
+
+  54   1        u8 aucPswA[6] = {0xff,0xff,0xff,0xff,0xff,0xff};//默认密钥A
+  55   1        u8 aucBlkBuf[18];
+  56   1        u8 num = 0;
+  57   1      
+  58   1          ret = MifareAuthenticate(uid, 0, 'A', aucPswA, 0);//每个扇区认证一次,第一次执行认证
+  59   1          if(RETURN_OK == ret)
+  60   1        {
+  61   2          if(RETURN_OK == MifareOperations( 'r', 0, 0, aucBlkBuf))//读第4块数据 16byte
+  62   2          {     
+  63   3            num = 0;
+  64   3             dqiot_drv_uart0_sendData(&num,1);
+  65   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+  66   3             ret = RETURN_OK;
+  67   3          }
+  68   2          if(RETURN_OK == MifareOperations( 'r', 1, 1, aucBlkBuf))//读第5块数据 16byte
+  69   2          {   
+  70   3            num = 1;
+  71   3             dqiot_drv_uart0_sendData(&num,1);
+  72   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+  73   3             ret = RETURN_OK;
+  74   3          }
+  75   2          if(RETURN_OK == MifareOperations( 'r', 2, 2, aucBlkBuf))//读第6块数据 16byte
+  76   2          {   
+  77   3            num = 2;
+  78   3             dqiot_drv_uart0_sendData(&num,1);
+  79   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+  80   3             ret = RETURN_OK;
+  81   3          }
+  82   2          if(RETURN_OK == MifareOperations( 'r', 3, 3, aucBlkBuf))//读第6块数据 16byte
+  83   2          {   
+  84   3            num = 3;
+  85   3             dqiot_drv_uart0_sendData(&num,1);
+  86   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+  87   3             ret = RETURN_OK;
+  88   3          }
+  89   2        }
+  90   1        ret = MifareAuthenticate(uid, 8, 'A', aucPswA, 1);//每个扇区认证一次,这次属于再次认证
+  91   1          if(RETURN_OK == ret)
+  92   1        {
+  93   2          if(RETURN_OK == MifareOperations( 'r', 8, 8, aucBlkBuf))//读第8块数据 16byte
+  94   2          { 
+  95   3            num = 8;
+  96   3             dqiot_drv_uart0_sendData(&num,1);
+  97   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+  98   3             ret = RETURN_OK;
+  99   3          }
+ 100   2          if(RETURN_OK == MifareOperations( 'r', 9, 9, aucBlkBuf))//读第9块数据 16byte
+ 101   2          {   
+ 102   3            num = 9;
+ 103   3             dqiot_drv_uart0_sendData(&num,1);
+ 104   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+ 105   3             ret = RETURN_OK;
+ 106   3          }
+ 107   2          if(RETURN_OK == MifareOperations( 'r', 10, 10, aucBlkBuf))//读第10块数据 16byte
+ 108   2          {   
+ 109   3            num = 10;
+ 110   3             dqiot_drv_uart0_sendData(&num,1);
+ 111   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+ 112   3             ret = RETURN_OK;
+ 113   3          }
+ 114   2          if(RETURN_OK == MifareOperations( 'r', 11, 11, aucBlkBuf))//读第10块数据 16byte
+ 115   2          {   
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        02/19/2021 17:29:47 PAGE 3   
+
+ 116   3            num = 11;
+ 117   3             dqiot_drv_uart0_sendData(&num,1);
+ 118   3             dqiot_drv_uart0_sendData(aucBlkBuf,18);
+ 119   3             ret = RETURN_OK;
+ 120   3          }
+ 121   2        }
+ 122   1        return ret;
+ 123   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    776    ----
+   CONSTANT SIZE    =      6    ----
+   XDATA SIZE       =   ----      52
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,98 @@
+C51 COMPILER V9.59.0.0   MCU02_LVDT                                                        02/19/2021 17:29:50 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_LVDT
+OBJECT MODULE PLACED IN .\output\mcu02_lvdt.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_lvdt.c LARGE OMF2 OPTIMIZE(
+                    -8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifar
+                    -e\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_lvdt.lst) TABS(2) OBJECT(.\output\mcu02_lvdt.ob
+                    -j)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_lvdt.c
+   3              \brief lvdt driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-20, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_lvdt.h"
+  13          #include "mmi_audio.h"
+  14          #include "dqiot_drv.h"
+  15          #include "delay.h"
+  16          
+  17          /**
+  18            * @brief  电压检测初始化
+  19            * @param  vth_sel;
+  20            * 0: 2.7v,
+  21            * 1: 3v,
+  22            * 2: 3.8v,
+  23            * 3: 4.2v
+  24            * @return none
+  25            * @note   none
+  26            * @see    none
+  27            */
+  28          void lvdt_init(uint8_t vth_sel)
+  29          {
+  30   1          LVDT_VOL_SET(vth_sel);  //设置电压检测值
+  31   1          LVDT_INT_DOWN_FLAG_CLR; //清除电压下降中断标志
+  32   1          LVDT_INT_UP_FLAG_CLR;   //清除电压上升中断标志
+  33   1          LVDT_IPL_SET(LOW);      //设置中断优先级
+  34   1          LVDT_INT_ENABLE();      //启用中断
+  35   1          LVDT_ENABLE();          //使能电压检测
+  36   1      }
+  37          
+  38          /**
+  39            * @brief  电压检测
+  40            * @param  none  
+  41            * @return none
+  42            * @note   none
+  43            * @see    none
+  44            */
+  45          void lvdt_VolT(void)
+  46          {
+  47   1          // u16 volL = 1; /* 0:电压低;1:电压正常 */
+  48   1      
+  49   1          if (GET_INT_LVDT_FLAG_STATE(INT_VOL_UP_FLAG)) //电压低
+  50   1          {
+  51   2              // volL = 0;
+  52   2              LVDT_INT_DOWN_FLAG_CLR; //清除电压下降中断标志
+C51 COMPILER V9.59.0.0   MCU02_LVDT                                                        02/19/2021 17:29:50 PAGE 2   
+
+  53   2              mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+  54   2          }
+  55   1          if (GET_INT_LVDT_FLAG_STATE(INT_VOL_DOWN_FLAG)) //电压正常
+  56   1          {
+  57   2              // volL = 1;
+  58   2              LVDT_INT_UP_FLAG_CLR; //清除电压上升中断标志
+  59   2          }
+  60   1      
+  61   1          // if (volL == 0)
+  62   1          // {
+  63   1          //     delay_ms(2000);
+  64   1          //     mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+  65   1          // }
+  66   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     46    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

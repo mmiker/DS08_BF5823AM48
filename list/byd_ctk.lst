@@ -1,0 +1,789 @@
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_CTK
+OBJECT MODULE PLACED IN .\output\byd_ctk.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\byd_ctk.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.\
+                    -Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rfi
+                    -d;.\mmi_inc) DEBUG PRINT(.\list\byd_ctk.lst) TABS(2) OBJECT(.\output\byd_ctk.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  byd_ctk.c
+   3              \brief ctk app
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-10-28, V1.0.0, app for byd
+  10          */
+  11          
+  12          #include "byd_ctk.h"
+  13          #include "byd_init.h"
+  14          #include "byd_idle.h"
+  15          #include "delay.h"
+  16          #include "dq_project.h"
+  17          
+  18          /*don't modify*/
+  19          /*-----------------------------------------------------------------------------------*/
+  20          bit g_bTouchFlag = 0;/*the touch state of key,1: touch ;0: no touch*/
+  21          volatile bit g_bCtkWaitFlag = 0;
+  22          bit g_bExceptionFlag = 0;
+  23          
+  24          #if CSD_INT_EN
+  25          volatile bit g_csdIntFlag = 0;
+  26          #endif
+  27          
+  28          //uint8_t xdata csd_sensor_index[SENSOR_NUM];  /* sensor index value */
+  29          uint16_t xdata csd_pull_current[SENSOR_NUM];/* pull current value */
+  30          uint16_t xdata bak_baseline[SENSOR_NUM];  /* backup baseline */
+  31          uint16_t xdata rawdata[SENSOR_NUM];
+  32          uint16_t xdata baseline[SENSOR_NUM];
+  33          #if CTK_FRAME_MUL_SELT>1
+              uint16_t rawdata2[SENSOR_NUM];
+              #endif
+  36          #if CTK_FRAME_MUL_SELT >= 3
+              uint16_t rawdata3[SENSOR_NUM];
+              #endif
+  39          #if CTK_FRAME_MUL_SELT == 4
+              uint16_t rawdata4[SENSOR_NUM];
+              #endif
+  42          
+  43          uint8_t xdata g_ucBtPNthCnt[SENSOR_NUM];//基线更新differ>=正噪声计数
+  44          uint8_t xdata g_ucStPNthCnt[SENSOR_NUM];//基线更新differ<正噪声计数
+  45          uint8_t xdata g_ucBtNNthCnt[SENSOR_NUM];//基线更新differ>=负噪声计数
+  46          uint8_t xdata g_ucStNNthCnt[SENSOR_NUM];//基线更新differ<负噪声计数
+  47          uint8_t xdata g_ucWaterBaseRenoCnt[SENSOR_NUM];
+  48          
+  49          uint8_t xdata g_ucJudgeKeyTouchUpCnt[SENSOR_NUM];
+  50          uint8_t xdata g_ucJudgeKeyTouchCnt[SENSOR_NUM];
+  51          uint8_t xdata g_ucSenSorTouchFlag[SENSOR_NUM];
+  52          uint8_t xdata g_ucKeyTouchFlag[SENSOR_NUM];/*the touch state of each key,1: touch ;0: no touch*/
+  53          #if CTK_FIRST_KEY_EN
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 2   
+
+  54          uint8_t xdata g_ucFirstTouchKeyIndex;//当前第一个被触摸的按键通道下标，0xff代表无效，0~SENSOR_NUM有效
+  55          #endif
+  56          
+  57          uint8_t xdata g_ucExceptionCnt = 0;
+  58          uint16_t xdata g_uiExceptionCsdMaxValue;
+  59          uint16_t xdata g_uiExceptionCsdMinValue;
+  60          
+  61          #if CTK_LONG_TOUCH_HANDLE
+              uint16_t xdata g_uiTouchFrame = 0;
+              #endif
+  64          
+  65          /*-----------------------------------------------------------------------------------*/
+  66          
+  67          code byd_parameter_struct byd_parameter={
+  68          
+  69          /* csd */    
+  70            VTH_2,               //uint8_t vth;           /* vth select,notice：VCC-VTH>0.5V*/
+  71            DS_24M,              //uint8_t ds;          /* detect speed select */
+  72            PRE_CHARGE_20us,     //uint8_t pre_charge;      /* pre charge select time us*/
+  73            PRE_DISCHARGE_2us,  //uint8_t pre_discharge;  /* pre discharge select time us*/
+  74            CSD_SW_CLK_ON,       //uint8_t sw_clk_off;    /* enable or disable sw_clk */  
+  75            CSD_PARALLEL_DISABLE,//uint8_t parallel;      /* enable or disable sns parallel */
+  76            CSD_LOWPOWER_ENABLE, //uint8_t csd_lowpower     /* enable or disable csd lowpower function */
+  77            CSD_INT_EN,          //uint8_t int_enable       /* enable or disable csd interrupt function */
+  78            
+  79          
+  80          /*csd normal mode config */ 
+  81            RB_200K,//uint8_t rb;         /* rb select */
+  82          #if CTK_FRAME_MUL_SELT>1
+                RESO_1024,//uint8_t reso;     /* reso select */
+              #else
+  85            RESO_2048,//uint8_t reso;     /* reso select */
+  86          #endif
+  87            SW_CLK_2,//uint8_t pre_div;/* pre select,csd低功耗模式和正常工作模式所对应的前端频率是不一样的,由参数csd_
+             -lowpower值决定，具体看CSD_PREDIV_enum*/
+  88          
+  89          /*csd parallel mode config */
+  90            RB_200K,   //uint8_t parallel_rb;   /* parallel_rb select */
+  91            RESO_16384,//uint8_t parallel_reso;   /* parallel_reso select */
+  92            SW_CLK_18,//uint8_t parallel_pre_div; /* parallel_pre_div select */
+  93          
+  94            SENSOR_NUM,//uint8_t sensornum;     /* detect sensor num */
+  95          #ifdef __DQ_PROJECT_DS08__
+  96            {   
+  97              27,21,20,47,46,45,
+  98              44,43,42,7,40,39,0,0,0,0,0,0,
+  99              0,0,0,0,0,0,0,0,
+ 100              0,0,0,0,0,0   
+ 101            },//uint8_t sensorindex[SENSOR_MAX_NUM];/* detect sensor index */
+ 102          #else
+                {   
+                  47,46,45,44,43,42,
+                  7,6,41,40,39,27,0,0,0,0,0,0,
+                  0,0,0,0,0,0,0,0,
+                  0,0,0,0,0,0   
+                },//uint8_t sensorindex[SENSOR_MAX_NUM];/* detect sensor index */
+              #endif
+ 110            {
+ 111             300,300,300,300,300,300,300,300,
+ 112             300,300,300,300,300,300,300,300,
+ 113             300,300,300,300,300,300,300,300,
+ 114             300,300,300,300,300,300,300,300
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 3   
+
+ 115            },//uint16_t pull_current[SENSOR_MAX_NUM];/* detect sensor current at normal mode*/
+ 116          
+ 117            300,//uint16_t parallel_pull_current;       /* detect sensor current at parallel mode*/
+ 118          
+ 119            0,//uint8_t filterenable;//该功能已关闭,参数无效
+ 120            SCAN_FILTER_NUM,//uint8_t filterframe;//该功能已关闭,参数无效
+ 121          
+ 122            0,//uint8_t abnormal_mul;      /*有盖板填2,无盖板填0; 异常最小值系数,小于(溢出值*abnormal_mulrate/10)基线
+             -复位*/      
+ 123          
+ 124            0,//uint8_t renovatemode;   /* renovatemode select 0:normal 1;water*/
+ 125            
+ 126            11,//uint8_t fthrate; //手指阈值系数,手指阈值=(fingerthreshold*fthrate)>>4,参数无效
+ 127            7,//uint8_t nthrate; //噪声阈值系数,噪声阈值=(fingerthreshold*nthrate)>>4 
+ 128          
+ 129          //正常全速跑时的基线更新速度
+ 130            30,//uint8_t bt_ponth_maxcnt;//基线更新differ>=正噪声计数,更新基线，值越小，基线更新越快
+ 131            20,//uint8_t st_ponth_maxcnt;//基线更新differ<正噪声计数,更新基线，值越小，基线更新越快
+ 132            10,//uint8_t bt_nenth_maxcnt;//基线更新differ>=负噪声计数,更新基线，值越小，基线更新越快
+ 133            20,//uint8_t st_nenth_maxcnt;//基线更新differ<负噪声计数,更新基线，值越小，基线更新越快 
+ 134            
+ 135          //休眠帧频低时的基线更新速度  
+ 136            6,//uint8_t wakeup_bt_ponth_maxcnt;//基线更新differ>=正噪声计数,更新基线，值越小，基线更新越快
+ 137            3,//uint8_t wakeup_st_ponth_maxcnt;//基线更新differ<正噪声计数,更新基线，值越小，基线更新越快
+ 138            2,//uint8_t wakeup_bt_nenth_maxcnt;//基线更新differ>=负噪声计数,更新基线，值越小，基线更新越快
+ 139            3,//uint8_t wakeup_st_nenth_maxcnt;//基线更新differ<负噪声计数,更新基线，值越小，基线更新越快 
+ 140            
+ 141            8,//uint8_t waterflowrate;  //溢水判断阈值比例系数  
+ 142            8,//uint8_t watermoderate;  //防水手指阈值系数
+ 143          
+ 144            50,//uint8_t water_base_renomaxcnt;//bak_baseline基线更新判断次数
+ 145            
+ 146            2,//uint8_t multikey_maxcnt;  //多按键消除判断次数;
+ 147              
+ 148            3,//uint8_t judge_water_maxcnt;      //溢水判断通道个数;
+ 149          
+ 150            30,//uint16_t judge_waterleave_maxcnt;//溢水离开判断次数
+ 151              
+ 152            {
+ 153            #if 0
+                 900,900,900,900,900,900,900,900,
+                 900,900,900,900,900,900,900,900,
+                 800,800,800,800,800,800,800,800,
+                 800,800,800,800,800,800,800,800,
+                #else
+ 159             200,200,200,200,200,200,200,200,
+ 160             200,200,200,200,200,200,200,200,
+ 161             200,200,200,200,200,200,200,200,
+ 162             200,200,200,200,200,200,200,200,
+ 163            #endif
+ 164            },//int16_t fingerthreshold[SENSOR_MAX_NUM];
+ 165          
+ 166          /*
+ 167            {
+ 168             55,55,55,55,55,55,55,55,
+ 169             55,55,55,55,55,55,55,55,
+ 170             55,55,55,55,55,55,55,55,
+ 171             55,55,55,55,55,55,55,55,
+ 172            },//int16_t fingerthreshold[SENSOR_MAX_NUM];
+ 173          */    
+ 174            150,//uint16_t threshold_parallel;//并联模式下阈值
+ 175            10,//uint16_t finger_latency;//通道有触摸后,当差值小于fingerthreshold-finger_latency时认为抬起
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 4   
+
+ 176            
+ 177            0,/*judging the number of finger touch*/
+ 178            0,/*judging the number of finger up*/
+ 179          };
+ 180          
+ 181          /*!
+ 182              \brief      tk current adjust init
+ 183              \param[in]  csd scan mode
+ 184                    1: parallel mode
+ 185                    0: normal mode
+ 186              \param[out] none
+ 187              \retval     none
+ 188          */
+ 189          void byd_adjust_init(bit csd_scanmode)
+ 190          {
+ 191   1          uint8_t i;
+ 192   1          uint16_t value;
+ 193   1      
+ 194   1        g_bTouchFlag = 0;
+ 195   1      
+ 196   1        if(!csd_scanmode)
+ 197   1        {
+ 198   2          if(byd_parameter.reso==0)
+ 199   2          {
+ 200   3            value = CSD_MAXDATA_VALUE[0]>>1;
+ 201   3          }
+ 202   2          else
+ 203   2          {
+ 204   3            value = CSD_MAXDATA_VALUE[byd_parameter.reso-1];//(uint32_t)0x0001 << (byd_parameter.reso + 8);
+ 205   3          }
+ 206   2      
+ 207   2          for(i = 0; i < SENSOR_NUM; i++)
+ 208   2          {
+ 209   3            g_ucKeyTouchFlag[i] = 0;    
+ 210   3            byd_cts_adjust(i,0,value);
+ 211   3          }
+ 212   2        }
+ 213   1        else
+ 214   1        {
+ 215   2          if(byd_parameter.parallel_reso==0)
+ 216   2          {
+ 217   3            value = CSD_MAXDATA_VALUE[0]>>1;
+ 218   3          }
+ 219   2          else
+ 220   2          {
+ 221   3            value = CSD_MAXDATA_VALUE[byd_parameter.parallel_reso-1];//(uint32_t)0x0001 << (byd_parameter.parallel_
+             -reso + 8);
+ 222   3          }
+ 223   2          byd_cts_adjust(0,1,value);    
+ 224   2        }
+ 225   1      
+ 226   1      #if TRACEMODE_EN
+                g_ulKeyTouchFlag = 0;
+              #endif
+ 229   1      #if CTK_FIRST_KEY_EN    
+ 230   1        g_ucFirstTouchKeyIndex = 0xff;
+ 231   1      #endif
+ 232   1      }
+ 233          
+ 234          /*!
+ 235              \brief      ctk frame acc
+ 236              \param[in]  none
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 5   
+
+ 237              \param[out] none
+ 238              \retval     none
+ 239          */
+ 240          #if CTK_FRAME_MUL_SELT>1
+              void byd_ctk_frame_acc(void)
+              {
+                uint8_t i;
+                for(i = 0; i < SENSOR_NUM; i++)
+                {
+              #if CTK_FRAME_MUL_SELT == 2
+                    rawdata2[i] = rawdata[i];
+                  baseline[i] = rawdata[i]+rawdata[i];
+              #endif
+                  
+              #if CTK_FRAME_MUL_SELT == 3
+                  rawdata2[i] = rawdata[i];
+                  rawdata3[i] = rawdata[i];
+                  baseline[i] = rawdata[i]+rawdata[i]+rawdata[i];
+              #endif
+                  
+              #if CTK_FRAME_MUL_SELT == 4
+                  rawdata2[i] = rawdata[i];
+                  rawdata3[i] = rawdata[i];
+                  rawdata4[i] = rawdata[i];
+                  baseline[i] = (rawdata[i]<<2);
+              #endif
+                    
+                  rawdata[i] = baseline[i];        
+                }
+              }
+              #endif
+ 268          
+ 269          /*!
+ 270              \brief      ctk init
+ 271              \param[in]  none
+ 272              \param[out] none
+ 273              \retval     none
+ 274          */
+ 275          void byd_ctk_init(void)
+ 276          {
+ 277   1        byd_key_init();//tk init
+ 278   1          
+ 279   1      //  if(!g_bCsdFilterEnable)
+ 280   1      //  {
+ 281   1      //    byd_adjust_init(0);//normal mode:tk current adjust
+ 282   1      //  }
+ 283   1      //  else
+ 284   1      //  {
+ 285   1      //    g_bCsdFilterEnable= 0;//close scan filter handle
+ 286   1      //    byd_adjust_init(0);//normal mode:tk current adjust
+ 287   1      //    g_bCsdFilterEnable = 1;//open scan filter handle
+ 288   1      //    byd_adjust_init(0);//normal mode:tk current adjust
+ 289   1      //  }
+ 290   1      
+ 291   1        byd_adjust_init(0);//normal mode:tk current adjust
+ 292   1      
+ 293   1        g_uiExceptionCsdMaxValue = ((uint32_t)CSD_MAXDATA_VALUE[byd_parameter.reso]<<3)/10;
+ 294   1          g_uiExceptionCsdMinValue = ((uint32_t)CSD_MAXDATA_VALUE[byd_parameter.reso]*byd_parameter.abnormal_mul
+             -)/10;
+ 295   1      
+ 296   1      #if CTK_FRAME_MUL_SELT>1
+                  byd_ctk_frame_acc();
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 6   
+
+                g_uiExceptionCsdMaxValue = g_uiExceptionCsdMaxValue*CTK_FRAME_MUL_SELT;
+                g_uiExceptionCsdMinValue = g_uiExceptionCsdMinValue*CTK_FRAME_MUL_SELT;
+              #endif
+ 301   1      }
+ 302          /*!
+ 303              \brief      start csd scan
+ 304              \param[in]  none
+ 305              \param[out] none
+ 306              \retval     none
+ 307          */
+ 308          void byd_ctk_start(void)
+ 309          {
+ 310   1        CSD_SCAN_STOP;
+ 311   1      
+ 312   1      #if CSD_INT_EN
+ 313   1        g_csdIntFlag = 0;
+ 314   1      #endif
+ 315   1      
+ 316   1        INT_CSD_CLR();
+ 317   1      
+ 318   1        CSD_PULL_I_SET(csd_pull_current[0]);
+ 319   1          CSD_SCANADDR_SET(byd_parameter.sensorindex[0]);
+ 320   1        CSD_SCAN_EN;
+ 321   1      }
+ 322          /*!
+ 323              \brief      get_csd_data
+ 324              \param[in]  sensor_addr:0~11,16~47
+ 325                  pull_current:0~0x1ff
+ 326              \param[out] none
+ 327              \retval     csd data
+ 328          */
+ 329          uint16_t get_csd_data(uint8_t sensor_addr,uint16_t pull_current)
+ 330          {
+ 331   1      
+ 332   1        CSD_PULL_I_SET(pull_current);
+ 333   1          CSD_SCANADDR_SET(sensor_addr);    
+ 334   1      
+ 335   1      #if CSD_INT_EN
+ 336   1      
+ 337   1        g_csdIntFlag = 0;
+ 338   1      
+ 339   1          CSD_SCAN_EN;
+ 340   1      
+ 341   1      #if TRACEMODE_EN==0 && CSD_WAIT_MODE_EN
+ 342   1        if(g_bCtkWaitFlag)
+ 343   1          SYS_CLK_CFG |= 0x10;//wait mode
+ 344   1      #endif
+ 345   1        
+ 346   1        while(!g_csdIntFlag)
+ 347   1        {
+ 348   2           WDT_CTRL = 7;
+ 349   2        }
+ 350   1      
+ 351   1      #else
+              
+                CSD_SCAN_EN;
+                while((IRCON1 & 0x20) == 0)
+                {
+                   WDT_CTRL = 7;
+                }
+                INT_CSD_CLR();
+                
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 7   
+
+              #endif
+ 361   1      
+ 362   1        return (((uint16_t)CSD_RAWDATAH << 8)|(uint16_t)CSD_RAWDATAL);
+ 363   1      }
+ 364          
+ 365          /*!
+ 366              \brief      csd isr
+ 367              \param[in]  none
+ 368              \param[out] none
+ 369              \retval     none
+ 370          */
+ 371          #if CSD_INT_EN
+ 372          void csd_isr(void) interrupt 12
+ 373          {
+ 374   1        INT_CSD_CLR();
+ 375   1        g_csdIntFlag = 1;
+ 376   1      }
+ 377          #endif
+ 378          /*!
+ 379              \brief      key exception handling
+ 380              \param[in]  sensor(0..31)
+ 381              \param[out] none
+ 382              \retval     none
+ 383          */
+ 384          void byd_exception_handle(uint8_t sensor)
+ 385          {
+ 386   1          g_bExceptionFlag = 0;
+ 387   1      
+ 388   1        if((rawdata[sensor]>=g_uiExceptionCsdMaxValue)
+ 389   1           ||(rawdata[sensor]<g_uiExceptionCsdMinValue)
+ 390   1          )
+ 391   1        {
+ 392   2          g_ucExceptionCnt++;
+ 393   2          if(g_ucExceptionCnt >= CTK_EXCEPTION_MAXCNT)
+ 394   2          {
+ 395   3            g_ucExceptionCnt = 0;
+ 396   3            g_bExceptionFlag = 1;
+ 397   3      
+ 398   3      #if CTK_SCAN_MODE
+ 399   3      
+ 400   3            CSD_SCAN_STOP;
+ 401   3            INT_CSD_CLR();
+ 402   3      #if CSD_INT_EN
+ 403   3            g_csdIntFlag = 0;
+ 404   3      #endif
+ 405   3      #endif
+ 406   3            g_bTouchFlag = 0;
+ 407   3      #if CTK_FIRST_KEY_EN    
+ 408   3            g_ucFirstTouchKeyIndex = 0xff;
+ 409   3      #endif
+ 410   3      #if CTK_LONG_TOUCH_HANDLE
+                    g_uiTouchFrame = 0;
+              #endif
+ 413   3            
+ 414   3            byd_setbaseline(0);
+ 415   3      #if CTK_FRAME_MUL_SELT>1
+                      byd_ctk_frame_acc();
+              #endif
+ 418   3          }
+ 419   2        }
+ 420   1      }
+ 421          /*!
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 8   
+
+ 422              \brief      get the maxkey index when touch
+ 423              \param[in]  none
+ 424              \param[out] none
+ 425              \retval     none
+ 426          */
+ 427          uint8_t byd_get_maxkey(void)
+ 428          {
+ 429   1        uint8_t i,index = 0;
+ 430   1        int differ,max_differ=0;
+ 431   1        
+ 432   1      //  max_differ = (int)baseline[0] - (int)rawdata[0];
+ 433   1      
+ 434   1        for(i = 0; i < SENSOR_NUM;i++)
+ 435   1        {
+ 436   2          if(g_ucKeyTouchFlag[i])
+ 437   2          {
+ 438   3              differ = baseline[i] - rawdata[i];
+ 439   3            if(differ >= max_differ)
+ 440   3            {
+ 441   4              max_differ = differ;
+ 442   4              index = i;
+ 443   4            }
+ 444   3          }
+ 445   2        }
+ 446   1      #if CTK_FIRST_KEY_EN
+ 447   1        if(g_ucFirstTouchKeyIndex != index)//滑动时处理
+ 448   1        {
+ 449   2           differ = (int)baseline[g_ucFirstTouchKeyIndex] - (int)rawdata[g_ucFirstTouchKeyIndex];
+ 450   2           differ = max_differ - differ;
+ 451   2           if(differ > (int)byd_parameter.fingerthreshold[index])
+ 452   2           {
+ 453   3              g_ucFirstTouchKeyIndex = index;
+ 454   3           } 
+ 455   2        }
+ 456   1      #endif
+ 457   1        return index;
+ 458   1      }
+ 459          
+ 460          /*!
+ 461              \brief      enable all csd sensor
+ 462              \param[in]  none
+ 463              \param[out] none
+ 464              \retval     none
+ 465          */
+ 466          void csd_sensor_enable_all(void)
+ 467          {
+ 468   1         uint8_t i;
+ 469   1         for(i = 0; i < SENSOR_NUM; i++)
+ 470   1         { 
+ 471   2          csd_sensor_enable(byd_parameter.sensorindex[i]);     
+ 472   2         }
+ 473   1      }
+ 474          
+ 475          /*!
+ 476              \brief      get the touchkey state at ctk normal mode
+ 477              \param[in]  none
+ 478              \param[out] none
+ 479              \retval     none
+ 480          */
+ 481          void byd_ctk_normal(void)
+ 482          {
+ 483   1          uint8_t i,n = 0;
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 9   
+
+ 484   1      
+ 485   1      #if CTK_FRAME_MUL_SELT>1
+                uint16_t temp_rawdata;
+              #endif
+ 488   1        
+ 489   1        g_bTouchFlag = 0;
+ 490   1      
+ 491   1      #if CTK_SCAN_MODE
+ 492   1      
+ 493   1        byd_ctk_start();
+ 494   1      
+ 495   1        for(i = 0; i < SENSOR_NUM;i++)
+ 496   1        { 
+ 497   2      #if CSD_INT_EN
+ 498   2      
+ 499   2      #if TRACEMODE_EN==0 && CSD_WAIT_MODE_EN
+ 500   2          if(g_bCtkWaitFlag)
+ 501   2            SYS_CLK_CFG |= 0x10;//wait mode
+ 502   2      #endif
+ 503   2          while(!g_csdIntFlag)    
+ 504   2          {
+ 505   3             WDT_CTRL = 7;
+ 506   3          }
+ 507   2          g_csdIntFlag = 0;
+ 508   2      #else 
+                  while((IRCON1 & 0x20) == 0)
+                  {
+                     WDT_CTRL = 7;
+                  }
+                  INT_CSD_CLR();    
+              #endif
+ 515   2      
+ 516   2      #if CTK_FRAME_MUL_SELT == 1   
+ 517   2          rawdata[i] = (((uint16_t)CSD_RAWDATAH << 8)|(uint16_t)CSD_RAWDATAL);
+ 518   2      #endif
+ 519   2      
+ 520   2      #if CTK_FRAME_MUL_SELT == 2     
+                              
+                    temp_rawdata = rawdata2[i];
+                    rawdata2[i]  = (((uint16_t)CSD_RAWDATAH << 8)|(uint16_t)CSD_RAWDATAL);          
+                  rawdata[i] = temp_rawdata+rawdata2[i];
+                  
+              #endif
+ 527   2        
+ 528   2      #if CTK_FRAME_MUL_SELT == 3
+                                
+                  temp_rawdata = rawdata3[i]+rawdata2[i]; 
+                  rawdata3[i] = rawdata2[i];            
+                    rawdata2[i]  = (((uint16_t)CSD_RAWDATAH << 8)|(uint16_t)CSD_RAWDATAL);          
+                  rawdata[i] = temp_rawdata + rawdata2[i];
+              
+              #endif
+ 536   2            
+ 537   2      #if CTK_FRAME_MUL_SELT == 4
+                          
+                  temp_rawdata = rawdata4[i]+rawdata3[i]+rawdata2[i]; 
+                  rawdata4[i] = rawdata3[i];
+                  rawdata3[i] = rawdata2[i];
+                    rawdata2[i]  = (((uint16_t)CSD_RAWDATAH << 8)|(uint16_t)CSD_RAWDATAL);    
+                  rawdata[i] = temp_rawdata + rawdata2[i];
+              
+              #endif
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 10  
+
+ 546   2                    
+ 547   2          if(i < SENSOR_NUM-1)//扫描下一个通道
+ 548   2          { 
+ 549   3            CSD_PULL_I_SET(csd_pull_current[i+1]);
+ 550   3              CSD_SCANADDR_SET(byd_parameter.sensorindex[i+1]);//csd_sensor_index[i]
+ 551   3            CSD_SCAN_EN;
+ 552   3          }
+ 553   2      
+ 554   2      #if CTK_RENOVATE_EN
+ 555   2          byd_renovate(i);
+ 556   2      #endif
+ 557   2      
+ 558   2          byd_get_keytouch(i);
+ 559   2          byd_exception_handle(i);
+ 560   2      
+ 561   2      #if CTK_FIRST_KEY_EN
+ 562   2          if((g_bTouchFlag)&&(g_ucFirstTouchKeyIndex==0xff))
+ 563   2             g_ucFirstTouchKeyIndex = i;
+ 564   2      #endif
+ 565   2          if(g_bExceptionFlag)return;     
+ 566   2        }
+ 567   1      
+ 568   1      #else //////////////////串行
+              
+                for(i = 0; i < SENSOR_NUM;i++)
+                {
+              #if CTK_FRAME_MUL_SELT == 1
+                  rawdata[i] = get_csd_data(byd_parameter.sensorindex[i],csd_pull_current[i]);
+              #endif
+                  
+              #if CTK_FRAME_MUL_SELT == 2     
+                              
+                    temp_rawdata = rawdata2[i];
+                    rawdata2[i]  = get_csd_data(byd_parameter.sensorindex[i],csd_pull_current[i]);          
+                  rawdata[i] = temp_rawdata+rawdata2[i];
+                  
+              #endif
+                
+              #if CTK_FRAME_MUL_SELT == 3
+                                
+                  temp_rawdata = rawdata3[i]+rawdata2[i]; 
+                  rawdata3[i] = rawdata2[i];            
+                    rawdata2[i]  = get_csd_data(byd_parameter.sensorindex[i],csd_pull_current[i]);          
+                  rawdata[i] = temp_rawdata + rawdata2[i];
+              
+              #endif
+                    
+              #if CTK_FRAME_MUL_SELT == 4
+                          
+                  temp_rawdata = rawdata4[i]+rawdata3[i]+rawdata2[i]; 
+                  rawdata4[i] = rawdata3[i];
+                  rawdata3[i] = rawdata2[i];
+                    rawdata2[i]  = get_csd_data(byd_parameter.sensorindex[i],csd_pull_current[i]);    
+                  rawdata[i] = temp_rawdata + rawdata2[i];
+              
+              #endif
+              
+              #if CTK_RENOVATE_EN 
+                  byd_renovate(i);
+              #endif
+              
+                  byd_get_keytouch(i);
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 11  
+
+              
+                  byd_exception_handle(i);
+              #if CTK_FIRST_KEY_EN
+                  if((g_bTouchFlag)&&(g_ucFirstTouchKeyIndex==0xff))
+                     g_ucFirstTouchKeyIndex = i;
+              #endif
+                  if(g_bExceptionFlag)return;
+                }
+              
+              #endif //CTK_SCAN_MODE
+ 618   1      
+ 619   1      
+ 620   1      #if CTK_FIRST_KEY_EN
+ 621   1          if(!g_bTouchFlag)
+ 622   1          g_ucFirstTouchKeyIndex = 0xff;
+ 623   1      #endif
+ 624   1      
+ 625   1      #if CTK_MULI_KEY_EN==0 || CTK_LONG_TOUCH_HANDLE
+              
+                  if(g_bTouchFlag)
+                {
+              #if CTK_MULI_KEY_EN==0
+                  for(i = 0; i < SENSOR_NUM;i++)
+                  {
+                     if(g_ucKeyTouchFlag[i])
+                     {
+                        n++;
+                      if(n>=3)
+                      {
+                        g_bTouchFlag = 0;
+                        break;
+                      }
+                     }
+                  }
+              #endif
+              #if CTK_LONG_TOUCH_HANDLE
+                    g_uiTouchFrame++;
+                  if(g_uiTouchFrame >= CTK_LONG_TOUCH_FRAME)
+                    {
+                      g_uiTouchFrame = 0;
+                    g_bTouchFlag = 0;
+                    for(i = 0; i < SENSOR_NUM; i++)
+                    {                      
+                      baseline[i] = rawdata[i];
+                      g_ucKeyTouchFlag[i] = 0;
+                    }
+                  }
+              #endif    
+                }
+              #if CTK_LONG_TOUCH_HANDLE
+                else
+                {
+                  g_uiTouchFrame = 0;
+                }
+              #endif
+              #endif
+ 664   1        
+ 665   1      } 
+ 666          
+ 667          /*!
+ 668              \brief      ctk work example
+ 669              \param[in]  none
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 12  
+
+ 670              \param[out] none
+ 671              \retval     none
+ 672          */
+ 673          void byd_ctk_work(void)
+ 674          { 
+ 675   1        uint8_t i;
+ 676   1      
+ 677   1      #if TRACEMODE_EN
+                if(IIC_START)return;
+              #endif
+ 680   1        
+ 681   1        byd_ctk_normal();     
+ 682   1      
+ 683   1        if(g_bTouchFlag)//tk touch
+ 684   1        {
+ 685   2          i = byd_get_maxkey();
+ 686   2      
+ 687   2          for(i = 0; i < SENSOR_NUM;i++)
+ 688   2            {
+ 689   3      #if CTK_FIRST_KEY_EN
+ 690   3            if(g_ucFirstTouchKeyIndex == i)//g_ucFirstTouchKeyIndex=0~11,即代表按键1~12
+ 691   3            {
+ 692   4              
+ 693   4            }
+ 694   3      #else     
+                    if(g_ucKeyTouchFlag[i])//判断哪个按键有触摸,触摸为1
+                    {
+                       
+                    }
+              #endif
+ 700   3      #if TRACEMODE_EN
+                    if(g_ucKeyTouchFlag[i]) 
+                      g_ulKeyTouchFlag |= ((uint32_t)g_ucKeyTouchFlag[i] << i);
+                    else
+                        g_ulKeyTouchFlag &= ~(1 << i);
+              #endif
+ 706   3            }    
+ 707   2            
+ 708   2        }
+ 709   1        else  //tk up
+ 710   1        {    
+ 711   2      
+ 712   2      #if TRACEMODE_EN
+                   g_ulKeyTouchFlag = 0;
+              #else
+ 715   2            
+ 716   2      //     byd_idlemode();//进入休眠,使用timer2唤醒    
+ 717   2        
+ 718   2      #endif
+ 719   2        }
+ 720   1              
+ 721   1      }
+ 722          
+ 723          uint8_t byd_get_touch_flag(void)
+ 724          {
+ 725   1        return g_bTouchFlag;
+ 726   1      }
+ 727          
+ 728          uint8_t byd_get_touch_index(void)
+ 729          {
+ 730   1        return g_ucFirstTouchKeyIndex;
+ 731   1      }
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/19/2021 17:29:44 PAGE 13  
+
+ 732          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1025    ----
+   CONSTANT SIZE    =    204    ----
+   XDATA SIZE       =    210      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4       1
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

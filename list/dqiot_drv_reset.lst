@@ -1,0 +1,59 @@
+C51 COMPILER V9.59.0.0   DQIOT_DRV_RESET                                                   02/19/2021 17:29:47 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_RESET
+OBJECT MODULE PLACED IN .\output\dqiot_drv_reset.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\dqiot_drv_reset.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\in
+                    -clude;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.
+                    -\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\dqiot_drv_reset.lst) TABS(2) OBJECT(.\output\dqiot_drv_reset.obj)
+
+line level    source
+
+   1          #ifndef __DQIOT_DRV_RESET_C__
+   2          #define __DQIOT_DRV_RESET_C__
+   3          
+   4          #include "dqiot_drv.h"
+   5          
+   6          /*
+   7          parameter: 
+   8            none
+   9          return :
+  10            none
+  11          */
+  12          void dqiot_drv_reset_gpio_init(void)
+  13          {
+  14   1        gpio_init(RESET_PORT,RESET_PIN,GPIO_MODE_IPU);
+  15   1        return;
+  16   1      }
+  17          
+  18          /*
+  19          parameter: 
+  20            none
+  21          return :
+  22            none
+  23          */
+  24          uint8_t dqiot_drv_get_reset_pin(void)
+  25          {
+  26   1        return gpio_bit_get(RESET_PORT, RESET_PIN);
+  27   1      }
+  28          
+  29          #endif
+  30          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     16    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,439 @@
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_ISR
+OBJECT MODULE PLACED IN .\output\mcu02_isr.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\mcu02_isr.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;
+                    -.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_r
+                    -fid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_isr.lst) TABS(2) OBJECT(.\output\mcu02_isr.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_isr.c
+   3              \brief isr driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-05-18, V1.0.0, firmware for mcu02
+  10          */
+  11          #include "byd_init.h"
+  12          #include "byd_idle.h"
+  13          #include "byd_ctk_api.h"
+  14          #include "byd_sm4.h"
+  15          #include "byd_led.h"
+  16          #include "delay.h"
+  17          #include "bydmcu_libopt.h"
+  18          #include "byd_tracemode.h"
+  19          
+  20          /*!
+  21              \brief      timer0 isr
+  22              \param[in]  none
+  23              \param[out] none
+  24              \retval     none
+  25          *
+  26          unsigned int t0_cnt=0;
+  27          
+  28          
+  29          void timer0_isr(void) interrupt 1
+  30          {
+  31            INT_TIMER0_CLR();
+  32          
+  33            if(GET_TIMER0_MODE() != TIMER_8BIT_AUTORELOAD)
+  34            {
+  35              TH0 = TH0_reload;
+  36              TL0 = TL0_reload;
+  37            }
+  38            t0_cnt++;
+  39            if(t0_cnt>=4000)
+  40            {
+  41              t0_cnt=0;
+  42              PH4=~PH4;
+  43              PB5=~PB5;//TEST
+  44              PB6=~PB6;//TEST
+  45              PB7=~PB7;//TEST
+  46            }
+  47          }
+  48          */
+  49          /*!
+  50              \brief      timer1 isr
+  51              \param[in]  none
+  52              \param[out] none
+  53              \retval     none
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 2   
+
+  54          *
+  55          
+  56          void timer1_isr(void) interrupt 3
+  57          {
+  58            INT_TIMER1_CLR();
+  59          
+  60            if(GET_TIMER1_MODE() != TIMER_8BIT_AUTORELOAD){
+  61              TH1 = TH1_reload;
+  62              TL1 = TL1_reload;
+  63            }
+  64          }
+  65          
+  66          /*!
+  67              \brief      timer2 isr
+  68              \param[in]  none
+  69              \param[out] none
+  70              \retval     none
+  71          */
+  72          #if 0
+              void timer2_wdt_isr(void) interrupt 14
+              {
+              
+                INT_WDT_TIMER2_CLR(); 
+              /*  
+                if(GET_INT_TIMER2_FLAG_STATE())
+                {
+                    //timer2
+                }
+                else if(GET_INT_WDT_FLAG_STATE())
+                {
+                   //wdt
+                } 
+              */
+              
+              }
+              #endif
+  90          /*!
+  91              \brief      timer3 and sm4 isr
+  92              \param[in]  none
+  93              \param[out] none
+  94              \retval     none
+  95          */
+  96          
+  97          void timer3_sm4_isr(void) interrupt 19
+  98          {
+  99   1        #if 0
+                INT_TIMER3_SM4_CLR();
+              
+              #if SM4_INT_EN
+                if(GET_INT_SM4_FLAG_STATE())
+                {
+                   g_bSm4IntFlag = 1;
+                }
+              #endif
+              
+              /*
+                if(GET_INT_TIMER3_FLAG_STATE())
+                {
+                  TIMER3_ENABLE();
+                }
+              */  
+              #endif
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 3   
+
+ 116   1      }
+ 117          
+ 118          /*!
+ 119              \brief      sci isr
+ 120              \param[in]  none
+ 121              \param[out] none
+ 122              \retval     none
+ 123          */
+ 124          //void sci_isr(void)  interrupt 15
+ 125          //{
+ 126          //  INT_SCI_CLR();
+ 127          //}
+ 128          
+ 129          /*!
+ 130              \brief      spi1 isr
+ 131              \param[in]  none
+ 132              \param[out] none
+ 133              \retval     none
+ 134          */
+ 135          void spi1_isr(void) interrupt 20
+ 136          {
+ 137   1        INT_SPI1_CLR();
+ 138   1      }
+ 139          
+ 140          /*!
+ 141              \brief      uart0 isr
+ 142              \param[in]  none
+ 143              \param[out] none
+ 144              \retval     none
+ 145          *
+ 146          void uart0_isr(void) interrupt 17
+ 147          {
+ 148          //  uint8_t temp;
+ 149            
+ 150            INT_UART0_CLR();
+ 151            
+ 152          //  if(GET_UART0_RX_STATE())
+ 153          //  {
+ 154          //    temp = UART0_BUF;
+ 155          //    CLR_UART0_RX_STATE();//清除接收中断标志位
+ 156          //  }
+ 157          //  if(GET_UART0_TX_STATE())
+ 158          //  {
+ 159          //    CLR_UART0_TX_STATE();//清除发送中断标志位
+ 160          //      UART0_TX_INT_DISABLE();   
+ 161          //  }
+ 162            
+ 163          }
+ 164          
+ 165          /*!
+ 166              \brief      uart1 isr
+ 167              \param[in]  none
+ 168              \param[out] none
+ 169              \retval     none
+ 170          */
+ 171          void uart1_isr(void) interrupt 18
+ 172          {
+ 173   1      //  uint8_t temp;
+ 174   1      
+ 175   1        INT_UART1_CLR();
+ 176   1      
+ 177   1      //  if(GET_UART1_RX_STATE())
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 4   
+
+ 178   1      //  {
+ 179   1      //    temp = UART1_BUF;
+ 180   1      //    CLR_UART1_RX_STATE();//清除接收中断标志位
+ 181   1      //  }
+ 182   1      //  if(GET_UART1_TX_STATE())
+ 183   1      //  {
+ 184   1      //    CLR_UART1_TX_STATE();//清除发送中断标志位
+ 185   1      //      UART1_TX_INT_DISABLE();   
+ 186   1      //  } 
+ 187   1      }
+ 188          
+ 189          /*!
+ 190              \brief      iic isr
+ 191              \param[in]  none
+ 192              \param[out] none
+ 193              \retval     none
+ 194          */
+ 195          
+ 196          void iic_isr(void)  interrupt 10
+ 197          {
+ 198   1        INT_IIC_CLR();
+ 199   1      
+ 200   1      #if TRACEMODE_EN==0
+ 201   1      //  iic_isr_func();
+ 202   1      #else
+                byd_tracemode_isr();
+              #endif
+ 205   1      
+ 206   1      }
+ 207          
+ 208          /*!
+ 209              \brief      exti_0_0~8 isr
+ 210              \param[in]  none
+ 211              \param[out] none
+ 212              \retval     none
+ 213          */
+ 214          void exti_0_isr(void) interrupt 0
+ 215          {
+ 216   1        INT_EXTI_0_CLR();
+ 217   1      /*
+ 218   1        if(GET_INT0_8_FLAG_STATE())//int0_8 on PB0
+ 219   1        {
+ 220   1          INT0_8_FLAG_CLR();
+ 221   1        }
+ 222   1      
+ 223   1        if(GET_INT0_0_7_FLAG_STATE(0))//int0_0 on PH0
+ 224   1        {
+ 225   1          INT0_0_7_FLAG_CLR(0);
+ 226   1        }
+ 227   1        if(GET_INT0_0_7_FLAG_STATE(1))//int0_1 on PH1
+ 228   1        {
+ 229   1          INT0_0_7_FLAG_CLR(1);
+ 230   1        }
+ 231   1        if(GET_INT0_0_7_FLAG_STATE(2))//int0_2 on PH2
+ 232   1        {
+ 233   1          INT0_0_7_FLAG_CLR(2);
+ 234   1        }
+ 235   1        if(GET_INT0_0_7_FLAG_STATE(3))//int0_3 on PH3
+ 236   1        {
+ 237   1          INT0_0_7_FLAG_CLR(3);
+ 238   1        }
+ 239   1        if(GET_INT0_0_7_FLAG_STATE(4))//int0_4 on PH4
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 5   
+
+ 240   1        {
+ 241   1          INT0_0_7_FLAG_CLR(4);
+ 242   1        }
+ 243   1        if(GET_INT0_0_7_FLAG_STATE(5))//int0_5 on PH5
+ 244   1        {
+ 245   1          INT0_0_7_FLAG_CLR(5);
+ 246   1        }
+ 247   1        if(GET_INT0_0_7_FLAG_STATE(6))//int0_6 on PH6
+ 248   1        {
+ 249   1          INT0_0_7_FLAG_CLR(6);
+ 250   1        }
+ 251   1        if(GET_INT0_0_7_FLAG_STATE(7))//int0_7 on PH7
+ 252   1        {
+ 253   1          INT0_0_7_FLAG_CLR(7);
+ 254   1        }
+ 255   1      */
+ 256   1      }
+ 257          
+ 258          /*!
+ 259              \brief      exti_1 isr
+ 260              \param[in]  none
+ 261              \param[out] none
+ 262              \retval     none
+ 263          */
+ 264          void exti_1_isr(void) interrupt 2
+ 265          {
+ 266   1        INT_EXTI_1_CLR();
+ 267   1      }
+ 268          
+ 269          /*!
+ 270              \brief      exti_2 isr
+ 271              \param[in]  none
+ 272              \param[out] none
+ 273              \retval     none
+ 274          */
+ 275          void exti_2_isr(void) interrupt 9
+ 276          {
+ 277   1        INT_EXTI_2_CLR();   
+ 278   1      }
+ 279          
+ 280          /*!
+ 281              \brief      exti_3 isr
+ 282              \param[in]  none
+ 283              \param[out] none
+ 284              \retval     none
+ 285          */
+ 286          void exti_3_isr(void) interrupt 21
+ 287          {
+ 288   1        INT_EXTI_3_CLR();
+ 289   1      }
+ 290          
+ 291          /*!
+ 292              \brief      exti_4 isr
+ 293              \param[in]  none
+ 294              \param[out] none
+ 295              \retval     none
+ 296          */
+ 297          void exti_4_isr(void) interrupt 22
+ 298          {
+ 299   1        INT_EXTI_4_CLR();
+ 300   1      //获取对应IO口DATAX数据来判断INT4XX的中断引脚来源   
+ 301   1      //  if(GET_GPIOE_BIT(GPIO_PIN_4))
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 6   
+
+ 302   1      //  {   
+ 303   1      //  }
+ 304   1      //  if(GET_GPIOE_BIT(GPIO_PIN_5))
+ 305   1      //  {
+ 306   1      //  }
+ 307   1      //  if(GET_GPIOE_BIT(GPIO_PIN_6))
+ 308   1      //  {
+ 309   1      //  }
+ 310   1      //  if(GET_GPIOE_BIT(GPIO_PIN_7))
+ 311   1      //  {
+ 312   1      //  }
+ 313   1      
+ 314   1      //  if(GET_GPIOF_BIT(GPIO_PIN_4))
+ 315   1      //  {   
+ 316   1      //  }
+ 317   1      //  if(GET_GPIOF_BIT(GPIO_PIN_5))
+ 318   1      //  {
+ 319   1      //  }
+ 320   1      //  if(GET_GPIOF_BIT(GPIO_PIN_6))
+ 321   1      //  {
+ 322   1      //  }
+ 323   1      //  if(GET_GPIOF_BIT(GPIO_PIN_7))
+ 324   1      //  {
+ 325   1      //  }
+ 326   1      
+ 327   1      //  if(GET_GPIOG_BIT(GPIO_PIN_0))
+ 328   1      //  {   
+ 329   1      //  }
+ 330   1      //  if(GET_GPIOG_BIT(GPIO_PIN_1))
+ 331   1      //  {
+ 332   1      //  }
+ 333   1      //  if(GET_GPIOG_BIT(GPIO_PIN_2))
+ 334   1      //  {
+ 335   1      //  }
+ 336   1      //  if(GET_GPIOG_BIT(GPIO_PIN_3))
+ 337   1      //  {
+ 338   1      //  }
+ 339   1      }
+ 340          
+ 341          /*!
+ 342              \brief      lvdt isr
+ 343              \param[in]  none
+ 344              \param[out] none
+ 345              \retval     none
+ 346          */
+ 347          void lvdt_isr(void) interrupt 16
+ 348          {
+ 349   1        INT_LVDT_CLR();
+ 350   1      /*  
+ 351   1        if(GET_INT_LVDT_FLAG_STATE(INT_VOL_UP_FLAG))
+ 352   1        {
+ 353   1            
+ 354   1        }
+ 355   1        if(GET_INT_LVDT_FLAG_STATE(INT_VOL_DOWN_FLAG))
+ 356   1        {
+ 357   1            
+ 358   1        }
+ 359   1      */
+ 360   1      }
+ 361          
+ 362          /*!
+ 363              \brief      led_lcd_rfid isr
+C51 COMPILER V9.59.0.0   MCU02_ISR                                                         02/19/2021 17:29:45 PAGE 7   
+
+ 364              \param[in]  none
+ 365              \param[out] none
+ 366              \retval     none
+ 367          */
+ 368          void led_lcd_rfid_isr(void) interrupt 13
+ 369          {
+ 370   1      #if LED_SCAN_INT_EN
+                if(GET_INT_LED_FLAG_STATE())
+                { 
+                  INT_LED_LCD_RFID_CLR(); 
+                  LED_START();
+                  }
+              #endif
+ 377   1        
+ 378   1      
+ 379   1      #if 0//RFID_EN
+              
+                uint8_t tmpData;
+              
+                  if(GET_INT_RFID_FLAG_STATE()) 
+                {
+                  INT_LED_LCD_RFID_CLR(); //清除中断标志
+              
+                  if(RFID_CFG & RFID_TX_COMPLET_FLAG)//字节发送完毕
+                  {
+                    RFID_TX_COMPLTE_CLR();
+                  }   
+                  if((RFID_CFG & RFID_RX_FULL_FLAG))//字节接收已完成
+                  {
+                    RFID_RX_FULL_CLR();
+                        tmpData = RFID_BUF2;
+                  } 
+                }
+              #endif
+ 398   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     71    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

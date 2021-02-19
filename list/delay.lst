@@ -1,0 +1,95 @@
+C51 COMPILER V9.59.0.0   DELAY                                                             02/19/2021 17:29:45 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DELAY
+OBJECT MODULE PLACED IN .\output\delay.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\delay.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.\Li
+                    -brary\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rfid;
+                    -.\mmi_inc) DEBUG PRINT(.\list\delay.lst) TABS(2) OBJECT(.\output\delay.obj)
+
+line level    source
+
+   1          /*!
+   2              \file  delay.c
+   3              \brief delay app
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2018 BYD
+   8          
+   9              2018-09-13, V1.0.0, app for byd
+  10          */
+  11          
+  12          #include "delay.h"
+  13          #include "mcu02_wdt.h"
+  14          #include "byd_init.h"
+  15          
+  16          #if SYS_CLOCK_SEL==SYS_CLK_12M
+  17          
+  18          #define DELAY_COUNT  858
+  19          
+  20          #elif SYS_CLOCK_SEL==SYS_CLK_8M
+              
+              #define DELAY_COUNT  570
+              
+              #elif SYS_CLOCK_SEL==SYS_CLK_4M
+              
+              #define DELAY_COUNT  284
+              
+              #else
+              
+              #define DELAY_COUNT  67
+              
+              #endif
+  33          
+  34          /*!
+  35              \brief      delay_us
+  36              \param[in]  us
+  37              \param[out] none
+  38              \retval     none
+  39          */
+  40          void delay_us(unsigned int us)
+  41          {
+  42   1        for (; us > 0; us--)
+  43   1        { 
+  44   2          WDT_CTRL = 0x07;
+  45   2        }
+  46   1      }
+  47          /*!
+  48              \brief      delay_ms
+  49              \param[in]  ms
+  50              \param[out] none
+  51              \retval     none
+  52          */
+  53          void delay_ms(unsigned int ms)
+C51 COMPILER V9.59.0.0   DELAY                                                             02/19/2021 17:29:45 PAGE 2   
+
+  54          {
+  55   1      
+  56   1        unsigned int a = DELAY_COUNT,b = ms;  
+  57   1        for (b = ms; b > 0; b--)
+  58   1        {
+  59   2          for (a = DELAY_COUNT; a > 0; a--)
+  60   2          {
+  61   3            WDT_CTRL = 0x07;
+  62   3          } 
+  63   2        }
+  64   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     57    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

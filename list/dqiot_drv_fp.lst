@@ -1,0 +1,139 @@
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/19/2021 17:29:46 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_FP
+OBJECT MODULE PLACED IN .\output\dqiot_drv_fp.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\dqiot_drv_fp.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inclu
+                    -de;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\by
+                    -d_rfid;.\mmi_inc) DEBUG PRINT(.\list\dqiot_drv_fp.lst) TABS(2) OBJECT(.\output\dqiot_drv_fp.obj)
+
+line level    source
+
+   1          #ifndef __DQIOT_DRV_FP_C__
+   2          #define __DQIOT_DRV_FP_C__
+   3          
+   4          #include "dqiot_drv.h"
+   5          #include "dqiot_drv_fp.h"
+   6          #include "delay.h"
+   7          
+   8          //unsigned char test_data[] ={0xAA,0xAA,0x87,0x00,0x02,0x0A,0x01,0x01,0xE8};
+   9          unsigned char test_data[] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x07, 0x41, 0x01, 0x01, 0x00,
+             - 0x50, 0x00, 0x9B};
+  10          
+  11          /*
+  12          parameter: 
+  13            none
+  14          return :
+  15            none
+  16          */
+  17          void dqiot_drv_fp_gpio_init(void)
+  18          {
+  19   1        /*指纹
+  20   1        UART0_TX  PF4 输出
+  21   1        UART0_RX  PF5 输入
+  22   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
+  23   1        NRST_CTR  PF7 供电
+  24   1        */
+  25   1        gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_OUT);
+  26   1        gpio_bit_set(FP_TX_PORT, FP_TX_PIN);
+  27   1      
+  28   1        gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IPU);
+  29   1        gpio_bit_set(FP_RX_PORT, FP_RX_PIN);
+  30   1      
+  31   1        gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_OUT);
+  32   1        gpio_bit_set(FP_PWR_PORT, FP_PWR_PIN);
+  33   1      
+  34   1        gpio_init(FP_INT_PORT, FP_INT_PIN, GPIO_MODE_IPU);
+  35   1      
+  36   1        return;
+  37   1      }
+  38          
+  39          /*
+  40          parameter: 
+  41            none
+  42          return :
+  43            none
+  44          */
+  45          void dqiot_drv_fp_gpio_deinit(void)
+  46          {
+  47   1        /*指纹
+  48   1        UART0_TX  PF4 输出
+  49   1        UART0_RX  PF5 输入
+  50   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
+  51   1        NRST_CTR  PF7 供电
+  52   1        */
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/19/2021 17:29:46 PAGE 2   
+
+  53   1        gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_IN_FLOATING);
+  54   1        gpio_bit_reset(FP_TX_PORT, FP_TX_PIN);
+  55   1      
+  56   1        gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IN_FLOATING);
+  57   1        gpio_bit_reset(FP_RX_PORT, FP_RX_PIN);
+  58   1      
+  59   1        gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_IN_FLOATING);
+  60   1        gpio_bit_reset(FP_PWR_PORT, FP_PWR_PIN);
+  61   1      
+  62   1        // gpio_init(FP_INT_PORT,FP_INT_PIN,GPIO_MODE_IN_FLOATING);
+  63   1      
+  64   1        return;
+  65   1      }
+  66          
+  67          /*
+  68          parameter: 
+  69            none
+  70          return :
+  71            none
+  72          */
+  73          void dqiot_drv_fp_poweron(void)
+  74          {
+  75   1        gpio_bit_reset(FP_PWR_PORT, FP_PWR_PIN);
+  76   1        return;
+  77   1      }
+  78          
+  79          /*
+  80          parameter: 
+  81            none
+  82          return :
+  83            none
+  84          */
+  85          void dqiot_drv_fp_poweroff(void)
+  86          {
+  87   1        gpio_bit_set(FP_PWR_PORT, FP_PWR_PIN);
+  88   1        return;
+  89   1      }
+  90          
+  91          /*
+  92          parameter: 
+  93            none
+  94          return :
+  95            none
+  96          */
+  97          void drv_fp_test(void)
+  98          {
+  99   1      
+ 100   1        delay_ms(100);
+ 101   1      
+ 102   1        dqiot_drv_uart0_sendData(test_data, 16);
+ 103   1      }
+ 104          
+ 105          #endif //__DQIOT_DRV_FP_C__
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    137    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     16    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/19/2021 17:29:46 PAGE 3   
+
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

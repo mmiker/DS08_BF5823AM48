@@ -1,0 +1,619 @@
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_RFID
+OBJECT MODULE PLACED IN .\output\mcu02_rfid.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Library\byd_standard_peripheral\source\mcu02_rfid.c LARGE OMF2 OPTIMIZE(
+                    -8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifar
+                    -e\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\mcu02_rfid.lst) TABS(2) OBJECT(.\output\mcu02_rfid.ob
+                    -j)
+
+line level    source
+
+   1          /*!
+   2              \file  mcu02_rfid.c
+   3              \brief rfid driver
+   4          */
+   5          
+   6          /*
+   7              Copyright (C) 2020 BYD
+   8          
+   9              2020-07-09, V1.0.0, firmware for mcu02
+  10          */
+  11          
+  12          #include "mcu02_rfid.h"
+  13          #include "mcu02_gpio.h"
+  14          #include "mcu02_system.h"
+  15          #include "delay.h"
+  16          
+  17          
+  18          /*!
+  19              \brief      rfid config
+  20              \param[in]  none
+  21              \param[out] none
+  22              \retval     none
+  23          */
+  24          void rfid_config(void)
+  25          {
+  26   1          SET_PC0_IO_OUT;//RF_TX
+  27   1        SET_PC0_L;
+  28   1      
+  29   1      //  SET_PB7_IO_OUT;//test输出io口
+  30   1      //  SET_PB7_L;
+  31   1      //  apb_sfr_write(SFR_TEST_SEL1,0xc0);//输出比较器滤波后信号
+  32   1      //  apb_sfr_write(SFR_TEST_SEL1,0x40);//输出比较器滤波前信号
+  33   1      //  apb_sfr_write(SFR_TEST_SEL1,0x3c);//输出32k时钟
+  34   1      //  apb_sfr_write(SFR_TEST_SEL1,0x3b);//输出13.56M时钟
+  35   1        
+  36   1        PLL_13P56M_ENABLE();
+  37   1        delay_ms(2);
+  38   1        PLL_13P56M_WAKE_TIME_SET(3);
+  39   1      
+  40   1        RFID_CFG2 = 0x00;
+  41   1        RFID_CFG3 = 0x00;
+  42   1        
+  43   1        RFID_IO_ENABLE();//RFID IO口使能
+  44   1        RFID_REIV_BIT_SET(2);//接收位时序0~3对应1~4
+  45   1        RFID_REIV_FILTER_SET(5);//滤波个数1~15,0无滤波
+  46   1        
+  47   1        RFID_RXD_16H_EN(1);//配置接收计数器加1
+  48   1        RFID_RXD_PRENUM_SET(4);
+  49   1        RFID_TXD_DATA_SEL(RFID_TXD_DATA_8);
+  50   1      
+  51   1      
+  52   1          RFID_CMP_DISABLE();//RFID接收比较器不工作
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 2   
+
+  53   1      
+  54   1      
+  55   1        RFID_ENABLE();  
+  56   1      }
+  57          /*!
+  58              \brief      data parity
+  59              \param[in]  none
+  60              \param[out] none
+  61              \retval     parity bit
+  62          */
+  63          bit calc_parity(uint8_t send_data)
+  64          {   
+  65   1         uint8_t temp = send_data;
+  66   1         bit parity_flag = 0;
+  67   1         while (temp)                            
+  68   1         {                                    
+  69   2          parity_flag = !parity_flag;                  
+  70   2          temp = temp & (temp - 1);                   
+  71   2         }
+  72   1         return !parity_flag;
+  73   1      }
+  74          
+  75          /*!
+  76              \brief      wait rfid tx complete
+  77              \param[in]  none
+  78              \param[out] none
+  79              \retval     status: ERROR or SUCCESS
+  80          */
+  81          ErrStatus wait_rfid_tx_complete(void)
+  82          {
+  83   1        uint16_t count = WAIT_TIMEOUT_TX;
+  84   1        
+  85   1        while(count --){
+  86   2          if(RFID_CFG & RFID_TX_COMPLET_FLAG){
+  87   3            RFID_CFG &= ~RFID_TX_COMPLET_FLAG;
+  88   3            return SUCCESS;
+  89   3          }
+  90   2        }
+  91   1        return ERROR;
+  92   1      }
+  93          
+  94          /*!
+  95              \brief      rfid transmit data
+  96              \param[in]  buf:data pointer
+  97            \param[in]  len:the number of data(len=0~31)          
+  98              \param[out] none
+  99              \retval     ERROR or SUCCESS
+ 100          */
+ 101          ErrStatus rfid_transmit(uint8_t *buf,uint8_t len)
+ 102          {
+ 103   1          uint8_t i;  
+ 104   1          ErrStatus state = ERROR;
+ 105   1      
+ 106   1          RFID_TXD_DATA_SEL(RFID_TXD_DATA_8);
+ 107   1      
+ 108   1          if(0 == len || 1 == len)
+ 109   1          {
+ 110   2            RFID_BUF1 = buf[0];
+ 111   2              RFID_DATANUM_SET(len);
+ 112   2              RFID_SEND_ENABLE(); 
+ 113   2            state = wait_rfid_tx_complete();
+ 114   2          }
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 3   
+
+ 115   1          else 
+ 116   1          {
+ 117   2            RFID_BUF1 = buf[0];
+ 118   2            RFID_BUF2 = buf[1];
+ 119   2            RFID_DATANUM_SET(len);
+ 120   2      
+ 121   2            RFID_SEND_ENABLE();
+ 122   2          
+ 123   2            state = wait_rfid_tx_complete();
+ 124   2          
+ 125   2            for(i = 2; i < len; i++)
+ 126   2            {
+ 127   3             if(i & 0x01)
+ 128   3             {
+ 129   4              RFID_BUF2 = buf[i];
+ 130   4             }
+ 131   3             else
+ 132   3             {
+ 133   4              RFID_BUF1 = buf[i];
+ 134   4             }                   
+ 135   3             state = wait_rfid_tx_complete();       
+ 136   3            }
+ 137   2            
+ 138   2            state = wait_rfid_tx_complete();
+ 139   2          }
+ 140   1          
+ 141   1          return state;
+ 142   1      }
+ 143          
+ 144          /*!
+ 145              \brief      rfid transmit bit
+ 146              \param[in]  buf:data pointer
+ 147            \param[in]  lenBit:the number of data bit          
+ 148              \param[out] none
+ 149              \retval     ERROR or SUCCESS
+ 150          */
+ 151          ErrStatus rfid_transmit_bit(uint8_t *buf,uint8_t lenBit)
+ 152          {
+ 153   1          uint8_t i,m;
+ 154   1          bit bit_last,buf_flag=0;
+ 155   1        bit send_flag = 0;
+ 156   1          uint8_t dat;
+ 157   1          uint8_t ucparity; 
+ 158   1          uint8_t temp_bit;
+ 159   1        uint8_t allbyte,lastbit;
+ 160   1            
+ 161   1          RFID_BIT_TXD_MODE_ENABLE();
+ 162   1          RFID_TXD_STOP_MODE_ENABLE();
+ 163   1      
+ 164   1        //计算总字节数和最后位长度
+ 165   1          allbyte = lenBit>>3;
+ 166   1          lastbit = lenBit&0x07; 
+ 167   1      
+ 168   1        //发送起始位
+ 169   1          RFID_BUF1 = send_z();
+ 170   1          bit_last = 1;
+ 171   1      
+ 172   1          for(m=0;m<allbyte+1;m++)
+ 173   1          {
+ 174   2            ucparity = 0;
+ 175   2            dat=buf[m];
+ 176   2            
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 4   
+
+ 177   2          if(m < allbyte)
+ 178   2          {
+ 179   3             i = 8;
+ 180   3          }
+ 181   2          else
+ 182   2          {
+ 183   3             i = lastbit;
+ 184   3          }
+ 185   2      
+ 186   2          for(;i>0;i--)
+ 187   2            {
+ 188   3              if(dat&1)
+ 189   3              {
+ 190   4                temp_bit = send_x();
+ 191   4                bit_last = 0;
+ 192   4                ucparity++;
+ 193   4              }
+ 194   3              else 
+ 195   3              {
+ 196   4                if(bit_last) 
+ 197   4            { 
+ 198   5              temp_bit = send_z(); 
+ 199   5            }
+ 200   4                else            
+ 201   4            { 
+ 202   5              temp_bit = send_y(); 
+ 203   5            }
+ 204   4                bit_last = 1;
+ 205   4              }
+ 206   3              dat>>=1;
+ 207   3      
+ 208   3          if(!buf_flag)
+ 209   3          {
+ 210   4            RFID_BUF2 = temp_bit;
+ 211   4            buf_flag = 1;
+ 212   4          }
+ 213   3          else
+ 214   3          {
+ 215   4            RFID_BUF1 = temp_bit;
+ 216   4            buf_flag = 0;
+ 217   4          }
+ 218   3          
+ 219   3          if(!send_flag)
+ 220   3          {
+ 221   4            send_flag = 1;
+ 222   4            RFID_SEND_ENABLE();
+ 223   4          } 
+ 224   3            wait_rfid_tx_complete();
+ 225   3      
+ 226   3            }
+ 227   2      
+ 228   2            if(allbyte > 1)
+ 229   2            {
+ 230   3              if((ucparity&0x01)==0)
+ 231   3          {
+ 232   4            temp_bit = send_x(); 
+ 233   4            bit_last = 0;
+ 234   4          }
+ 235   3              else if(bit_last==1)
+ 236   3          {
+ 237   4            temp_bit = send_z(); 
+ 238   4            bit_last = 1;
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 5   
+
+ 239   4          }
+ 240   3              else                
+ 241   3          {
+ 242   4            temp_bit = send_y(); 
+ 243   4              bit_last = 1;
+ 244   4          }
+ 245   3          
+ 246   3          if(!buf_flag) 
+ 247   3            {
+ 248   4             RFID_BUF2 = temp_bit;
+ 249   4             buf_flag = 1;
+ 250   4          }
+ 251   3            else
+ 252   3          {
+ 253   4             RFID_BUF1 = temp_bit;
+ 254   4             buf_flag = 0;
+ 255   4          }
+ 256   3      
+ 257   3            wait_rfid_tx_complete();
+ 258   3               
+ 259   3            }
+ 260   2      
+ 261   2          }
+ 262   1      
+ 263   1          //发送结束位
+ 264   1          if(allbyte >1)
+ 265   1          {  
+ 266   2              
+ 267   2          if(bit_last==1) 
+ 268   2          {
+ 269   3             temp_bit = send_z(); 
+ 270   3          }
+ 271   2            else            
+ 272   2          {
+ 273   3             temp_bit = send_y();      
+ 274   3          }
+ 275   2          
+ 276   2          if(!buf_flag)
+ 277   2          { 
+ 278   3             RFID_BUF2 = temp_bit;
+ 279   3           buf_flag = 1;
+ 280   3          }
+ 281   2          else
+ 282   2          {
+ 283   3           RFID_BUF1 = temp_bit;
+ 284   3           buf_flag = 0;
+ 285   3          }
+ 286   2          wait_rfid_tx_complete();
+ 287   2      
+ 288   2          if(!buf_flag)
+ 289   2          { 
+ 290   3             RFID_BUF2 = send_y();
+ 291   3           buf_flag = 1;
+ 292   3          }
+ 293   2          else
+ 294   2          {
+ 295   3           RFID_BUF1 = send_y();
+ 296   3           buf_flag = 0;
+ 297   3          }
+ 298   2          wait_rfid_tx_complete();
+ 299   2          }
+ 300   1                         
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 6   
+
+ 301   1        RFID_TXD_STOP_ENABLE();
+ 302   1        delay_us(10);
+ 303   1        
+ 304   1          RFID_SEND_DISABLE();
+ 305   1        RFID_TXD_STOP_MODE_DISABLE();
+ 306   1        RFID_BIT_TXD_MODE_DISABLE();
+ 307   1      
+ 308   1        return SUCCESS;
+ 309   1      }
+ 310          
+ 311          /*!
+ 312              \brief      rfid transmit 9bit
+ 313              \param[in]  buf:data pointer
+ 314            \param[in]  len:the number of data(len=2~31)          
+ 315              \param[out] none
+ 316              \retval     ERROR or SUCCESS
+ 317          */
+ 318          ErrStatus rfid_transmit_9bit(uint8_t *buf,uint8_t *paritybuf,uint8_t len)
+ 319          {
+ 320   1          uint8_t i;
+ 321   1          ErrStatus state = ERROR;
+ 322   1      
+ 323   1        RFID_BIT_TXD_MODE_DISABLE();  
+ 324   1      
+ 325   1          RFID_TXD_DATA_SEL(RFID_TXD_DATA_9);
+ 326   1      
+ 327   1          RFID_BUF1 = buf[0];
+ 328   1        RFID_BUF2 = buf[1];
+ 329   1      
+ 330   1        RFID_BUF1_ODD_SET(paritybuf[0]);
+ 331   1        RFID_BUF2_ODD_SET(paritybuf[1]);
+ 332   1      
+ 333   1        RFID_DATANUM_SET(len);
+ 334   1        
+ 335   1        if(len>31)
+ 336   1        {
+ 337   2           RFID_TXD_STOP_MODE_ENABLE();      
+ 338   2        }
+ 339   1      
+ 340   1          RFID_SEND_ENABLE();   
+ 341   1        state = wait_rfid_tx_complete();
+ 342   1        
+ 343   1        for(i = 2; i < len; i++)
+ 344   1        {  
+ 345   2           if(i & 0x01)
+ 346   2           {
+ 347   3              RFID_BUF2_ODD_SET(paritybuf[i]);
+ 348   3            RFID_BUF2 = buf[i];
+ 349   3           }
+ 350   2           else
+ 351   2           {          
+ 352   3            RFID_BUF1_ODD_SET(paritybuf[i]);
+ 353   3            RFID_BUF1 = buf[i];
+ 354   3           }
+ 355   2                         
+ 356   2           state = wait_rfid_tx_complete();
+ 357   2                
+ 358   2        }
+ 359   1      
+ 360   1        if(len>31)
+ 361   1          RFID_TXD_STOP_ENABLE();
+ 362   1      
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 7   
+
+ 363   1        state = wait_rfid_tx_complete();      
+ 364   1      
+ 365   1      
+ 366   1        RFID_SEND_DISABLE();
+ 367   1        RFID_TXD_DATA_SEL(RFID_TXD_DATA_8);
+ 368   1      
+ 369   1        return state;
+ 370   1      }
+ 371          
+ 372          /*!
+ 373              \brief      rfid receive bit
+ 374              \param[in]  buf:data pointer
+ 375            \param[in]  len:the number of data         
+ 376              \param[out] none
+ 377              \retval     the number of receive bit or 1
+ 378          */
+ 379          uint8_t rfid_receive_bit(uint8_t *buf,uint8_t len)
+ 380          {
+ 381   1        uint8_t i,j;
+ 382   1        uint8_t sdat[5];
+ 383   1        uint8_t dat=0;  
+ 384   1      
+ 385   1        RFID_CMP_ENABLE();//RFID接收比较器工作
+ 386   1        RFID_RX_FULL_CLR();
+ 387   1        RFID_BIT_RXD_MODE_ENABLE();
+ 388   1      
+ 389   1        delay_us(42);
+ 390   1      
+ 391   1       
+ 392   1        RFID_RECEIVE_ENABLE();
+ 393   1      
+ 394   1      
+ 395   1      //第一个起始位去掉  
+ 396   1        sdat[0] = rfid_rx_bit();
+ 397   1      
+ 398   1        sdat[0] = rfid_rx_bit();
+ 399   1        sdat[1] = rfid_rx_bit();
+ 400   1        sdat[2] = rfid_rx_bit();
+ 401   1        sdat[3] = rfid_rx_bit();
+ 402   1      //  rfid_rx_bit();//通信结束
+ 403   1      
+ 404   1        j=0;
+ 405   1        for(i=0; i<len; i++)    
+ 406   1        {   
+ 407   2          if(sdat[i] != 0xff)
+ 408   2            dat |= (sdat[i]<<j);
+ 409   2          else
+ 410   2          {
+ 411   3           break;
+ 412   3          }
+ 413   2          j++;  
+ 414   2        }
+ 415   1            
+ 416   1        *buf = dat;
+ 417   1      
+ 418   1      
+ 419   1        RFID_RECEIVE_DISABLE();
+ 420   1        RFID_BIT_RXD_MODE_DISABLE();  
+ 421   1        RFID_CMP_DISABLE();//RFID接收比较器不工作
+ 422   1      
+ 423   1        return len;
+ 424   1      
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 8   
+
+ 425   1      }
+ 426          
+ 427          /*!
+ 428              \brief      rfid receive data
+ 429              \param[in]  buf: receive data buffer
+ 430            \param[in]  anti_byte: error byte
+ 431            \param[in]  len: the number of receive data
+ 432              \param[out] receive data
+ 433              \retval     ERROR/SUCCESS/ANTIA_ERROR
+ 434          */
+ 435          uint8_t rfid_receive(uint8_t *buf,uint8_t *anti_byte,uint8_t len)
+ 436          {
+ 437   1          uint8_t i,ret = ERROR;
+ 438   1        uint16_t count; 
+ 439   1      
+ 440   1        delay_us(46);
+ 441   1      
+ 442   1        RFID_CMP_ENABLE();//RFID接收比较器工作
+ 443   1        RFID_BUF2 = 0;
+ 444   1        RFID_BIT_ER = 0;
+ 445   1        RFID_BIT_RXD_MODE_DISABLE();
+ 446   1        RFID_RX_FULL_CLR();
+ 447   1        RFID_RECEIVE_ENABLE();
+ 448   1      
+ 449   1        for(i = 0; i < len; i++)
+ 450   1        {
+ 451   2            ret = ERROR;
+ 452   2            count = WAIT_TIMEOUT_RX;
+ 453   2            while(count--)
+ 454   2          {   
+ 455   3            if((RFID_CFG & RFID_RX_FULL_FLAG)&&((RFID_CFG&0x80)==0))
+ 456   3            {
+ 457   4              buf[i] = RFID_BUF2;
+ 458   4              RFID_RX_FULL_CLR();
+ 459   4              ret = SUCCESS;
+ 460   4              break;
+ 461   4            }
+ 462   3            }
+ 463   2            RFID_RX_ERR_CLR();
+ 464   2            RFID_RX_PARITY_ERR_CLR();
+ 465   2      
+ 466   2          if(RFID_BIT_ER)
+ 467   2          {     
+ 468   3            buf[i] = RFID_BUF2;     
+ 469   3            ret = ANTIA_ERROR;//collision happens
+ 470   3            break;
+ 471   3          }
+ 472   2      
+ 473   2        }
+ 474   1      
+ 475   1        RFID_RECEIVE_DISABLE();
+ 476   1        RFID_CMP_DISABLE();//RFID接收比较器不工作
+ 477   1          
+ 478   1        if(ret == ANTIA_ERROR)
+ 479   1        {
+ 480   2          *anti_byte = i;
+ 481   2        }
+ 482   1          return ret; 
+ 483   1      }
+ 484          
+ 485          /*!
+ 486              \brief      receive data error bit
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 9   
+
+ 487              \param[in]  none
+ 488              \param[out] none
+ 489              \retval     err bit
+ 490          */
+ 491          uint8_t rfid_byte_err_bit(void)
+ 492          {
+ 493   1          uint8_t i;    
+ 494   1        uint8_t error_bit = RFID_BIT_ER;
+ 495   1      
+ 496   1        for(i = 0; i < 8;i++)
+ 497   1        {
+ 498   2           if((error_bit>>i)&0x01)
+ 499   2             return (i+1);
+ 500   2        }
+ 501   1        return 0;
+ 502   1      }
+ 503          /*!
+ 504              \brief      rfid rx
+ 505              \param[in]  none
+ 506              \param[out] receive data
+ 507              \retval     status: ERROR-none ,SUCCESS-receive data
+ 508          */
+ 509          ErrStatus rfid_rx(uint8_t *buf)
+ 510          {
+ 511   1        uint16_t count = WAIT_TIMEOUT_RX;
+ 512   1      
+ 513   1        while(count--){   
+ 514   2          if((RFID_CFG & RFID_RX_FULL_FLAG)&&((RFID_CFG&0xA0)==0)){
+ 515   3            *buf = RFID_BUF2;
+ 516   3            RFID_RX_FULL_CLR();
+ 517   3            return SUCCESS;
+ 518   3          }
+ 519   2        }
+ 520   1        RFID_RX_ERR_CLR();
+ 521   1        RFID_RX_PARITY_ERR_CLR();
+ 522   1          return ERROR; 
+ 523   1      }
+ 524          
+ 525          /*!
+ 526              \brief      rfid rx bit
+ 527              \param[in]  timeout
+ 528              \param[out] none
+ 529              \retval     receive data bit
+ 530          */
+ 531          uint8_t rfid_rx_bit(void)
+ 532          {
+ 533   1          uint8_t temp = 0xff;
+ 534   1        uint16_t count = WAIT_TIMEOUT_RX;
+ 535   1        while(count--)
+ 536   1        {
+ 537   2          if((RFID_CFG & RFID_RX_FULL_FLAG)&&((RFID_CFG&0x80)==0))
+ 538   2          {
+ 539   3            temp = RFID_BUF2;
+ 540   3            RFID_RX_FULL_CLR();
+ 541   3            break;
+ 542   3          }       
+ 543   2        }
+ 544   1        RFID_RX_ERR_CLR();
+ 545   1        
+ 546   1          return temp;  
+ 547   1      }
+ 548          
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        02/19/2021 17:29:51 PAGE 10  
+
+ 549          /*!
+ 550              \brief      enter_lowpower
+ 551              \param[in]  none
+ 552              \param[out] none
+ 553              \retval     none
+ 554          */
+ 555          void rfid_enter_lowpower_config(void)
+ 556          {
+ 557   1        RFID_CMP_DISABLE();//RFID接收比较器不工作
+ 558   1        RFID_DISABLE();//RFID关闭         
+ 559   1      }
+ 560          
+ 561          /*!
+ 562              \brief      exit lowpower
+ 563              \param[in]  none
+ 564              \param[out] none
+ 565              \retval     none
+ 566          */
+ 567          void rfid_exit_lowpower_config(void)
+ 568          {
+ 569   1        RFID_ENABLE();  
+ 570   1      }
+ 571          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1461    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      38
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       4
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

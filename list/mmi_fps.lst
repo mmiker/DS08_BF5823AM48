@@ -1,0 +1,469 @@
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FPS
+OBJECT MODULE PLACED IN .\output\mmi_fps.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\mmi_fps.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include;.
+                    -\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rf
+                    -id;.\mmi_inc) DEBUG PRINT(.\list\mmi_fps.lst) TABS(2) OBJECT(.\output\mmi_fps.obj)
+
+line level    source
+
+   1          #ifndef __MMI_FPC_C__
+   2          #define __MMI_FPC_C__
+   3          
+   4          #include "string.h"
+   5          #include "mmi_fps.h"
+   6          #include "mmi_feature.h"
+   7          #include "dqiot_drv.h"
+   8          #include "delay.h"
+   9          #include "mmi_fs.h"
+  10          
+  11          #ifdef __LOCK_FP_SUPPORT__
+  12          
+  13          /* ValidN，OldValidN 模块内有效模板个数 */
+  14          u16 ValidN = 0, OldValidN = 0;
+  15          /* FP_oldStatus，FP_newStatus 记录按压状态 (1按下/0未按下)*/
+  16          u16 FP_oldStatus = 0, FP_newStatus = 0;
+  17          /* waittime 等待确认码时间 x*1000ms ; FP_Status 指纹模块状态(0未连接/1连接)*/
+  18          u16 waittime, FP_Status = 0;
+  19          
+  20          /*
+  21          parameter: 
+  22            current status machine
+  23          return :
+  24            none
+  25          */
+  26          //void mmi_dq_fp_set_fp_uart_handle_cb(fp_uart_handle_callback cb)
+  27          //{
+  28          
+  29          //}
+  30          
+  31          /*
+  32          parameter: 
+  33            current status machine
+  34          return :
+  35            none
+  36          */
+  37          void mmi_dq_fps_set_irq_handle_cb(fp_irq_handle_callback cb)
+  38          {
+  39   1        cb = NULL;
+  40   1      }
+  41          
+  42          /*
+  43          parameter: 
+  44            current status machine
+  45          return :
+  46            none
+  47          */
+  48          void mmi_dq_fp_init(void)
+  49          {
+  50   1        dqiot_drv_uart0B_init();
+  51   1        dqiot_drv_fp_poweron();
+  52   1      
+  53   1      #if 1
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 2   
+
+  54   1        waittime = 3;
+  55   1        while (--waittime)
+  56   1        {
+  57   2          if (PS_HandShake(&AS608_Addr) == 0x55) /* 与AS608模块握手 */
+  58   2          {
+  59   3            FP_Status = 1;
+  60   3      #if 1 /* 读库指纹个数 */
+  61   3            PS_ValidTempleteNum(&ValidN);
+  62   3      #endif
+  63   3            FP_Light(FP_BLUE); //点灯
+  64   3            return;
+  65   3          }
+  66   2        }
+  67   1      #else
+                waittime = 3000;
+                while (--waittime)
+                {
+                  if (uart_rx_byte(UART0) == 0x55)
+                  {
+                    FP_Status = 1;
+              #if 1 /* 读库指纹个数 */
+                    PS_ValidTempleteNum(&ValidN);
+              #endif
+                    FP_Light(FP_BLUE); //点灯
+                    return;
+                  }
+                }
+              #endif
+  82   1      
+  83   1        FP_Status = 0;
+  84   1        return;
+  85   1      }
+  86          
+  87          /*
+  88          parameter: 
+  89            current status machine
+  90          return :
+  91            none
+  92          */
+  93          unsigned char mmi_dq_fp_get_fp_mode(void)
+  94          {
+  95   1        return 1;
+  96   1      }
+  97          
+  98          /*
+  99          parameter: 
+ 100            current status machine
+ 101          return :
+ 102            none
+ 103          */
+ 104          unsigned short mmi_dq_fp_get_image(void)
+ 105          {
+ 106   1        unsigned short retval = 0;
+ 107   1      
+ 108   1      #if 0
+                waittime = 1; //等待确认码时间
+                while (--waittime)
+                {
+                  retval = PS_GetImage();
+                  if (retval != 1 && retval != 2)
+                    return retval;
+                }
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 3   
+
+              #else
+ 117   1        retval = PS_GetImage();
+ 118   1      #endif
+ 119   1        return retval;
+ 120   1      }
+ 121          
+ 122          /*
+ 123          parameter: 
+ 124            current status machine
+ 125          return :
+ 126            none
+ 127          */
+ 128          unsigned short mmi_dq_fp_gen_char(unsigned char id)
+ 129          {
+ 130   1        unsigned short retval = 0;
+ 131   1        unsigned char real_buf_id;
+ 132   1      
+ 133   1        if (id == 0)
+ 134   1          real_buf_id = CHAR_BUFFER1;
+ 135   1        else if (id == 1)
+ 136   1          real_buf_id = CHAR_BUFFER2;
+ 137   1        else if (id == 2)
+ 138   1          real_buf_id = CHAR_BUFFER3;
+ 139   1        else if (id == 3)
+ 140   1          real_buf_id = CHAR_BUFFER4;
+ 141   1      
+ 142   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_GenChar(real_buf_id);
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 152   1        retval = PS_GenChar(real_buf_id); //生成特征
+ 153   1      
+ 154   1      #endif
+ 155   1        return retval;
+ 156   1      }
+ 157          
+ 158          /*
+ 159          parameter: 
+ 160            current status machine
+ 161          return :
+ 162            none
+ 163          */
+ 164          unsigned short mmi_dq_fp_match(void)
+ 165          {
+ 166   1        unsigned short retval = 0;
+ 167   1      
+ 168   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_Match();
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 4   
+
+ 178   1        retval = PS_Match();
+ 179   1      #endif
+ 180   1        return retval;
+ 181   1      }
+ 182          
+ 183          /*
+ 184          parameter: 
+ 185            current status machine
+ 186          return :
+ 187            none
+ 188          */
+ 189          unsigned short mmi_dq_fp_reg_module(void)
+ 190          {
+ 191   1        unsigned short retval = 0;
+ 192   1      
+ 193   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_RegModel();
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 203   1        retval = PS_RegModel();
+ 204   1      #endif
+ 205   1        return retval;
+ 206   1      }
+ 207          
+ 208          /*
+ 209          parameter: 
+ 210            current status machine
+ 211          return :
+ 212            none
+ 213          */
+ 214          unsigned short mmi_dq_fp_store_char(unsigned char id, unsigned short index)
+ 215          {
+ 216   1        unsigned short retval = 0;
+ 217   1        unsigned char real_buf_id;
+ 218   1      
+ 219   1        if (id == 0)
+ 220   1          real_buf_id = CHAR_BUFFER1;
+ 221   1        else if (id == 1)
+ 222   1          real_buf_id = CHAR_BUFFER2;
+ 223   1        else if (id == 2)
+ 224   1          real_buf_id = CHAR_BUFFER3;
+ 225   1        else if (id == 3)
+ 226   1          real_buf_id = CHAR_BUFFER4;
+ 227   1      
+ 228   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_StoreChar(real_buf_id, index); //储存模板
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 238   1        retval = PS_StoreChar(real_buf_id, index); //储存模板
+ 239   1      #endif
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 5   
+
+ 240   1        return retval;
+ 241   1      }
+ 242          
+ 243          /*
+ 244          parameter: 
+ 245            current status machine
+ 246          return :
+ 247            none
+ 248          */
+ 249          unsigned short mmi_dq_fp_delete(unsigned short index)
+ 250          {
+ 251   1        unsigned short retval = 0;
+ 252   1      
+ 253   1      #if 0
+                waittime = 2; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_DeletChar(index, 1);
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 263   1        retval = PS_DeletChar(index, 1);
+ 264   1      #endif
+ 265   1        return retval;
+ 266   1      }
+ 267          
+ 268          /*
+ 269          parameter: 
+ 270            current status machine
+ 271          return :
+ 272            none
+ 273          */
+ 274          unsigned short mmi_dq_fp_empty(void)
+ 275          {
+ 276   1        unsigned short retval = 0;
+ 277   1      
+ 278   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_Empty();
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 288   1        retval = PS_Empty();
+ 289   1      #endif
+ 290   1        return retval;
+ 291   1      }
+ 292          
+ 293          /*
+ 294          parameter: 
+ 295            current status machine
+ 296          return :
+ 297            none
+ 298          */
+ 299          unsigned char mmi_dq_fp_get_valid_templete(unsigned short *count)
+ 300          {
+ 301   1        unsigned char retval = 0;
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 6   
+
+ 302   1      
+ 303   1      #if 0
+                waittime = 3; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_ValidTempleteNum(count);
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 313   1        retval = PS_ValidTempleteNum(count);
+ 314   1      #endif
+ 315   1        return retval;
+ 316   1      }
+ 317          
+ 318          /*
+ 319          parameter: 
+ 320            current status machine
+ 321          return :
+ 322            none
+ 323          */
+ 324          unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *index)
+ 325          {
+ 326   1        unsigned short retval = 0;
+ 327   1        unsigned char real_buf_id;
+ 328   1      
+ 329   1        if (Buf_id == 0)
+ 330   1          real_buf_id = CHAR_BUFFER1;
+ 331   1        else if (Buf_id == 1)
+ 332   1          real_buf_id = CHAR_BUFFER2;
+ 333   1        else if (Buf_id == 2)
+ 334   1          real_buf_id = CHAR_BUFFER3;
+ 335   1        else if (Buf_id == 3)
+ 336   1          real_buf_id = CHAR_BUFFER4;
+ 337   1      
+ 338   1      #if 0
+                waittime = 2; //等待确认码时间
+                while (--waittime)
+                {
+                  delay_ms(1);
+                  retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
+                  if (retval != 1)
+                    return retval;
+                }
+              #else
+ 348   1        retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
+ 349   1      #endif
+ 350   1        return retval;
+ 351   1      }
+ 352          
+ 353          /*
+ 354          parameter: 
+ 355            current status machine
+ 356          return :
+ 357            none
+ 358          */
+ 359          unsigned char mmi_dq_fp_search(unsigned char Buf_id, unsigned short *index)
+ 360          {
+ 361   1        unsigned short retval = 0;
+ 362   1        unsigned char real_buf_id;
+ 363   1      
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 7   
+
+ 364   1        if (Buf_id == 0)
+ 365   1          real_buf_id = CHAR_BUFFER1;
+ 366   1        else if (Buf_id == 1)
+ 367   1          real_buf_id = CHAR_BUFFER2;
+ 368   1        else if (Buf_id == 2)
+ 369   1          real_buf_id = CHAR_BUFFER3;
+ 370   1        else if (Buf_id == 3)
+ 371   1          real_buf_id = CHAR_BUFFER4;
+ 372   1      
+ 373   1        retval = PS_Search(real_buf_id, 0, 300, index);
+ 374   1        return retval;
+ 375   1      }
+ 376          
+ 377          /*
+ 378          parameter: 
+ 379            current status machine
+ 380          return :
+ 381            none
+ 382          */
+ 383          void mmi_dq_fp_light(FP_COLOR_E light_id)
+ 384          {
+ 385   1        FP_Light(light_id); //点灯
+ 386   1      }
+ 387          
+ 388          /*
+ 389          parameter: 
+ 390            current status machine
+ 391          return :
+ 392            none
+ 393          */
+ 394          FP_COLOR_E mmi_dq_fp_get_light(void)
+ 395          {
+ 396   1        FP_COLOR_E retval = 0;
+ 397   1        retval = FP_Get_Light();
+ 398   1        return retval;
+ 399   1      }
+ 400          
+ 401          /* 触摸判断 */
+ 402          int mmi_dq_fp_work(void)
+ 403          {
+ 404   1        if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)
+ 405   1          FP_newStatus = 1;
+ 406   1        else
+ 407   1          FP_newStatus = 0;
+ 408   1      
+ 409   1        if (FP_newStatus == 1 && FP_newStatus != FP_oldStatus)
+ 410   1        {
+ 411   2          FP_oldStatus = 1;
+ 412   2          return 1;
+ 413   2        }
+ 414   1        else if (FP_newStatus == 0 && FP_newStatus != FP_oldStatus)
+ 415   1        {
+ 416   2          FP_oldStatus = 0;
+ 417   2          return 0;
+ 418   2        }
+ 419   1        else if (FP_newStatus == 1 && FP_newStatus == FP_oldStatus)
+ 420   1          return 0;
+ 421   1      }
+ 422          
+ 423          #endif //__LOCK_FP_SUPPORT__
+ 424          
+ 425          #endif //__MMI_FPC_C__
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           02/19/2021 17:29:52 PAGE 8   
+
+*** WARNING C291 IN LINE 421 OF mmi_src\mmi_fps.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    611    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     16      15
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

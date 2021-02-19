@@ -1,0 +1,77 @@
+C51 COMPILER V9.59.0.0   DQIOT_DRV_LDO                                                     02/19/2021 17:29:46 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_LDO
+OBJECT MODULE PLACED IN .\output\dqiot_drv_ldo.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE source\dqiot_drv_ldo.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\incl
+                    -ude;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\b
+                    -yd_rfid;.\mmi_inc) DEBUG PRINT(.\list\dqiot_drv_ldo.lst) TABS(2) OBJECT(.\output\dqiot_drv_ldo.obj)
+
+line level    source
+
+   1          #ifndef __DQIOT_DRV_LDO_C__
+   2          #define __DQIOT_DRV_LDO_C__
+   3          
+   4          #include "dqiot_drv.h"
+   5          #include "dqiot_drv_ldo.h"
+   6          
+   7          /*
+   8          parameter: 
+   9            none
+  10          return :
+  11            none
+  12          */
+  13          void dqiot_drv_ext_ldo_init(void)
+  14          {
+  15   1        gpio_init(EXT_LDO_PORT,EXT_LDO_PIN,GPIO_MODE_OUT);
+  16   1        gpio_bit_reset(EXT_LDO_PORT,EXT_LDO_PIN);
+  17   1        return;
+  18   1      }
+  19          
+  20          /*
+  21          parameter: 
+  22            none
+  23          return :
+  24            none
+  25          */
+  26          void dqiot_drv_ext_ldo_on(void)
+  27          {
+  28   1        gpio_bit_set(EXT_LDO_PORT,EXT_LDO_PIN);
+  29   1        return;
+  30   1      }
+  31          
+  32          /*
+  33          parameter: 
+  34            none
+  35          return :
+  36            none
+  37          */
+  38          void dqiot_drv_ext_ldo_off(void)
+  39          {
+  40   1        gpio_bit_reset(EXT_LDO_PORT,EXT_LDO_PIN);
+  41   1        return;
+  42   1      }
+  43          
+  44          
+  45          
+  46          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     30    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   DQIOT_DRV_LDO                                                     02/19/2021 17:29:46 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
