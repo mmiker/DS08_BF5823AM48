@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/19/2021 17:34:39 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/22/2021 17:53:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_FP
@@ -62,7 +62,7 @@ line level    source
   50   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
   51   1        NRST_CTR  PF7 供电
   52   1        */
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/19/2021 17:34:39 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      02/22/2021 17:53:00 PAGE 2   
 
   53   1        gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
   54   1        gpio_bit_reset(FP_TX_PORT,FP_TX_PIN);

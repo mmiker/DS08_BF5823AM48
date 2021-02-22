@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +62,7 @@ line level    source
   51          //{
   52          //  send_data = 0;
   53          //}
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 2   
 
   54          
   55          //unsigned char fp_GetModeState(void)
@@ -126,7 +126,7 @@ line level    source
  113   1        /*包头 SendHead*/
  114   1        AS608_SendData(0xEF);
  115   1        AS608_SendData(0x01);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 3   
 
  116   1      
  117   1        /*指纹模块地址 SendAddr*/
@@ -190,7 +190,7 @@ line level    source
  175            * @param  check:检查位
  176            * @retval 无
  177            */
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 4   
 
  178          void SendCheck(unsigned short check)
  179          {
@@ -254,7 +254,7 @@ line level    source
  236   2        }
  237   1      
  238   1        return 1;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 5   
 
  239   1      }
  240          
@@ -318,7 +318,7 @@ line level    source
  298   1        sure = JudgeStr(1000, 0x03);
  299   1      
  300   1        return sure;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 6   
 
  301   1      }
  302          
@@ -382,7 +382,7 @@ line level    source
  360   1        unsigned char sure; //,p=0;
  361   1      
  362   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 7   
 
  363   1          return 0xFF;
  364   1        SendFlag(0x01);
@@ -446,7 +446,7 @@ line level    source
  421   1        return sure;
  422   1      }
  423          
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 8   
 
  424          //储存模板 PS_StoreChar
  425          //功能:将 CharBuffer1 或 CharBuffer2 中的模板文件存到 PageID 号flash数据库位置。
@@ -510,7 +510,7 @@ line level    source
  483          //      很好的指纹，会很快给出搜索结果。
  484          //参数:  BufferID， StartPage(起始页)，PageNum（页数）
  485          //说明:  模块返回确认字+页码（相配指纹模板）
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 9   
 
  486          unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum,
              - unsigned short *p)
@@ -574,7 +574,7 @@ line level    source
               {
                 PS_Addr = 0;
                 if(AS608_PackHead()==1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 10  
 
                   return 0xFF;
                 AS608_SendData(0X01);
@@ -638,7 +638,7 @@ line level    source
                 }
                 return ensure;
               }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 11  
 
               //设置模块地址 PS_SetAddr
               //功能:  设置模块地址
@@ -702,7 +702,7 @@ line level    source
                 unsigned char  ensure;
                 
                 *Byte32 = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 12  
 
                 
                 if(AS608_PackHead()==1)
@@ -766,7 +766,7 @@ line level    source
  729   1        SendCheck(sum);
  730   1      
  731   1        return 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 13  
 
  732   1      }
  733          
@@ -830,7 +830,7 @@ line level    source
  790   1        unsigned char ensure;
  791   1      
  792   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 14  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 14  
 
  793   1          return 0xFF;
  794   1        SendFlag(0x01); //命令包标识
@@ -894,7 +894,7 @@ line level    source
  852   2        case FP_NONE_COLOR:
  853   2          AS608_SendData(0x04);
  854   2          AS608_SendData(0x00);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/19/2021 17:40:22 PAGE 15  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 15  
 
  855   2          AS608_SendData(0x00);
  856   2          AS608_SendData(0xC8);

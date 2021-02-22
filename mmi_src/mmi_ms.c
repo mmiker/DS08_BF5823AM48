@@ -946,6 +946,15 @@ void mmi_ms_reset_opt_fun(void)
 		mmi_dq_factory_mode_reset_test();
 		return;
 	}
+	else
+	{
+		if (RET_SUCESS == mmi_dq_fs_reset())
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_SYS_RESTORE_SUCCESS);
+		else
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+
+		mmi_dq_sys_chg_admin_pwd();
+	}
 }
 
 #endif

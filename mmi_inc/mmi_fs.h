@@ -82,6 +82,24 @@ return :
 */
 void mmi_dq_fs_init(void);
 
+/**
+  * @brief  手动初始化
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
+RET_VAL mmi_dq_fs_clr_set(void);
+
+/**
+  * @brief  复位初始化
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
+RET_VAL mmi_dq_fs_reset(void);
+
 /*
 parameter: 
 	none
