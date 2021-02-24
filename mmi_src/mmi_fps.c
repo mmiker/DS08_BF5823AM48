@@ -9,6 +9,7 @@
 
 #ifdef __LOCK_FP_SUPPORT__
 unsigned char FP_oldStatus = 0;
+unsigned short waittime = 0;
 /*
 parameter: 
 	current status machine
@@ -44,7 +45,7 @@ void mmi_dq_fp_init(void)
 	dqiot_drv_fp_poweron();
 
 #if 1
-	u16 waittime = 3;
+	waittime = 3;
 	while (--waittime)
 	{
 		if (PS_HandShake(&AS608_Addr) == 0x55) /* ”ÎAS608ƒ£øÈŒ’ ÷ */
@@ -54,7 +55,7 @@ void mmi_dq_fp_init(void)
 		}
 	}
 #else
-	u16 waittime = 3000;
+	waittime = 3000;
 	while (--waittime)
 	{
 		if (uart_rx_byte(UART0) == 0x55)

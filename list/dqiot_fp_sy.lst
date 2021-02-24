@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +62,7 @@ line level    source
   51          //{
   52          //  send_data = 0;
   53          //}
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 2   
 
   54          
   55          //unsigned char fp_GetModeState(void)
@@ -126,7 +126,7 @@ line level    source
  113   1        /*包头 SendHead*/
  114   1        AS608_SendData(0xEF);
  115   1        AS608_SendData(0x01);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 3   
 
  116   1      
  117   1        /*指纹模块地址 SendAddr*/
@@ -190,7 +190,7 @@ line level    source
  175            * @param  check:检查位
  176            * @retval 无
  177            */
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 4   
 
  178          void SendCheck(unsigned short check)
  179          {
@@ -254,7 +254,7 @@ line level    source
  236   2        }
  237   1      
  238   1        return 1;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 5   
 
  239   1      }
  240          
@@ -318,7 +318,7 @@ line level    source
  298   1        sure = JudgeStr(1000, 0x03);
  299   1      
  300   1        return sure;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 6   
 
  301   1      }
  302          
@@ -382,7 +382,7 @@ line level    source
  360   1        unsigned char sure; //,p=0;
  361   1      
  362   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 7   
 
  363   1          return 0xFF;
  364   1        SendFlag(0x01);
@@ -446,7 +446,7 @@ line level    source
  421   1        return sure;
  422   1      }
  423          
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 8   
 
  424          //储存模板 PS_StoreChar
  425          //功能:将 CharBuffer1 或 CharBuffer2 中的模板文件存到 PageID 号flash数据库位置。
@@ -510,7 +510,7 @@ line level    source
  483          //      很好的指纹，会很快给出搜索结果。
  484          //参数:  BufferID， StartPage(起始页)，PageNum（页数）
  485          //说明:  模块返回确认字+页码（相配指纹模板）
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 9   
 
  486          unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum,
              - unsigned short *p)
@@ -574,7 +574,7 @@ line level    source
               {
                 PS_Addr = 0;
                 if(AS608_PackHead()==1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 10  
 
                   return 0xFF;
                 AS608_SendData(0X01);
@@ -638,7 +638,7 @@ line level    source
                 }
                 return ensure;
               }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 11  
 
               //设置模块地址 PS_SetAddr
               //功能:  设置模块地址
@@ -702,7 +702,7 @@ line level    source
                 unsigned char  ensure;
                 
                 *Byte32 = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 12  
 
                 
                 if(AS608_PackHead()==1)
@@ -766,7 +766,7 @@ line level    source
  729   1        SendCheck(sum);
  730   1      
  731   1        return 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 13  
 
  732   1      }
  733          
@@ -802,125 +802,122 @@ line level    source
  762          //说明: 模块返新地址（正确地址） 返回确认码
  763          unsigned char PS_HandShake(unsigned long *PS_Addr)
  764          {
- 765   1        *PS_Addr = 0;
- 766   1      
- 767   1        if (AS608_PackHead() == 1)
- 768   1          return 0xFF;
- 769   1      
+ 765   1        unsigned char ensure;
+ 766   1        *PS_Addr = 0;
+ 767   1      
+ 768   1        if (AS608_PackHead() == 1)
+ 769   1          return 0xFF;
  770   1        SendFlag(0x01);
- 771   1        SendLength(0x07);
- 772   1        Sendcmd(0x13);
- 773   1        AS608_SendData(0x00);
- 774   1        AS608_SendData(0x00);
- 775   1        AS608_SendData(0x00);
- 776   1        AS608_SendData(0x00);
- 777   1        SendCheck(0x1B);
- 778   1      
- 779   1        return 0;
- 780   1      }
- 781          
- 782          unsigned char PS_Reset(void)
- 783          {
- 784   1        return 0;
- 785   1      }
- 786          
- 787          unsigned char PS_Sleep(void)
- 788          {
- 789   1        unsigned short temp;
- 790   1        unsigned char ensure;
- 791   1      
- 792   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 14  
+ 771   1        SendLength(0x03);
+ 772   1        Sendcmd(0x53);
+ 773   1        SendCheck(0x57);
+ 774   1        
+ 775   1        ensure = JudgeStr(1000, 0x03);
+ 776   1        return ensure;
+ 777   1      }
+ 778          
+ 779          unsigned char PS_Reset(void)
+ 780          {
+ 781   1        return 0;
+ 782   1      }
+ 783          
+ 784          unsigned char PS_Sleep(void)
+ 785          {
+ 786   1        unsigned short temp;
+ 787   1        unsigned char ensure;
+ 788   1      
+ 789   1        if (AS608_PackHead() == 1)
+ 790   1          return 0xFF;
+ 791   1        SendFlag(0x01); //命令包标识
+ 792   1        SendLength(0x03);
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 14  
 
- 793   1          return 0xFF;
- 794   1        SendFlag(0x01); //命令包标识
- 795   1        SendLength(0x03);
- 796   1        Sendcmd(0x60);
- 797   1        temp = 0x01 + 0x03 + 0x60;
- 798   1        SendCheck(temp);
- 799   1        return ensure;
- 800   1      }
- 801          
- 802          //void AS608_log(void)
- 803          //{
- 804          //  unsigned char i =0;
- 805          ////  NRF_LOG_PRINTF_DEBUG("receive :");
- 806          //  for(i=0;i<25;i++)
- 807          //  {
- 808          //    NRF_LOG_PRINTF_DEBUG("%2x ",as608_rec_buff[i]);
- 809          //  }
- 810          //  NRF_LOG_PRINTF_DEBUG("\n");
- 811          //}
- 812          
- 813          void FP_Light(FP_COLOR_E light_id)
- 814          {
- 815   1        //  if(fp_flag == FP_LT5X)
- 816   1        //  {
- 817   1        //#ifdef __FP_LT5X_LIGHT_SUPPORT__
- 818   1        unsigned short temp;
- 819   1      
- 820   1        unsigned char sure = 0; //,p=0;
- 821   1        if (light_id == Light_Color)
+ 793   1        Sendcmd(0x60);
+ 794   1        temp = 0x01 + 0x03 + 0x60;
+ 795   1        SendCheck(temp);
+ 796   1        return ensure;
+ 797   1      }
+ 798          
+ 799          //void AS608_log(void)
+ 800          //{
+ 801          //  unsigned char i =0;
+ 802          ////  NRF_LOG_PRINTF_DEBUG("receive :");
+ 803          //  for(i=0;i<25;i++)
+ 804          //  {
+ 805          //    NRF_LOG_PRINTF_DEBUG("%2x ",as608_rec_buff[i]);
+ 806          //  }
+ 807          //  NRF_LOG_PRINTF_DEBUG("\n");
+ 808          //}
+ 809          
+ 810          void FP_Light(FP_COLOR_E light_id)
+ 811          {
+ 812   1        //  if(fp_flag == FP_LT5X)
+ 813   1        //  {
+ 814   1        //#ifdef __FP_LT5X_LIGHT_SUPPORT__
+ 815   1        unsigned short temp;
+ 816   1      
+ 817   1        unsigned char sure = 0; //,p=0;
+ 818   1        if (light_id == Light_Color)
+ 819   1          return;
+ 820   1      
+ 821   1        if (AS608_PackHead() == 1)
  822   1          return;
- 823   1      
- 824   1        if (AS608_PackHead() == 1)
- 825   1          return;
- 826   1        SendFlag(0x01);
- 827   1        SendLength(0x07);
- 828   1        Sendcmd(0x41);
- 829   1        switch (light_id)
- 830   1        {
- 831   2        case FP_BLUE:
- 832   2          AS608_SendData(0x01);
- 833   2          AS608_SendData(0x01);
- 834   2          AS608_SendData(0x00);
- 835   2          AS608_SendData(0x50);
- 836   2          temp = 0x01 + 0x07 + 0x41 + 0x02 + 0x50;
- 837   2          break;
- 838   2        case FP_GREEN:
- 839   2          AS608_SendData(0x01);
- 840   2          AS608_SendData(0x02);
- 841   2          AS608_SendData(0x02);
- 842   2          AS608_SendData(0);
- 843   2          temp = 0x01 + 0x07 + 0x41 + 0x05 + 0;
- 844   2          break;
- 845   2        case FP_RED:
- 846   2          AS608_SendData(0x01);
- 847   2          AS608_SendData(0x04);
- 848   2          AS608_SendData(0x04);
- 849   2          AS608_SendData(0);
- 850   2          temp = 0x01 + 0x07 + 0x41 + 0x09 + 0;
- 851   2          break;
- 852   2        case FP_NONE_COLOR:
- 853   2          AS608_SendData(0x04);
- 854   2          AS608_SendData(0x00);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/22/2021 17:53:00 PAGE 15  
+ 823   1        SendFlag(0x01);
+ 824   1        SendLength(0x07);
+ 825   1        Sendcmd(0x41);
+ 826   1        switch (light_id)
+ 827   1        {
+ 828   2        case FP_BLUE:
+ 829   2          AS608_SendData(0x01);
+ 830   2          AS608_SendData(0x01);
+ 831   2          AS608_SendData(0x00);
+ 832   2          AS608_SendData(0x50);
+ 833   2          temp = 0x01 + 0x07 + 0x41 + 0x02 + 0x50;
+ 834   2          break;
+ 835   2        case FP_GREEN:
+ 836   2          AS608_SendData(0x01);
+ 837   2          AS608_SendData(0x02);
+ 838   2          AS608_SendData(0x02);
+ 839   2          AS608_SendData(0);
+ 840   2          temp = 0x01 + 0x07 + 0x41 + 0x05 + 0;
+ 841   2          break;
+ 842   2        case FP_RED:
+ 843   2          AS608_SendData(0x01);
+ 844   2          AS608_SendData(0x04);
+ 845   2          AS608_SendData(0x04);
+ 846   2          AS608_SendData(0);
+ 847   2          temp = 0x01 + 0x07 + 0x41 + 0x09 + 0;
+ 848   2          break;
+ 849   2        case FP_NONE_COLOR:
+ 850   2          AS608_SendData(0x04);
+ 851   2          AS608_SendData(0x00);
+ 852   2          AS608_SendData(0x00);
+ 853   2          AS608_SendData(0xC8);
+ 854   2          temp = 0x01 + 0x07 + 0x41 + 0x04 + 0xC8;
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 15  
 
- 855   2          AS608_SendData(0x00);
- 856   2          AS608_SendData(0xC8);
- 857   2          temp = 0x01 + 0x07 + 0x41 + 0x04 + 0xC8;
- 858   2          break;
- 859   2        }
- 860   1        SendCheck(temp);
- 861   1      
- 862   1        //sure=ReturnFlag(&p);
- 863   1        sure = JudgeStr(1000, 0x03);
- 864   1        //#endif
- 865   1        Light_Color = light_id;
- 866   1      
- 867   1        //  }
- 868   1      }
- 869          
- 870          FP_COLOR_E FP_Get_Light(void)
- 871          {
- 872   1        return Light_Color;
- 873   1      }
- 874          
- 875          //#endif//__PREIPHERAL_FP_LT5X_SUPPORT__
+ 855   2          break;
+ 856   2        }
+ 857   1        SendCheck(temp);
+ 858   1      
+ 859   1        //sure=ReturnFlag(&p);
+ 860   1        sure = JudgeStr(1000, 0x03);
+ 861   1        //#endif
+ 862   1        Light_Color = light_id;
+ 863   1      
+ 864   1        //  }
+ 865   1      }
+ 866          
+ 867          FP_COLOR_E FP_Get_Light(void)
+ 868          {
+ 869   1        return Light_Color;
+ 870   1      }
+ 871          
+ 872          //#endif//__PREIPHERAL_FP_LT5X_SUPPORT__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1896    ----
+   CODE SIZE        =   1873    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     25      56
    PDATA SIZE       =   ----    ----

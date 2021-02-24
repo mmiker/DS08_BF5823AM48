@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 1   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_CTK
@@ -62,7 +62,7 @@ line level    source
   51          uint8_t xdata g_ucSenSorTouchFlag[SENSOR_NUM];
   52          uint8_t xdata g_ucKeyTouchFlag[SENSOR_NUM];/*the touch state of each key,1: touch ;0: no touch*/
   53          #if CTK_FIRST_KEY_EN
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 2   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 2   
 
   54          uint8_t xdata g_ucFirstTouchKeyIndex;//当前第一个被触摸的按键通道下标，0xff代表无效，0~SENSOR_NUM有效
   55          #endif
@@ -126,7 +126,7 @@ line level    source
  112             300,300,300,300,300,300,300,300,
  113             300,300,300,300,300,300,300,300,
  114             300,300,300,300,300,300,300,300
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 3   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 3   
 
  115            },//uint16_t pull_current[SENSOR_MAX_NUM];/* detect sensor current at normal mode*/
  116          
@@ -190,7 +190,7 @@ line level    source
  173          */    
  174            150,//uint16_t threshold_parallel;//并联模式下阈值
  175            10,//uint16_t finger_latency;//通道有触摸后,当差值小于fingerthreshold-finger_latency时认为抬起
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 4   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 4   
 
  176            
  177            0,/*judging the number of finger touch*/
@@ -254,7 +254,7 @@ line level    source
  234          /*!
  235              \brief      ctk frame acc
  236              \param[in]  none
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 5   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 5   
 
  237              \param[out] none
  238              \retval     none
@@ -318,7 +318,7 @@ line level    source
  295   1      
  296   1      #if CTK_FRAME_MUL_SELT>1
                   byd_ctk_frame_acc();
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 6   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 6   
 
                 g_uiExceptionCsdMaxValue = g_uiExceptionCsdMaxValue*CTK_FRAME_MUL_SELT;
                 g_uiExceptionCsdMinValue = g_uiExceptionCsdMinValue*CTK_FRAME_MUL_SELT;
@@ -382,7 +382,7 @@ line level    source
                 }
                 INT_CSD_CLR();
                 
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 7   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 7   
 
               #endif
  361   1      
@@ -446,7 +446,7 @@ line level    source
  419   2        }
  420   1      }
  421          /*!
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 8   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 8   
 
  422              \brief      get the maxkey index when touch
  423              \param[in]  none
@@ -510,7 +510,7 @@ line level    source
  481          void byd_ctk_normal(void)
  482          {
  483   1          uint8_t i,n = 0;
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 9   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 9   
 
  484   1      
  485   1      #if CTK_FRAME_MUL_SELT>1
@@ -574,7 +574,7 @@ line level    source
                   rawdata[i] = temp_rawdata + rawdata2[i];
               
               #endif
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 10  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 10  
 
  546   2                    
  547   2          if(i < SENSOR_NUM-1)//扫描下一个通道
@@ -638,7 +638,7 @@ line level    source
               #endif
               
                   byd_get_keytouch(i);
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 11  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 11  
 
               
                   byd_exception_handle(i);
@@ -702,7 +702,7 @@ line level    source
  667          /*!
  668              \brief      ctk work example
  669              \param[in]  none
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 12  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 12  
 
  670              \param[out] none
  671              \retval     none
@@ -766,7 +766,7 @@ line level    source
  729          {
  730   1        return g_ucFirstTouchKeyIndex;
  731   1      }
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/22/2021 17:52:59 PAGE 13  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           02/24/2021 17:18:57 PAGE 13  
 
  732          
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_RFID                                                    02/22/2021 17:53:01 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_RFID                                                    02/24/2021 17:19:01 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_RFID
@@ -62,7 +62,7 @@ line level    source
   51   1        if(adc_last_value == 0)
   52   1        {
   53   2          adc_last_value = adc_value;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_RFID                                                    02/22/2021 17:53:01 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_RFID                                                    02/24/2021 17:19:01 PAGE 2   
 
   54   2        }
   55   1        if(adc_value > 500)
