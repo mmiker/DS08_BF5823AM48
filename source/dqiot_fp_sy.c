@@ -762,21 +762,18 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 //说明: 模块返新地址（正确地址） 返回确认码
 unsigned char PS_HandShake(unsigned long *PS_Addr)
 {
+	unsigned char ensure;
 	*PS_Addr = 0;
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-
 	SendFlag(0x01);
-	SendLength(0x07);
-	Sendcmd(0x13);
-	AS608_SendData(0x00);
-	AS608_SendData(0x00);
-	AS608_SendData(0x00);
-	AS608_SendData(0x00);
-	SendCheck(0x1B);
-
-	return 0;
+	SendLength(0x03);
+	Sendcmd(0x53);
+	SendCheck(0x57);
+	
+	ensure = JudgeStr(1000, 0x03);
+	return ensure;
 }
 
 unsigned char PS_Reset(void)
