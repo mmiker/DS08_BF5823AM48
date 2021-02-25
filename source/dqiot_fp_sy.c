@@ -79,13 +79,8 @@ extern unsigned char uart_getbuflen;
 //}
 
 /**
-<<<<<<< HEAD
-  * @brief  AS608_USART串口向指纹模块传递数据 
-  * @param  data;传输的数据
-=======
   * @brief  AS608_USART涓插彛鍚戞寚绾规ā鍧椾紶閫掓暟鎹? 
   * @param  data;浼犺緭鐨勬暟鎹?
->>>>>>> six commit
   */
 void AS608_SendData(unsigned char send_data)
 {
@@ -93,13 +88,8 @@ void AS608_SendData(unsigned char send_data)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  AS608_USART串口向指纹模块命令包头格式 
-  * @param  无
-=======
   * @brief  AS608_USART涓插彛鍚戞寚绾规ā鍧楀懡浠ゅ寘澶存牸寮? 
   * @param  鏃?
->>>>>>> six commit
   */
 unsigned char AS608_PackHead(void)
 {
@@ -120,19 +110,11 @@ unsigned char AS608_PackHead(void)
 	//	ps_start_flag = 2;
 	//}
 
-<<<<<<< HEAD
-	/*包头 SendHead*/
-	AS608_SendData(0xEF);
-	AS608_SendData(0x01);
-
-	/*指纹模块地址 SendAddr*/
-=======
 	/*鍖呭ご*/
 	AS608_SendData(0xEF);
 	AS608_SendData(0x01);
 
 	/*鎸囩汗妯″潡鍦板潃*/
->>>>>>> six commit
 	AS608_SendData(AS608_Addr >> 24);
 	AS608_SendData(AS608_Addr >> 16);
 	AS608_SendData(AS608_Addr >> 8);
@@ -144,19 +126,11 @@ unsigned char AS608_PackHead(void)
 unsigned char AS608_PackHead2(void)
 {
 
-<<<<<<< HEAD
-	/*包头 SendHead*/
-	AS608_SendData(0xEF);
-	AS608_SendData(0x01);
-
-	/*指纹模块地址*/
-=======
 	/*鍖呭ご*/
 	AS608_SendData(0xEF);
 	AS608_SendData(0x01);
 
 	/*鎸囩汗妯″潡鍦板潃*/
->>>>>>> six commit
 	AS608_SendData(AS608_Addr >> 24);
 	AS608_SendData(AS608_Addr >> 16);
 	AS608_SendData(AS608_Addr >> 8);
@@ -166,15 +140,9 @@ unsigned char AS608_PackHead2(void)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  发送包标识
-  * @param  flag:包标标志
-  * @retval 无
-=======
   * @brief  鍙戦�佸寘鏍囪瘑
   * @param  flag:鍖呮爣璇嗕綅
   * @retval 鏃?
->>>>>>> six commit
   */
 void SendFlag(unsigned char flag)
 {
@@ -182,15 +150,9 @@ void SendFlag(unsigned char flag)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  发送包长度
-  * @param  length:包长度
-  * @retval 无
-=======
   * @brief  鍙戦�佸寘闀垮害
   * @param  length:鍖呴暱搴?
   * @retval 鏃?
->>>>>>> six commit
   */
 void SendLength(unsigned short length)
 {
@@ -199,15 +161,9 @@ void SendLength(unsigned short length)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  发送指令码
-  * @param  cmd;指令码
-  * @retval 无
-=======
   * @brief  鍙戦�佹寚浠ょ爜
   * @param  cmd;鎸囦护鐮?
   * @retval 鏃?
->>>>>>> six commit
   */
 void Sendcmd(unsigned char cmd)
 {
@@ -215,15 +171,9 @@ void Sendcmd(unsigned char cmd)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  发送校验和
-  * @param  check:检查位
-  * @retval 无
-=======
   * @brief  鍙戦�佹牎楠屽拰
   * @param  check:妫�鏌ヤ綅
   * @retval 鏃?
->>>>>>> six commit
   */
 void SendCheck(unsigned short check)
 {
@@ -232,19 +182,11 @@ void SendCheck(unsigned short check)
 }
 
 /**
-<<<<<<< HEAD
-  * @brief  判断中断接收的数组有没有应答包
-  * @param  
-  * waittime为等待中断接收数据的时间(单位1ms)
-  * length为包长度
-  * @return 数据包确认码
-=======
   * @brief  鍒ゆ柇涓?鏂?鎺ユ敹鐨勬暟缁勬湁娌℃湁搴旂瓟鍖?
   * @param  
   * waittime涓虹瓑寰呬腑鏂?鎺ユ敹鏁版嵁鐨勬椂闂?(鍗曚綅1ms)
   * length涓哄寘闀垮害
   * @return 鏁版嵁鍖呯‘璁ょ爜
->>>>>>> six commit
   * @note   1 failed
   * @see    none
   */
@@ -265,28 +207,17 @@ static u8 JudgeStr(u16 waittime, u8 length)
 	{
 		delay_ms(1);
 
-<<<<<<< HEAD
-		/* 接收到一次数据 */
-		if (uart_getbuflen >= 9 + length)
-		{
-			/* 寻找0xEF位置 */
-=======
 		/* 鎺ユ敹鍒颁竴娆℃暟鎹? */
 		if (uart_getbuflen >= 9 + length)
 		{
 			/* 瀵绘壘0xEF浣嶇疆 */
->>>>>>> six commit
 			for (i = 0; i < uart_getbuflen; i++)
 			{
 				if (uart_get_buf[i] == 0xEF)
 					break;
 			}
 
-<<<<<<< HEAD
-			/* 判断是否为应答包 */
-=======
 			/* 鍒ゆ柇鏄?鍚︿负搴旂瓟鍖? */
->>>>>>> six commit
 			if (uart_get_buf[i] == 0xEF && uart_get_buf[i + 1] == 0x01 && uart_get_buf[i + 6] == 0x07 && ((uart_get_buf[i + 7] << 8) + uart_get_buf[i + 8]) == length)
 			{
 				for (i; i < uart_getbuflen; i++)
@@ -294,15 +225,9 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					uart_rec_buff[j] = uart_get_buf[i];
 					j++;
 				}
-<<<<<<< HEAD
-				getdata = uart_rec_buff[9]; //确认码
-
-				/* 清空缓存 */
-=======
 				getdata = uart_rec_buff[9]; //纭?璁ょ爜
 
 				/* 娓呯┖缂撳瓨 */
->>>>>>> six commit
 				uart_getbuflen = 0;
 
 				return getdata;
@@ -315,15 +240,9 @@ static u8 JudgeStr(u16 waittime, u8 length)
 
 #if 0
 /**
-<<<<<<< HEAD
-  * @brief  从缓冲区读出确认码
-  * @param  *i:返回值（确认码）
-  * @retval 无
-=======
   * @brief  浠庣紦鍐插尯璇诲嚭纭?璁ょ爜
   * @param  *i:杩斿洖鍊硷紙纭?璁ょ爜锛?
   * @retval 鏃?
->>>>>>> six commit
   */
 unsigned char  ReturnFlag( unsigned char *i)
 {	
@@ -367,58 +286,6 @@ unsigned char  ReceiveInfo( unsigned char *rec_data)
 
 unsigned char PS_GetEcho(void)
 {
-<<<<<<< HEAD
-	unsigned char sure; //,p=0;
-
-	AS608_PackHead2();
-	SendFlag(0x01);
-	SendLength(0x03);
-	Sendcmd(0x53); /*生成特征指令*/
-	SendCheck(0x57);
-
-	//sure=ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//录入图像 PS_GetImage
-//功能:探测手指，探测到后录入指纹图像存于ImageBuffer。
-//模块返回确认字
-unsigned char PS_GetImage(void)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-	/* 清空缓存 */
-	uart_getbuflen = 0;
-
-	//delay_ms(300);
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); /*命令包标识*/
-	SendLength(0x03);
-	Sendcmd(0x01); /*录指纹指令*/
-	temp = 0x01 + 0x03 + 0x01;
-	SendCheck(temp);
-
-	// nrf_delay_ms(50); /*等待指纹识别模块处理数据*/
-
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//生成特征 PS_GenChar
-//功能:将ImageBuffer中的原始图像生成指纹特征文件存于CharBuffer1或CharBuffer2
-//参数:BufferID --> charBuffer1:0x01	charBuffer1:0x02
-//模块返回确认字
-unsigned char PS_GenChar(unsigned char BufferID)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-
-=======
 	AS608_PackHead2();
 	SendFlag(0x01);
 	SendLength(0x03);
@@ -455,32 +322,10 @@ unsigned char PS_GetImage(void)
 //妯″潡杩斿洖纭?璁ゅ瓧
 unsigned char PS_GenChar(unsigned char BufferID)
 {
->>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x04);
-<<<<<<< HEAD
-	Sendcmd(0x02); /*生成特征指令*/
-	AS608_SendData(BufferID);
-	temp = 0x01 + 0x04 + 0x02 + BufferID;
-	SendCheck(temp);
-	//	mmi_dq_log_wakeup_count();
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//精确比对两枚指纹特征 PS_Match
-//功能:精确比对CharBuffer1 与CharBuffer2 中的特征文件
-//模块返回确认字
-unsigned char PS_Match(void)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-
-=======
 	Sendcmd(0x02); /*鐢熸垚鐗瑰緛鎸囦护*/
 	AS608_SendData(BufferID);
 	SendCheck(0x01 + 0x04 + 0x02 + BufferID);
@@ -492,37 +337,10 @@ unsigned char PS_Match(void)
 //妯″潡杩斿洖纭?璁ゅ瓧
 unsigned char PS_Match(void)
 {
->>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x03);
-<<<<<<< HEAD
-	Sendcmd(0x03); /*精确比对指令*/
-	temp = 0x01 + 0x03 + 0x03;
-	SendCheck(temp);
-
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x05);
-
-	return sure;
-}
-//搜索指纹 PS_Search
-//功能:以CharBuffer1或CharBuffer2中的特征文件搜索整个或部分指纹库.若搜索到，则返回页码。
-//参数:  BufferID @ref CharBuffer1	CharBuffer2
-//说明:  模块返回确认字，页码（相配指纹模板）
-unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, void *p)
-{
-	unsigned short temp;
-	unsigned char ensure;
-	//	QUEUE_DATA_TYPE   *rx_data;
-
-	p = 0;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-=======
 	Sendcmd(0x03); /*绮剧‘姣斿?规寚浠?*/
 	SendCheck(0x01 + 0x03 + 0x03);
 
@@ -540,7 +358,6 @@ unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsign
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x04);
 	AS608_SendData(BufferID);
@@ -548,21 +365,6 @@ unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsign
 	AS608_SendData(StartPage);
 	AS608_SendData(PageNum >> 8);
 	AS608_SendData(PageNum);
-<<<<<<< HEAD
-	temp = 0x01 + 0x08 + 0x04 + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum;
-	SendCheck(temp);
-	return ensure;
-}
-
-//合并特征（生成模板）PS_RegModel
-//功能:将CharBuffer1与CharBuffer2中的特征文件合并生成 模板,结果存于CharBuffer1与CharBuffer2
-//说明:  模块返回确认字
-unsigned char PS_RegModel(void)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-
-=======
 	SendCheck(0x01 + 0x08 + 0x04 + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum);
 	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
 	return sure;
@@ -573,32 +375,10 @@ unsigned char PS_RegModel(void)
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧
 unsigned char PS_RegModel(void)
 {
->>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x03);
-<<<<<<< HEAD
-	Sendcmd(0x05); /*合并特征指令*/
-	temp = 0x01 + 0x03 + 0x05;
-	SendCheck(temp);
-
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//储存模板 PS_StoreChar
-//功能:将 CharBuffer1 或 CharBuffer2 中的模板文件存到 PageID 号flash数据库位置。
-//参数:  BufferID @ref charBuffer1:0x01	charBuffer1:0x02
-//       PageID（指纹库位置号）
-//说明:  模块返回确认字
-unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-=======
 	Sendcmd(0x05); /*鍚堝苟鐗瑰緛鎸囦护*/
 	SendCheck(0x01 + 0x03 + 0x05);
 
@@ -614,34 +394,11 @@ unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 {
 	unsigned short;
->>>>>>> six commit
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x06);
-<<<<<<< HEAD
-	Sendcmd(0x06); /*存储模板指令*/
-	AS608_SendData(BufferID);
-	AS608_SendData(PageID >> 8);
-	AS608_SendData(PageID);
-	temp = 0x01 + 0x06 + 0x06 + BufferID + (PageID >> 8) + (unsigned char)PageID;
-	SendCheck(temp);
-
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//删除模板 PS_DeletChar
-//功能:  删除flash数据库中指定ID号开始的N个指纹模板
-//参数:  PageID(指纹库模板号)，N删除的模板个数。
-//说明:  模块返回确认字
-unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
-{
-	unsigned short temp;
-=======
 	Sendcmd(0x06); /*瀛樺偍妯℃澘鎸囦护*/
 	AS608_SendData(BufferID);
 	AS608_SendData(PageID >> 8);
@@ -658,52 +415,22 @@ unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧
 unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
 {
->>>>>>> six commit
 	unsigned char sure; //,p=0;
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01); //命令包标识
-	SendLength(0x07);
-	Sendcmd(0x0C); /*删除指定指纹模板指令*/
-=======
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
 	SendLength(0x07);
 	Sendcmd(0x0C); /*鍒犻櫎鎸囧畾鎸囩汗妯℃澘鎸囦护*/
->>>>>>> six commit
 	AS608_SendData(PageID >> 8);
 	AS608_SendData(PageID);
 	AS608_SendData(N >> 8);
 	AS608_SendData(N);
-<<<<<<< HEAD
-	temp = 0x01 + 0x07 + 0x0C + (PageID >> 8) + (unsigned char)PageID + (N >> 8) + (unsigned char)N;
-	SendCheck(temp);
-=======
 	SendCheck(0x01 + 0x07 + 0x0C + (PageID >> 8) + (unsigned char)PageID + (N >> 8) + (unsigned char)N);
->>>>>>> six commit
 
 	//AS608_DELAY_MS(400);
 
 	// sure = ReturnFlag(&p);
-<<<<<<< HEAD
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-}
-
-//高速搜索PS_HighSpeedSearch
-//功能：以 CharBuffer1或CharBuffer2中的特征文件高速搜索整个或部分指纹库。
-//		  若搜索到，则返回页码,该指令对于的确存在于指纹库中 ，且登录时质量
-//		  很好的指纹，会很快给出搜索结果。
-//参数:  BufferID， StartPage(起始页)，PageNum（页数）
-//说明:  模块返回确认字+页码（相配指纹模板）
-unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
-{
-	unsigned short temp;
-	unsigned char ensure;
-	//unsigned short rc;
-=======
 	return JudgeStr(1000, 0x03);
 }
 
@@ -716,64 +443,27 @@ unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPag
 unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
 {
 	unsigned char ensure;
->>>>>>> six commit
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x08);
-<<<<<<< HEAD
-	Sendcmd(0x1b); /*高速搜索指纹库指令*/
-=======
 	Sendcmd(0x1b); /*楂橀�熸悳绱㈡寚绾瑰簱鎸囦护*/
->>>>>>> six commit
 	AS608_SendData(BufferID);
 	AS608_SendData(StartPage >> 8);
 	AS608_SendData(StartPage);
 	AS608_SendData(PageNum >> 8);
 	AS608_SendData(PageNum);
-<<<<<<< HEAD
-	temp = 0x01 + 0x08 + 0x1b + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum;
-	SendCheck(temp);
-=======
 	SendCheck(0x01 + 0x08 + 0x1b + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum);
->>>>>>> six commit
 
 	// ensure = ReturnFlag(&rc);
 	ensure = JudgeStr(1000, 0x07);
 
-<<<<<<< HEAD
-	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11]; //模板号
-=======
 	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
->>>>>>> six commit
 
 	return ensure;
 }
 
-<<<<<<< HEAD
-//清空指纹库 PS_Empty
-//功能:  删除flash数据库中所有指纹模板
-//参数:  无
-//说明:  模块返回确认字
-unsigned char PS_Empty(void)
-{
-	unsigned short temp;
-	unsigned char sure; //,p=0;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-	SendLength(0x03);
-	Sendcmd(0x0D);
-	temp = 0x01 + 0x03 + 0x0D;
-	SendCheck(temp);
-
-	// sure = ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
-
-	return sure;
-=======
 //娓呯┖鎸囩汗搴? PS_Empty
 //鍔熻兘:  鍒犻櫎flash鏁版嵁搴撲腑鎵�鏈夋寚绾规ā鏉?
 //鍙傛暟:  鏃?
@@ -789,20 +479,13 @@ unsigned char PS_Empty(void)
 
 	// sure = ReturnFlag(&p);
 	return JudgeStr(1000, 0x03);
->>>>>>> six commit
 }
 
 #if 0
 /**
-<<<<<<< HEAD
-  * @brief  检查STM32与指纹模块的通信连接
-  * @param  PS_Addr指纹模块地址
-  * @retval 返回值0通讯成功;1表示通讯不成功
-=======
   * @brief  妫�鏌?STM32涓庢寚绾规ā鍧楃殑閫氫俊杩炴帴
   * @param  PS_Addr鎸囩汗妯″潡鍦板潃
   * @retval 杩斿洖鍊?0閫氳??鎴愬姛;1琛ㄧず閫氳??涓嶆垚鍔?
->>>>>>> six commit
   */
 unsigned char PS_Connect(unsigned long *PS_Addr)
 {
@@ -815,17 +498,10 @@ unsigned char PS_Connect(unsigned long *PS_Addr)
 	return 1;		
 }
 
-<<<<<<< HEAD
-//写系统寄存器 PS_WriteReg
-//功能:  写模块寄存器
-//参数:  寄存器序号RegNum:4\5\6
-//说明:  模块返回确认字
-=======
 //鍐欑郴缁熷瘎瀛樺櫒 PS_WriteReg
 //鍔熻兘:  鍐欐ā鍧楀瘎瀛樺櫒
 //鍙傛暟:  瀵勫瓨鍣ㄥ簭鍙稲egNum:4\5\6
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧
->>>>>>> six commit
 unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 {
 	unsigned short temp;
@@ -833,11 +509,7 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01);//命令包标识
-=======
 	SendFlag(0x01);//閸涙垝鎶ら崠鍛?鐖ｇ拠
->>>>>>> six commit
 	SendLength(0x05);
 	Sendcmd(0x0E);
 	AS608_SendData(RegNum);
@@ -847,20 +519,10 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 	sure=ReturnFlag(&p);
 	return sure;
 }
-<<<<<<< HEAD
-/**
-  * @brief  读系统基本参数 PS_ReadSysPara
-  * @param  无
-  * @return 模块返回确认字 + 基本参数（16bytes）
-  * @note   读取模块的基本参数（波特率，包大小等)
-  * @see    none
-  */
-=======
 //璇荤郴缁熷熀鏈?鍙傛暟 PS_ReadSysPara
 //鍔熻兘:  璇诲彇妯″潡鐨勫熀鏈?鍙傛暟锛堟尝鐗圭巼锛屽寘澶у皬绛?)
 //鍙傛暟:  鏃?
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧 + 鍩烘湰鍙傛暟锛?16bytes锛?
->>>>>>> six commit
 unsigned char PS_ReadSysPara(void)
 {
 	unsigned short temp;
@@ -870,11 +532,7 @@ unsigned char PS_ReadSysPara(void)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01);//命令包标识
-=======
 	SendFlag(0x01);//閸涙垝鎶ら崠鍛?鐖ｇ拠
->>>>>>> six commit
 	SendLength(0x03);
 	Sendcmd(0x0F);
 	temp = 0x01+0x03+0x0F;
@@ -892,17 +550,10 @@ unsigned char PS_ReadSysPara(void)
 	}
 	return ensure;
 }
-<<<<<<< HEAD
-//设置模块地址 PS_SetAddr
-//功能:  设置模块地址
-//参数:  PS_addr
-//说明:  模块返回确认字
-=======
 //璁剧疆妯″潡鍦板潃 PS_SetAddr
 //鍔熻兘:  璁剧疆妯″潡鍦板潃
 //鍙傛暟:  PS_addr
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧
->>>>>>> six commit
 unsigned char PS_SetAddr(unsigned long PS_addr)
 {
 	unsigned short temp;
@@ -910,11 +561,7 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01);//命令包标识
-=======
 	SendFlag(0x01);//鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(0x07);
 	Sendcmd(0x15);
 	AS608_SendData(PS_addr>>24);
@@ -928,17 +575,10 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	return ensure;
 }
-<<<<<<< HEAD
-//功能： 模块内部为用户开辟了256bytes的FLASH空间用于存用户记事本,
-//	该记事本逻辑上被分成 16 个页。
-//参数:  NotePageNum(0~15),Byte32(要写入内容，32个字节)
-//说明:  模块返回确认字
-=======
 //鍔熻兘锛? 妯″潡鍐呴儴涓虹敤鎴峰紑杈熶簡256bytes鐨凢LASH绌洪棿鐢ㄤ簬瀛樼敤鎴疯?颁簨鏈?,
 //	璇ヨ?颁簨鏈?閫昏緫涓婅??鍒嗘垚 16 涓?椤点�?
 //鍙傛暟:  NotePageNum(0~15),Byte32(瑕佸啓鍏ュ唴瀹癸紝32涓?瀛楄妭)
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧
->>>>>>> six commit
 unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -948,11 +588,7 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01); //命令包标识
-=======
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(36);
 	Sendcmd(0x18);
 	AS608_SendData(NotePageNum);
@@ -966,17 +602,10 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 
 	return ensure;
 }
-<<<<<<< HEAD
-//读记事PS_ReadNotepad
-//功能：  读取FLASH用户区的128bytes数据
-//参数:  NotePageNum(0~15)
-//说明:  模块返回确认字+用户信息
-=======
 //璇昏?颁簨PS_ReadNotepad
 //鍔熻兘锛?  璇诲彇FLASH鐢ㄦ埛鍖虹殑128bytes鏁版嵁
 //鍙傛暟:  NotePageNum(0~15)
 //璇存槑:  妯″潡杩斿洖纭?璁ゅ瓧+鐢ㄦ埛淇℃伅
->>>>>>> six commit
 unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -986,11 +615,7 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-<<<<<<< HEAD
-	SendFlag(0x01);//命令包标识
-=======
 	SendFlag(0x01);//鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(0x04);
 	Sendcmd(0x19);
 	AS608_SendData(NotePageNum);
@@ -1001,25 +626,6 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 }
 #endif
 
-<<<<<<< HEAD
-//读有效模板个数 PS_ValidTempleteNum
-//功能：读有效模板个数
-//参数: 无
-//说明: 模块返回确认字+有效模板个数ValidN
-unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
-{
-	unsigned short temp;
-	unsigned char ensure;
-	unsigned short p = 0;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-	SendLength(0x03);
-	Sendcmd(0x1d);
-	temp = 0x01 + 0x03 + 0x1d;
-	SendCheck(temp);
-=======
 //璇绘湁鏁堟ā鏉夸釜鏁? PS_ValidTempleteNum
 //鍔熻兘锛氳?绘湁鏁堟ā鏉夸釜鏁?
 //鍙傛暟: 鏃?
@@ -1034,7 +640,6 @@ unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
 	SendLength(0x03);
 	Sendcmd(0x1d);
 	SendCheck(0x01 + 0x03 + 0x1d);
->>>>>>> six commit
 
 	// ensure = ReturnFlag(&p);
 	ensure = JudgeStr(1000, 0x05);
@@ -1044,25 +649,11 @@ unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
 	return ensure;
 }
 
-<<<<<<< HEAD
-//自动注册模板 PS_AutoEnRoll
-//功能：采集一次指纹注册模板，在指纹库中搜索空位并存储，返回存储ID
-//参数: 无
-//说明: 模块返回确认字+页码（相配指纹模板）
-unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short param)
-{
-	unsigned short sum;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-=======
 unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short param)
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x31);
 	AS608_SendData(id >> 8);
@@ -1070,31 +661,11 @@ unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short
 	AS608_SendData(num);
 	AS608_SendData(param >> 8);
 	AS608_SendData(param & 0xFF);
-<<<<<<< HEAD
-	sum = 0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF);
-	SendCheck(sum);
-=======
 	SendCheck(0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF));
->>>>>>> six commit
 
 	return 0;
 }
 
-<<<<<<< HEAD
-//自动验证指纹 PS_AutoIdentify
-//功能：
-//1.自动采集指纹，在指纹库中搜索目标模板并返回搜索结果。
-//2.如果目标模板同当前采集的指纹比对得分大于最高阀值，并且目标模板为不完整特征则以采集的特征更新目标模板的空白区域。
-//参数: 无
-//说明: 模块返回确认字+页码（相配指纹模板）
-unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned short param)
-{
-	unsigned short sum;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-=======
 //鑷?鍔ㄩ獙璇佹寚绾? PS_AutoIdentify
 //鍔熻兘锛?
 //1.鑷?鍔ㄩ噰闆嗘寚绾癸紝鍦ㄦ寚绾瑰簱涓?鎼滅储鐩?鏍囨ā鏉垮苟杩斿洖鎼滅储缁撴灉銆?
@@ -1106,7 +677,6 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
->>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x32);
 	AS608_SendData(level);
@@ -1114,30 +684,16 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 	AS608_SendData(id & 0xFF);
 	AS608_SendData(param >> 8);
 	AS608_SendData(param & 0xFF);
-<<<<<<< HEAD
-	sum = 0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF);
-	SendCheck(sum);
-=======
 	SendCheck(0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF));
->>>>>>> six commit
 
 	return 0;
 }
 
-<<<<<<< HEAD
-//与AS608握手 PS_HandShake
-//参数: PS_Addr地址指针
-//说明: 模块返新地址（正确地址） 返回确认码
-unsigned char PS_HandShake(unsigned long *PS_Addr)
-{
-	unsigned char ensure;
-=======
 //涓嶢S608鎻℃墜 PS_HandShake
 //鍙傛暟: PS_Addr鍦板潃鎸囬拡
 //璇存槑: 妯″潡杩旀柊鍦板潃锛堟?ｇ‘鍦板潃锛?
 unsigned char PS_HandShake(unsigned long *PS_Addr)
 {
->>>>>>> six commit
 	*PS_Addr = 0;
 
 	if (AS608_PackHead() == 1)
@@ -1146,14 +702,8 @@ unsigned char PS_HandShake(unsigned long *PS_Addr)
 	SendLength(0x03);
 	Sendcmd(0x53);
 	SendCheck(0x57);
-<<<<<<< HEAD
-	
-	ensure = JudgeStr(1000, 0x03);
-	return ensure;
-=======
 
 	return JudgeStr(1000, 0x03);
->>>>>>> six commit
 }
 
 unsigned char PS_Reset(void)
@@ -1163,19 +713,6 @@ unsigned char PS_Reset(void)
 
 unsigned char PS_Sleep(void)
 {
-<<<<<<< HEAD
-	unsigned short temp;
-	unsigned char ensure;
-
-	if (AS608_PackHead() == 1)
-		return 0xFF;
-	SendFlag(0x01); //命令包标识
-	SendLength(0x03);
-	Sendcmd(0x60);
-	temp = 0x01 + 0x03 + 0x60;
-	SendCheck(temp);
-	return ensure;
-=======
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //鍛戒护鍖呮爣璇?
@@ -1183,7 +720,6 @@ unsigned char PS_Sleep(void)
 	Sendcmd(0x60);
 	SendCheck(0x01 + 0x03 + 0x60);
 	return 0;
->>>>>>> six commit
 }
 
 //void AS608_log(void)
@@ -1248,18 +784,12 @@ void FP_Light(FP_COLOR_E light_id)
 
 	//sure=ReturnFlag(&p);
 	sure = JudgeStr(1000, 0x03);
-<<<<<<< HEAD
-	//#endif
-	Light_Color = light_id;
-
-=======
 
 	// if (sure == 0)
 	Light_Color = light_id;
 
 	//#endif
 
->>>>>>> six commit
 	//	}
 }
 
@@ -1268,8 +798,6 @@ FP_COLOR_E FP_Get_Light(void)
 	return Light_Color;
 }
 
-<<<<<<< HEAD
-=======
 FP_COLOR_E FP_Set_Light(FP_COLOR_E light_id)
 {
 	Light_Color = light_id;
@@ -1294,5 +822,4 @@ unsigned char FP_Get_Start_Flag(void)
 	return 0;
 }
 
->>>>>>> six commit
 //#endif//__PREIPHERAL_FP_LT5X_SUPPORT__

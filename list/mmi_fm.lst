@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/24/2021 17:19:10 PAGE 1   
-=======
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 17:43:03 PAGE 1   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 18:05:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FM
@@ -66,11 +62,7 @@ line level    source
   51          {
   52   1        switch(g_fm_result_name[item_num])
   53   1        {
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/24/2021 17:19:10 PAGE 2   
-=======
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 17:43:03 PAGE 2   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 18:05:30 PAGE 2   
 
   54   2          case STR_ID_KEY:
   55   2            mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
@@ -134,11 +126,7 @@ line level    source
  113   1        for(i=0;i<max;i++)
  114   1        {
  115   2          if(g_fm_result_name[i]==item_name)
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/24/2021 17:19:10 PAGE 3   
-=======
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 17:43:03 PAGE 3   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 18:05:30 PAGE 3   
 
  116   2            break;
  117   2        }
@@ -192,11 +180,7 @@ line level    source
  165   1        //if(mmi_dq_fs_get_factory_flag()!=0)
  166   1        {
  167   2          if(mmi_dq_fs_get_admin_status() == 0)
-<<<<<<< HEAD
- 168   2            mmi_dq_sys_chg_admin_pwd();
-=======
  168   2            mmi_dq_sys_add_admin_pwd();
->>>>>>> six commit
  169   2          else
  170   2            mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
  171   2        }
@@ -206,11 +190,7 @@ line level    source
  175          
  176          /*
  177          parameter: 
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/24/2021 17:19:10 PAGE 4   
-=======
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 17:43:03 PAGE 4   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 18:05:30 PAGE 4   
 
  178            none
  179          return :
@@ -274,11 +254,7 @@ line level    source
  237          void mmi_dq_factory_mode_motor_test(void)
  238          {
  239   1        mmi_dq_motor_turn_right();
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/24/2021 17:19:10 PAGE 5   
-=======
-C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 17:43:03 PAGE 5   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_FM                                                            02/25/2021 18:05:30 PAGE 5   
 
  240   1        delay_ms(300);
  241   1        mmi_dq_motor_stop();

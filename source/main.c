@@ -4,10 +4,7 @@
 */
 
 #include "main.h"
-<<<<<<< HEAD
-=======
 #include "mmi_feature.h"
->>>>>>> six commit
 #include "dqiot_drv.h"
 #include "mmi_ms.h"
 #include "mmi_fs.h"
@@ -16,19 +13,11 @@
 #include "mmi_audio.h"
 #include "mmi_bsp.h"
 #include "mmi_fm.h"
-<<<<<<< HEAD
-//#include "stdio.h"
-
-#define ADCVDT_EN 1 /* adcµçÑ¹¼ì²â */
-
-extern uint16_t timer0_count;
-=======
 #include "dqiot_drv_audio.h"
 //#include "stdio.h"
 
 extern uint16_t timer0_count;
 extern uint8_t audio_flag;
->>>>>>> six commit
 
 void system_init(void)
 {
@@ -59,15 +48,6 @@ int main(void)
 	mmi_dq_bsp_init();
 
 	mmi_dq_key_init();
-<<<<<<< HEAD
-
-	mmi_dq_fp_init();
-
-	mmi_dq_rfid_init();
-
-	mmi_dq_aud_init();
-
-=======
 #ifdef __LOCK_FP_SUPPORT__
 	mmi_dq_fp_init();
 #endif
@@ -77,40 +57,14 @@ int main(void)
 #ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_init();
 #endif
->>>>>>> six commit
 	byd_adc_init();
 
 	wdt_init(WDT_TIME_2304MS);
 
-<<<<<<< HEAD
-#if ADCVDT_EN //¿ª»ú¼ì²â
-	if (adc_VolT() == 1)
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
-#endif
-
-=======
->>>>>>> six commit
 	//WDT_ENABLE();
 
 	mmi_dq_sys_init();
 
-<<<<<<< HEAD
-#if 0
-	if(mmi_dq_fs_get_factory_flag() == 0)
-	{
-		mmi_dq_factory_mode_test_start();
-	}
-	else
-#endif
-	if (mmi_dq_fs_get_admin_status() == 0)
-	{
-		mmi_dq_sys_chg_admin_pwd();
-	}
-	else
-		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-
-	//printf("main while satrt");
-=======
 	if (0 == mmi_dq_sys_check_vbat())
 	{
 #ifdef __FACTORY_TEST_SUPPORT__
@@ -131,7 +85,6 @@ int main(void)
 		}
 #endif
 	}
->>>>>>> six commit
 
 	while (1)
 	{

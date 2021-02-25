@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 1   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 1   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_AUDIO
@@ -66,11 +62,7 @@ line level    source
   45            AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//Œ™¡Àƒ˙µƒ π”√∞
              -≤»´£¨«Îœ»ÃÌº”π‹¿Ì‘±√‹¬Î£¨∞¥#º¸Ω· ¯
   46                                        //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//«Î‘Ÿ¥Œ ‰»Îπ‹¿Ì‘±√‹¬Î£¨∞¥#º¸Ω· ¯
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 2   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 2   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 2   
 
   47            AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 54,//√‹¬Î¥ÌŒÛ,«Î÷ÿ ‘
   48            AUD_BASE_ID_FP_WRONG,AUD_BASE_ID_RETRY,0,       //AUD_ID_FP_WRONG_TRY = 57,//÷∏Œ∆¥ÌŒÛ£¨«Î÷ÿ ‘
@@ -134,11 +126,7 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 3   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 3   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 3   
 
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//œµÕ≥
@@ -202,11 +190,7 @@ line level    source
  160   1          dqiot_drv_audio_play(aud_id);
  161   1      #if 0
                 else if(aud_id == AUD_ID_SYSTEM)
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 4   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 4   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 4   
 
                 {
                   unsigned char num = 1;
@@ -270,11 +254,7 @@ line level    source
  222          void mmi_dq_aud_play_key_num(unsigned char key_val)
  223          {
  224   1        mmi_dq_aud_stop();
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 5   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 5   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 5   
 
  225   1        //if(mmi_dq_sys_get_pro_sound_state())
  226   1        //  mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO,NULL);
@@ -338,11 +318,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/24/2021 17:19:08 PAGE 6   
-=======
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 17:43:01 PAGE 6   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         02/25/2021 18:05:27 PAGE 6   
 
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----

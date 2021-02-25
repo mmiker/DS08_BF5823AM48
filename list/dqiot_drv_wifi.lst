@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 1   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 1   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_WIFI
@@ -66,11 +62,7 @@ line level    source
   51   2          
   52   2          EA = 1;
   53   2          iic_master_stop();       
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 2   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 2   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 2   
 
   54   2      
   55   2        }
@@ -134,11 +126,7 @@ line level    source
  113   1      }
  114          
  115          
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 3   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 3   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 3   
 
  116          /*
  117          parameter: 
@@ -202,11 +190,7 @@ line level    source
  175          {
  176   1        uint8_t wifi_data[2];
  177   1        wifi_data[0] = WIFI_CMD_WF_OPEN_ASK;
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 4   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 4   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 4   
 
  178   1        wifi_data[1] = 100;
  179   1        if(UH010_Write_Byte(wifi_data,2) == 0)
@@ -270,11 +254,7 @@ line level    source
  237   1        wifi_data[1] = 100;
  238   1        UH010_Write_Byte(wifi_data,2);
  239   1      }
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 5   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 5   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 5   
 
  240          
  241          /*
@@ -338,11 +318,7 @@ line level    source
  299            none
  300          return :
  301            none
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 6   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 6   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 6   
 
  302          */
  303          void wifi_open_by_wifi(void)
@@ -406,11 +382,7 @@ line level    source
  361          void wifi_open_by_key(void)
  362          {
  363   1        uint8_t wifi_data[2];
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 7   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 7   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 7   
 
  364   1        wifi_data[0] = WIFI_CMD_KEY_OPEN;
  365   1        wifi_data[1] = 100;
@@ -474,11 +446,7 @@ line level    source
  423   1      }
  424          
  425          /*
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/24/2021 17:19:02 PAGE 8   
-=======
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 17:42:55 PAGE 8   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    02/25/2021 18:05:19 PAGE 8   
 
  426          parameter: 
  427            none

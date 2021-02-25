@@ -20,12 +20,8 @@ typedef enum
 	SYS_STATUS_CLR_PWD = 0x14,
 	SYS_STATUS_ADD_PWD_CON = 0x15,
 	SYS_STATUS_DEL_PWD_CON = 0x16,
-<<<<<<< HEAD
-
-=======
 	
 #ifdef	__LOCK_FP_SUPPORT__
->>>>>>> six commit
 	SYS_STATUS_INPUT_FP = 0x01,
 	SYS_STATUS_INPUT_ADMIN_FP = 0x02,
 	SYS_STATUS_ADD_FP = 0x22,
@@ -33,25 +29,15 @@ typedef enum
 	SYS_STATUS_CLR_FP = 0x24,
 	SYS_STATUS_ADD_FP_CON = 0x25,
 	SYS_STATUS_DEL_FP_CON = 0x26,
-<<<<<<< HEAD
-
-=======
 #endif
 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
->>>>>>> six commit
 	SYS_STATUS_INPUT_RFID = 0x01,
 	SYS_STATUS_ADD_RFID = 0x32,
 	SYS_STATUS_DEL_RFID = 0x33,
 	SYS_STATUS_CLR_RFID = 0x34,
 	SYS_STATUS_ADD_RFID_CON = 0x35,
 	SYS_STATUS_DEL_RFID_CON = 0x36,
-<<<<<<< HEAD
-
-	SYS_STATUS_ADD_ADMIN_PWD = 0x41,
-	SYS_STATUS_ADD_ADMIN_FP1 = 0x42,
-	SYS_STATUS_ADD_ADMIN_FP2 = 0x43,
-=======
 #endif
 
 	SYS_STATUS_ADD_ADMIN_PWD = 0x41,
@@ -60,7 +46,6 @@ typedef enum
 	SYS_STATUS_ADD_ADMIN_FP1 = 0x43,
 	SYS_STATUS_ADD_ADMIN_FP2 = 0x44,
 #endif
->>>>>>> six commit
 
 	SYS_STATUS_RESTORE_LOCK_CON = 0x50,
 	SYS_STATUS_RESTORE_LOCK = 0x51,
@@ -168,10 +153,7 @@ return :
 */
 SYS_BASE_STATUS mmi_dq_ms_get_sys_state(void);
 
-<<<<<<< HEAD
-=======
 #ifdef	__LOCK_FP_SUPPORT__
->>>>>>> six commit
 /*
 parameter: 
 	none
@@ -179,10 +161,7 @@ return :
 	none
 */
 void mmi_ms_pwd_opt_fun(unsigned char key_val);
-<<<<<<< HEAD
-=======
 #endif
->>>>>>> six commit
 
 /*
 parameter: 
@@ -192,10 +171,7 @@ return :
 */
 void mmi_ms_fps_opt_fun(unsigned char fps_val);
 
-<<<<<<< HEAD
-=======
 #ifdef __LOCK_RFID_CARD_SUPPORT__
->>>>>>> six commit
 /*
 parameter: 
 	none
@@ -203,10 +179,7 @@ return :
 	none
 */
 void mmi_ms_rfid_opt_fun(unsigned char rfid_val);
-<<<<<<< HEAD
-=======
 #endif
->>>>>>> six commit
 
 /*
 parameter: 
@@ -216,8 +189,6 @@ return :
 */
 void mmi_ms_reset_opt_fun(void);
 
-<<<<<<< HEAD
-=======
 /*
 parameter: 
 	none
@@ -226,6 +197,5 @@ return :
 */
 void mmi_ms_wifi_opt_fun(void);
 
->>>>>>> six commit
 #endif //__MMI_MS_H__
 

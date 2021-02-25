@@ -14,10 +14,7 @@
 	#endif
 #endif
 
-<<<<<<< HEAD
-=======
 // #define __FACTORY_TEST_SUPPORT__
 
->>>>>>> six commit
 #endif //__MMI_FEATURE_H__
 

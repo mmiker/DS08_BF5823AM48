@@ -165,11 +165,7 @@ void mmi_dq_factory_mode_test_stop(void)
 	//if(mmi_dq_fs_get_factory_flag()!=0)
 	{
 		if(mmi_dq_fs_get_admin_status() == 0)
-<<<<<<< HEAD
-			mmi_dq_sys_chg_admin_pwd();
-=======
 			mmi_dq_sys_add_admin_pwd();
->>>>>>> six commit
 		else
 			mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	}

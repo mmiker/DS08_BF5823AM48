@@ -3679,8 +3679,6 @@ putchar in dqiot_drv.c (source) :      uart_tx_byte(UART0,c);
 AS608_SendData in dqiot_fp_sy.c (source) : 	uart_tx_byte(send_data);
 mcu02_uart.c (Library\byd_standard_peripheral\source) line 46 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
 mcu02_uart.h (Library\byd_standard_peripheral\include) line 154 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat);
-<<<<<<< HEAD
-=======
 ---- iic_respond Matches (8 in 3 files) ----
 UH010_ReadDatas in dqiot_drv_wifi.c (source) : 			iic_respond(ACK);
 UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		iic_respond(NACK);
@@ -4169,4 +4167,3 @@ mmi_sys.h (mmi_inc) line 41 : void mmi_dq_sys_lock_add_admin_suc(void);
 mmi_fs.c (mmi_src) line 799 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
 mmi_fs.h (mmi_inc) line 307 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status);
 mmi_dq_sys_lock_add_admin_suc in mmi_sys.c (mmi_src) : 	mmi_dq_fs_set_admin_status(1);
->>>>>>> six commit

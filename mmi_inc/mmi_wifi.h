@@ -16,25 +16,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-void mmi_dq_wifi_connected_fail(void);
-
-/*
-parameter: 
-	none
-return :
-	none
-*/
-void mmi_dq_wifi_connected_suc(void);
-
-/*
-parameter: 
-	none
-return :
-	none
-*/
-=======
->>>>>>> six commit
 void mmi_dq_wifi_check_connect(void);
 
 /*
@@ -99,8 +80,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-=======
 void mmi_dq_wifi_open_by_rfid(void);
 
 /*
@@ -109,7 +88,6 @@ parameter:
 return :
 	none
 */
->>>>>>> six commit
 void mmi_dq_wifi_open_by_key(void);
 
 /*
@@ -158,10 +136,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-void mmi_dq_wifi_lowpower_alarm(void);
-
-=======
 void mmi_dq_wifi_rfid_alarm(void);
 
 /*
@@ -180,5 +154,4 @@ return :
 */
 unsigned char mmi_dq_wifi_get_running_flag(void);
 
->>>>>>> six commit
 #endif

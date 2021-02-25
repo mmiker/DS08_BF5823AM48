@@ -13,140 +13,6 @@
 mmi_fs_setting g_dq_fs_init_set;
 
 #define MMI_DQ_FS_PWD_MAX_NUM 100
-<<<<<<< HEAD
-mmi_fs_pwd g_dq_fs_pwd[MMI_DQ_FS_PWD_MAX_NUM];
-
-#if defined(__LOCK_FP_SUPPORT__)
-#define MMI_DQ_FS_FP_MAX_NUM 50
-mmi_fs_fp g_dq_fs_fp[MMI_DQ_FS_FP_MAX_NUM];
-#endif
-
-#ifdef __LOCK_RFID_CARD_SUPPORT__
-#define MMI_DQ_FS_RFID_MAX_NUM 10
-mmi_fs_rfid g_dq_fs_rfid[MMI_DQ_FS_RFID_MAX_NUM];
-#endif
-
-static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_size)
-{
-	uint16_t i;
-
-	switch (file)
-	{
-	case MID_FDS_FILE_SET:
-		eeprom_select(0);
-		for (i = 0; i < r_size; i++)
-		{
-			r_data[i] = eeprom_read_byte(0, i); //¶ÁµÚÒ»Ò³
-		}
-		break;
-	case MID_FDS_FILE_PWD:
-		eeprom_select(0);
-		for (i = 0; i < r_size; i++)
-		{
-			r_data[i] = eeprom_read_byte(0, i + 24); //¶ÁµÚÒ»Ò³
-		}
-		break;
-	case MID_FDS_FILE_FP:
-		eeprom_select(1);
-		eeprom_nvr_read_page(r_data, 0, 0, r_size);
-		break;
-	case MID_FDS_FILE_RF:
-		eeprom_select(1);
-		eeprom_nvr_read_page(r_data, 1, 0, r_size);
-		break;
-	default:
-		break;
-	}
-}
-
-static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t w_size)
-{
-	uint16_t i;
-	ErrStatus ret;
-	eeprom_erase_time(9);
-	switch (file)
-	{
-	case MID_FDS_FILE_SET:
-	{
-		uint8_t *w_data2 = (uint8_t *)g_dq_fs_pwd;
-		uint16_t w_size2 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
-		eeprom_select(0);
-		eeprom_erase_page(0); //²Á³ý1K
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data[i]); //¶ÁµÚÒ»Ò³
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-		for (i = 0; i < w_size2; i++)
-		{
-			ret = eeprom_write_byte(0, i + 24, w_data2[i]); //¶ÁµÚÒ»Ò³
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-	}
-	break;
-	case MID_FDS_FILE_PWD:
-	{
-		uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
-		uint16_t w_size2 = sizeof(mmi_fs_setting);
-		eeprom_select(0);
-		eeprom_erase_page(0); //²Á³ý1K
-		for (i = 0; i < w_size2; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data2[i]); //¶ÁµÚÒ»Ò³
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i + 24, w_data[i]); //¶ÁµÚÒ»Ò³
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-	}
-	break;
-	case MID_FDS_FILE_FP:
-		eeprom_select(1);
-		eeprom_erase_page(0); //²Á³ý512byte
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data[i]);
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-		break;
-	case MID_FDS_FILE_RF:
-		eeprom_select(1);
-		eeprom_erase_page(1); //²Á³ý512byte
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(1, i, w_data[i]);
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-		break;
-	default:
-		return RET_FAIL;
-=======
 mmi_fs_pwd 		g_dq_fs_pwd[MMI_DQ_FS_PWD_MAX_NUM];
 
 #if defined(__LOCK_FP_SUPPORT__) 
@@ -289,17 +155,13 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t* w_data ,uint16_t 
 #endif
 		default:
 			return RET_FAIL;
->>>>>>> six commit
 	}
 	//printf("mmi_dq_fds_write  suc\n");
 	return RET_SUCESS;
 }
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> six commit
 /*
 parameter: 
 	none
@@ -309,22 +171,6 @@ return :
 void mmi_dq_fs_init(void)
 {
 	mmi_dq_fds_read(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-<<<<<<< HEAD
-	if (FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
-	{
-		unsigned char i = 0;
-		mmi_dq_fds_read(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-		mmi_dq_fds_read(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
-		mmi_dq_fds_read(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-		if (g_dq_fs_init_set.admin_status > 0)
-		{
-			for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-			{
-				if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
-					break;
-			}
-			if (i >= MMI_DQ_FS_PWD_MAX_NUM)
-=======
 	if(FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
 	{
 		unsigned char i = 0;
@@ -343,7 +189,6 @@ void mmi_dq_fs_init(void)
 					break;
 			}
 			if(i>=MMI_DQ_FS_PWD_MAX_NUM)
->>>>>>> six commit
 			{
 				g_dq_fs_init_set.admin_status = 0;
 				mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
@@ -353,19 +198,6 @@ void mmi_dq_fs_init(void)
 	else
 	{
 		//printf("mmi_dq_fs_init init error");
-<<<<<<< HEAD
-		memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
-		mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-
-		memset(g_dq_fs_fp, 0xFF, sizeof(g_dq_fs_fp));
-		mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
-
-		mmi_dq_fp_empty();
-
-		memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
-		mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-
-=======
 		memset(g_dq_fs_pwd,0xFF,sizeof(g_dq_fs_pwd));
 		mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd)*MMI_DQ_FS_PWD_MAX_NUM);
 		
@@ -379,7 +211,6 @@ void mmi_dq_fs_init(void)
 		memset(g_dq_fs_rfid,0xFF,sizeof(g_dq_fs_rfid));
 		mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid)*MMI_DQ_FS_RFID_MAX_NUM);
 #endif
->>>>>>> six commit
 		g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
 		g_dq_fs_init_set.open_pro_sound = 1;
 		g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
@@ -416,27 +247,16 @@ RET_VAL mmi_dq_fs_reset(void)
 {
 	memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
 	mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-<<<<<<< HEAD
-
-=======
 #ifdef __LOCK_FP_SUPPORT__
->>>>>>> six commit
 	memset(g_dq_fs_fp, 0xFF, sizeof(g_dq_fs_fp));
 	mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
 
 	mmi_dq_fp_empty();
-<<<<<<< HEAD
-
-	memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
-	mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-
-=======
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
 	mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
 #endif
->>>>>>> six commit
 	g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
 	g_dq_fs_init_set.open_pro_sound = 1;
 	g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
@@ -451,27 +271,12 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-void mmi_dq_fs_pwd_string_to_byte(unsigned char *input_pwd, unsigned char pwd_len, unsigned char *output_pwd)
-=======
 void mmi_dq_fs_pwd_string_to_byte(unsigned char *input_pwd,unsigned char pwd_len,unsigned char *output_pwd)
->>>>>>> six commit
 {
 	unsigned char i = 0;
 	unsigned char bit_l = 0;
 	unsigned char bit_h = 0;
 
-<<<<<<< HEAD
-	for (i = 0; i < pwd_len; i++)
-	{
-		bit_l = *(input_pwd + i) & 0x0F;
-		i++;
-		if (i < pwd_len)
-			bit_h = *(input_pwd + i) & 0x0F;
-		else
-			bit_h = 0xF;
-		*output_pwd++ = bit_l << 4 | bit_h;
-=======
 	for(i=0;i<pwd_len;i++)
 	{
 		bit_l = *(input_pwd+i)&0x0F;
@@ -481,7 +286,6 @@ void mmi_dq_fs_pwd_string_to_byte(unsigned char *input_pwd,unsigned char pwd_len
 		else
 			bit_h = 0xF;
 		*output_pwd++ = bit_l<<4|bit_h;
->>>>>>> six commit
 	}
 	return;
 }
@@ -491,24 +295,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-void mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd, unsigned char *output_pwd)
-{
-	unsigned char i = 0;
-	unsigned char pwd = 0;
-	for (i = 0; i < 4; i++)
-	{
-		pwd = *(input_pwd + i);
-		if (pwd == 0xFF)
-			break;
-		else
-			*output_pwd++ = (pwd & 0xF0) >> 4;
-		if ((pwd & 0x0F) == 0x0F)
-			break;
-		else
-		{
-			*output_pwd++ = pwd & 0x0F;
-=======
 void mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd,unsigned char *output_pwd)
 {
 	unsigned char i = 0;
@@ -525,7 +311,6 @@ void mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd,unsigned char *output
 		else
 		{
 			*output_pwd++ = pwd&0x0F;
->>>>>>> six commit
 		}
 	}
 	return;
@@ -541,15 +326,6 @@ unsigned char mmi_dq_fs_get_pwd_unuse_index(void)
 {
 	unsigned char i = 0;
 
-<<<<<<< HEAD
-	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-	{
-		if (g_dq_fs_pwd[i].flag == 0xFF)
-			break;
-	}
-
-	if (i < MMI_DQ_FS_PWD_MAX_NUM)
-=======
 	for(i=0;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 	{
 		if(g_dq_fs_pwd[i].flag == 0xFF)
@@ -557,7 +333,6 @@ unsigned char mmi_dq_fs_get_pwd_unuse_index(void)
 	}
 
 	if(i<MMI_DQ_FS_PWD_MAX_NUM)
->>>>>>> six commit
 		return i;
 	else
 		return 0xFF;
@@ -569,32 +344,12 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd, unsigned char len, fds_use_type type)
-=======
 unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd,unsigned char len,fds_use_type type)
->>>>>>> six commit
 {
 	unsigned char i = 0;
 	unsigned char k = 0;
 	unsigned char password[4];
 	unsigned char ret_val = 0xFF;
-<<<<<<< HEAD
-
-	memset(password, 0xFF, sizeof(password));
-	mmi_dq_fs_pwd_string_to_byte(input_pwd, len, password);
-
-	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-	{
-		if (g_dq_fs_pwd[i].flag != 0xFF)
-		{
-			for (k = 0; k < 4; k++)
-			{
-				if (password[k] != g_dq_fs_pwd[i].key_pwd[k])
-					break;
-			}
-			if (k == 4)
-=======
 	
 	memset(password,0xFF,sizeof(password));
 	mmi_dq_fs_pwd_string_to_byte(input_pwd,len,password);
@@ -609,32 +364,21 @@ unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd,unsigned char l
 					break;
 			}
 			if(k == 4)
->>>>>>> six commit
 			{
 				break;
 			}
 		}
 	}
-<<<<<<< HEAD
-	if (i < MMI_DQ_FS_PWD_MAX_NUM)
-	{
-		if ((g_dq_fs_pwd[i].flag == type) || (type == FDS_USE_TYPE_ALL))
-=======
 	if(i<MMI_DQ_FS_PWD_MAX_NUM)
 	{
 		if((g_dq_fs_pwd[i].flag == type)||(type == FDS_USE_TYPE_ALL))
->>>>>>> six commit
 			ret_val = i;
 		else
 			ret_val = 0xFF;
 	}
 	else
 		ret_val = 0xFF;
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> six commit
 	return ret_val;
 }
 
@@ -644,41 +388,11 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd, unsigned char pwd_size, fds_use_type type)
-=======
 RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char pwd_size,fds_use_type type)
->>>>>>> six commit
 {
 	unsigned char i = 0xFF;
 	unsigned char password[4];
 
-<<<<<<< HEAD
-	if (type == FDS_USE_TYPE_ADMIN)
-	{
-		for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-		{
-			if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
-				break;
-		}
-	}
-	if (i >= MMI_DQ_FS_PWD_MAX_NUM)
-	{
-		for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-		{
-			if (g_dq_fs_pwd[i].flag == 0xFF)
-				break;
-		}
-	}
-	if (i < MMI_DQ_FS_PWD_MAX_NUM)
-	{
-		memset(password, 0xFF, sizeof(password));
-		//g_dq_fs_pwd[i].index = i;
-		mmi_dq_fs_pwd_string_to_byte(pwd, pwd_size, password);
-		memcpy((char *)g_dq_fs_pwd[i].key_pwd, (const char *)password, 4);
-		g_dq_fs_pwd[i].flag = type;
-		return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-=======
 	if(type == FDS_USE_TYPE_ADMIN)
 	{
 		for(i=0;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
@@ -704,7 +418,6 @@ RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char pwd_size,fds_use_type
 		g_dq_fs_pwd[i].flag = type;
 		return	mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd,sizeof(mmi_fs_pwd)*MMI_DQ_FS_PWD_MAX_NUM);
 		
->>>>>>> six commit
 	}
 	return RET_FAIL;
 }
@@ -715,16 +428,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-RET_VAL mmi_dq_fs_del_pwd(unsigned char index, fds_use_type type)
-{
-	if (index < MMI_DQ_FS_PWD_MAX_NUM && g_dq_fs_pwd[index].flag == type)
-	{
-		g_dq_fs_pwd[index].flag = FDS_USE_TYPE_INVALID;
-		//g_dq_fs_pwd[index].index = 0xFF;
-		memset(g_dq_fs_pwd[index].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[index].key_pwd));
-		return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-=======
 RET_VAL mmi_dq_fs_del_pwd(unsigned char index,fds_use_type type)
 {
 	if(index < MMI_DQ_FS_PWD_MAX_NUM && g_dq_fs_pwd[index].flag == type)
@@ -733,7 +436,6 @@ RET_VAL mmi_dq_fs_del_pwd(unsigned char index,fds_use_type type)
 		//g_dq_fs_pwd[index].index = 0xFF;
 		memset(g_dq_fs_pwd[index].key_pwd,0xFF,sizeof(g_dq_fs_pwd[index].key_pwd));
 		return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd,sizeof(mmi_fs_pwd)*MMI_DQ_FS_PWD_MAX_NUM);
->>>>>>> six commit
 	}
 	return RET_FAIL;
 }
@@ -748,21 +450,6 @@ RET_VAL mmi_dq_fs_clr_pwd(void)
 {
 	unsigned char i = 0;
 
-<<<<<<< HEAD
-	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-	{
-		if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_USER)
-		{
-			g_dq_fs_pwd[i].flag = FDS_USE_TYPE_INVALID;
-			//g_dq_fs_pwd[i].index = 0xFF;
-			memset(g_dq_fs_pwd[i].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[i].key_pwd));
-		}
-	}
-	return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
-}
-
-#if defined(__LOCK_FP_SUPPORT__)
-=======
 	for(i=0;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 	{
 		if(g_dq_fs_pwd[i].flag == FDS_USE_TYPE_USER)
@@ -777,7 +464,6 @@ RET_VAL mmi_dq_fs_clr_pwd(void)
 
 
 #if defined (__LOCK_FP_SUPPORT__)
->>>>>>> six commit
 /*
 parameter: 
 	none
@@ -787,15 +473,6 @@ return :
 unsigned char mmi_dq_fs_get_fp_unuse_index(void)
 {
 	unsigned char i = 2;
-<<<<<<< HEAD
-
-	for (; i < MMI_DQ_FS_FP_MAX_NUM; i++)
-	{
-		if (g_dq_fs_fp[i].fp_index == 0xFF)
-			break;
-	}
-	if (i >= MMI_DQ_FS_FP_MAX_NUM)
-=======
 	
 	for(;i<MMI_DQ_FS_FP_MAX_NUM;i++)
 	{
@@ -803,7 +480,6 @@ unsigned char mmi_dq_fs_get_fp_unuse_index(void)
 			break;
 	}
 	if(i>=MMI_DQ_FS_FP_MAX_NUM)
->>>>>>> six commit
 		return 0xFF;
 	return i;
 }
@@ -816,11 +492,7 @@ return :
 */
 RET_VAL mmi_dq_fs_check_fp(unsigned char fp_index, fds_use_type type)
 {
-<<<<<<< HEAD
-	if ((fp_index < MMI_DQ_FS_FP_MAX_NUM) && (g_dq_fs_fp[fp_index].fp_index == fp_index) && ((g_dq_fs_fp[fp_index].flag == type) || (type == FDS_USE_TYPE_ALL)))
-=======
 	if((fp_index < MMI_DQ_FS_FP_MAX_NUM) && (g_dq_fs_fp[fp_index].fp_index == fp_index) && ((g_dq_fs_fp[fp_index].flag == type)||(type == FDS_USE_TYPE_ALL)))
->>>>>>> six commit
 		return RET_SUCESS;
 	else
 		return RET_FAIL;
@@ -832,19 +504,11 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-RET_VAL mmi_dq_fs_set_fp(unsigned char fs_index, fds_use_type type)
-{
-	g_dq_fs_fp[fs_index].fp_index = fs_index;
-	g_dq_fs_fp[fs_index].flag = type;
-	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
-=======
 RET_VAL mmi_dq_fs_set_fp(unsigned char fs_index,fds_use_type type)
 {
 	g_dq_fs_fp[fs_index].fp_index = fs_index;
 	g_dq_fs_fp[fs_index].flag = type;
 	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp)*MMI_DQ_FS_FP_MAX_NUM);
->>>>>>> six commit
 }
 
 /*
@@ -853,15 +517,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-RET_VAL mmi_dq_fs_del_fp(unsigned char fp_index, fds_use_type type)
-{
-	if (mmi_dq_fs_check_fp(fp_index, type) == RET_SUCESS)
-	{
-		g_dq_fs_fp[fp_index].flag = FDS_USE_TYPE_INVALID;
-		g_dq_fs_fp[fp_index].fp_index = 0xFF;
-		return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
-=======
 RET_VAL mmi_dq_fs_del_fp(unsigned char fp_index,fds_use_type type)
 {
 	if(mmi_dq_fs_check_fp(fp_index,type) == RET_SUCESS)
@@ -869,7 +524,6 @@ RET_VAL mmi_dq_fs_del_fp(unsigned char fp_index,fds_use_type type)
 		g_dq_fs_fp[fp_index].flag = FDS_USE_TYPE_INVALID;
 		g_dq_fs_fp[fp_index].fp_index = 0xFF;
 		return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp)*MMI_DQ_FS_FP_MAX_NUM);
->>>>>>> six commit
 	}
 	return RET_FAIL;
 }
@@ -885,16 +539,6 @@ RET_VAL mmi_dq_fs_clr_fp(void)
 	unsigned char i = 0;
 	unsigned short fp_ret = 0;
 
-<<<<<<< HEAD
-	for (i = 0; i < MMI_DQ_FS_FP_MAX_NUM; i++)
-	{
-		if (g_dq_fs_fp[i].flag != FDS_USE_TYPE_ADMIN)
-		{
-			if (g_dq_fs_fp[i].fp_index != 0xFF)
-			{
-				fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
-				if (fp_ret == 0)
-=======
 	for(i=0;i<MMI_DQ_FS_FP_MAX_NUM;i++)
 	{
 		if(g_dq_fs_fp[i].flag != FDS_USE_TYPE_ADMIN)
@@ -903,7 +547,6 @@ RET_VAL mmi_dq_fs_clr_fp(void)
 			{
 				fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
 				if(fp_ret == 0)
->>>>>>> six commit
 				{
 					g_dq_fs_fp[i].flag = FDS_USE_TYPE_INVALID;
 					g_dq_fs_fp[i].fp_index = 0xFF;
@@ -911,20 +554,12 @@ RET_VAL mmi_dq_fs_clr_fp(void)
 			}
 		}
 	}
-<<<<<<< HEAD
-
-	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
-=======
 	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp)*MMI_DQ_FS_FP_MAX_NUM);
->>>>>>> six commit
 }
 
 #endif
 
-<<<<<<< HEAD
-=======
 
->>>>>>> six commit
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 
 /*
@@ -937,15 +572,6 @@ unsigned char mmi_dq_fs_get_rfid_unuse_index(void)
 {
 	unsigned char i = 0;
 
-<<<<<<< HEAD
-	for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
-	{
-		if (g_dq_fs_rfid[i].index == 0xFF)
-			break;
-	}
-
-	if (i >= MMI_DQ_FS_RFID_MAX_NUM)
-=======
 	for(i=0;i<MMI_DQ_FS_RFID_MAX_NUM;i++)
 	{
 		if(g_dq_fs_rfid[i].index == 0xFF)
@@ -953,7 +579,6 @@ unsigned char mmi_dq_fs_get_rfid_unuse_index(void)
 	}
 
 	if(i>=MMI_DQ_FS_RFID_MAX_NUM)
->>>>>>> six commit
 		return 0xFF;
 	return i;
 }
@@ -966,21 +591,6 @@ return :
 */
 unsigned char mmi_dq_fs_check_rfid(unsigned char *sec_data, fds_use_type type)
 {
-<<<<<<< HEAD
-	unsigned char i = 0, j = 0;
-
-	for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
-	{
-		for (j = 0; j < RFID_SEC_DATA_LEN; j++)
-		{
-			if (g_dq_fs_rfid[i].sec_data[j] != sec_data[j])
-				break;
-		}
-		if (j == RFID_SEC_DATA_LEN)
-			break;
-	}
-	if (i < MMI_DQ_FS_RFID_MAX_NUM && ((g_dq_fs_rfid[i].flag == type) || (type == FDS_USE_TYPE_ALL)))
-=======
 	unsigned char i = 0,j = 0;
 	
 	for(i=0;i<MMI_DQ_FS_RFID_MAX_NUM;i++)
@@ -994,7 +604,6 @@ unsigned char mmi_dq_fs_check_rfid(unsigned char *sec_data, fds_use_type type)
 			break;
 	}
 	if(i<MMI_DQ_FS_RFID_MAX_NUM&&((g_dq_fs_rfid[i].flag == type)||(type == FDS_USE_TYPE_ALL)))
->>>>>>> six commit
 	{
 		return i;
 	}
@@ -1012,23 +621,6 @@ return :
 */
 RET_VAL mmi_dq_fs_set_rfid(unsigned char *sec_data, fds_use_type type)
 {
-<<<<<<< HEAD
-	unsigned char i = 0, j = 0;
-	for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
-	{
-		if (g_dq_fs_rfid[i].index == 0xFF)
-			break;
-	}
-	if (i < MMI_DQ_FS_RFID_MAX_NUM)
-	{
-		g_dq_fs_rfid[i].index = i;
-		g_dq_fs_rfid[i].flag = type;
-		for (j = 0; j < RFID_SEC_DATA_LEN; j++)
-		{
-			g_dq_fs_rfid[i].sec_data[j] = sec_data[j];
-		}
-		return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-=======
 	unsigned char i = 0,j = 0;
 	for(i=0;i<MMI_DQ_FS_RFID_MAX_NUM;i++)
 	{
@@ -1044,7 +636,6 @@ RET_VAL mmi_dq_fs_set_rfid(unsigned char *sec_data, fds_use_type type)
 			g_dq_fs_rfid[i].sec_data[j] = sec_data[j];
 		}
 		return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid)*MMI_DQ_FS_RFID_MAX_NUM);
->>>>>>> six commit
 	}
 	return RET_FAIL;
 }
@@ -1057,29 +648,17 @@ return :
 */
 RET_VAL mmi_dq_fs_del_rfid(unsigned char rfid_index)
 {
-<<<<<<< HEAD
-	if (rfid_index < MMI_DQ_FS_RFID_MAX_NUM && g_dq_fs_rfid[rfid_index].index == rfid_index)
-	{
-		g_dq_fs_rfid[rfid_index].index = 0xFF;
-		g_dq_fs_rfid[rfid_index].flag = FDS_USE_TYPE_INVALID;
-		memset(g_dq_fs_rfid[rfid_index].sec_data, 0xFF, sizeof(g_dq_fs_rfid[rfid_index].sec_data));
-		return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-=======
 	if(rfid_index < MMI_DQ_FS_RFID_MAX_NUM && g_dq_fs_rfid[rfid_index].index == rfid_index)
 	{
 		g_dq_fs_rfid[rfid_index].index = 0xFF;
 		g_dq_fs_rfid[rfid_index].flag = FDS_USE_TYPE_INVALID;
 		memset(g_dq_fs_rfid[rfid_index].sec_data,0xFF,sizeof(g_dq_fs_rfid[rfid_index].sec_data));
 		return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid)*MMI_DQ_FS_RFID_MAX_NUM);
->>>>>>> six commit
 	}
 	return RET_FAIL;
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> six commit
 /*
 parameter: 
 	none
@@ -1089,16 +668,6 @@ return :
 RET_VAL mmi_dq_fs_clr_rfid(void)
 {
 	unsigned char i = 0;
-<<<<<<< HEAD
-
-	for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
-	{
-		g_dq_fs_rfid[i].flag = FDS_USE_TYPE_INVALID;
-		g_dq_fs_rfid[i].index = 0xFF;
-		memset(g_dq_fs_rfid[i].sec_data, 0xFF, sizeof(g_dq_fs_rfid[i].sec_data));
-	}
-	return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX_NUM);
-=======
 	
 	for(i=0;i<MMI_DQ_FS_RFID_MAX_NUM;i++)
 	{
@@ -1107,7 +676,6 @@ RET_VAL mmi_dq_fs_clr_rfid(void)
 		memset(g_dq_fs_rfid[i].sec_data,0xFF,sizeof(g_dq_fs_rfid[i].sec_data));
 	}
 	return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid)*MMI_DQ_FS_RFID_MAX_NUM);
->>>>>>> six commit
 }
 
 #endif
@@ -1120,19 +688,12 @@ return :
 */
 RET_VAL mmi_dq_fs_set_open_mode(sys_open_mode mode)
 {
-<<<<<<< HEAD
-	if (g_dq_fs_init_set.open_mode == mode)
-=======
 	if(g_dq_fs_init_set.open_mode == mode)
->>>>>>> six commit
 		return RET_SUCESS;
 
 	g_dq_fs_init_set.open_mode = mode;
 	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-<<<<<<< HEAD
-=======
 	
->>>>>>> six commit
 }
 /*
 parameter: 
@@ -1153,20 +714,12 @@ return :
 */
 RET_VAL mmi_dq_fs_set_pro_sound(unsigned char flag)
 {
-<<<<<<< HEAD
-	if (g_dq_fs_init_set.open_pro_sound == flag)
-		return RET_SUCESS;
-
-	g_dq_fs_init_set.open_pro_sound = flag;
-	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-=======
 	if(g_dq_fs_init_set.open_pro_sound == flag)
 		return RET_SUCESS;
 	
 	g_dq_fs_init_set.open_pro_sound = flag;
 	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
 
->>>>>>> six commit
 }
 
 /*
@@ -1211,11 +764,7 @@ return :
 */
 RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag)
 {
-<<<<<<< HEAD
-	g_dq_fs_init_set.factory_flag = flag;
-=======
 	g_dq_fs_init_set.factory_flag= flag;
->>>>>>> six commit
 	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
 }
 
@@ -1276,8 +825,6 @@ unsigned char mmi_dq_fs_get_wifi_setting(void)
 	return g_dq_fs_init_set.wifi_flag;
 }
 
-<<<<<<< HEAD
-=======
 
 
 
@@ -1304,5 +851,4 @@ unsigned char mmi_dq_fs_get_wifi_setting(void)
 
 
 
->>>>>>> six commit
 #endif

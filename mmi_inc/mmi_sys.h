@@ -9,10 +9,7 @@ typedef enum
 	SYS_OPEN_BY_PASSWORD = 0x01,
 	SYS_OPEN_BY_FP = 0x02,
 	SYS_OPEN_BY_RFID = 0x04,
-<<<<<<< HEAD
-=======
 	SYS_OPEN_BY_WIFI = 0x08,
->>>>>>> six commit
 }sys_open_type;
 
 typedef enum
@@ -71,8 +68,6 @@ return :
 void mmi_dq_sys_door_open(sys_open_type type);
 
 /*
-<<<<<<< HEAD
-=======
 function: 
 parameter: 
 	none
@@ -91,7 +86,6 @@ return :
 unsigned char mmi_dq_sys_door_state_check(void);
 
 /*
->>>>>>> six commit
 function: system wake up
 parameter: 
 	none
@@ -125,9 +119,6 @@ parameter:
 return :
 	none
 */
-<<<<<<< HEAD
-void mmi_dq_sys_set_wifi_check(void);
-=======
 void mmi_dq_sys_set_wifi_check(unsigned char type);
 
 /*
@@ -138,7 +129,6 @@ return :
 	none
 */
 unsigned char mmi_dq_sys_get_wifi_check_type(void);
->>>>>>> six commit
 
 /*
 function: 
@@ -217,8 +207,6 @@ return :
 */
 RET_VAL mmi_dq_sys_exe_menu_fun(unsigned char menu_id);
 
-<<<<<<< HEAD
-=======
 /*
 function: 
 parameter: 
@@ -244,7 +232,6 @@ return :
 	none
 */
 void mmi_dq_sys_add_admin_pwd(void);
->>>>>>> six commit
 
 //--------------------------------------------------------------------------------------------------------------------------------------------
 void mmi_dq_sys_add_pwd(void);
@@ -253,41 +240,26 @@ void mmi_dq_sys_del_pwd(void);
 void mmi_dq_sys_add_pwd_con(void);
 void mmi_dq_sys_del_pwd_con(void);
 
-<<<<<<< HEAD
-
-=======
 #ifdef __LOCK_FP_SUPPORT__
->>>>>>> six commit
 void mmi_dq_sys_add_fp(void);
 void mmi_dq_sys_del_fp(void);
 
 void mmi_dq_sys_add_fp_con(void);
 void mmi_dq_sys_del_fp_con(void);
-<<<<<<< HEAD
-
-
-=======
 #endif
 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
->>>>>>> six commit
 void mmi_dq_sys_add_rf(void);
 void mmi_dq_sys_del_rf(void);
 
 void mmi_dq_sys_add_rf_con(void);
 void mmi_dq_sys_del_rf_con(void);
-<<<<<<< HEAD
-
-void mmi_dq_sys_chg_admin_fp_No1(void);
-void mmi_dq_sys_chg_admin_fp_No2(void);
-=======
 #endif
 
 #ifdef __LOCK_FP_SUPPORT__
 void mmi_dq_sys_chg_admin_fp_No1(void);
 void mmi_dq_sys_chg_admin_fp_No2(void);
 #endif
->>>>>>> six commit
 void mmi_dq_sys_chg_admin_pwd(void);
 
 void mmi_dq_sys_restore_lock(void);

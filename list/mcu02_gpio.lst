@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/24/2021 17:19:04 PAGE 1   
-=======
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 17:42:56 PAGE 1   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 18:05:21 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_GPIO
@@ -66,11 +62,7 @@ line level    source
   50   3            }else if(gpio_mode == GPIO_MODE_IPU){
   51   3              TRISB |= gpio_pin;
   52   3                      REG_ADDR = PU_PB;
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/24/2021 17:19:04 PAGE 2   
-=======
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 17:42:56 PAGE 2   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 18:05:21 PAGE 2   
 
   53   3                    REG_DATA |= (gpio_pin);
   54   3            }else if(gpio_mode == GPIO_MODE_OUT){
@@ -134,11 +126,7 @@ line level    source
  112   3              TRISF |= gpio_pin;
  113   3                      REG_ADDR = PU_PF;
  114   3                    REG_DATA |= (gpio_pin);
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/24/2021 17:19:04 PAGE 3   
-=======
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 17:42:56 PAGE 3   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 18:05:21 PAGE 3   
 
  115   3            }else if(gpio_mode == GPIO_MODE_OUT){
  116   3              TRISF &= ~gpio_pin;
@@ -202,11 +190,7 @@ line level    source
  174   2          case GPIOF:
  175   2            DATAF |= gpio_pin;break;
  176   2          case GPIOG:
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/24/2021 17:19:04 PAGE 4   
-=======
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 17:42:56 PAGE 4   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 18:05:21 PAGE 4   
 
  177   2            DATAG |= gpio_pin;break;
  178   2          case GPIOH:
@@ -270,11 +254,7 @@ line level    source
  236   2          case GPIOF:
  237   2            value = DATAF & gpio_pin ? 1 : 0;break;
  238   2          case GPIOG:
-<<<<<<< HEAD
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/24/2021 17:19:04 PAGE 5   
-=======
-C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 17:42:56 PAGE 5   
->>>>>>> six commit
+C51 COMPILER V9.59.0.0   MCU02_GPIO                                                        02/25/2021 18:05:21 PAGE 5   
 
  239   2            value = DATAG & gpio_pin ? 1 : 0;break;
  240   2          case GPIOH:
