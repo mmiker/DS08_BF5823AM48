@@ -1,6 +1,7 @@
 #ifndef __MMI_FPC_C__
 #define __MMI_FPC_C__
 
+<<<<<<< HEAD
 #include "string.h"
 #include "mmi_fps.h"
 #include "mmi_feature.h"
@@ -10,6 +11,17 @@
 #ifdef __LOCK_FP_SUPPORT__
 unsigned char FP_oldStatus = 0;
 unsigned short waittime = 0;
+=======
+#include "mmi_feature.h"
+#ifdef __LOCK_FP_SUPPORT__
+#include "string.h"
+#include "mmi_fps.h"
+#include "dqiot_drv.h"
+#include "delay.h"
+
+unsigned char FP_oldStatus = 0;
+u16 waittime = 0;
+>>>>>>> six commit
 /*
 parameter: 
 	current status machine
@@ -41,6 +53,7 @@ return :
 void mmi_dq_fp_init(void)
 {
 	dqiot_drv_uart0B_init();
+<<<<<<< HEAD
 	delay_ms(300);
 	dqiot_drv_fp_poweron();
 
@@ -65,6 +78,20 @@ void mmi_dq_fp_init(void)
 		}
 	}
 #endif
+=======
+	dqiot_drv_fp_poweron();
+
+	waittime = 2000;
+	while (--waittime)
+	{
+		delay_ms(1);
+		if (FP_Get_Start_Flag() == 1)
+		{
+			FP_Light(FP_BLUE);
+			return;
+		}
+	}
+>>>>>>> six commit
 
 	return;
 }

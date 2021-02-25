@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/24/2021 17:19:07 PAGE 1   
+=======
+C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/25/2021 17:42:59 PAGE 1   
+>>>>>>> six commit
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_TRACEMODE
@@ -62,7 +66,11 @@ line level    source
                    SET_PE5_IO_IN; 
                 }
               
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/24/2021 17:19:07 PAGE 2   
+=======
+C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/25/2021 17:42:59 PAGE 2   
+>>>>>>> six commit
 
                 IIC_ADDR_SET(iic_slaveaddr);
                 IICSTAT = 0;
@@ -126,7 +134,11 @@ line level    source
                     if(g_ucTraceModeReadCnt & 0x01) 
                     {
                       tmp = baseline[g_ucTraceModeDateCnt]>>8;
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/24/2021 17:19:07 PAGE 3   
+=======
+C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/25/2021 17:42:59 PAGE 3   
+>>>>>>> six commit
 
                     }
                     else
@@ -190,7 +202,11 @@ line level    source
                    IICBUFFER = tmp;   
               #endif
                 }
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/24/2021 17:19:07 PAGE 4   
+=======
+C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/25/2021 17:42:59 PAGE 4   
+>>>>>>> six commit
 
               
               #if IIC_RD_SCL_SEL==0
@@ -254,7 +270,11 @@ line level    source
               
               #if IIC_RD_SCL_SEL
                     g_ucTraceModeReadCnt = 1;
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/24/2021 17:19:07 PAGE 5   
+=======
+C51 COMPILER V9.59.0.0   BYD_TRACEMODE                                                     02/25/2021 17:42:59 PAGE 5   
+>>>>>>> six commit
 
               #else
                     g_ucTraceModeReadCnt = 0;

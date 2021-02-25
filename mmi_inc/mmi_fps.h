@@ -2,6 +2,10 @@
 #define __MMI_FPS_H__
 
 #include "mmi_feature.h"
+<<<<<<< HEAD
+=======
+#ifdef __LOCK_FP_SUPPORT__
+>>>>>>> six commit
 #include "dqiot_fp_sy.h"
 #include "mcu02_sfr.h"
 
@@ -145,7 +149,11 @@ return :
 	none
 */
 unsigned char mmi_dq_fp_get_pin(void);
+<<<<<<< HEAD
 
+=======
+#endif
+>>>>>>> six commit
 
 #endif //__MMI_FPS_H__
 

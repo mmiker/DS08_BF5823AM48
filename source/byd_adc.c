@@ -158,7 +158,13 @@ unsigned char adc_VolT(void)
 	ADC_DISABLE();
 	temp = (float)adcx * (3.3 / 4095); //º∆À„µÁ—π
 
+<<<<<<< HEAD
 	if (temp < 1.5625)//<5v
+=======
+	if(temp < 1.25)
+		return 2;
+	else if (temp < 1.5625)//<5v
+>>>>>>> six commit
 		return 1;//mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
 
 	return 0;

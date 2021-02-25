@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 1   
+=======
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 1   
+>>>>>>> six commit
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +66,11 @@ line level    source
   51          //{
   52          //  send_data = 0;
   53          //}
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 2   
+=======
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 2   
+>>>>>>> six commit
 
   54          
   55          //unsigned char fp_GetModeState(void)
@@ -92,8 +100,13 @@ line level    source
   79          //}
   80          
   81          /**
+<<<<<<< HEAD
   82            * @brief  AS608_USART¥Æø⁄œÚ÷∏Œ∆ƒ£øÈ¥´µ› ˝æ› 
   83            * @param  data;¥´ ‰µƒ ˝æ›
+=======
+  82            * @brief  AS608_USART‰∏≤Âè£ÂêëÊåáÁ∫πÊ®°Âùó‰º†ÈÄíÊï∞Êç? 
+  83            * @param  data;‰º†ËæìÁöÑÊï∞Êç?
+>>>>>>> six commit
   84            */
   85          void AS608_SendData(unsigned char send_data)
   86          {
@@ -101,8 +114,13 @@ line level    source
   88   1      }
   89          
   90          /**
+<<<<<<< HEAD
   91            * @brief  AS608_USART¥Æø⁄œÚ÷∏Œ∆ƒ£øÈ√¸¡Ó∞¸Õ∑∏Ò Ω 
   92            * @param  Œﬁ
+=======
+  91            * @brief  AS608_USART‰∏≤Âè£ÂêëÊåáÁ∫πÊ®°ÂùóÂëΩ‰ª§ÂåÖÂ§¥Ê†ºÂº? 
+  92            * @param  Êó?
+>>>>>>> six commit
   93            */
   94          unsigned char AS608_PackHead(void)
   95          {
@@ -123,6 +141,7 @@ line level    source
  110   1        //  ps_start_flag = 2;
  111   1        //}
  112   1      
+<<<<<<< HEAD
  113   1        /*∞¸Õ∑ SendHead*/
  114   1        AS608_SendData(0xEF);
  115   1        AS608_SendData(0x01);
@@ -130,6 +149,15 @@ line level    source
 
  116   1      
  117   1        /*÷∏Œ∆ƒ£øÈµÿ÷∑ SendAddr*/
+=======
+ 113   1        /*ÂåÖÂ§¥*/
+ 114   1        AS608_SendData(0xEF);
+ 115   1        AS608_SendData(0x01);
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 3   
+
+ 116   1      
+ 117   1        /*ÊåáÁ∫πÊ®°ÂùóÂú∞ÂùÄ*/
+>>>>>>> six commit
  118   1        AS608_SendData(AS608_Addr >> 24);
  119   1        AS608_SendData(AS608_Addr >> 16);
  120   1        AS608_SendData(AS608_Addr >> 8);
@@ -141,11 +169,19 @@ line level    source
  126          unsigned char AS608_PackHead2(void)
  127          {
  128   1      
+<<<<<<< HEAD
  129   1        /*∞¸Õ∑ SendHead*/
  130   1        AS608_SendData(0xEF);
  131   1        AS608_SendData(0x01);
  132   1      
  133   1        /*÷∏Œ∆ƒ£øÈµÿ÷∑*/
+=======
+ 129   1        /*ÂåÖÂ§¥*/
+ 130   1        AS608_SendData(0xEF);
+ 131   1        AS608_SendData(0x01);
+ 132   1      
+ 133   1        /*ÊåáÁ∫πÊ®°ÂùóÂú∞ÂùÄ*/
+>>>>>>> six commit
  134   1        AS608_SendData(AS608_Addr >> 24);
  135   1        AS608_SendData(AS608_Addr >> 16);
  136   1        AS608_SendData(AS608_Addr >> 8);
@@ -155,9 +191,15 @@ line level    source
  140   1      }
  141          
  142          /**
+<<<<<<< HEAD
  143            * @brief  ∑¢ÀÕ∞¸±Í ∂
  144            * @param  flag:∞¸±Í±Í÷æ
  145            * @retval Œﬁ
+=======
+ 143            * @brief  ÂèëÈÄÅÂåÖÊ†áËØÜ
+ 144            * @param  flag:ÂåÖÊ†áËØÜ‰Ωç
+ 145            * @retval Êó?
+>>>>>>> six commit
  146            */
  147          void SendFlag(unsigned char flag)
  148          {
@@ -165,9 +207,15 @@ line level    source
  150   1      }
  151          
  152          /**
+<<<<<<< HEAD
  153            * @brief  ∑¢ÀÕ∞¸≥§∂»
  154            * @param  length:∞¸≥§∂»
  155            * @retval Œﬁ
+=======
+ 153            * @brief  ÂèëÈÄÅÂåÖÈïøÂ∫¶
+ 154            * @param  length:ÂåÖÈïøÂ∫?
+ 155            * @retval Êó?
+>>>>>>> six commit
  156            */
  157          void SendLength(unsigned short length)
  158          {
@@ -176,9 +224,15 @@ line level    source
  161   1      }
  162          
  163          /**
+<<<<<<< HEAD
  164            * @brief  ∑¢ÀÕ÷∏¡Ó¬Î
  165            * @param  cmd;÷∏¡Ó¬Î
  166            * @retval Œﬁ
+=======
+ 164            * @brief  ÂèëÈÄÅÊåá‰ª§Á†Å
+ 165            * @param  cmd;Êåá‰ª§Á†?
+ 166            * @retval Êó?
+>>>>>>> six commit
  167            */
  168          void Sendcmd(unsigned char cmd)
  169          {
@@ -186,11 +240,19 @@ line level    source
  171   1      }
  172          
  173          /**
+<<<<<<< HEAD
  174            * @brief  ∑¢ÀÕ–£—È∫Õ
  175            * @param  check:ºÏ≤ÈŒª
  176            * @retval Œﬁ
  177            */
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 4   
+=======
+ 174            * @brief  ÂèëÈÄÅÊ†°È™åÂíå
+ 175            * @param  check:Ê£ÄÊü•‰Ωç
+ 176            * @retval Êó?
+ 177            */
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 4   
+>>>>>>> six commit
 
  178          void SendCheck(unsigned short check)
  179          {
@@ -199,11 +261,19 @@ line level    source
  182   1      }
  183          
  184          /**
+<<<<<<< HEAD
  185            * @brief  ≈–∂œ÷–∂œΩ” ’µƒ ˝◊È”–√ª”–”¶¥∞¸
  186            * @param  
  187            * waittimeŒ™µ»¥˝÷–∂œΩ” ’ ˝æ›µƒ ±º‰(µ•Œª1ms)
  188            * lengthŒ™∞¸≥§∂»
  189            * @return  ˝æ›∞¸»∑»œ¬Î
+=======
+ 185            * @brief  Âà§Êñ≠‰∏?Êñ?Êé•Êî∂ÁöÑÊï∞ÁªÑÊúâÊ≤°ÊúâÂ∫îÁ≠îÂå?
+ 186            * @param  
+ 187            * waittime‰∏∫Á≠âÂæÖ‰∏≠Êñ?Êé•Êî∂Êï∞ÊçÆÁöÑÊó∂Èó?(Âçï‰Ωç1ms)
+ 188            * length‰∏∫ÂåÖÈïøÂ∫¶
+ 189            * @return Êï∞ÊçÆÂåÖÁ°ÆËÆ§Á†Å
+>>>>>>> six commit
  190            * @note   1 failed
  191            * @see    none
  192            */
@@ -224,17 +294,28 @@ line level    source
  207   1        {
  208   2          delay_ms(1);
  209   2      
+<<<<<<< HEAD
  210   2          /* Ω” ’µΩ“ª¥Œ ˝æ› */
  211   2          if (uart_getbuflen >= 9 + length)
  212   2          {
  213   3            /* —∞’“0xEFŒª÷√ */
+=======
+ 210   2          /* Êé•Êî∂Âà∞‰∏ÄÊ¨°Êï∞Êç? */
+ 211   2          if (uart_getbuflen >= 9 + length)
+ 212   2          {
+ 213   3            /* ÂØªÊâæ0xEF‰ΩçÁΩÆ */
+>>>>>>> six commit
  214   3            for (i = 0; i < uart_getbuflen; i++)
  215   3            {
  216   4              if (uart_get_buf[i] == 0xEF)
  217   4                break;
  218   4            }
  219   3      
+<<<<<<< HEAD
  220   3            /* ≈–∂œ «∑ÒŒ™”¶¥∞¸ */
+=======
+ 220   3            /* Âà§Êñ≠Êò?Âê¶‰∏∫Â∫îÁ≠îÂå? */
+>>>>>>> six commit
  221   3            if (uart_get_buf[i] == 0xEF && uart_get_buf[i + 1] == 0x01 && uart_get_buf[i + 6] == 0x07 && ((uart_get
              -_buf[i + 7] << 8) + uart_get_buf[i + 8]) == length)
  222   3            {
@@ -243,9 +324,15 @@ line level    source
  225   5                uart_rec_buff[j] = uart_get_buf[i];
  226   5                j++;
  227   5              }
+<<<<<<< HEAD
  228   4              getdata = uart_rec_buff[9]; //»∑»œ¬Î
  229   4      
  230   4              /* «Âø’ª∫¥Ê */
+=======
+ 228   4              getdata = uart_rec_buff[9]; //Á°?ËÆ§Á†Å
+ 229   4      
+ 230   4              /* Ê∏ÖÁ©∫ÁºìÂ≠ò */
+>>>>>>> six commit
  231   4              uart_getbuflen = 0;
  232   4      
  233   4              return getdata;
@@ -254,15 +341,25 @@ line level    source
  236   2        }
  237   1      
  238   1        return 1;
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 5   
+=======
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 5   
+>>>>>>> six commit
 
  239   1      }
  240          
  241          #if 0
               /**
+<<<<<<< HEAD
                 * @brief  ¥”ª∫≥Â«¯∂¡≥ˆ»∑»œ¬Î
                 * @param  *i:∑µªÿ÷µ£®»∑»œ¬Î£©
                 * @retval Œﬁ
+=======
+                * @brief  ‰ªéÁºìÂÜ≤Âå∫ËØªÂá∫Á°?ËÆ§Á†Å
+                * @param  *i:ËøîÂõûÂÄºÔºàÁ°?ËÆ§Á†ÅÔº?
+                * @retval Êó?
+>>>>>>> six commit
                 */
               unsigned char  ReturnFlag( unsigned char *i)
               { 
@@ -306,6 +403,7 @@ line level    source
  286          
  287          unsigned char PS_GetEcho(void)
  288          {
+<<<<<<< HEAD
  289   1        unsigned char sure; //,p=0;
  290   1      
  291   1        AS608_PackHead2();
@@ -569,13 +667,233 @@ line level    source
                 * @brief  ºÏ≤ÈSTM32”Î÷∏Œ∆ƒ£øÈµƒÕ®–≈¡¨Ω”
                 * @param  PS_Addr÷∏Œ∆ƒ£øÈµÿ÷∑
                 * @retval ∑µªÿ÷µ0Õ®—∂≥…π¶;1±Ì æÕ®—∂≤ª≥…π¶
+=======
+ 289   1        AS608_PackHead2();
+ 290   1        SendFlag(0x01);
+ 291   1        SendLength(0x03);
+ 292   1        Sendcmd(0x53); /*ÁîüÊàêÁâπÂæÅÊåá‰ª§*/
+ 293   1        SendCheck(0x57);
+ 294   1      
+ 295   1        //sure=ReturnFlag(&p);
+ 296   1        return JudgeStr(1000, 0x03);
+ 297   1      }
+ 298          
+ 299          //ÂΩïÂÖ•ÂõæÂÉè PS_GetImage
+ 300          //ÂäüËÉΩ:Êé¢ÊµãÊâãÊåáÔºåÊé¢ÊµãÂà∞ÂêéÂΩïÂÖ•ÊåáÁ∫πÂõæÂÉèÂ≠ò‰∫éImageBuffer„Ä?
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 6   
+
+ 301          //Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 302          unsigned char PS_GetImage(void)
+ 303          {
+ 304   1        uart_getbuflen = 0;
+ 305   1        //delay_ms(300);
+ 306   1        if (AS608_PackHead() == 1)
+ 307   1          return 0xFF;
+ 308   1        SendFlag(0x01); /*ÂëΩ‰ª§ÂåÖÊ†áËØ?*/
+ 309   1        SendLength(0x03);
+ 310   1        Sendcmd(0x01); /*ÂΩïÊåáÁ∫πÊåá‰ª?*/
+ 311   1        SendCheck(0x01 + 0x03 + 0x01);
+ 312   1      
+ 313   1        //nrf_delay_ms(50);        /*Á≠âÂæÖÊåáÁ∫πËØÜÂà´Ê®°ÂùóÂ§ÑÁêÜÊï∞ÊçÆ*/
+ 314   1      
+ 315   1        // sure = ReturnFlag(&p);
+ 316   1        return JudgeStr(1000, 0x03);
+ 317   1      }
+ 318          
+ 319          //ÁîüÊàêÁâπÂæÅ PS_GenChar
+ 320          //ÂäüËÉΩ:Â∞ÜImageBuffer‰∏?ÁöÑÂéüÂßãÂõæÂÉèÁîüÊàêÊåáÁ∫πÁâπÂæÅÊñá‰ª∂Â≠ò‰∫éCharBuffer1ÊàñCharBuffer2
+ 321          //ÂèÇÊï∞:BufferID --> charBuffer1:0x01  charBuffer1:0x02
+ 322          //Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 323          unsigned char PS_GenChar(unsigned char BufferID)
+ 324          {
+ 325   1        if (AS608_PackHead() == 1)
+ 326   1          return 0xFF;
+ 327   1        SendFlag(0x01);
+ 328   1        SendLength(0x04);
+ 329   1        Sendcmd(0x02); /*ÁîüÊàêÁâπÂæÅÊåá‰ª§*/
+ 330   1        AS608_SendData(BufferID);
+ 331   1        SendCheck(0x01 + 0x04 + 0x02 + BufferID);
+ 332   1        return JudgeStr(1000, 0x03);
+ 333   1      }
+ 334          
+ 335          //Á≤æÁ°ÆÊØîÂ?π‰∏§ÊûöÊåáÁ∫πÁâπÂæ? PS_Match
+ 336          //ÂäüËÉΩ:Á≤æÁ°ÆÊØîÂ?πCharBuffer1 ‰∏éCharBuffer2 ‰∏?ÁöÑÁâπÂæÅÊñá‰ª?
+ 337          //Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 338          unsigned char PS_Match(void)
+ 339          {
+ 340   1        if (AS608_PackHead() == 1)
+ 341   1          return 0xFF;
+ 342   1        SendFlag(0x01);
+ 343   1        SendLength(0x03);
+ 344   1        Sendcmd(0x03); /*Á≤æÁ°ÆÊØîÂ?πÊåá‰ª?*/
+ 345   1        SendCheck(0x01 + 0x03 + 0x03);
+ 346   1      
+ 347   1        // sure = ReturnFlag(&p);
+ 348   1        return JudgeStr(1000, 0x05);
+ 349   1      }
+ 350          //ÊêúÁ¥¢ÊåáÁ∫π PS_Search
+ 351          //ÂäüËÉΩ:‰ª?CharBuffer1ÊàñCharBuffer2‰∏?ÁöÑÁâπÂæÅÊñá‰ª∂ÊêúÁ¥¢Êï¥‰∏?ÊàñÈÉ®ÂàÜÊåáÁ∫πÂ∫ì.Ëã•ÊêúÁ¥¢Âà∞ÔºåÂàôËø
+             -îÂõûÈ°µÁ†Å„Ä?
+ 352          //ÂèÇÊï∞:  BufferID @ref CharBuffer1  CharBuffer2
+ 353          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠óÔºåÈ°µÁ†ÅÔºàÁõ∏ÈÖçÊåáÁ∫πÊ®°ÊùøÔº?
+ 354          unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned
+             - short *p)
+ 355          {
+ 356   1      
+ 357   1        unsigned char sure;
+ 358   1        if (AS608_PackHead() == 1)
+ 359   1          return 0xFF;
+ 360   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 7   
+
+ 361   1        SendLength(0x08);
+ 362   1        Sendcmd(0x04);
+ 363   1        AS608_SendData(BufferID);
+ 364   1        AS608_SendData(StartPage >> 8);
+ 365   1        AS608_SendData(StartPage);
+ 366   1        AS608_SendData(PageNum >> 8);
+ 367   1        AS608_SendData(PageNum);
+ 368   1        SendCheck(0x01 + 0x08 + 0x04 + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + 
+             -(unsigned char)PageNum);
+ 369   1        *p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
+ 370   1        return sure;
+ 371   1      }
+ 372          
+ 373          //ÂêàÂπ∂ÁâπÂæÅÔºàÁîüÊàêÊ®°ÊùøÔºâPS_RegModel
+ 374          //ÂäüËÉΩ:Â∞ÜCharBuffer1‰∏éCharBuffer2‰∏?ÁöÑÁâπÂæÅÊñá‰ª∂ÂêàÂπ∂ÁîüÊà? Ê®°Êùø,ÁªìÊûúÂ≠ò‰∫éCharBuffer1‰∏éCharB
+             -uffer2
+ 375          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 376          unsigned char PS_RegModel(void)
+ 377          {
+ 378   1        if (AS608_PackHead() == 1)
+ 379   1          return 0xFF;
+ 380   1        SendFlag(0x01);
+ 381   1        SendLength(0x03);
+ 382   1        Sendcmd(0x05); /*ÂêàÂπ∂ÁâπÂæÅÊåá‰ª§*/
+ 383   1        SendCheck(0x01 + 0x03 + 0x05);
+ 384   1      
+ 385   1        // sure = ReturnFlag(&p);
+ 386   1        return JudgeStr(1000, 0x03);
+ 387   1      }
+ 388          
+ 389          //ÂÇ®Â≠òÊ®°Êùø PS_StoreChar
+ 390          //ÂäüËÉΩ:Â∞? CharBuffer1 Êà? CharBuffer2 ‰∏?ÁöÑÊ®°ÊùøÊñá‰ª∂Â≠òÂà? PageID Âè∑flashÊï∞ÊçÆÂ∫ì‰ΩçÁΩ?„Ä?
+ 391          //ÂèÇÊï∞:  BufferID @ref charBuffer1:0x01 charBuffer1:0x02
+ 392          //       PageIDÔºàÊåáÁ∫πÂ∫ì‰ΩçÁΩÆÂè∑Ôºâ
+ 393          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 394          unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
+ 395          {
+ 396   1        unsigned short;
+ 397   1      
+ 398   1        if (AS608_PackHead() == 1)
+ 399   1          return 0xFF;
+ 400   1        SendFlag(0x01);
+ 401   1        SendLength(0x06);
+ 402   1        Sendcmd(0x06); /*Â≠òÂÇ®Ê®°ÊùøÊåá‰ª§*/
+ 403   1        AS608_SendData(BufferID);
+ 404   1        AS608_SendData(PageID >> 8);
+ 405   1        AS608_SendData(PageID);
+ 406   1        SendCheck(0x01 + 0x06 + 0x06 + BufferID + (PageID >> 8) + (unsigned char)PageID);
+ 407   1      
+ 408   1        // sure = ReturnFlag(&p);
+ 409   1        return JudgeStr(1000, 0x03);
+ 410   1      }
+ 411          
+ 412          //Âà†Èô§Ê®°Êùø PS_DeletChar
+ 413          //ÂäüËÉΩ:  Âà†Èô§flashÊï∞ÊçÆÂ∫ì‰∏≠ÊåáÂÆöIDÂè∑ÂºÄÂßãÁöÑN‰∏?ÊåáÁ∫πÊ®°Êùø
+ 414          //ÂèÇÊï∞:  PageID(ÊåáÁ∫πÂ∫ìÊ®°ÊùøÂè∑)ÔºåNÂà†Èô§ÁöÑÊ®°Êùø‰∏™Êï∞„Ä?
+ 415          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 416          unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
+ 417          {
+ 418   1        unsigned char sure; //,p=0;
+ 419   1      
+ 420   1        if (AS608_PackHead() == 1)
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 8   
+
+ 421   1          return 0xFF;
+ 422   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 423   1        SendLength(0x07);
+ 424   1        Sendcmd(0x0C); /*Âà†Èô§ÊåáÂÆöÊåáÁ∫πÊ®°ÊùøÊåá‰ª§*/
+ 425   1        AS608_SendData(PageID >> 8);
+ 426   1        AS608_SendData(PageID);
+ 427   1        AS608_SendData(N >> 8);
+ 428   1        AS608_SendData(N);
+ 429   1        SendCheck(0x01 + 0x07 + 0x0C + (PageID >> 8) + (unsigned char)PageID + (N >> 8) + (unsigned char)N);
+ 430   1      
+ 431   1        //AS608_DELAY_MS(400);
+ 432   1      
+ 433   1        // sure = ReturnFlag(&p);
+ 434   1        return JudgeStr(1000, 0x03);
+ 435   1      }
+*** WARNING C280 IN LINE 418 OF source\dqiot_fp_sy.c: 'sure': unreferenced local variable
+ 436          
+ 437          //È´òÈÄüÊêúÁ¥?PS_HighSpeedSearch
+ 438          //ÂäüËÉΩÔºö‰ª• CharBuffer1ÊàñCharBuffer2‰∏?ÁöÑÁâπÂæÅÊñá‰ª∂È´òÈÄüÊêúÁ¥¢Êï¥‰∏?ÊàñÈÉ®ÂàÜÊåáÁ∫πÂ∫ì„Ä?
+ 439          //      Ëã•ÊêúÁ¥¢Âà∞ÔºåÂàôËøîÂõûÈ°µÁ†Å,ËØ•Êåá‰ª§Â?π‰∫éÁöÑÁ°ÆÂ≠òÂú®‰∫éÊåáÁ∫πÂ∫ì‰∏? Ôºå‰∏îÁôªÂΩïÊó∂Ë¥®Èá?
+ 440          //      ÂæàÂ•ΩÁöÑÊåáÁ∫πÔºå‰ºöÂæàÂø?ÁªôÂá∫ÊêúÁ¥¢ÁªìÊûú„Ä?
+ 441          //ÂèÇÊï∞:  BufferIDÔº? StartPage(Ëµ∑Â?ãÈ°µ)ÔºåPageNumÔºàÈ°µÊï∞Ôºâ
+ 442          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó+È°µÁ†ÅÔºàÁõ∏ÈÖçÊåáÁ∫πÊ®°ÊùøÔºâ
+ 443          unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum,
+             - unsigned short *p)
+ 444          {
+ 445   1        unsigned char ensure;
+ 446   1      
+ 447   1        if (AS608_PackHead() == 1)
+ 448   1          return 0xFF;
+ 449   1        SendFlag(0x01);
+ 450   1        SendLength(0x08);
+ 451   1        Sendcmd(0x1b); /*È´òÈÄüÊêúÁ¥¢ÊåáÁ∫πÂ∫ìÊåá‰ª§*/
+ 452   1        AS608_SendData(BufferID);
+ 453   1        AS608_SendData(StartPage >> 8);
+ 454   1        AS608_SendData(StartPage);
+ 455   1        AS608_SendData(PageNum >> 8);
+ 456   1        AS608_SendData(PageNum);
+ 457   1        SendCheck(0x01 + 0x08 + 0x1b + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + 
+             -(unsigned char)PageNum);
+ 458   1      
+ 459   1        // ensure = ReturnFlag(&rc);
+ 460   1        ensure = JudgeStr(1000, 0x07);
+ 461   1      
+ 462   1        *p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
+ 463   1      
+ 464   1        return ensure;
+ 465   1      }
+ 466          
+ 467          //Ê∏ÖÁ©∫ÊåáÁ∫πÂ∫? PS_Empty
+ 468          //ÂäüËÉΩ:  Âà†Èô§flashÊï∞ÊçÆÂ∫ì‰∏≠ÊâÄÊúâÊåáÁ∫πÊ®°Êù?
+ 469          //ÂèÇÊï∞:  Êó?
+ 470          //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+ 471          unsigned char PS_Empty(void)
+ 472          {
+ 473   1        if (AS608_PackHead() == 1)
+ 474   1          return 0xFF;
+ 475   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 476   1        SendLength(0x03);
+ 477   1        Sendcmd(0x0D);
+ 478   1        SendCheck(0x01 + 0x03 + 0x0D);
+ 479   1      
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 9   
+
+ 480   1        // sure = ReturnFlag(&p);
+ 481   1        return JudgeStr(1000, 0x03);
+ 482   1      }
+ 483          
+ 484          #if 0
+              /**
+                * @brief  Ê£ÄÊü?STM32‰∏éÊåáÁ∫πÊ®°ÂùóÁöÑÈÄö‰ø°ËøûÊé•
+                * @param  PS_AddrÊåáÁ∫πÊ®°ÂùóÂú∞ÂùÄ
+                * @retval ËøîÂõûÂÄ?0ÈÄöË??ÊàêÂäü;1Ë°®Á§∫ÈÄöË??‰∏çÊàêÂä?
+>>>>>>> six commit
                 */
               unsigned char PS_Connect(unsigned long *PS_Addr)
               {
                 PS_Addr = 0;
                 if(AS608_PackHead()==1)
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 10  
 
+=======
+>>>>>>> six commit
                   return 0xFF;
                 AS608_SendData(0X01);
                 AS608_SendData(0X00);
@@ -583,10 +901,17 @@ line level    source
                 return 1;   
               }
               
+<<<<<<< HEAD
               //–¥œµÕ≥ºƒ¥Ê∆˜ PS_WriteReg
               //π¶ƒ‹:  –¥ƒ£øÈºƒ¥Ê∆˜
               //≤Œ ˝:  ºƒ¥Ê∆˜–Ú∫≈RegNum:4\5\6
               //Àµ√˜:  ƒ£øÈ∑µªÿ»∑»œ◊÷
+=======
+              //ÂÜôÁ≥ªÁªüÂØÑÂ≠òÂô® PS_WriteReg
+              //ÂäüËÉΩ:  ÂÜôÊ®°ÂùóÂØÑÂ≠òÂô®
+              //ÂèÇÊï∞:  ÂØÑÂ≠òÂô®Â∫èÂè∑RegNum:4\5\6
+              //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+>>>>>>> six commit
               unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
               {
                 unsigned short temp;
@@ -594,7 +919,11 @@ line level    source
               
                 if(AS608_PackHead()==1)
                   return 0xFF;
+<<<<<<< HEAD
                 SendFlag(0x01);//√¸¡Ó∞¸±Í ∂
+=======
+                SendFlag(0x01);//ÈçõÊàíÊä§ÈçñÂë?Áà£Áíá
+>>>>>>> six commit
                 SendLength(0x05);
                 Sendcmd(0x0E);
                 AS608_SendData(RegNum);
@@ -604,6 +933,7 @@ line level    source
                 sure=ReturnFlag(&p);
                 return sure;
               }
+<<<<<<< HEAD
               /**
                 * @brief  ∂¡œµÕ≥ª˘±æ≤Œ ˝ PS_ReadSysPara
                 * @param  Œﬁ
@@ -611,6 +941,12 @@ line level    source
                 * @note   ∂¡»°ƒ£øÈµƒª˘±æ≤Œ ˝£®≤®Ãÿ¬ £¨∞¸¥Û–°µ»)
                 * @see    none
                 */
+=======
+              //ËØªÁ≥ªÁªüÂü∫Êú?ÂèÇÊï∞ PS_ReadSysPara
+              //ÂäüËÉΩ:  ËØªÂèñÊ®°ÂùóÁöÑÂü∫Êú?ÂèÇÊï∞ÔºàÊ≥¢ÁâπÁéáÔºåÂåÖÂ§ßÂ∞èÁ≠?)
+              //ÂèÇÊï∞:  Êó?
+              //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó + Âü∫Êú¨ÂèÇÊï∞Ôº?16bytesÔº?
+>>>>>>> six commit
               unsigned char PS_ReadSysPara(void)
               {
                 unsigned short temp;
@@ -620,13 +956,22 @@ line level    source
                 
                 if(AS608_PackHead()==1)
                   return 0xFF;
+<<<<<<< HEAD
                 SendFlag(0x01);//√¸¡Ó∞¸±Í ∂
+=======
+                SendFlag(0x01);//ÈçõÊàíÊä§ÈçñÂë?Áà£Áíá
+>>>>>>> six commit
                 SendLength(0x03);
                 Sendcmd(0x0F);
                 temp = 0x01+0x03+0x0F;
                 SendCheck(temp);
                 ensure=ReturnFlag(&p);
                 if(send_data)
+<<<<<<< HEAD
+=======
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 10  
+
+>>>>>>> six commit
                 {
               
                 }   
@@ -638,12 +983,19 @@ line level    source
                 }
                 return ensure;
               }
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 11  
 
               //…Ë÷√ƒ£øÈµÿ÷∑ PS_SetAddr
               //π¶ƒ‹:  …Ë÷√ƒ£øÈµÿ÷∑
               //≤Œ ˝:  PS_addr
               //Àµ√˜:  ƒ£øÈ∑µªÿ»∑»œ◊÷
+=======
+              //ËÆæÁΩÆÊ®°ÂùóÂú∞ÂùÄ PS_SetAddr
+              //ÂäüËÉΩ:  ËÆæÁΩÆÊ®°ÂùóÂú∞ÂùÄ
+              //ÂèÇÊï∞:  PS_addr
+              //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+>>>>>>> six commit
               unsigned char PS_SetAddr(unsigned long PS_addr)
               {
                 unsigned short temp;
@@ -651,7 +1003,11 @@ line level    source
               
                 if(AS608_PackHead()==1)
                   return 0xFF;
+<<<<<<< HEAD
                 SendFlag(0x01);//√¸¡Ó∞¸±Í ∂
+=======
+                SendFlag(0x01);//ÂëΩ‰ª§ÂåÖÊ†áËØ?
+>>>>>>> six commit
                 SendLength(0x07);
                 Sendcmd(0x15);
                 AS608_SendData(PS_addr>>24);
@@ -665,10 +1021,17 @@ line level    source
               
                 return ensure;
               }
+<<<<<<< HEAD
               //π¶ƒ‹£∫ ƒ£øÈƒ⁄≤øŒ™”√ªßø™±Ÿ¡À256bytesµƒFLASHø’º‰”√”⁄¥Ê”√ªßº« ¬±æ,
               //  ∏√º« ¬±æ¬ﬂº≠…œ±ª∑÷≥… 16 ∏ˆ“≥°£
               //≤Œ ˝:  NotePageNum(0~15),Byte32(“™–¥»Îƒ⁄»›£¨32∏ˆ◊÷Ω⁄)
               //Àµ√˜:  ƒ£øÈ∑µªÿ»∑»œ◊÷
+=======
+              //ÂäüËÉΩÔº? Ê®°ÂùóÂÜÖÈÉ®‰∏∫Áî®Êà∑ÂºÄËæü‰∫Ü256bytesÁöÑFLASHÁ©∫Èó¥Áî®‰∫éÂ≠òÁî®Êà∑Ë?∞‰∫ãÊú?,
+              //  ËØ•Ë?∞‰∫ãÊú?ÈÄªËæë‰∏äË??ÂàÜÊàê 16 ‰∏?È°µ„Ä?
+              //ÂèÇÊï∞:  NotePageNum(0~15),Byte32(Ë¶ÅÂÜôÂÖ•ÂÜÖÂÆπÔºå32‰∏?Â≠óËäÇ)
+              //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó
+>>>>>>> six commit
               unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
               {
                 unsigned short temp;
@@ -678,7 +1041,11 @@ line level    source
                 
                 if(AS608_PackHead()==1)
                   return 0xFF;
+<<<<<<< HEAD
                 SendFlag(0x01); //√¸¡Ó∞¸±Í ∂
+=======
+                SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+>>>>>>> six commit
                 SendLength(36);
                 Sendcmd(0x18);
                 AS608_SendData(NotePageNum);
@@ -691,23 +1058,40 @@ line level    source
                 SendCheck(temp);
               
                 return ensure;
+<<<<<<< HEAD
               }
               //∂¡º« ¬PS_ReadNotepad
               //π¶ƒ‹£∫  ∂¡»°FLASH”√ªß«¯µƒ128bytes ˝æ›
               //≤Œ ˝:  NotePageNum(0~15)
               //Àµ√˜:  ƒ£øÈ∑µªÿ»∑»œ◊÷+”√ªß–≈œ¢
+=======
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 11  
+
+              }
+              //ËØªË?∞‰∫ãPS_ReadNotepad
+              //ÂäüËÉΩÔº?  ËØªÂèñFLASHÁî®Êà∑Âå∫ÁöÑ128bytesÊï∞ÊçÆ
+              //ÂèÇÊï∞:  NotePageNum(0~15)
+              //ËØ¥Êòé:  Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó+Áî®Êà∑‰ø°ÊÅØ
+>>>>>>> six commit
               unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
               {
                 unsigned short temp;
                 unsigned char  ensure;
                 
                 *Byte32 = 0;
+<<<<<<< HEAD
 C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/24/2021 17:18:59 PAGE 12  
 
                 
                 if(AS608_PackHead()==1)
                   return 0xFF;
                 SendFlag(0x01);//√¸¡Ó∞¸±Í ∂
+=======
+                
+                if(AS608_PackHead()==1)
+                  return 0xFF;
+                SendFlag(0x01);//ÂëΩ‰ª§ÂåÖÊ†áËØ?
+>>>>>>> six commit
                 SendLength(0x04);
                 Sendcmd(0x19);
                 AS608_SendData(NotePageNum);
@@ -717,6 +1101,7 @@ line level    source
                 return ensure;
               }
               #endif
+<<<<<<< HEAD
  683          
  684          //∂¡”––ßƒ£∞Â∏ˆ ˝ PS_ValidTempleteNum
  685          //π¶ƒ‹£∫∂¡”––ßƒ£∞Â∏ˆ ˝
@@ -920,6 +1305,219 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   1873    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     25      56
+=======
+ 628          
+ 629          //ËØªÊúâÊïàÊ®°Êùø‰∏™Êï? PS_ValidTempleteNum
+ 630          //ÂäüËÉΩÔºöË?ªÊúâÊïàÊ®°Êùø‰∏™Êï?
+ 631          //ÂèÇÊï∞: Êó?
+ 632          //ËØ¥Êòé: Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó+ÊúâÊïàÊ®°Êùø‰∏?Êï∞ValidN
+ 633          unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
+ 634          {
+ 635   1        unsigned char ensure;
+ 636   1      
+ 637   1        if (AS608_PackHead() == 1)
+ 638   1          return 0xFF;
+ 639   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 640   1        SendLength(0x03);
+ 641   1        Sendcmd(0x1d);
+ 642   1        SendCheck(0x01 + 0x03 + 0x1d);
+ 643   1      
+ 644   1        // ensure = ReturnFlag(&p);
+ 645   1        ensure = JudgeStr(1000, 0x05);
+ 646   1      
+ 647   1        *ValidN = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
+ 648   1      
+ 649   1        return ensure;
+ 650   1      }
+ 651          
+ 652          unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short param)
+ 653          {
+ 654   1        if (AS608_PackHead() == 1)
+ 655   1          return 0xFF;
+ 656   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 657   1        SendLength(0x08);
+ 658   1        Sendcmd(0x31);
+ 659   1        AS608_SendData(id >> 8);
+ 660   1        AS608_SendData(id & 0xFF);
+ 661   1        AS608_SendData(num);
+ 662   1        AS608_SendData(param >> 8);
+ 663   1        AS608_SendData(param & 0xFF);
+ 664   1        SendCheck(0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF));
+ 665   1      
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 12  
+
+ 666   1        return 0;
+ 667   1      }
+ 668          
+ 669          //Ëá?Âä®È™åËØÅÊåáÁ∫? PS_AutoIdentify
+ 670          //ÂäüËÉΩÔº?
+ 671          //1.Ëá?Âä®ÈááÈõÜÊåáÁ∫πÔºåÂú®ÊåáÁ∫πÂ∫ì‰∏?ÊêúÁ¥¢Áõ?Ê†áÊ®°ÊùøÂπ∂ËøîÂõûÊêúÁ¥¢ÁªìÊûú„Ä?
+ 672          //2.Â¶ÇÊûúÁõ?Ê†áÊ®°ÊùøÂêåÂΩìÂâçÈááÈõÜÁöÑÊåáÁ∫πÊØîÂØπÂæóÂàÜÂ§ß‰∫éÊúÄÈ´òÈòÄÂÄºÔºåÂπ∂‰∏îÁõ?Ê†áÊ®°Êùø‰∏∫‰∏çÂÆå
+             -Êï¥ÁâπÂæÅÂàô‰ª•ÈááÈõÜÁöÑÁâπÂæÅÊõ¥Êñ∞Áõ?Ê†áÊ®°ÊùøÁöÑÁ©∫ÁôΩÂå∫Âüü„Ä?
+ 673          //ÂèÇÊï∞: Êó?
+ 674          //ËØ¥Êòé: Ê®°ÂùóËøîÂõûÁ°?ËÆ§Â≠ó+È°µÁ†ÅÔºàÁõ∏ÈÖçÊåáÁ∫πÊ®°ÊùøÔºâ
+ 675          unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned short param)
+ 676          {
+ 677   1        if (AS608_PackHead() == 1)
+ 678   1          return 0xFF;
+ 679   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 680   1        SendLength(0x08);
+ 681   1        Sendcmd(0x32);
+ 682   1        AS608_SendData(level);
+ 683   1        AS608_SendData(id >> 8);
+ 684   1        AS608_SendData(id & 0xFF);
+ 685   1        AS608_SendData(param >> 8);
+ 686   1        AS608_SendData(param & 0xFF);
+ 687   1        SendCheck(0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF));
+ 688   1      
+ 689   1        return 0;
+ 690   1      }
+ 691          
+ 692          //‰∏éAS608Êè°Êâã PS_HandShake
+ 693          //ÂèÇÊï∞: PS_AddrÂú∞ÂùÄÊåáÈíà
+ 694          //ËØ¥Êòé: Ê®°ÂùóËøîÊñ∞Âú∞ÂùÄÔºàÊ?£Á°ÆÂú∞ÂùÄÔº?
+ 695          unsigned char PS_HandShake(unsigned long *PS_Addr)
+ 696          {
+ 697   1        *PS_Addr = 0;
+ 698   1      
+ 699   1        if (AS608_PackHead() == 1)
+ 700   1          return 0xFF;
+ 701   1        SendFlag(0x01);
+ 702   1        SendLength(0x03);
+ 703   1        Sendcmd(0x53);
+ 704   1        SendCheck(0x57);
+ 705   1      
+ 706   1        return JudgeStr(1000, 0x03);
+ 707   1      }
+ 708          
+ 709          unsigned char PS_Reset(void)
+ 710          {
+ 711   1        return 0;
+ 712   1      }
+ 713          
+ 714          unsigned char PS_Sleep(void)
+ 715          {
+ 716   1        if (AS608_PackHead() == 1)
+ 717   1          return 0xFF;
+ 718   1        SendFlag(0x01); //ÂëΩ‰ª§ÂåÖÊ†áËØ?
+ 719   1        SendLength(0x03);
+ 720   1        Sendcmd(0x60);
+ 721   1        SendCheck(0x01 + 0x03 + 0x60);
+ 722   1        return 0;
+ 723   1      }
+ 724          
+ 725          //void AS608_log(void)
+ 726          //{
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 13  
+
+ 727          //  unsigned char i =0;
+ 728          ////  NRF_LOG_PRINTF_DEBUG("receive :");
+ 729          //  for(i=0;i<25;i++)
+ 730          //  {
+ 731          //    NRF_LOG_PRINTF_DEBUG("%2x ",as608_rec_buff[i]);
+ 732          //  }
+ 733          //  NRF_LOG_PRINTF_DEBUG("\n");
+ 734          //}
+ 735          
+ 736          void FP_Light(FP_COLOR_E light_id)
+ 737          {
+ 738   1        //  if(fp_flag == FP_LT5X)
+ 739   1        //  {
+ 740   1        //#ifdef __FP_LT5X_LIGHT_SUPPORT__
+ 741   1        unsigned short temp;
+ 742   1      
+ 743   1        unsigned char sure = 0; //,p=0;
+ 744   1        if (light_id == Light_Color)
+ 745   1          return;
+ 746   1      
+ 747   1        if (AS608_PackHead() == 1)
+ 748   1          return;
+ 749   1        SendFlag(0x01);
+ 750   1        SendLength(0x07);
+ 751   1        Sendcmd(0x41);
+ 752   1        switch (light_id)
+ 753   1        {
+ 754   2        case FP_BLUE:
+ 755   2          AS608_SendData(0x01);
+ 756   2          AS608_SendData(0x01);
+ 757   2          AS608_SendData(0x00);
+ 758   2          AS608_SendData(0x50);
+ 759   2          temp = 0x01 + 0x07 + 0x41 + 0x02 + 0x50;
+ 760   2          break;
+ 761   2        case FP_GREEN:
+ 762   2          AS608_SendData(0x01);
+ 763   2          AS608_SendData(0x02);
+ 764   2          AS608_SendData(0x02);
+ 765   2          AS608_SendData(0);
+ 766   2          temp = 0x01 + 0x07 + 0x41 + 0x05 + 0;
+ 767   2          break;
+ 768   2        case FP_RED:
+ 769   2          AS608_SendData(0x01);
+ 770   2          AS608_SendData(0x04);
+ 771   2          AS608_SendData(0x04);
+ 772   2          AS608_SendData(0);
+ 773   2          temp = 0x01 + 0x07 + 0x41 + 0x09 + 0;
+ 774   2          break;
+ 775   2        case FP_NONE_COLOR:
+ 776   2          AS608_SendData(0x04);
+ 777   2          AS608_SendData(0x00);
+ 778   2          AS608_SendData(0x00);
+ 779   2          AS608_SendData(0xC8);
+ 780   2          temp = 0x01 + 0x07 + 0x41 + 0x04 + 0xC8;
+ 781   2          break;
+ 782   2        }
+ 783   1        SendCheck(temp);
+ 784   1      
+ 785   1        //sure=ReturnFlag(&p);
+ 786   1        sure = JudgeStr(1000, 0x03);
+ 787   1      
+ 788   1        // if (sure == 0)
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       02/25/2021 17:42:54 PAGE 14  
+
+ 789   1        Light_Color = light_id;
+ 790   1      
+ 791   1        //#endif
+ 792   1      
+ 793   1        //  }
+ 794   1      }
+ 795          
+ 796          FP_COLOR_E FP_Get_Light(void)
+ 797          {
+ 798   1        return Light_Color;
+ 799   1      }
+ 800          
+ 801          FP_COLOR_E FP_Set_Light(FP_COLOR_E light_id)
+ 802          {
+ 803   1        Light_Color = light_id;
+ 804   1        return Light_Color;
+ 805   1      }
+ 806          
+ 807          unsigned char FP_Get_Start_Flag(void)
+ 808          {
+ 809   1        if (uart_getbuflen > 0)
+ 810   1        {
+ 811   2          unsigned char i;
+ 812   2      
+ 813   2          for (i = 0; i < uart_getbuflen; i++)
+ 814   2          {
+ 815   3            if (uart_get_buf[i] == 0x55)
+ 816   3            {
+ 817   4              uart_getbuflen = 0;
+ 818   4              return 1;
+ 819   4            }
+ 820   3          }
+ 821   2        }
+ 822   1        return 0;
+ 823   1      }
+ 824          
+ 825          //#endif//__PREIPHERAL_FP_LT5X_SUPPORT__
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1948    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     25      55
+>>>>>>> six commit
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -931,4 +1529,8 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
+<<<<<<< HEAD
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+=======
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+>>>>>>> six commit

@@ -3679,3 +3679,494 @@ putchar in dqiot_drv.c (source) :      uart_tx_byte(UART0,c);
 AS608_SendData in dqiot_fp_sy.c (source) : 	uart_tx_byte(send_data);
 mcu02_uart.c (Library\byd_standard_peripheral\source) line 46 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
 mcu02_uart.h (Library\byd_standard_peripheral\include) line 154 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat);
+<<<<<<< HEAD
+=======
+---- iic_respond Matches (8 in 3 files) ----
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 			iic_respond(ACK);
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		iic_respond(NACK);
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 			  iic_respond(ACK);
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 		  iic_respond(NACK);
+iic_master.c (source) line 140 : void iic_respond(uint8_t ack)
+iic_master_read_data in iic_master.c (source) :         iic_respond(ACK);
+iic_master_read_data in iic_master.c (source) :     iic_respond(NACK);
+iic_master.h (include) line 34 : void iic_respond(uint8_t ack);
+---- _NOP Matches (0 in 0 files) ----
+---- __NOP Matches (0 in 0 files) ----
+---- _NOP_ Matches (22 in 2 files) ----
+eeprom_erase_page in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_erase_page in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_erase_page in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_erase_page in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_write_byte in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_write_byte in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_write_byte in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+eeprom_write_byte in mcu02_eeprom.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_erase_page in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_erase_page in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_erase_page in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_erase_page in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_write_byte in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_write_byte in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_write_byte in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+flash_write_byte in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+enter_boot_upgrade in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+enter_boot_upgrade in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+enter_boot_upgrade in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+exit_boot_upgrade in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+jump_to_app in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+jump_to_boot in mcu02_flash.c (Library\byd_standard_peripheral\source) : 	_nop_();
+---- iic_receive_byte Matches (5 in 3 files) ----
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 			Buf[i] = iic_receive_byte();
+UH010_ReadDatas in dqiot_drv_wifi.c (source) : 			  Buf[i] = iic_receive_byte();
+iic_master.c (source) line 59 : uint8_t iic_receive_byte(void)
+iic_master_read_data in iic_master.c (source) :         receivedata[i] = iic_receive_byte();
+iic_master.h (include) line 36 : uint8_t iic_receive_byte(void);
+---- audio_play_end_flag Matches (4 in 1 files) ----
+dqiot_drv_audio.c (source) line 22 : static uint8_t audio_play_end_flag = 0;
+dqiot_drv_audio_get_end_flag in dqiot_drv_audio.c (source) : 	if(audio_play_end_flag == 1)
+dqiot_drv_audio_get_end_flag in dqiot_drv_audio.c (source) : 		audio_play_end_flag = 0;
+timer0_event_handler in dqiot_drv_audio.c (source) : 			audio_play_end_flag = 1;
+---- uart_tx_byte Matches (5 in 4 files) ----
+dqiot_drv_uart0_sendData in dqiot_drv.c (source) : 		uart_tx_byte(UART0,p_data[i]);
+putchar in dqiot_drv.c (source) :      uart_tx_byte(UART0,c);
+AS608_SendData in dqiot_fp_sy.c (source) : 	uart_tx_byte(UART0,send_data);
+mcu02_uart.c (Library\byd_standard_peripheral\source) line 46 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat)
+mcu02_uart.h (Library\byd_standard_peripheral\include) line 154 : void uart_tx_byte(UART_PORT_enum uart_port,uint8_t dat);
+---- mmi_dq_rst_timer_event Matches (3 in 3 files) ----
+mmi_rst.c (mmi_src) line 30 : unsigned char mmi_dq_rst_timer_event(void)
+mmi_rst.h (mmi_inc) line 12 : unsigned char mmi_dq_rst_timer_event(void);
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
+---- SYS_STATUS_RESTORE_LOCK Matches (2 in 2 files) ----
+mmi_ms.h (mmi_inc) line 44 : 	SYS_STATUS_RESTORE_LOCK = 0x51,
+mmi_dq_sys_restore_lock in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK);
+---- mmi_dq_sys_restore_lock_con Matches (2 in 1 files) ----
+mmi_sys.c (mmi_src) line 755 : static void mmi_dq_sys_restore_lock_con(void)
+mmi_sys.c (mmi_src) line 812 : 	{STR_ID_SYSTEM2,STR_ID_RESTORE,mmi_dq_sys_restore_lock_con},
+---- SYS_STATUS_RESTORE_LOCK_CON Matches (4 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_RESTORE_LOCK_CON:
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					case SYS_STATUS_RESTORE_LOCK_CON:
+mmi_ms.h (mmi_inc) line 43 : 	SYS_STATUS_RESTORE_LOCK_CON = 0x50,
+mmi_dq_sys_restore_lock_con in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK_CON);
+---- FDS_INIT_APP_SUC Matches (2 in 2 files) ----
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 	if(FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
+mmi_fs.h (mmi_inc) line 29 : 	FDS_INIT_APP_SUC = 0x02,
+---- SYS_STATUS_INPUT_ADMIN_PWD Matches (6 in 2 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_INPUT_ADMIN_PWD:
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(status == SYS_STATUS_INPUT_ADMIN_PWD)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_ms_set_sys_state(SYS_STATUS_INPUT_ADMIN_PWD);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(status == SYS_STATUS_INPUT_ADMIN_PWD)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				if((status == SYS_STATUS_INPUT_PWD)||(status == SYS_STATUS_INPUT_ADMIN_PWD))
+mmi_ms.h (mmi_inc) line 17 : 	SYS_STATUS_INPUT_ADMIN_PWD = 0x02,
+---- mmi_dq_sys_show_message_with_id Matches (2 in 2 files) ----
+mmi_sys.c (mmi_src) line 59 : void mmi_dq_sys_show_message_with_id(unsigned char text_id,unsigned long time_msec)
+mmi_sys.h (mmi_inc) line 85 : void mmi_dq_sys_show_message_with_id(unsigned char text_id,unsigned long time_msec);
+---- msg_aud_id_list Matches (3 in 2 files) ----
+mmi_com.c (mmi_src) line 7 : const msg_aud_id_list msg_aud_list[] = 
+{anonmsg_aud_id_list} in mmi_com.h (mmi_inc) : }msg_aud_id_list;
+mmi_com.h (mmi_inc) line 15 : extern const msg_aud_id_list msg_aud_list[];
+---- msg_aud_id_list Matches (3 in 2 files) ----
+mmi_com.c (mmi_src) line 7 : const msg_aud_id_list msg_aud_list[] = 
+{anonmsg_aud_id_list} in mmi_com.h (mmi_inc) : }msg_aud_id_list;
+mmi_com.h (mmi_inc) line 15 : extern const msg_aud_id_list msg_aud_list[];
+---- msg_aud_list Matches (5 in 3 files) ----
+mmi_dq_aud_get_audio_id in mmi_audio.c (mmi_src) : 	for(i=0;msg_aud_list[i].msg_id<STR_ID_MAX_COUNT;i++)
+mmi_dq_aud_get_audio_id in mmi_audio.c (mmi_src) : 		if(msg_aud_list[i].msg_id == text_id)
+mmi_dq_aud_get_audio_id in mmi_audio.c (mmi_src) : 	return msg_aud_list[i].aud_id;
+mmi_com.c (mmi_src) line 7 : const msg_aud_id_list msg_aud_list[] = 
+mmi_com.h (mmi_inc) line 15 : extern const msg_aud_id_list msg_aud_list[];
+---- mmi_dq_aud_get_audio_id Matches (6 in 3 files) ----
+mmi_audio.c (mmi_src) line 135 : AUD_PLAY_ID mmi_dq_aud_get_audio_id(unsigned char text_id)
+mmi_audio.h (mmi_inc) line 266 : unsigned char mmi_dq_aud_get_audio_id(unsigned char text_id);
+mmi_dq_sys_show_message_with_id in mmi_sys.c (mmi_src) : 	audio_id = mmi_dq_aud_get_audio_id(text_id);
+mmi_dq_sys_show_cur_menu_list in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
+mmi_dq_sys_get_pre_menu_list in mmi_sys.c (mmi_src) : 		mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
+mmi_dq_sys_exe_menu_fun in mmi_sys.c (mmi_src) : 		 mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
+---- mmi_dq_wifi_open_ask Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 115 : unsigned char mmi_dq_wifi_open_ask(void)
+mmi_wifi.h (mmi_inc) line 43 : unsigned char mmi_dq_wifi_open_ask(void);
+---- mmi_dq_wifi_open_ask Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 115 : unsigned char mmi_dq_wifi_open_ask(void)
+mmi_wifi.h (mmi_inc) line 43 : unsigned char mmi_dq_wifi_open_ask(void);
+---- mmi_dq_wifi_setting Matches (3 in 3 files) ----
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 	if(0 == mmi_dq_wifi_setting())
+mmi_wifi.c (mmi_src) line 43 : unsigned char mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : unsigned char mmi_dq_wifi_setting(void);
+---- mmi_dq_wifi_open_by_fp Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 209 : void mmi_dq_wifi_open_by_fp(void)
+mmi_wifi.h (mmi_inc) line 91 : void mmi_dq_wifi_open_by_fp(void);
+---- mmi_dq_wifi_add_password Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 135 : void mmi_dq_wifi_add_password(void)
+mmi_wifi.h (mmi_inc) line 51 : void mmi_dq_wifi_add_password(void);
+---- WIFI_CMD_RF_OPEN Matches (2 in 2 files) ----
+wifi_open_by_rfid in dqiot_drv_wifi.c (source) : 	wifi_data[0] = WIFI_CMD_RF_OPEN;
+dqiot_drv_wifi.h (include) line 16 : #define WIFI_CMD_RF_OPEN				'r'
+---- wifi_open_by_rfid Matches (1 in 1 files) ----
+dqiot_drv_wifi.c (source) line 332 : void wifi_open_by_rfid(void)
+---- mmi_dq_sys_door_open Matches (5 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_sys_door_open(SYS_OPEN_BY_PASSWORD);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_door_open(SYS_OPEN_BY_FP);
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 			mmi_dq_sys_door_open(SYS_OPEN_BY_RFID);
+mmi_sys.c (mmi_src) line 141 : void mmi_dq_sys_door_open(sys_open_type type)
+mmi_sys.h (mmi_inc) line 67 : void mmi_dq_sys_door_open(sys_open_type type);
+---- g_timer2_set_count Matches (3 in 1 files) ----
+mmi_sys.c (mmi_src) line 20 : static unsigned int g_timer2_set_count = 0;
+timer2_event_handler in mmi_sys.c (mmi_src) : 		if(g_timer2_count >= g_timer2_set_count)
+mmi_dq_sys_set_delay_event in mmi_sys.c (mmi_src) : 	g_timer2_set_count = count;
+---- MMI_TIMER_DOOR_OPEN_COUNT Matches (2 in 1 files) ----
+mmi_sys.c (mmi_src) line 38 : #define MMI_TIMER_DOOR_OPEN_COUNT	(MMI_TIMER_DOOR_OPEN/MMI_TIMER_BASE_TIME)
+mmi_dq_sys_door_open_cb in mmi_sys.c (mmi_src) : 	mmi_dq_sys_set_delay_event(MMI_TIMER_DOOR_OPEN_COUNT, mmi_dq_sys_door_close);
+---- g_wifi_check_count Matches (5 in 1 files) ----
+mmi_sys.c (mmi_src) line 24 : static unsigned char g_wifi_check_count = 0;
+timer2_event_handler in mmi_sys.c (mmi_src) : 		g_wifi_check_count++;
+timer2_event_handler in mmi_sys.c (mmi_src) : 		if(g_wifi_check_count >= 4)
+timer2_event_handler in mmi_sys.c (mmi_src) : 			g_wifi_check_count = 0;
+mmi_dq_sys_set_wifi_check in mmi_sys.c (mmi_src) : 	g_wifi_check_count = 0;
+---- SYS_STATUS_WAIT_FOR_ENTER_SLEEP Matches (9 in 4 files) ----
+main in main.c (source) : 		if(SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
+mmi_ms.h (mmi_inc) line 57 : 	SYS_STATUS_WAIT_FOR_ENTER_SLEEP = 0x60,
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
+---- SYS_STATUS_ENTER_SLEEP Matches (6 in 4 files) ----
+main in main.c (source) : 		if(SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+mmi_ms.h (mmi_inc) line 58 : 	SYS_STATUS_ENTER_SLEEP = 0x61,
+mmi_dq_sys_enter_sleep in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_ENTER_SLEEP);
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
+mmi_dq_wifi_connected_fail in mmi_wifi.c (mmi_src) : 	else if(SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+mmi_dq_wifi_connected_suc in mmi_wifi.c (mmi_src) : 	else if(SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+---- mmi_dq_sys_enter_sleep Matches (4 in 3 files) ----
+mmi_wait_sleep_task_proc in mmi_ms.c (mmi_src) : 		mmi_dq_sys_enter_sleep();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						//mmi_dq_sys_enter_sleep();
+mmi_sys.c (mmi_src) line 100 : void mmi_dq_sys_enter_sleep(void)
+mmi_sys.h (mmi_inc) line 49 : void mmi_dq_sys_enter_sleep(void);
+---- mmi_wait_sleep_task_proc Matches (3 in 3 files) ----
+main in main.c (source) : 			mmi_wait_sleep_task_proc();
+mmi_ms.c (mmi_src) line 145 : void mmi_wait_sleep_task_proc(void)
+mmi_ms.h (mmi_inc) line 97 : void mmi_wait_sleep_task_proc(void);
+---- dqiot_drv_timer2_start Matches (4 in 4 files) ----
+dqiot_drv.c (source) line 354 : void dqiot_drv_timer2_start(void)
+dqiot_drv.h (include) line 175 : void dqiot_drv_timer2_start(void);
+mmi_dq_bsp_init in mmi_bsp.c (mmi_src) : 	dqiot_drv_timer2_start();
+mmi_dq_sys_set_delay_event in mmi_sys.c (mmi_src) : 	//dqiot_drv_timer2_start();
+---- wifi_open_by_wifi Matches (3 in 3 files) ----
+dqiot_drv_wifi.c (source) line 303 : void wifi_open_by_wifi(void)
+dqiot_drv_wifi.h (include) line 60 : void wifi_open_by_wifi(void);
+mmi_dq_wifi_open_by_wifi in mmi_wifi.c (mmi_src) : 	wifi_open_by_wifi();
+---- mmi_dq_wifi_open_by_wifi Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 255 : void mmi_dq_wifi_open_by_wifi(void)
+mmi_wifi.h (mmi_inc) line 115 : void mmi_dq_wifi_open_by_wifi(void);
+---- g_wifi_check_flag Matches (6 in 1 files) ----
+mmi_sys.c (mmi_src) line 23 : static unsigned char g_wifi_check_flag = 0;
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 1)
+timer2_event_handler in mmi_sys.c (mmi_src) : 			g_wifi_check_flag = 2;
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 2)
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 		g_wifi_check_flag = 0;
+mmi_dq_sys_set_wifi_check in mmi_sys.c (mmi_src) : 	g_wifi_check_flag = 1;
+---- mmi_dq_sys_get_wifi_check_flag Matches (4 in 3 files) ----
+mmi_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sys.c (mmi_src) line 394 : unsigned char mmi_dq_sys_get_wifi_check_flag(void)
+mmi_sys.h (mmi_inc) line 112 : unsigned char mmi_dq_sys_get_wifi_check_flag(void);
+---- mmi_dq_sys_get_wifi_check_flag Matches (4 in 3 files) ----
+mmi_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sys.c (mmi_src) line 394 : unsigned char mmi_dq_sys_get_wifi_check_flag(void)
+mmi_sys.h (mmi_inc) line 112 : unsigned char mmi_dq_sys_get_wifi_check_flag(void);
+---- mmi_dq_sys_set_wifi_check Matches (5 in 3 files) ----
+mmi_sys.c (mmi_src) line 411 : void mmi_dq_sys_set_wifi_check(void)
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 		mmi_dq_sys_set_wifi_check();
+mmi_sys.h (mmi_inc) line 121 : void mmi_dq_sys_set_wifi_check(void);
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 		mmi_dq_sys_set_wifi_check();
+mmi_dq_wifi_check_open in mmi_wifi.c (mmi_src) : 		mmi_dq_sys_set_wifi_check();
+---- g_wifi_check_flag Matches (6 in 1 files) ----
+mmi_sys.c (mmi_src) line 23 : static unsigned char g_wifi_check_flag = 0;
+timer2_event_handler in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 1)
+timer2_event_handler in mmi_sys.c (mmi_src) : 			g_wifi_check_flag = 2;
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 	if(g_wifi_check_flag == 2)
+mmi_dq_sys_get_wifi_check_flag in mmi_sys.c (mmi_src) : 		g_wifi_check_flag = 0;
+mmi_dq_sys_set_wifi_check in mmi_sys.c (mmi_src) : 	g_wifi_check_flag = 1;
+---- mmi_dq_wifi_setting Matches (3 in 3 files) ----
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 	if(0 == mmi_dq_wifi_setting())
+mmi_wifi.c (mmi_src) line 43 : unsigned char mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : unsigned char mmi_dq_wifi_setting(void);
+---- wifi_check_times Matches (6 in 1 files) ----
+mmi_wifi.c (mmi_src) line 12 : static unsigned int wifi_check_times = 0;
+mmi_dq_wifi_setting in mmi_wifi.c (mmi_src) : 		wifi_check_times = 0;
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 	wifi_check_times++;
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 	else if(wifi_check_times >= 150)
+mmi_dq_wifi_check_open in mmi_wifi.c (mmi_src) : 	wifi_check_times++;
+mmi_dq_wifi_check_open in mmi_wifi.c (mmi_src) : 	else if(wifi_check_times >= 150)
+---- mmi_dq_wifi_connected_suc Matches (3 in 2 files) ----
+mmi_wifi.c (mmi_src) line 84 : void mmi_dq_wifi_connected_suc(void)
+mmi_dq_wifi_check_connect in mmi_wifi.c (mmi_src) : 			mmi_dq_wifi_connected_suc();
+mmi_wifi.h (mmi_inc) line 27 : void mmi_dq_wifi_connected_suc(void);
+---- mmi_dq_sys_get_wifi_check_flag Matches (4 in 3 files) ----
+mmi_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sys.c (mmi_src) line 399 : unsigned char mmi_dq_sys_get_wifi_check_flag(void)
+mmi_sys.h (mmi_inc) line 113 : unsigned char mmi_dq_sys_get_wifi_check_flag(void);
+---- mmi_ms_reset_opt_fun Matches (3 in 2 files) ----
+mmi_dq_ms_sys_msg_handle in mmi_ms.c (mmi_src) : 				mmi_ms_reset_opt_fun();
+mmi_ms.c (mmi_src) line 1012 : void mmi_ms_reset_opt_fun(void)
+mmi_ms.h (mmi_inc) line 189 : void mmi_ms_reset_opt_fun(void);
+---- AUD_BASE_ID_LOW_BATTERY Matches (4 in 3 files) ----
+adc_VolT in byd_adc.c (source) : 		return 1;//mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+main in main.c (source) : 		mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+mmi_audio.h (mmi_inc) line 59 : 	AUD_BASE_ID_LOW_BATTERY = 47,//电量低
+mmi_audio.h (mmi_inc) line 208 : 	AUD_ID_LOW_BATTERY 							= AUD_BASE_ID_LOW_BATTERY,//电量低，请及时更换电池
+---- SYS_STATUS_LOW_POWER Matches (1 in 1 files) ----
+mmi_ms.h (mmi_inc) line 60 : 	SYS_STATUS_LOW_POWER = 0x70,
+---- ADCVDT_EN Matches (2 in 1 files) ----
+main.c (source) line 19 : #define ADCVDT_EN 1 /* adc电压检测 */
+main in main.c (source) : #if ADCVDT_EN	//开机检测
+---- mmi_dq_bsp_wake_up Matches (3 in 3 files) ----
+mmi_bsp.c (mmi_src) line 35 : void mmi_dq_bsp_wake_up(void)
+mmi_bsp.h (mmi_inc) line 22 : void mmi_dq_bsp_wake_up(void);
+mmi_dq_sys_wake_up in mmi_sys.c (mmi_src) : 	mmi_dq_bsp_wake_up();
+---- mmi_dq_sys_wake_up Matches (7 in 4 files) ----
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 		mmi_dq_sys_wake_up();
+mmi_sys.c (mmi_src) line 118 : void mmi_dq_sys_wake_up(void)
+mmi_sys.h (mmi_inc) line 59 : void mmi_dq_sys_wake_up(void);
+mmi_dq_wifi_connected_fail in mmi_wifi.c (mmi_src) : 		mmi_dq_sys_wake_up();
+mmi_dq_wifi_connected_suc in mmi_wifi.c (mmi_src) : 		mmi_dq_sys_wake_up();
+mmi_dq_wifi_check_open in mmi_wifi.c (mmi_src) : 			mmi_dq_sys_wake_up();
+mmi_dq_wifi_check_open in mmi_wifi.c (mmi_src) : 			mmi_dq_sys_wake_up();
+---- mmi_dq_wifi_setting Matches (3 in 3 files) ----
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 	if(0 == mmi_dq_wifi_setting())
+mmi_wifi.c (mmi_src) line 43 : unsigned char mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : unsigned char mmi_dq_wifi_setting(void);
+---- mmi_dq_sys_wifi_setting Matches (2 in 1 files) ----
+mmi_sys.c (mmi_src) line 891 : static void mmi_dq_sys_wifi_setting(void)
+mmi_sys.c (mmi_src) line 930 : 	{STR_ID_SYSTEM,STR_ID_WIFI,mmi_dq_sys_wifi_setting},
+---- mmi_dq_wifi_open_ask Matches (2 in 2 files) ----
+mmi_wifi.c (mmi_src) line 136 : unsigned char mmi_dq_wifi_open_ask(void)
+mmi_wifi.h (mmi_inc) line 27 : unsigned char mmi_dq_wifi_open_ask(void);
+---- mmi_dq_wifi_setting Matches (3 in 3 files) ----
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 	if(0 == mmi_dq_wifi_setting())
+mmi_wifi.c (mmi_src) line 43 : unsigned char mmi_dq_wifi_setting(void)
+mmi_wifi.h (mmi_inc) line 11 : unsigned char mmi_dq_wifi_setting(void);
+---- mmi_dq_fp_init Matches (4 in 4 files) ----
+main in main.c (source) : 	mmi_dq_fp_init();
+mmi_fps.c (mmi_src) line 39 : void mmi_dq_fp_init(void)
+mmi_fps.h (mmi_inc) line 36 : void mmi_dq_fp_init(void);
+mmi_dq_sys_wake_up in mmi_sys.c (mmi_src) : 		mmi_dq_fp_init(); //握手、点灯
+---- mmi_dq_fp_light Matches (23 in 4 files) ----
+mmi_fps.c (mmi_src) line 246 : void mmi_dq_fp_light(FP_COLOR_E light_id)
+mmi_fps.h (mmi_inc) line 68 : void mmi_dq_fp_light(FP_COLOR_E light_id);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 								mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 											mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_fp_light(FP_GREEN);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_fp_light(FP_RED);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 	mmi_dq_fp_light(FP_RED);
+mmi_dq_sys_show_cur_menu_list in mmi_sys.c (mmi_src) :   	//mmi_dq_fp_light(FP_NONE_COLOR);
+---- mmi_dq_sys_get_wifi_check_flag Matches (4 in 3 files) ----
+mmi_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sleep_task_proc in mmi_ms.c (mmi_src) : 	if(mmi_dq_sys_get_wifi_check_flag() != 0)
+mmi_sys.c (mmi_src) line 405 : unsigned char mmi_dq_sys_get_wifi_check_flag(void)
+mmi_sys.h (mmi_inc) line 113 : unsigned char mmi_dq_sys_get_wifi_check_flag(void);
+---- dqiot_drv_clr_uart0_data Matches (2 in 2 files) ----
+dqiot_drv.c (source) line 498 : void dqiot_drv_clr_uart0_data(void)
+dqiot_drv.h (include) line 151 : void dqiot_drv_clr_uart0_data(void);
+---- uart_get_buf Matches (17 in 2 files) ----
+dqiot_drv.c (source) line 26 : unsigned char uart_get_buf[UART0_GET_DATA_LEN];
+dqiot_drv_uart0A_init in dqiot_drv.c (source) : 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
+dqiot_drv_uart0B_init in dqiot_drv.c (source) : 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 				uart_get_buf[uart_getbuflen++] = UART0_BUF;
+dqiot_drv_get_uart0_data in dqiot_drv.c (source) : 	return uart_get_buf[len];
+dqiot_drv_clr_uart0_data in dqiot_drv.c (source) : 	memset(uart_get_buf, 0, sizeof(uart_get_buf));
+dqiot_fp_sy.c (source) line 23 : extern unsigned char uart_get_buf[];
+JudgeStr in dqiot_fp_sy.c (source) : 				if (uart_get_buf[i] == 0xEF)
+JudgeStr in dqiot_fp_sy.c (source) : 			if (uart_get_buf[i] == 0xEF && uart_get_buf[i + 1] == 0x01 && uart_get_buf[i + 6] == 0x07 && ((uart_get_buf[i + 7] << 8) + uart_get_buf[i + 8]) == length)
+JudgeStr in dqiot_fp_sy.c (source) : 					uart_rec_buff[j] = uart_get_buf[i];
+---- uart_getbuflen Matches (11 in 2 files) ----
+dqiot_drv.c (source) line 29 : unsigned char uart_getbuflen = 0;
+dqiot_drv_uart0A_init in dqiot_drv.c (source) : 	// uart_getbuflen = 0;
+dqiot_drv_uart0B_init in dqiot_drv.c (source) : 	// uart_getbuflen = 0;
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 			if(uart_getbuflen >= UART0_GET_DATA_LEN )
+dqiot_drv_uart0_isr in dqiot_drv.c (source) : 				uart_get_buf[uart_getbuflen++] = UART0_BUF;
+dqiot_drv_clr_uart0_data in dqiot_drv.c (source) : 	uart_getbuflen = 0;
+dqiot_fp_sy.c (source) line 24 : extern unsigned char uart_getbuflen;
+JudgeStr in dqiot_fp_sy.c (source) : 		if (uart_getbuflen >= 9 + length)
+JudgeStr in dqiot_fp_sy.c (source) : 			for (i = 0; i < uart_getbuflen; i++)
+JudgeStr in dqiot_fp_sy.c (source) : 				for (i; i < uart_getbuflen; i++)
+PS_GetImage in dqiot_fp_sy.c (source) : 	uart_getbuflen = 0;
+---- mmi_dq_fp_init Matches (4 in 4 files) ----
+main in main.c (source) : 	mmi_dq_fp_init();
+mmi_fps.c (mmi_src) line 39 : void mmi_dq_fp_init(void)
+mmi_fps.h (mmi_inc) line 36 : void mmi_dq_fp_init(void);
+mmi_dq_sys_wake_up in mmi_sys.c (mmi_src) : 		mmi_dq_fp_init(); //握手、点灯
+---- SYS_STATUS_DEL_FP_CON Matches (4 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_DEL_FP_CON:
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					case SYS_STATUS_DEL_FP_CON:
+mmi_ms.h (mmi_inc) line 31 : 	SYS_STATUS_DEL_FP_CON = 0x26,
+mmi_dq_sys_del_fp_con in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP_CON);
+---- mmi_dq_sys_show_cur_menu_list Matches (19 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 							mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 										mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 						mmi_dq_sys_show_cur_menu_list();
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				mmi_dq_sys_show_cur_menu_list();
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_sys_show_cur_menu_list();
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 									mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_add_pwd in mmi_sys.c (mmi_src) : 		mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_open_pro_sound in mmi_sys.c (mmi_src) : 	mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_close_pro_sound in mmi_sys.c (mmi_src) : 	mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_sin_open_mode in mmi_sys.c (mmi_src) : 	mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_dbl_open_mode in mmi_sys.c (mmi_src) : 	mmi_dq_sys_show_cur_menu_list();
+mmi_dq_sys_wifi_setting in mmi_sys.c (mmi_src) : 		mmi_dq_sys_show_cur_menu_list();
+mmi_sys.c (mmi_src) line 1074 : void mmi_dq_sys_show_cur_menu_list(void)
+mmi_sys.h (mmi_inc) line 192 : void mmi_dq_sys_show_cur_menu_list(void);
+---- mmi_dq_fs_get_fp_unuse_index Matches (4 in 4 files) ----
+mmi_fs.c (mmi_src) line 472 : unsigned char mmi_dq_fs_get_fp_unuse_index(void)
+mmi_fs.h (mmi_inc) line 151 : unsigned char mmi_dq_fs_get_fp_unuse_index(void);
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 								index = mmi_dq_fs_get_fp_unuse_index();
+mmi_dq_sys_add_fp in mmi_sys.c (mmi_src) : 	mmi_dq_fs_get_fp_unuse_index();
+---- AUD_ID_RFCARD_FULL Matches (4 in 4 files) ----
+mmi_audio.c (mmi_src) line 111 : 			//AUD_ID_RFCARD_FULL = 12,//RF卡已满，请联系管理员
+mmi_audio.h (mmi_inc) line 166 : 	AUD_ID_RFCARD_FULL 				= AUD_BASE_ID_MEM_FULL,//RF卡已满，请联系管理员
+mmi_com.c (mmi_src) line 435 : 		AUD_ID_RFCARD_FULL
+mmi_dq_sys_add_rf in mmi_sys.c (mmi_src) : 		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_FULL);
+---- SYS_STATUS_ADD_RFID Matches (7 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_ADD_RFID:
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 	if((status != SYS_STATUS_INPUT_RFID && status != SYS_STATUS_ADD_RFID && status != SYS_STATUS_DEL_RFID)||(status == SYS_STATUS_FM_MODE && STR_ID_RF_CARD != mmi_dq_factory_mode_get_test_project()))
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 		else if(status == SYS_STATUS_ADD_RFID)
+mmi_ms_rfid_opt_fun in mmi_ms.c (mmi_src) : 		if(status == SYS_STATUS_ADD_RFID)
+mmi_ms.h (mmi_inc) line 36 : 	SYS_STATUS_ADD_RFID = 0x32,
+timer2_event_handler in mmi_sys.c (mmi_src) : 			|| state == SYS_STATUS_ADD_RFID|| state == SYS_STATUS_DEL_RFID
+mmi_dq_sys_add_rf in mmi_sys.c (mmi_src) : 		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
+---- PS_ValidTempleteNum Matches (4 in 3 files) ----
+dqiot_fp_sy.c (source) line 700 : //读有效模板个数 PS_ValidTempleteNum
+dqiot_fp_sy.c (source) line 704 : unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
+dqiot_fp_sy.h (include) line 71 :  unsigned char PS_ValidTempleteNum(unsigned short *ValidN);
+mmi_dq_fp_get_valid_templete in mmi_fps.c (mmi_src) : 	retval = PS_ValidTempleteNum(count);
+---- mmi_dq_fp_get_valid_templete Matches (2 in 2 files) ----
+mmi_fps.c (mmi_src) line 207 : unsigned char mmi_dq_fp_get_valid_templete(unsigned short *count)
+mmi_fps.h (mmi_inc) line 116 : unsigned char mmi_dq_fp_get_valid_templete(unsigned short *count);
+---- PS_Search Matches (4 in 3 files) ----
+dqiot_fp_sy.c (source) line 389 : //搜索指纹 PS_Search
+dqiot_fp_sy.c (source) line 393 : unsigned char PS_Search(unsigned char BufferID,unsigned short StartPage,unsigned short PageNum,void *p)
+dqiot_fp_sy.h (include) line 72 :  unsigned char PS_Search(unsigned char BufferID,unsigned short StartPage,unsigned short PageNum,void *p);
+mmi_dq_fp_search in mmi_fps.c (mmi_src) : 	retval = PS_Search(real_buf_id, 0, 300, index);
+---- timer2_event_handler Matches (3 in 2 files) ----
+dqiot_drv.c (source) line 32 : extern void timer2_event_handler(void);
+timer2_wdt_isr in dqiot_drv.c (source) : 	    timer2_event_handler();
+mmi_sys.c (mmi_src) line 333 : void timer2_event_handler(void)
+---- timer0_event_handler Matches (3 in 2 files) ----
+dqiot_drv.c (source) line 31 : extern void timer0_event_handler(void);
+dqiot_drv_timer0_isr in dqiot_drv.c (source) : 	timer0_event_handler();
+dqiot_drv_audio.c (source) line 262 : void timer0_event_handler(void)
+---- AUD_ID_ADD_ADMIN_PWD_FIRST Matches (4 in 3 files) ----
+mmi_audio.c (mmi_src) line 45 : 	AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//为了您的使用安全，请先添加管理员密码，按#键结束
+mmi_audio.h (mmi_inc) line 199 : 	AUD_ID_ADD_ADMIN_PWD_FIRST 					= 51+AUD_BASE_ID_MAX,//为了您的使用安全，请先添加管理员密码，按#键结束
+mmi_com.c (mmi_src) line 681 : 		AUD_ID_ADD_ADMIN_PWD_FIRST
+mmi_com.c (mmi_src) line 779 : 		AUD_ID_ADD_ADMIN_PWD_FIRST
+---- AUD_ID_ADD_ADMIN_PWD_FIRST Matches (5 in 4 files) ----
+mmi_audio.c (mmi_src) line 45 : 	AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//为了您的使用安全，请先添加管理员密码，按#键结束
+mmi_audio.h (mmi_inc) line 199 : 	AUD_ID_ADD_ADMIN_PWD_FIRST 					= 51+AUD_BASE_ID_MAX,//为了您的使用安全，请先添加管理员密码，按#键结束
+mmi_com.c (mmi_src) line 681 : 		AUD_ID_ADD_ADMIN_PWD_FIRST
+mmi_com.c (mmi_src) line 779 : 		AUD_ID_ADD_ADMIN_PWD_FIRST
+mmi_dq_sys_chg_admin_pwd in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_FIRST);
+---- mmi_dq_sys_chg_admin_pwd Matches (6 in 5 files) ----
+main in main.c (source) : 				mmi_dq_sys_chg_admin_pwd();
+mmi_dq_factory_mode_test_stop in mmi_fm.c (mmi_src) : 			mmi_dq_sys_chg_admin_pwd();
+mmi_ms_reset_opt_fun in mmi_ms.c (mmi_src) : 		mmi_dq_sys_chg_admin_pwd();
+mmi_sys.c (mmi_src) line 908 : void mmi_dq_sys_chg_admin_pwd(void)
+mmi_sys.c (mmi_src) line 1033 : 	{STR_ID_ADMIN,STR_ID_CHG_ADMIN_PWD,mmi_dq_sys_chg_admin_pwd},
+mmi_sys.h (mmi_inc) line 263 : void mmi_dq_sys_chg_admin_pwd(void);
+---- SYS_STATUS_ADD_ADMIN_PWD Matches (12 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 		case SYS_STATUS_ADD_ADMIN_PWD:
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if(!((SYS_STATUS_ADD_ADMIN_PWD == status) && (0 == mmi_dq_fs_get_admin_status())))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					if((status == SYS_STATUS_ADD_PWD)||(status == SYS_STATUS_DEL_PWD)||(status == SYS_STATUS_ADD_ADMIN_PWD))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					else if((status == SYS_STATUS_ADD_PWD)||(status == SYS_STATUS_DEL_PWD)||(status == SYS_STATUS_ADD_ADMIN_PWD))
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 								else if(status == SYS_STATUS_ADD_ADMIN_PWD)
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 				else if((status == SYS_STATUS_ADD_PWD)||(status == SYS_STATUS_DEL_PWD)||(status == SYS_STATUS_ADD_ADMIN_PWD))
+mmi_ms.h (mmi_inc) line 43 : 	SYS_STATUS_ADD_ADMIN_PWD = 0x41,
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 	if(state >= SYS_STATUS_ADD_PWD && state < SYS_STATUS_ADD_ADMIN_PWD || state == SYS_STATUS_SYS_MENU)
+mmi_dq_sys_time_out_handle in mmi_sys.c (mmi_src) : 	else if(state == SYS_STATUS_ADD_ADMIN_PWD)
+System_timer_event_handler in mmi_sys.c (mmi_src) : 		if(state == SYS_STATUS_ADD_PWD || state == SYS_STATUS_DEL_PWD ||state ==SYS_STATUS_ADD_ADMIN_PWD 
+mmi_dq_sys_add_admin_pwd in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
+mmi_dq_sys_chg_admin_pwd in mmi_sys.c (mmi_src) : 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
+---- AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS Matches (2 in 2 files) ----
+mmi_audio.h (mmi_inc) line 201 : 	AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS 			= AUD_BASE_ID_SUCCESS,//管理员密码添加成功
+mmi_com.c (mmi_src) line 688 : 		AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS
+---- AUD_ID_FM_KEY_INPUT Matches (3 in 3 files) ----
+mmi_audio.h (mmi_inc) line 227 : 	AUD_ID_FM_KEY_INPUT = AUD_BASE_ID_FM_KEY_INPUT,//请测试所有按键
+mmi_com.c (mmi_src) line 793 : 		AUD_ID_FM_KEY_INPUT
+mmi_dq_factory_mode_test_item_select in mmi_fm.c (mmi_src) : 			mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
+---- AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN Matches (3 in 3 files) ----
+mmi_audio.c (mmi_src) line 43 : 															//AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//请再次输入新管理员密码，按#键结束
+mmi_audio.h (mmi_inc) line 183 : 	AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN 			= 6+AUD_BASE_ID_MAX,//请再次输入新管理员密码，按#键结束
+mmi_com.c (mmi_src) line 548 : 		AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN
+---- AUD_ID_NEW_ADMIN_FP Matches (4 in 3 files) ----
+mmi_audio.h (mmi_inc) line 186 : 	AUD_ID_NEW_ADMIN_FP 						= AUD_BASE_ID_PRESS_FP,//请按新的管理员指纹
+mmi_com.c (mmi_src) line 569 : 		AUD_ID_NEW_ADMIN_FP
+mmi_dq_sys_chg_admin_fp_No1 in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+mmi_dq_sys_chg_admin_fp_No2 in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+---- AUD_ID_ADD_NO1_ADMIN_FP_SUCESS Matches (2 in 2 files) ----
+mmi_audio.h (mmi_inc) line 187 : 	AUD_ID_ADD_NO1_ADMIN_FP_SUCESS 				= AUD_BASE_ID_SUCCESS,//1号管理指纹添加成功
+mmi_com.c (mmi_src) line 583 : 		AUD_ID_ADD_NO1_ADMIN_FP_SUCESS
+---- AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM Matches (3 in 3 files) ----
+mmi_audio.h (mmi_inc) line 210 : 	AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM		=33+AUD_BASE_ID_MAX,//按#恢复出厂设置，取消请按*
+mmi_com.c (mmi_src) line 786 : 		AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM
+mmi_dq_sys_restore_lock_con in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM);
+---- AUD_ID_INPUT_NEW_PWD Matches (3 in 3 files) ----
+mmi_audio.c (mmi_src) line 20 : 	AUD_BASE_ID_INPUT_NEW_PWD,AUD_BASE_ID_INPUT_END,0,		//AUD_ID_INPUT_NEW_PWD = 21,//请输入新密码，按#键结束
+mmi_audio.h (mmi_inc) line 123 : 	AUD_ID_INPUT_NEW_PWD 			= 21+AUD_BASE_ID_MAX,//请输入新密码，按#键结束
+mmi_com.c (mmi_src) line 147 : 		AUD_ID_INPUT_NEW_PWD
+---- AUD_ID_INPUT_DEL_NUM Matches (4 in 4 files) ----
+mmi_audio.c (mmi_src) line 24 : 	AUD_BASE_ID_INPUT_DEL_PWD,AUD_BASE_ID_INPUT_END,0,		//AUD_ID_INPUT_DEL_NUM = 27,//请输入要删除的编号或密码，按#键结束
+mmi_audio.h (mmi_inc) line 128 : 	AUD_ID_INPUT_DEL_NUM 			= 27+AUD_BASE_ID_MAX,//请输入要删除的编号或密码，按#键结束
+mmi_com.c (mmi_src) line 189 : 		AUD_ID_INPUT_DEL_NUM
+mmi_dq_sys_del_pwd in mmi_sys.c (mmi_src) : 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_NUM);
+---- AUD_ID_INPUT_DEL_PWD_AGAIN Matches (2 in 2 files) ----
+mmi_audio.h (mmi_inc) line 131 : 	AUD_ID_INPUT_DEL_PWD_AGAIN 		= AUD_BASE_ID_PWD_INPUT_AGAIN,//请再次输入要删除的密码
+mmi_com.c (mmi_src) line 210 : 		AUD_ID_INPUT_DEL_PWD_AGAIN
+---- AUD_ID_SYS_CHG_ADMIN_FP Matches (3 in 3 files) ----
+mmi_audio.c (mmi_src) line 56 : 	AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_NO2_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,		//AUD_ID_SYS_CHG_ADMIN_FP = 75,//修改管理员指纹
+mmi_audio.h (mmi_inc) line 223 : 	AUD_ID_SYS_CHG_ADMIN_FP = 75+AUD_BASE_ID_MAX,//修改管理员指纹
+mmi_com.c (mmi_src) line 765 : 		AUD_ID_SYS_CHG_ADMIN_FP
+---- admin_status Matches (7 in 2 files) ----
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 		if(g_dq_fs_init_set.admin_status > 0)
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 				g_dq_fs_init_set.admin_status = 0;
+mmi_dq_fs_init in mmi_fs.c (mmi_src) : 		g_dq_fs_init_set.admin_status = 0;
+mmi_dq_fs_reset in mmi_fs.c (mmi_src) : 	g_dq_fs_init_set.admin_status = 0;
+mmi_dq_fs_get_admin_status in mmi_fs.c (mmi_src) : 	return g_dq_fs_init_set.admin_status;
+mmi_dq_fs_set_admin_status in mmi_fs.c (mmi_src) : 	g_dq_fs_init_set.admin_status = status;
+mmi_fs_setting in mmi_fs.h (mmi_inc) : 	unsigned char admin_status;
+---- mmi_dq_fs_set_admin_status Matches (3 in 3 files) ----
+mmi_fs.c (mmi_src) line 799 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
+mmi_fs.h (mmi_inc) line 307 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status);
+mmi_dq_sys_lock_add_admin_suc in mmi_sys.c (mmi_src) : 	mmi_dq_fs_set_admin_status(1);
+---- mmi_dq_sys_lock_add_admin_suc Matches (4 in 3 files) ----
+mmi_ms_pwd_opt_fun in mmi_ms.c (mmi_src) : 					mmi_dq_sys_lock_add_admin_suc();
+mmi_ms_fps_opt_fun in mmi_ms.c (mmi_src) : 										mmi_dq_sys_lock_add_admin_suc();
+mmi_sys.c (mmi_src) line 86 : void mmi_dq_sys_lock_add_admin_suc(void)
+mmi_sys.h (mmi_inc) line 41 : void mmi_dq_sys_lock_add_admin_suc(void);
+---- mmi_dq_fs_set_admin_status Matches (3 in 3 files) ----
+mmi_fs.c (mmi_src) line 799 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
+mmi_fs.h (mmi_inc) line 307 : RET_VAL mmi_dq_fs_set_admin_status(unsigned char status);
+mmi_dq_sys_lock_add_admin_suc in mmi_sys.c (mmi_src) : 	mmi_dq_fs_set_admin_status(1);
+>>>>>>> six commit

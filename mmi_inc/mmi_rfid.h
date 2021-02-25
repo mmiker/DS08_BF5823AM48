@@ -2,6 +2,10 @@
 #define __MMI_RFID_H__
 
 #include "mmi_feature.h"
+<<<<<<< HEAD
+=======
+#ifdef __LOCK_RFID_CARD_SUPPORT__
+>>>>>>> six commit
 #include "mmi_com.h"
 
 #define RFID_SEC_DATA_LEN 12
@@ -75,5 +79,9 @@ return :
 	none
 */
 RET_VAL mmi_dq_rfid_store(unsigned char id);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> six commit
 #endif //__MMI_RFID_H__
 

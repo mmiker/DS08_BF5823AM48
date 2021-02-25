@@ -12,6 +12,11 @@
 #include "mmi_bsp.h"
 #include "mmi_motor.h"
 #include "mmi_wifi.h"
+<<<<<<< HEAD
+=======
+#include "delay.h"
+#include "dqiot_fp_sy.h"
+>>>>>>> six commit
 
 static unsigned char g_sys_door_open_flag = 0;
 
@@ -22,6 +27,14 @@ static unsigned char g_timer2_flag = 0;
 
 static unsigned char g_wifi_check_flag = 0;
 static unsigned char g_wifi_check_count = 0;
+<<<<<<< HEAD
+=======
+static unsigned char g_wifi_check_type = 0;
+
+#define LOCK_MAX_EEROR_TIMES 5
+static unsigned char g_lock_error_flag = 0;
+static unsigned int g_lock_error_count = 0;
+>>>>>>> six commit
 
 timer2_delay_pro g_timer2_delay_pro = 0;
 
@@ -36,8 +49,14 @@ timer2_delay_pro g_timer2_delay_pro = 0;
 #define MMI_TIMER_MOTOR_COUNT (MMI_TIMER_MOTOR / MMI_TIMER_BASE_TIME)
 #define MMI_WIFI_SETTING_DELAY 60000
 #define MMI_WIFI_SETTING_DELAY_COUNT (MMI_WIFI_SETTING_DELAY / MMI_TIMER_BASE_TIME)
+<<<<<<< HEAD
 /*
 function: system enter sleep
+=======
+#define MMI_LOCK_ERROR_DELAY 60000
+#define MMI_LOCK_ERROR_DELAY_COUNT (MMI_LOCK_ERROR_DELAY / MMI_TIMER_BASE_TIME)
+/*
+>>>>>>> six commit
 parameter: 
 	none
 return :
@@ -57,7 +76,10 @@ return :
 */
 void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_msec)
 {
+<<<<<<< HEAD
 	unsigned char i = 0;
+=======
+>>>>>>> six commit
 	unsigned char audio_id = 0;
 
 	time_msec = 0;
@@ -96,6 +118,10 @@ void mmi_dq_sys_enter_sleep(void)
 	mmi_dq_bsp_enter_sleep();
 
 	g_timer2_flag = 0;
+<<<<<<< HEAD
+=======
+	FP_Set_Light(FP_NONE_COLOR);
+>>>>>>> six commit
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ENTER_SLEEP);
 }
@@ -111,8 +137,19 @@ void mmi_dq_sys_wake_up(void)
 {
 
 	mmi_dq_bsp_wake_up();
+<<<<<<< HEAD
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+=======
+	if (mmi_dq_sys_check_vbat() == 0)
+	{
+		mmi_dq_wifi_wakeup();
+#ifdef __LOCK_FP_SUPPORT__
+		mmi_dq_fp_init(); //ÎÕÊÖ¡¢µãµÆ
+#endif
+		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+	}
+>>>>>>> six commit
 }
 
 /*
@@ -138,7 +175,12 @@ return :
 */
 void mmi_dq_sys_door_open(sys_open_type type)
 {
+<<<<<<< HEAD
 	if (mmi_dq_fs_get_open_mode() == SYS_OPEN_MODE_DBL)
+=======
+	g_lock_error_flag = 0;
+	if (mmi_dq_fs_get_open_mode() == SYS_OPEN_MODE_DBL && SYS_OPEN_BY_WIFI != type)
+>>>>>>> six commit
 	{
 		if (g_sys_door_open_flag & (~type) != 0)
 		{
@@ -156,6 +198,70 @@ void mmi_dq_sys_door_open(sys_open_type type)
 	mmi_dq_motor_turn_right();
 	//mmi_dq_wifi_open_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_open_cb);
+<<<<<<< HEAD
+=======
+
+	switch (type)
+	{
+	case SYS_OPEN_BY_PASSWORD:
+		mmi_dq_wifi_open_by_password();
+		break;
+	case SYS_OPEN_BY_FP:
+		mmi_dq_wifi_open_by_fp();
+		break;
+	case SYS_OPEN_BY_RFID:
+		mmi_dq_wifi_open_by_rfid();
+		break;
+	case SYS_OPEN_BY_WIFI:
+		mmi_dq_wifi_open_by_wifi();
+		break;
+	}
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_door_open_fail(sys_open_type type)
+{
+	g_lock_error_count = 0;
+	g_lock_error_flag++;
+	switch (type)
+	{
+	case SYS_OPEN_BY_PASSWORD:
+		mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY);
+		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
+			mmi_dq_wifi_pw_alarm();
+		break;
+	case SYS_OPEN_BY_FP:
+		mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
+		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
+			mmi_dq_wifi_fp_alarm();
+		break;
+	case SYS_OPEN_BY_RFID:
+		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_WRONG_TRY);
+		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
+			mmi_dq_wifi_rfid_alarm();
+		break;
+	}
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_sys_door_state_check(void)
+{
+	if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
+		return 1;
+	return 0;
+>>>>>>> six commit
 }
 
 /*
@@ -209,11 +315,19 @@ void mmi_dq_sys_time_out_handle(void)
 {
 	SYS_BASE_STATUS state = mmi_dq_ms_get_sys_state();
 
+<<<<<<< HEAD
 	if (state >= SYS_STATUS_ADD_PWD && state <= SYS_STATUS_DEL_RFID_CON || state == SYS_STATUS_SYS_MENU)
+=======
+	if ((state >= SYS_STATUS_ADD_PWD && state < SYS_STATUS_ADD_ADMIN_PWD) || (state == SYS_STATUS_SYS_MENU) || (state == SYS_STATUS_CHG_ADMIN_PWD))
+>>>>>>> six commit
 	{
 		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 	}
+<<<<<<< HEAD
+=======
+#ifdef __LOCK_FP_SUPPORT__
+>>>>>>> six commit
 	else if (state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2)
 	{
 		if (mmi_dq_fs_get_admin_status() == 0)
@@ -224,6 +338,7 @@ void mmi_dq_sys_time_out_handle(void)
 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 		}
 	}
+<<<<<<< HEAD
 	else if (state == SYS_STATUS_ADD_ADMIN_PWD)
 	{
 		if (mmi_dq_fs_get_admin_status() == 0)
@@ -236,6 +351,13 @@ void mmi_dq_sys_time_out_handle(void)
 			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 		}
+=======
+#endif
+	else if (state == SYS_STATUS_ADD_ADMIN_PWD)
+	{
+		g_timer2_sleep_count = 0;
+		mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_FIRST);
+>>>>>>> six commit
 	}
 	else
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
@@ -248,7 +370,11 @@ parameter:
 return :
 	none
 */
+<<<<<<< HEAD
 void timer2_event_handler(void)
+=======
+void System_timer_event_handler(void)
+>>>>>>> six commit
 {
 	SYS_BASE_STATUS state = mmi_dq_ms_get_sys_state();
 
@@ -273,11 +399,33 @@ void timer2_event_handler(void)
 		}
 	}
 
+<<<<<<< HEAD
 	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1))
 	{
 		unsigned char flag = 0;
 		g_timer2_sleep_count++;
 		if (state == SYS_STATUS_ADD_PWD || state == SYS_STATUS_DEL_PWD || state == SYS_STATUS_ADD_FP || state == SYS_STATUS_DEL_FP || state == SYS_STATUS_ADD_RFID || state == SYS_STATUS_DEL_RFID || state == SYS_STATUS_ADD_ADMIN_PWD || state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2)
+=======
+	if (g_lock_error_flag > 0)
+	{
+		g_lock_error_count++;
+		if (g_lock_error_count >= MMI_LOCK_ERROR_DELAY_COUNT)
+			g_lock_error_flag = 0;
+	}
+
+	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1) && (mmi_dq_wifi_get_running_flag() == 0))
+	{
+		unsigned char flag = 0;
+		g_timer2_sleep_count++;
+		if (state == SYS_STATUS_ADD_PWD || state == SYS_STATUS_DEL_PWD || state == SYS_STATUS_ADD_ADMIN_PWD
+#ifdef __LOCK_FP_SUPPORT__
+			|| state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2 || state == SYS_STATUS_ADD_FP || state == SYS_STATUS_DEL_FP
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
+			|| state == SYS_STATUS_ADD_RFID || state == SYS_STATUS_DEL_RFID
+#endif
+		)
+>>>>>>> six commit
 		{
 			if (g_timer2_sleep_count > MMI_TIMER_ENTER_SLEEP_DEALY_COUNT)
 			{
@@ -322,10 +470,30 @@ parameter:
 return :
 	none
 */
+<<<<<<< HEAD
 void mmi_dq_sys_set_wifi_check(void)
 {
 	g_wifi_check_count = 0;
 	g_wifi_check_flag = 1;
+=======
+void mmi_dq_sys_set_wifi_check(unsigned char type)
+{
+	g_wifi_check_count = 0;
+	g_wifi_check_flag = 1;
+	g_wifi_check_type = type;
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_sys_get_wifi_check_type(void)
+{
+	return g_wifi_check_type;
+>>>>>>> six commit
 }
 
 /*
@@ -386,6 +554,60 @@ void mmi_dq_sys_delay_event_pro(void)
 	g_timer2_delay_pro();
 }
 
+<<<<<<< HEAD
+=======
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_sys_check_vbat(void)
+{
+	unsigned char state = adc_VolT();
+	if (state > 0)
+	{
+		mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+		mmi_dq_wifi_lowpower_alarm();
+		if (state == 2)
+		{
+			// mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
+			// return 1;
+		}
+	}
+
+	return 0;
+}
+
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_wifi_open(void)
+{
+	if ((mmi_dq_fs_get_wifi_setting() == 0) || (mmi_dq_wifi_open_ask() == 0))
+		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_add_admin_pwd(void)
+{
+	mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_FIRST);
+	mmi_ms_pwd_init_var();
+	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
+	return;
+}
+
+>>>>>>> six commit
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //*******************************************************************************************************************************************************************************************
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -480,9 +702,24 @@ return :
 */
 void mmi_dq_sys_add_fp(void)
 {
+<<<<<<< HEAD
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
+=======
+	if (mmi_dq_fs_get_fp_unuse_index() == 0xFF)
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_FP_FULL);
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+		mmi_dq_fp_light(FP_BLUE);
+		mmi_ms_opt_time_init();
+		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
+	}
+>>>>>>> six commit
 	return;
 }
 
@@ -514,6 +751,10 @@ return :
 void mmi_dq_sys_del_fp(void)
 {
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_FP_NUM);
+<<<<<<< HEAD
+=======
+	mmi_dq_fp_light(FP_BLUE);
+>>>>>>> six commit
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP);
 	return;
@@ -548,9 +789,24 @@ return :
 */
 void mmi_dq_sys_add_rf(void)
 {
+<<<<<<< HEAD
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
+=======
+
+	if (mmi_dq_fs_get_rfid_unuse_index() == 0xFF)
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_FULL);
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+		mmi_ms_opt_time_init();
+		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
+	}
+>>>>>>> six commit
 	return;
 }
 
@@ -694,6 +950,10 @@ return :
 void mmi_dq_sys_chg_admin_fp_No1(void)
 {
 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+<<<<<<< HEAD
+=======
+	mmi_dq_fp_light(FP_BLUE);
+>>>>>>> six commit
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP1);
 	return;
@@ -708,6 +968,10 @@ return :
 void mmi_dq_sys_chg_admin_fp_No2(void)
 {
 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+<<<<<<< HEAD
+=======
+	mmi_dq_fp_light(FP_BLUE);
+>>>>>>> six commit
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP2);
 	return;
@@ -736,17 +1000,32 @@ return :
 */
 void mmi_dq_sys_restore_lock(void)
 {
+<<<<<<< HEAD
 	unsigned short retval = 0;
+=======
+	unsigned char retval = 0;
+>>>>>>> six commit
 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK);
 
 	if (RET_SUCESS != mmi_dq_fs_clr_set())
 		retval = 1;
 	if (RET_SUCESS != mmi_dq_fs_clr_pwd())
 		retval = 1;
+<<<<<<< HEAD
 	if (RET_SUCESS != mmi_dq_fs_clr_fp())
 		retval = 1;
 	if (RET_SUCESS != mmi_dq_fs_clr_rfid())
 		retval = 1;
+=======
+#ifdef __LOCK_FP_SUPPORT__
+	if (RET_SUCESS != mmi_dq_fs_clr_fp())
+		retval = 1;
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
+	if (RET_SUCESS != mmi_dq_fs_clr_rfid())
+		retval = 1;
+#endif
+>>>>>>> six commit
 
 	if (retval == 0)
 		mmi_dq_aud_play_with_id(AUD_BASE_ID_SYS_RESTORE_SUCCESS);
@@ -786,7 +1065,10 @@ static void mmi_dq_sys_wifi_setting(void)
 	{
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+<<<<<<< HEAD
 		mmi_dq_sys_set_wifi_check();
+=======
+>>>>>>> six commit
 	}
 }
 
@@ -814,7 +1096,11 @@ const sys_menu_t sys_menu_tree[] =
 #endif
 		{STR_ID_SYSTEM, STR_ID_ADMIN, 0},
 		{STR_ID_SYSTEM, STR_ID_SETTING, 0},
+<<<<<<< HEAD
 		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock},
+=======
+		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock_con},
+>>>>>>> six commit
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
 
 		{STR_ID_SYSTEM2, STR_ID_ADMIN, 0},
@@ -827,7 +1113,11 @@ const sys_menu_t sys_menu_tree[] =
 		{STR_ID_PASSWORD, STR_ID_DEL_PWD, mmi_dq_sys_del_pwd},
 		{STR_ID_PASSWORD, STR_ID_CLR_PWD, mmi_dq_sys_clear_pwd},
 //FP
+<<<<<<< HEAD
 #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__) || defined(__LOCK_FP_SUPPORT1_2__)
+=======
+#if defined(__LOCK_FP_SUPPORT__)
+>>>>>>> six commit
 		{STR_ID_FINGERPRINT, STR_ID_ADD_FP, mmi_dq_sys_add_fp},
 		//{STR_ID_FINGERPRINT,STR_ID_CHG_FP,mmi_dq_sys_chg_fp},
 		{STR_ID_FINGERPRINT, STR_ID_DEL_FP, mmi_dq_sys_del_fp},
@@ -927,7 +1217,11 @@ void mmi_dq_sys_show_cur_menu_list(void)
 	mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
 #endif
 #ifdef __LOCK_FP_SUPPORT__
+<<<<<<< HEAD
 	//mmi_dq_fp_light(FP_NONE_COLOR);
+=======
+	mmi_dq_fp_light(FP_NONE_COLOR);
+>>>>>>> six commit
 #endif
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_SYS_MENU);

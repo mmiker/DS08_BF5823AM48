@@ -1,15 +1,24 @@
 #ifndef __MMI_RFID_C__
 #define __MMI_RFID_C__
+<<<<<<< HEAD
 
 #include "dqiot_drv.h"
 #include "mmi_feature.h"
+=======
+#include "mmi_feature.h"
+#ifdef __LOCK_RFID_CARD_SUPPORT__
+#include "dqiot_drv.h"
+>>>>>>> six commit
 #include "mmi_rfid.h"
 #include "string.h"
 #include "stdlib.h"
 #include "delay.h"
 #include "mmi_fs.h"
 
+<<<<<<< HEAD
 #ifdef __LOCK_RFID_CARD_SUPPORT__
+=======
+>>>>>>> six commit
 unsigned char rfid_uid_buff_temp[RFID_SEC_DATA_LEN];
 unsigned char rfid_uid_buff[2][RFID_SEC_DATA_LEN];
 

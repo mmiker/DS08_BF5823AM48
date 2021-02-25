@@ -65,11 +65,21 @@ unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPag
 unsigned char PS_Empty(void);																								   // 删除 flash 数据库中所有指纹模板
 //unsigned char PS_Connect(unsigned long *PS_Addr);//检查STM32与指纹模块的通信连接
 unsigned char PS_ValidTempleteNum(unsigned short *ValidN);
+<<<<<<< HEAD
 unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, void *p);
+=======
+unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p);
+>>>>>>> six commit
 unsigned char PS_HandShake(unsigned long *PS_Addr);
 //unsigned char PS_ReadSysPara(void);
 void FP_Light(FP_COLOR_E light_id);
 //void AS608_EnterSleep(void);
 FP_COLOR_E FP_Get_Light(void);
+<<<<<<< HEAD
+=======
+FP_COLOR_E FP_Set_Light(FP_COLOR_E light_id);
+
+unsigned char FP_Get_Start_Flag(void);
+>>>>>>> six commit
 
 #endif //__DQIOT_FP_AS608_H__

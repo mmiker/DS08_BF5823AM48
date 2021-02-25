@@ -91,7 +91,10 @@ uint8_t dqiot_drv_audio_play(uint8_t play_setion)
 	}
 	else
 	{
+<<<<<<< HEAD
 		char i = 0;
+=======
+>>>>>>> six commit
 		for(i=0;i<AUDIO_MAX_CACHE_NUM;i++)
 		{
 			if(audio_cache[i]==0)
@@ -260,7 +263,11 @@ parameter:
 return :
 	none
 */
+<<<<<<< HEAD
 void timer0_event_handler(void)
+=======
+void Audio_timer_event_handler(void)
+>>>>>>> six commit
 {
 	if((audio_flag == 2)&&(AUDIO_IN_BUSY == 1))
 	{

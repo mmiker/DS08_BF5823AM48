@@ -1,6 +1,10 @@
 #ifndef __MMI_WIFI_C__
 #define __MMI_WIFI_C__
 
+<<<<<<< HEAD
+=======
+#include "mmi_feature.h"
+>>>>>>> six commit
 #include "dqiot_drv_wifi.h"
 #include "mmi_sys.h"
 #include "mmi_ms.h"
@@ -50,7 +54,14 @@ unsigned char mmi_dq_wifi_setting(void)
 		ret = wifi_net_connect_send();
 	}
 	if(ret == 1)
+<<<<<<< HEAD
 		wifi_check_times = 0;
+=======
+	{
+		wifi_check_times = 1;
+		mmi_dq_sys_set_wifi_check(0);
+	}
+>>>>>>> six commit
 	return ret;
 }
 
@@ -96,6 +107,7 @@ return :
 */
 void mmi_dq_wifi_check_connect(void)
 {
+<<<<<<< HEAD
 	wifi_check_times++;
 	if(wifi_net_connect_state() == 1)
 		mmi_dq_wifi_connected_suc();
@@ -103,6 +115,33 @@ void mmi_dq_wifi_check_connect(void)
 		mmi_dq_wifi_connected_fail();
 	else
 		mmi_dq_sys_set_wifi_check();
+=======
+	static unsigned char wifi_check_connect_flag = 0;
+	wifi_check_times++;
+	if(wifi_net_connect_state() == 1)
+	{
+		wifi_check_connect_flag++;
+		if(wifi_check_connect_flag>=2)
+		{
+			mmi_dq_wifi_connected_suc();
+			wifi_check_connect_flag = 0;
+			wifi_check_times = 0;
+			return;
+		}
+	}
+	else
+	{
+		wifi_check_connect_flag = 0;
+	}
+	
+	if(wifi_check_times > 600)
+	{
+		mmi_dq_wifi_connected_fail();
+		wifi_check_times = 0;
+	}
+	else
+		mmi_dq_sys_set_wifi_check(0);
+>>>>>>> six commit
 }
 
 /*
@@ -113,15 +152,61 @@ return :
 */
 unsigned char mmi_dq_wifi_open_ask(void)
 {
+<<<<<<< HEAD
+=======
+	unsigned char ret = 1;
+	if(wifi_check_times > 0)
+		return 0;
+>>>>>>> six commit
 	mmi_dq_wifi_wakeup();
 	delay_ms(250);
 	if(wifi_open_ask() == 0)
 	{
 		delay_ms(250);
+<<<<<<< HEAD
 		return wifi_open_ask();
 	}
 	else
 		return 1;
+=======
+		ret =  wifi_open_ask();
+	}
+	if(ret == 1)
+	{
+		wifi_check_times = 1;
+		mmi_dq_sys_set_wifi_check(1);
+	}
+	return ret;
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_check_open(void)
+{
+	unsigned char state = wifi_open_reply_get();
+	wifi_check_times++;
+	if(state == 1)
+	{
+		if(SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+			mmi_dq_sys_wake_up();
+		mmi_dq_sys_door_open(SYS_OPEN_BY_WIFI);
+		wifi_check_times = 0;
+	}
+	else if(state == 2 || wifi_check_times > 300)
+	{
+		if(SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+			mmi_dq_sys_wake_up();
+		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+		wifi_check_times = 0;
+	}
+	else
+		mmi_dq_sys_set_wifi_check(1);
+
+>>>>>>> six commit
 }
 
 
@@ -220,6 +305,25 @@ parameter:
 return :
 	none
 */
+<<<<<<< HEAD
+=======
+void mmi_dq_wifi_open_by_rfid(void)
+{
+	mmi_dq_wifi_wakeup();
+
+	delay_ms(150);
+
+	wifi_open_by_rfid();
+}
+
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+>>>>>>> six commit
 void mmi_dq_wifi_open_by_key(void)
 {
 	mmi_dq_wifi_wakeup();
@@ -304,6 +408,25 @@ parameter:
 return :
 	none
 */
+<<<<<<< HEAD
+=======
+void mmi_dq_wifi_rfid_alarm(void)
+{
+	mmi_dq_wifi_wakeup();
+
+	delay_ms(150);
+
+	wifi_rf_alarm();
+}
+
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+>>>>>>> six commit
 void mmi_dq_wifi_lowpower_alarm(void)
 {
 	static uint8_t wifi_lowpower_flag = 0;
@@ -317,4 +440,21 @@ void mmi_dq_wifi_lowpower_alarm(void)
 		wifi_lowpower_alarm();
 	}
 }
+<<<<<<< HEAD
+=======
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_wifi_get_running_flag(void)
+{
+	if(wifi_check_times>0)
+		return 1;
+	return 0;
+}
+
+>>>>>>> six commit
 #endif

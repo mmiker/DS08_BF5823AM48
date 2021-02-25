@@ -79,8 +79,13 @@ extern unsigned char uart_getbuflen;
 //}
 
 /**
+<<<<<<< HEAD
   * @brief  AS608_USART´®¿ÚÏòÖ¸ÎÆÄ£¿é´«µÝÊý¾Ý 
   * @param  data;´«ÊäµÄÊý¾Ý
+=======
+  * @brief  AS608_USARTä¸²å£å‘æŒ‡çº¹æ¨¡å—ä¼ é€’æ•°æ? 
+  * @param  data;ä¼ è¾“çš„æ•°æ?
+>>>>>>> six commit
   */
 void AS608_SendData(unsigned char send_data)
 {
@@ -88,8 +93,13 @@ void AS608_SendData(unsigned char send_data)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  AS608_USART´®¿ÚÏòÖ¸ÎÆÄ£¿éÃüÁî°üÍ·¸ñÊ½ 
   * @param  ÎÞ
+=======
+  * @brief  AS608_USARTä¸²å£å‘æŒ‡çº¹æ¨¡å—å‘½ä»¤åŒ…å¤´æ ¼å¼? 
+  * @param  æ—?
+>>>>>>> six commit
   */
 unsigned char AS608_PackHead(void)
 {
@@ -110,11 +120,19 @@ unsigned char AS608_PackHead(void)
 	//	ps_start_flag = 2;
 	//}
 
+<<<<<<< HEAD
 	/*°üÍ· SendHead*/
 	AS608_SendData(0xEF);
 	AS608_SendData(0x01);
 
 	/*Ö¸ÎÆÄ£¿éµØÖ· SendAddr*/
+=======
+	/*åŒ…å¤´*/
+	AS608_SendData(0xEF);
+	AS608_SendData(0x01);
+
+	/*æŒ‡çº¹æ¨¡å—åœ°å€*/
+>>>>>>> six commit
 	AS608_SendData(AS608_Addr >> 24);
 	AS608_SendData(AS608_Addr >> 16);
 	AS608_SendData(AS608_Addr >> 8);
@@ -126,11 +144,19 @@ unsigned char AS608_PackHead(void)
 unsigned char AS608_PackHead2(void)
 {
 
+<<<<<<< HEAD
 	/*°üÍ· SendHead*/
 	AS608_SendData(0xEF);
 	AS608_SendData(0x01);
 
 	/*Ö¸ÎÆÄ£¿éµØÖ·*/
+=======
+	/*åŒ…å¤´*/
+	AS608_SendData(0xEF);
+	AS608_SendData(0x01);
+
+	/*æŒ‡çº¹æ¨¡å—åœ°å€*/
+>>>>>>> six commit
 	AS608_SendData(AS608_Addr >> 24);
 	AS608_SendData(AS608_Addr >> 16);
 	AS608_SendData(AS608_Addr >> 8);
@@ -140,9 +166,15 @@ unsigned char AS608_PackHead2(void)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  ·¢ËÍ°ü±êÊ¶
   * @param  flag:°ü±ê±êÖ¾
   * @retval ÎÞ
+=======
+  * @brief  å‘é€åŒ…æ ‡è¯†
+  * @param  flag:åŒ…æ ‡è¯†ä½
+  * @retval æ—?
+>>>>>>> six commit
   */
 void SendFlag(unsigned char flag)
 {
@@ -150,9 +182,15 @@ void SendFlag(unsigned char flag)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  ·¢ËÍ°ü³¤¶È
   * @param  length:°ü³¤¶È
   * @retval ÎÞ
+=======
+  * @brief  å‘é€åŒ…é•¿åº¦
+  * @param  length:åŒ…é•¿åº?
+  * @retval æ—?
+>>>>>>> six commit
   */
 void SendLength(unsigned short length)
 {
@@ -161,9 +199,15 @@ void SendLength(unsigned short length)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  ·¢ËÍÖ¸ÁîÂë
   * @param  cmd;Ö¸ÁîÂë
   * @retval ÎÞ
+=======
+  * @brief  å‘é€æŒ‡ä»¤ç 
+  * @param  cmd;æŒ‡ä»¤ç ?
+  * @retval æ—?
+>>>>>>> six commit
   */
 void Sendcmd(unsigned char cmd)
 {
@@ -171,9 +215,15 @@ void Sendcmd(unsigned char cmd)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  ·¢ËÍÐ£ÑéºÍ
   * @param  check:¼ì²éÎ»
   * @retval ÎÞ
+=======
+  * @brief  å‘é€æ ¡éªŒå’Œ
+  * @param  check:æ£€æŸ¥ä½
+  * @retval æ—?
+>>>>>>> six commit
   */
 void SendCheck(unsigned short check)
 {
@@ -182,11 +232,19 @@ void SendCheck(unsigned short check)
 }
 
 /**
+<<<<<<< HEAD
   * @brief  ÅÐ¶ÏÖÐ¶Ï½ÓÊÕµÄÊý×éÓÐÃ»ÓÐÓ¦´ð°ü
   * @param  
   * waittimeÎªµÈ´ýÖÐ¶Ï½ÓÊÕÊý¾ÝµÄÊ±¼ä(µ¥Î»1ms)
   * lengthÎª°ü³¤¶È
   * @return Êý¾Ý°üÈ·ÈÏÂë
+=======
+  * @brief  åˆ¤æ–­ä¸?æ–?æŽ¥æ”¶çš„æ•°ç»„æœ‰æ²¡æœ‰åº”ç­”åŒ?
+  * @param  
+  * waittimeä¸ºç­‰å¾…ä¸­æ–?æŽ¥æ”¶æ•°æ®çš„æ—¶é—?(å•ä½1ms)
+  * lengthä¸ºåŒ…é•¿åº¦
+  * @return æ•°æ®åŒ…ç¡®è®¤ç 
+>>>>>>> six commit
   * @note   1 failed
   * @see    none
   */
@@ -207,17 +265,28 @@ static u8 JudgeStr(u16 waittime, u8 length)
 	{
 		delay_ms(1);
 
+<<<<<<< HEAD
 		/* ½ÓÊÕµ½Ò»´ÎÊý¾Ý */
 		if (uart_getbuflen >= 9 + length)
 		{
 			/* Ñ°ÕÒ0xEFÎ»ÖÃ */
+=======
+		/* æŽ¥æ”¶åˆ°ä¸€æ¬¡æ•°æ? */
+		if (uart_getbuflen >= 9 + length)
+		{
+			/* å¯»æ‰¾0xEFä½ç½® */
+>>>>>>> six commit
 			for (i = 0; i < uart_getbuflen; i++)
 			{
 				if (uart_get_buf[i] == 0xEF)
 					break;
 			}
 
+<<<<<<< HEAD
 			/* ÅÐ¶ÏÊÇ·ñÎªÓ¦´ð°ü */
+=======
+			/* åˆ¤æ–­æ˜?å¦ä¸ºåº”ç­”åŒ? */
+>>>>>>> six commit
 			if (uart_get_buf[i] == 0xEF && uart_get_buf[i + 1] == 0x01 && uart_get_buf[i + 6] == 0x07 && ((uart_get_buf[i + 7] << 8) + uart_get_buf[i + 8]) == length)
 			{
 				for (i; i < uart_getbuflen; i++)
@@ -225,9 +294,15 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					uart_rec_buff[j] = uart_get_buf[i];
 					j++;
 				}
+<<<<<<< HEAD
 				getdata = uart_rec_buff[9]; //È·ÈÏÂë
 
 				/* Çå¿Õ»º´æ */
+=======
+				getdata = uart_rec_buff[9]; //ç¡?è®¤ç 
+
+				/* æ¸…ç©ºç¼“å­˜ */
+>>>>>>> six commit
 				uart_getbuflen = 0;
 
 				return getdata;
@@ -240,9 +315,15 @@ static u8 JudgeStr(u16 waittime, u8 length)
 
 #if 0
 /**
+<<<<<<< HEAD
   * @brief  ´Ó»º³åÇø¶Á³öÈ·ÈÏÂë
   * @param  *i:·µ»ØÖµ£¨È·ÈÏÂë£©
   * @retval ÎÞ
+=======
+  * @brief  ä»Žç¼“å†²åŒºè¯»å‡ºç¡?è®¤ç 
+  * @param  *i:è¿”å›žå€¼ï¼ˆç¡?è®¤ç ï¼?
+  * @retval æ—?
+>>>>>>> six commit
   */
 unsigned char  ReturnFlag( unsigned char *i)
 {	
@@ -286,6 +367,7 @@ unsigned char  ReceiveInfo( unsigned char *rec_data)
 
 unsigned char PS_GetEcho(void)
 {
+<<<<<<< HEAD
 	unsigned char sure; //,p=0;
 
 	AS608_PackHead2();
@@ -336,10 +418,49 @@ unsigned char PS_GenChar(unsigned char BufferID)
 	unsigned short temp;
 	unsigned char sure; //,p=0;
 
+=======
+	AS608_PackHead2();
+	SendFlag(0x01);
+	SendLength(0x03);
+	Sendcmd(0x53); /*ç”Ÿæˆç‰¹å¾æŒ‡ä»¤*/
+	SendCheck(0x57);
+
+	//sure=ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+}
+
+//å½•å…¥å›¾åƒ PS_GetImage
+//åŠŸèƒ½:æŽ¢æµ‹æ‰‹æŒ‡ï¼ŒæŽ¢æµ‹åˆ°åŽå½•å…¥æŒ‡çº¹å›¾åƒå­˜äºŽImageBufferã€?
+//æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_GetImage(void)
+{
+	uart_getbuflen = 0;
+	//delay_ms(300);
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); /*å‘½ä»¤åŒ…æ ‡è¯?*/
+	SendLength(0x03);
+	Sendcmd(0x01); /*å½•æŒ‡çº¹æŒ‡ä»?*/
+	SendCheck(0x01 + 0x03 + 0x01);
+
+	//nrf_delay_ms(50);        /*ç­‰å¾…æŒ‡çº¹è¯†åˆ«æ¨¡å—å¤„ç†æ•°æ®*/
+
+	// sure = ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+}
+
+//ç”Ÿæˆç‰¹å¾ PS_GenChar
+//åŠŸèƒ½:å°†ImageBufferä¸?çš„åŽŸå§‹å›¾åƒç”ŸæˆæŒ‡çº¹ç‰¹å¾æ–‡ä»¶å­˜äºŽCharBuffer1æˆ–CharBuffer2
+//å‚æ•°:BufferID --> charBuffer1:0x01	charBuffer1:0x02
+//æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_GenChar(unsigned char BufferID)
+{
+>>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x04);
+<<<<<<< HEAD
 	Sendcmd(0x02); /*Éú³ÉÌØÕ÷Ö¸Áî*/
 	AS608_SendData(BufferID);
 	temp = 0x01 + 0x04 + 0x02 + BufferID;
@@ -359,10 +480,24 @@ unsigned char PS_Match(void)
 	unsigned short temp;
 	unsigned char sure; //,p=0;
 
+=======
+	Sendcmd(0x02); /*ç”Ÿæˆç‰¹å¾æŒ‡ä»¤*/
+	AS608_SendData(BufferID);
+	SendCheck(0x01 + 0x04 + 0x02 + BufferID);
+	return JudgeStr(1000, 0x03);
+}
+
+//ç²¾ç¡®æ¯”å?¹ä¸¤æžšæŒ‡çº¹ç‰¹å¾? PS_Match
+//åŠŸèƒ½:ç²¾ç¡®æ¯”å?¹CharBuffer1 ä¸ŽCharBuffer2 ä¸?çš„ç‰¹å¾æ–‡ä»?
+//æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_Match(void)
+{
+>>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x03);
+<<<<<<< HEAD
 	Sendcmd(0x03); /*¾«È·±È¶ÔÖ¸Áî*/
 	temp = 0x01 + 0x03 + 0x03;
 	SendCheck(temp);
@@ -387,6 +522,25 @@ unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsign
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //ÃüÁî°ü±êÊ¶
+=======
+	Sendcmd(0x03); /*ç²¾ç¡®æ¯”å?¹æŒ‡ä»?*/
+	SendCheck(0x01 + 0x03 + 0x03);
+
+	// sure = ReturnFlag(&p);
+	return JudgeStr(1000, 0x05);
+}
+//æœç´¢æŒ‡çº¹ PS_Search
+//åŠŸèƒ½:ä»?CharBuffer1æˆ–CharBuffer2ä¸?çš„ç‰¹å¾æ–‡ä»¶æœç´¢æ•´ä¸?æˆ–éƒ¨åˆ†æŒ‡çº¹åº“.è‹¥æœç´¢åˆ°ï¼Œåˆ™è¿”å›žé¡µç ã€?
+//å‚æ•°:  BufferID @ref CharBuffer1	CharBuffer2
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—ï¼Œé¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼?
+unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
+{
+
+	unsigned char sure;
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x04);
 	AS608_SendData(BufferID);
@@ -394,6 +548,7 @@ unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsign
 	AS608_SendData(StartPage);
 	AS608_SendData(PageNum >> 8);
 	AS608_SendData(PageNum);
+<<<<<<< HEAD
 	temp = 0x01 + 0x08 + 0x04 + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum;
 	SendCheck(temp);
 	return ensure;
@@ -407,10 +562,23 @@ unsigned char PS_RegModel(void)
 	unsigned short temp;
 	unsigned char sure; //,p=0;
 
+=======
+	SendCheck(0x01 + 0x08 + 0x04 + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum);
+	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
+	return sure;
+}
+
+//åˆå¹¶ç‰¹å¾ï¼ˆç”Ÿæˆæ¨¡æ¿ï¼‰PS_RegModel
+//åŠŸèƒ½:å°†CharBuffer1ä¸ŽCharBuffer2ä¸?çš„ç‰¹å¾æ–‡ä»¶åˆå¹¶ç”Ÿæˆ? æ¨¡æ¿,ç»“æžœå­˜äºŽCharBuffer1ä¸ŽCharBuffer2
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_RegModel(void)
+{
+>>>>>>> six commit
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x03);
+<<<<<<< HEAD
 	Sendcmd(0x05); /*ºÏ²¢ÌØÕ÷Ö¸Áî*/
 	temp = 0x01 + 0x03 + 0x05;
 	SendCheck(temp);
@@ -430,11 +598,29 @@ unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 {
 	unsigned short temp;
 	unsigned char sure; //,p=0;
+=======
+	Sendcmd(0x05); /*åˆå¹¶ç‰¹å¾æŒ‡ä»¤*/
+	SendCheck(0x01 + 0x03 + 0x05);
+
+	// sure = ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+}
+
+//å‚¨å­˜æ¨¡æ¿ PS_StoreChar
+//åŠŸèƒ½:å°? CharBuffer1 æˆ? CharBuffer2 ä¸?çš„æ¨¡æ¿æ–‡ä»¶å­˜åˆ? PageID å·flashæ•°æ®åº“ä½ç½?ã€?
+//å‚æ•°:  BufferID @ref charBuffer1:0x01	charBuffer1:0x02
+//       PageIDï¼ˆæŒ‡çº¹åº“ä½ç½®å·ï¼‰
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
+{
+	unsigned short;
+>>>>>>> six commit
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x06);
+<<<<<<< HEAD
 	Sendcmd(0x06); /*´æ´¢Ä£°åÖ¸Áî*/
 	AS608_SendData(BufferID);
 	AS608_SendData(PageID >> 8);
@@ -455,23 +641,52 @@ unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
 {
 	unsigned short temp;
+=======
+	Sendcmd(0x06); /*å­˜å‚¨æ¨¡æ¿æŒ‡ä»¤*/
+	AS608_SendData(BufferID);
+	AS608_SendData(PageID >> 8);
+	AS608_SendData(PageID);
+	SendCheck(0x01 + 0x06 + 0x06 + BufferID + (PageID >> 8) + (unsigned char)PageID);
+
+	// sure = ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+}
+
+//åˆ é™¤æ¨¡æ¿ PS_DeletChar
+//åŠŸèƒ½:  åˆ é™¤flashæ•°æ®åº“ä¸­æŒ‡å®šIDå·å¼€å§‹çš„Nä¸?æŒ‡çº¹æ¨¡æ¿
+//å‚æ•°:  PageID(æŒ‡çº¹åº“æ¨¡æ¿å·)ï¼ŒNåˆ é™¤çš„æ¨¡æ¿ä¸ªæ•°ã€?
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
+{
+>>>>>>> six commit
 	unsigned char sure; //,p=0;
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01); //ÃüÁî°ü±êÊ¶
 	SendLength(0x07);
 	Sendcmd(0x0C); /*É¾³ýÖ¸¶¨Ö¸ÎÆÄ£°åÖ¸Áî*/
+=======
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+	SendLength(0x07);
+	Sendcmd(0x0C); /*åˆ é™¤æŒ‡å®šæŒ‡çº¹æ¨¡æ¿æŒ‡ä»¤*/
+>>>>>>> six commit
 	AS608_SendData(PageID >> 8);
 	AS608_SendData(PageID);
 	AS608_SendData(N >> 8);
 	AS608_SendData(N);
+<<<<<<< HEAD
 	temp = 0x01 + 0x07 + 0x0C + (PageID >> 8) + (unsigned char)PageID + (N >> 8) + (unsigned char)N;
 	SendCheck(temp);
+=======
+	SendCheck(0x01 + 0x07 + 0x0C + (PageID >> 8) + (unsigned char)PageID + (N >> 8) + (unsigned char)N);
+>>>>>>> six commit
 
 	//AS608_DELAY_MS(400);
 
 	// sure = ReturnFlag(&p);
+<<<<<<< HEAD
 	sure = JudgeStr(1000, 0x03);
 
 	return sure;
@@ -488,28 +703,55 @@ unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPag
 	unsigned short temp;
 	unsigned char ensure;
 	//unsigned short rc;
+=======
+	return JudgeStr(1000, 0x03);
+}
+
+//é«˜é€Ÿæœç´?PS_HighSpeedSearch
+//åŠŸèƒ½ï¼šä»¥ CharBuffer1æˆ–CharBuffer2ä¸?çš„ç‰¹å¾æ–‡ä»¶é«˜é€Ÿæœç´¢æ•´ä¸?æˆ–éƒ¨åˆ†æŒ‡çº¹åº“ã€?
+//		  è‹¥æœç´¢åˆ°ï¼Œåˆ™è¿”å›žé¡µç ,è¯¥æŒ‡ä»¤å?¹äºŽçš„ç¡®å­˜åœ¨äºŽæŒ‡çº¹åº“ä¸? ï¼Œä¸”ç™»å½•æ—¶è´¨é‡?
+//		  å¾ˆå¥½çš„æŒ‡çº¹ï¼Œä¼šå¾ˆå¿?ç»™å‡ºæœç´¢ç»“æžœã€?
+//å‚æ•°:  BufferIDï¼? StartPage(èµ·å?‹é¡µ)ï¼ŒPageNumï¼ˆé¡µæ•°ï¼‰
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—+é¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼‰
+unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
+{
+	unsigned char ensure;
+>>>>>>> six commit
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x08);
+<<<<<<< HEAD
 	Sendcmd(0x1b); /*¸ßËÙËÑË÷Ö¸ÎÆ¿âÖ¸Áî*/
+=======
+	Sendcmd(0x1b); /*é«˜é€Ÿæœç´¢æŒ‡çº¹åº“æŒ‡ä»¤*/
+>>>>>>> six commit
 	AS608_SendData(BufferID);
 	AS608_SendData(StartPage >> 8);
 	AS608_SendData(StartPage);
 	AS608_SendData(PageNum >> 8);
 	AS608_SendData(PageNum);
+<<<<<<< HEAD
 	temp = 0x01 + 0x08 + 0x1b + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum;
 	SendCheck(temp);
+=======
+	SendCheck(0x01 + 0x08 + 0x1b + BufferID + (StartPage >> 8) + (unsigned char)StartPage + (PageNum >> 8) + (unsigned char)PageNum);
+>>>>>>> six commit
 
 	// ensure = ReturnFlag(&rc);
 	ensure = JudgeStr(1000, 0x07);
 
+<<<<<<< HEAD
 	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11]; //Ä£°åºÅ
+=======
+	*p = (uart_rec_buff[10] << 8) + uart_rec_buff[11];
+>>>>>>> six commit
 
 	return ensure;
 }
 
+<<<<<<< HEAD
 //Çå¿ÕÖ¸ÎÆ¿â PS_Empty
 //¹¦ÄÜ:  É¾³ýflashÊý¾Ý¿âÖÐËùÓÐÖ¸ÎÆÄ£°å
 //²ÎÊý:  ÎÞ
@@ -531,13 +773,36 @@ unsigned char PS_Empty(void)
 	sure = JudgeStr(1000, 0x03);
 
 	return sure;
+=======
+//æ¸…ç©ºæŒ‡çº¹åº? PS_Empty
+//åŠŸèƒ½:  åˆ é™¤flashæ•°æ®åº“ä¸­æ‰€æœ‰æŒ‡çº¹æ¨¡æ?
+//å‚æ•°:  æ—?
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+unsigned char PS_Empty(void)
+{
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+	SendLength(0x03);
+	Sendcmd(0x0D);
+	SendCheck(0x01 + 0x03 + 0x0D);
+
+	// sure = ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+>>>>>>> six commit
 }
 
 #if 0
 /**
+<<<<<<< HEAD
   * @brief  ¼ì²éSTM32ÓëÖ¸ÎÆÄ£¿éµÄÍ¨ÐÅÁ¬½Ó
   * @param  PS_AddrÖ¸ÎÆÄ£¿éµØÖ·
   * @retval ·µ»ØÖµ0Í¨Ñ¶³É¹¦;1±íÊ¾Í¨Ñ¶²»³É¹¦
+=======
+  * @brief  æ£€æŸ?STM32ä¸ŽæŒ‡çº¹æ¨¡å—çš„é€šä¿¡è¿žæŽ¥
+  * @param  PS_AddræŒ‡çº¹æ¨¡å—åœ°å€
+  * @retval è¿”å›žå€?0é€šè??æˆåŠŸ;1è¡¨ç¤ºé€šè??ä¸æˆåŠ?
+>>>>>>> six commit
   */
 unsigned char PS_Connect(unsigned long *PS_Addr)
 {
@@ -550,10 +815,17 @@ unsigned char PS_Connect(unsigned long *PS_Addr)
 	return 1;		
 }
 
+<<<<<<< HEAD
 //Ð´ÏµÍ³¼Ä´æÆ÷ PS_WriteReg
 //¹¦ÄÜ:  Ð´Ä£¿é¼Ä´æÆ÷
 //²ÎÊý:  ¼Ä´æÆ÷ÐòºÅRegNum:4\5\6
 //ËµÃ÷:  Ä£¿é·µ»ØÈ·ÈÏ×Ö
+=======
+//å†™ç³»ç»Ÿå¯„å­˜å™¨ PS_WriteReg
+//åŠŸèƒ½:  å†™æ¨¡å—å¯„å­˜å™¨
+//å‚æ•°:  å¯„å­˜å™¨åºå·RegNum:4\5\6
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+>>>>>>> six commit
 unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 {
 	unsigned short temp;
@@ -561,7 +833,11 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01);//ÃüÁî°ü±êÊ¶
+=======
+	SendFlag(0x01);//é›æˆ’æŠ¤é–å‘?çˆ£ç’‡
+>>>>>>> six commit
 	SendLength(0x05);
 	Sendcmd(0x0E);
 	AS608_SendData(RegNum);
@@ -571,6 +847,7 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 	sure=ReturnFlag(&p);
 	return sure;
 }
+<<<<<<< HEAD
 /**
   * @brief  ¶ÁÏµÍ³»ù±¾²ÎÊý PS_ReadSysPara
   * @param  ÎÞ
@@ -578,6 +855,12 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
   * @note   ¶ÁÈ¡Ä£¿éµÄ»ù±¾²ÎÊý£¨²¨ÌØÂÊ£¬°ü´óÐ¡µÈ)
   * @see    none
   */
+=======
+//è¯»ç³»ç»ŸåŸºæœ?å‚æ•° PS_ReadSysPara
+//åŠŸèƒ½:  è¯»å–æ¨¡å—çš„åŸºæœ?å‚æ•°ï¼ˆæ³¢ç‰¹çŽ‡ï¼ŒåŒ…å¤§å°ç­?)
+//å‚æ•°:  æ—?
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­— + åŸºæœ¬å‚æ•°ï¼?16bytesï¼?
+>>>>>>> six commit
 unsigned char PS_ReadSysPara(void)
 {
 	unsigned short temp;
@@ -587,7 +870,11 @@ unsigned char PS_ReadSysPara(void)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01);//ÃüÁî°ü±êÊ¶
+=======
+	SendFlag(0x01);//é›æˆ’æŠ¤é–å‘?çˆ£ç’‡
+>>>>>>> six commit
 	SendLength(0x03);
 	Sendcmd(0x0F);
 	temp = 0x01+0x03+0x0F;
@@ -605,10 +892,17 @@ unsigned char PS_ReadSysPara(void)
 	}
 	return ensure;
 }
+<<<<<<< HEAD
 //ÉèÖÃÄ£¿éµØÖ· PS_SetAddr
 //¹¦ÄÜ:  ÉèÖÃÄ£¿éµØÖ·
 //²ÎÊý:  PS_addr
 //ËµÃ÷:  Ä£¿é·µ»ØÈ·ÈÏ×Ö
+=======
+//è®¾ç½®æ¨¡å—åœ°å€ PS_SetAddr
+//åŠŸèƒ½:  è®¾ç½®æ¨¡å—åœ°å€
+//å‚æ•°:  PS_addr
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+>>>>>>> six commit
 unsigned char PS_SetAddr(unsigned long PS_addr)
 {
 	unsigned short temp;
@@ -616,7 +910,11 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01);//ÃüÁî°ü±êÊ¶
+=======
+	SendFlag(0x01);//å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(0x07);
 	Sendcmd(0x15);
 	AS608_SendData(PS_addr>>24);
@@ -630,10 +928,17 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	return ensure;
 }
+<<<<<<< HEAD
 //¹¦ÄÜ£º Ä£¿éÄÚ²¿ÎªÓÃ»§¿ª±ÙÁË256bytesµÄFLASH¿Õ¼äÓÃÓÚ´æÓÃ»§¼ÇÊÂ±¾,
 //	¸Ã¼ÇÊÂ±¾Âß¼­ÉÏ±»·Ö³É 16 ¸öÒ³¡£
 //²ÎÊý:  NotePageNum(0~15),Byte32(ÒªÐ´ÈëÄÚÈÝ£¬32¸ö×Ö½Ú)
 //ËµÃ÷:  Ä£¿é·µ»ØÈ·ÈÏ×Ö
+=======
+//åŠŸèƒ½ï¼? æ¨¡å—å†…éƒ¨ä¸ºç”¨æˆ·å¼€è¾Ÿäº†256bytesçš„FLASHç©ºé—´ç”¨äºŽå­˜ç”¨æˆ·è?°äº‹æœ?,
+//	è¯¥è?°äº‹æœ?é€»è¾‘ä¸Šè??åˆ†æˆ 16 ä¸?é¡µã€?
+//å‚æ•°:  NotePageNum(0~15),Byte32(è¦å†™å…¥å†…å®¹ï¼Œ32ä¸?å­—èŠ‚)
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—
+>>>>>>> six commit
 unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -643,7 +948,11 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01); //ÃüÁî°ü±êÊ¶
+=======
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(36);
 	Sendcmd(0x18);
 	AS608_SendData(NotePageNum);
@@ -657,10 +966,17 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 
 	return ensure;
 }
+<<<<<<< HEAD
 //¶Á¼ÇÊÂPS_ReadNotepad
 //¹¦ÄÜ£º  ¶ÁÈ¡FLASHÓÃ»§ÇøµÄ128bytesÊý¾Ý
 //²ÎÊý:  NotePageNum(0~15)
 //ËµÃ÷:  Ä£¿é·µ»ØÈ·ÈÏ×Ö+ÓÃ»§ÐÅÏ¢
+=======
+//è¯»è?°äº‹PS_ReadNotepad
+//åŠŸèƒ½ï¼?  è¯»å–FLASHç”¨æˆ·åŒºçš„128bytesæ•°æ®
+//å‚æ•°:  NotePageNum(0~15)
+//è¯´æ˜Ž:  æ¨¡å—è¿”å›žç¡?è®¤å­—+ç”¨æˆ·ä¿¡æ¯
+>>>>>>> six commit
 unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -670,7 +986,11 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
+<<<<<<< HEAD
 	SendFlag(0x01);//ÃüÁî°ü±êÊ¶
+=======
+	SendFlag(0x01);//å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(0x04);
 	Sendcmd(0x19);
 	AS608_SendData(NotePageNum);
@@ -681,6 +1001,7 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 }
 #endif
 
+<<<<<<< HEAD
 //¶ÁÓÐÐ§Ä£°å¸öÊý PS_ValidTempleteNum
 //¹¦ÄÜ£º¶ÁÓÐÐ§Ä£°å¸öÊý
 //²ÎÊý: ÎÞ
@@ -698,6 +1019,22 @@ unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
 	Sendcmd(0x1d);
 	temp = 0x01 + 0x03 + 0x1d;
 	SendCheck(temp);
+=======
+//è¯»æœ‰æ•ˆæ¨¡æ¿ä¸ªæ•? PS_ValidTempleteNum
+//åŠŸèƒ½ï¼šè?»æœ‰æ•ˆæ¨¡æ¿ä¸ªæ•?
+//å‚æ•°: æ—?
+//è¯´æ˜Ž: æ¨¡å—è¿”å›žç¡?è®¤å­—+æœ‰æ•ˆæ¨¡æ¿ä¸?æ•°ValidN
+unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
+{
+	unsigned char ensure;
+
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+	SendLength(0x03);
+	Sendcmd(0x1d);
+	SendCheck(0x01 + 0x03 + 0x1d);
+>>>>>>> six commit
 
 	// ensure = ReturnFlag(&p);
 	ensure = JudgeStr(1000, 0x05);
@@ -707,6 +1044,7 @@ unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
 	return ensure;
 }
 
+<<<<<<< HEAD
 //×Ô¶¯×¢²áÄ£°å PS_AutoEnRoll
 //¹¦ÄÜ£º²É¼¯Ò»´ÎÖ¸ÎÆ×¢²áÄ£°å£¬ÔÚÖ¸ÎÆ¿âÖÐËÑË÷¿ÕÎ»²¢´æ´¢£¬·µ»Ø´æ´¢ID
 //²ÎÊý: ÎÞ
@@ -718,6 +1056,13 @@ unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //ÃüÁî°ü±êÊ¶
+=======
+unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short param)
+{
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x31);
 	AS608_SendData(id >> 8);
@@ -725,12 +1070,17 @@ unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short
 	AS608_SendData(num);
 	AS608_SendData(param >> 8);
 	AS608_SendData(param & 0xFF);
+<<<<<<< HEAD
 	sum = 0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF);
 	SendCheck(sum);
+=======
+	SendCheck(0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF));
+>>>>>>> six commit
 
 	return 0;
 }
 
+<<<<<<< HEAD
 //×Ô¶¯ÑéÖ¤Ö¸ÎÆ PS_AutoIdentify
 //¹¦ÄÜ£º
 //1.×Ô¶¯²É¼¯Ö¸ÎÆ£¬ÔÚÖ¸ÎÆ¿âÖÐËÑË÷Ä¿±êÄ£°å²¢·µ»ØËÑË÷½á¹û¡£
@@ -744,6 +1094,19 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01); //ÃüÁî°ü±êÊ¶
+=======
+//è‡?åŠ¨éªŒè¯æŒ‡çº? PS_AutoIdentify
+//åŠŸèƒ½ï¼?
+//1.è‡?åŠ¨é‡‡é›†æŒ‡çº¹ï¼Œåœ¨æŒ‡çº¹åº“ä¸?æœç´¢ç›?æ ‡æ¨¡æ¿å¹¶è¿”å›žæœç´¢ç»“æžœã€?
+//2.å¦‚æžœç›?æ ‡æ¨¡æ¿åŒå½“å‰é‡‡é›†çš„æŒ‡çº¹æ¯”å¯¹å¾—åˆ†å¤§äºŽæœ€é«˜é˜€å€¼ï¼Œå¹¶ä¸”ç›?æ ‡æ¨¡æ¿ä¸ºä¸å®Œæ•´ç‰¹å¾åˆ™ä»¥é‡‡é›†çš„ç‰¹å¾æ›´æ–°ç›?æ ‡æ¨¡æ¿çš„ç©ºç™½åŒºåŸŸã€?
+//å‚æ•°: æ—?
+//è¯´æ˜Ž: æ¨¡å—è¿”å›žç¡?è®¤å­—+é¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼‰
+unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned short param)
+{
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+>>>>>>> six commit
 	SendLength(0x08);
 	Sendcmd(0x32);
 	AS608_SendData(level);
@@ -751,18 +1114,30 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 	AS608_SendData(id & 0xFF);
 	AS608_SendData(param >> 8);
 	AS608_SendData(param & 0xFF);
+<<<<<<< HEAD
 	sum = 0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF);
 	SendCheck(sum);
+=======
+	SendCheck(0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF));
+>>>>>>> six commit
 
 	return 0;
 }
 
+<<<<<<< HEAD
 //ÓëAS608ÎÕÊÖ PS_HandShake
 //²ÎÊý: PS_AddrµØÖ·Ö¸Õë
 //ËµÃ÷: Ä£¿é·µÐÂµØÖ·£¨ÕýÈ·µØÖ·£© ·µ»ØÈ·ÈÏÂë
 unsigned char PS_HandShake(unsigned long *PS_Addr)
 {
 	unsigned char ensure;
+=======
+//ä¸ŽAS608æ¡æ‰‹ PS_HandShake
+//å‚æ•°: PS_Addråœ°å€æŒ‡é’ˆ
+//è¯´æ˜Ž: æ¨¡å—è¿”æ–°åœ°å€ï¼ˆæ?£ç¡®åœ°å€ï¼?
+unsigned char PS_HandShake(unsigned long *PS_Addr)
+{
+>>>>>>> six commit
 	*PS_Addr = 0;
 
 	if (AS608_PackHead() == 1)
@@ -771,9 +1146,14 @@ unsigned char PS_HandShake(unsigned long *PS_Addr)
 	SendLength(0x03);
 	Sendcmd(0x53);
 	SendCheck(0x57);
+<<<<<<< HEAD
 	
 	ensure = JudgeStr(1000, 0x03);
 	return ensure;
+=======
+
+	return JudgeStr(1000, 0x03);
+>>>>>>> six commit
 }
 
 unsigned char PS_Reset(void)
@@ -783,6 +1163,7 @@ unsigned char PS_Reset(void)
 
 unsigned char PS_Sleep(void)
 {
+<<<<<<< HEAD
 	unsigned short temp;
 	unsigned char ensure;
 
@@ -794,6 +1175,15 @@ unsigned char PS_Sleep(void)
 	temp = 0x01 + 0x03 + 0x60;
 	SendCheck(temp);
 	return ensure;
+=======
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01); //å‘½ä»¤åŒ…æ ‡è¯?
+	SendLength(0x03);
+	Sendcmd(0x60);
+	SendCheck(0x01 + 0x03 + 0x60);
+	return 0;
+>>>>>>> six commit
 }
 
 //void AS608_log(void)
@@ -858,9 +1248,18 @@ void FP_Light(FP_COLOR_E light_id)
 
 	//sure=ReturnFlag(&p);
 	sure = JudgeStr(1000, 0x03);
+<<<<<<< HEAD
 	//#endif
 	Light_Color = light_id;
 
+=======
+
+	// if (sure == 0)
+	Light_Color = light_id;
+
+	//#endif
+
+>>>>>>> six commit
 	//	}
 }
 
@@ -869,4 +1268,31 @@ FP_COLOR_E FP_Get_Light(void)
 	return Light_Color;
 }
 
+<<<<<<< HEAD
+=======
+FP_COLOR_E FP_Set_Light(FP_COLOR_E light_id)
+{
+	Light_Color = light_id;
+	return Light_Color;
+}
+
+unsigned char FP_Get_Start_Flag(void)
+{
+	if (uart_getbuflen > 0)
+	{
+		unsigned char i;
+
+		for (i = 0; i < uart_getbuflen; i++)
+		{
+			if (uart_get_buf[i] == 0x55)
+			{
+				uart_getbuflen = 0;
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+>>>>>>> six commit
 //#endif//__PREIPHERAL_FP_LT5X_SUPPORT__
