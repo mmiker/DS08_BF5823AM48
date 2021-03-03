@@ -103,6 +103,7 @@ void mmi_dq_sys_enter_sleep(void)
 	mmi_dq_bsp_enter_sleep();
 
 	g_timer2_flag = 0;
+	g_sys_door_open_flag = 0;
 	FP_Set_Light(FP_NONE_COLOR);
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ENTER_SLEEP);
@@ -499,8 +500,10 @@ unsigned char mmi_dq_sys_check_vbat(void)
 		mmi_dq_wifi_lowpower_alarm();
 		if (state == 2)
 		{
-			// mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
-			// return 1;
+#if __Normal_handling__
+			mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
+			return 1;
+#endif
 		}
 	}
 

@@ -164,7 +164,6 @@ unsigned char adc_VolT(void)
 		return 1;//mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
 
 	return 0;
-
 }
 
 /*!

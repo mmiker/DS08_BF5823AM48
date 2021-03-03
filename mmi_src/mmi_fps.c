@@ -9,7 +9,6 @@
 #include "delay.h"
 
 unsigned char FP_oldStatus = 0;
-u16 waittime = 0;
 /*
 parameter: 
 	current status machine
@@ -40,10 +39,11 @@ return :
 */
 void mmi_dq_fp_init(void)
 {
+	u16 waittime = 2000;
 	dqiot_drv_uart0B_init();
 	dqiot_drv_fp_poweron();
 
-	waittime = 2000;
+#if __Normal_handling__
 	while (--waittime)
 	{
 		delay_ms(1);
@@ -53,6 +53,10 @@ void mmi_dq_fp_init(void)
 			return;
 		}
 	}
+#else
+	delay_ms(10);
+	FP_Light(FP_BLUE);
+#endif
 
 	return;
 }

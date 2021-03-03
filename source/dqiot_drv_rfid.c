@@ -65,7 +65,7 @@ uint8_t dqiot_drv_rfid_check(void)
 
 
 /*
-parameter: 
+parameter:
 	none
 return :
 	none

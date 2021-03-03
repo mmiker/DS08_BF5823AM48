@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          02/25/2021 18:05:29 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_RFID
@@ -22,142 +22,141 @@ line level    source
   11          
   12          unsigned char rfid_uid_buff_temp[RFID_SEC_DATA_LEN];
   13          unsigned char rfid_uid_buff[2][RFID_SEC_DATA_LEN];
-  14          
-  15          /*
-  16          parameter: 
-  17            none
-  18          return :
-  19            none
-  20          */
-  21          void mmi_dq_rfid_init(void)
-  22          {
-  23   1        dqiot_drv_rfid_init();
-  24   1      }
-  25          
-  26          /*
-  27          parameter: 
-  28            none
-  29          return :
-  30            none
-  31          */
-  32          RET_VAL mmi_dq_rfid_check(void)
-  33          {
-  34   1        return dqiot_drv_rfid_check()?RET_SUCESS:RET_FAIL;
-  35   1      }
-  36          
-  37          /*
-  38          parameter: 
-  39            none
-  40          return :
-  41            none
-  42          */
-  43          RET_VAL mmi_dq_rfid_work(void)
-  44          {
-  45   1        return dqiot_drv_rfid_get_card_number(rfid_uid_buff_temp)?RET_SUCESS:RET_FAIL;
-  46   1      }
-  47          
+  14          unsigned char RF_oldStatus = 0;
+  15          
+  16          /*
+  17          parameter: 
+  18            none
+  19          return :
+  20            none
+  21          */
+  22          void mmi_dq_rfid_init(void)
+  23          {
+  24   1        dqiot_drv_rfid_init();
+  25   1      }
+  26          
+  27          /*
+  28          parameter: 
+  29            none
+  30          return :
+  31            none
+  32          */
+  33          RET_VAL mmi_dq_rfid_check(void)
+  34          {
+  35   1        return dqiot_drv_rfid_check() ? RET_SUCESS : RET_FAIL;
+  36   1      }
+  37          
+  38          /*
+  39          parameter: 
+  40            none
+  41          return :
+  42            none
+  43          */
+  44          RET_VAL mmi_dq_rfid_work(void)
+  45          {
+  46   1        return dqiot_drv_rfid_get_card_number(rfid_uid_buff_temp) ? RET_SUCESS : RET_FAIL;
+  47   1      }
   48          
   49          /*
   50          parameter: 
   51            none
   52          return :
   53            none
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          02/25/2021 18:05:29 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 2   
 
   54          */
   55          RET_VAL mmi_dq_rfid_gen_char(unsigned char index)
   56          {
-  57   1        unsigned char i=0;
-  58   1        if(index >= 2)
+  57   1        unsigned char i = 0;
+  58   1        if (index >= 2)
   59   1          return RET_FAIL;
-  60   1        for(i=0;i<RFID_SEC_DATA_LEN;i++)
+  60   1        for (i = 0; i < RFID_SEC_DATA_LEN; i++)
   61   1        {
-  62   2          rfid_uid_buff[index][i]=rfid_uid_buff_temp[i];
+  62   2          rfid_uid_buff[index][i] = rfid_uid_buff_temp[i];
   63   2          rfid_uid_buff_temp[i] = 0x00;
   64   2        }
   65   1        return RET_SUCESS;
   66   1      }
   67          
-  68          
-  69          /*
-  70          parameter: 
-  71            none
-  72          return :
-  73            none
-  74          */
-  75          RET_VAL mmi_dq_rfid_match(void)
-  76          {
-  77   1        if(memcmp((const char *)rfid_uid_buff[0],(const char *)rfid_uid_buff[1],RFID_SEC_DATA_LEN)== 0)
-  78   1          return RET_SUCESS;
-  79   1        return RET_FAIL;
-  80   1      }
-  81          
-  82          /*
-  83          parameter: 
-  84            none
-  85          return :
-  86            none
-  87          */
-  88          RET_VAL mmi_dq_rfid_search_by_temp(unsigned char *index)
-  89          {
-  90   1        *index = mmi_dq_fs_check_rfid(rfid_uid_buff_temp, FDS_USE_TYPE_ALL);
-  91   1        if(*index != 0xFF)
-  92   1          return RET_SUCESS;
-  93   1        
-  94   1        return RET_FAIL;
-  95   1      }
-  96          
-  97          /*
-  98          parameter: 
-  99            none
- 100          return :
- 101            none
- 102          */
- 103          RET_VAL mmi_dq_rfid_search_by_id(unsigned char id, unsigned char *index)
- 104          {
- 105   1        if(id > 1)
- 106   1          return RET_FAIL;
- 107   1        
- 108   1        *index = mmi_dq_fs_check_rfid(rfid_uid_buff[id], FDS_USE_TYPE_ALL);
- 109   1        if(*index != 0xFF)
- 110   1          return RET_SUCESS;
- 111   1        
- 112   1        return RET_FAIL;
- 113   1      }
- 114          
- 115          /*
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          02/25/2021 18:05:29 PAGE 3   
+  68          /*
+  69          parameter: 
+  70            none
+  71          return :
+  72            none
+  73          */
+  74          RET_VAL mmi_dq_rfid_match(void)
+  75          {
+  76   1        if (memcmp((const char *)rfid_uid_buff[0], (const char *)rfid_uid_buff[1], RFID_SEC_DATA_LEN) == 0)
+  77   1          return RET_SUCESS;
+  78   1        return RET_FAIL;
+  79   1      }
+  80          
+  81          /*
+  82          parameter: 
+  83            none
+  84          return :
+  85            none
+  86          */
+  87          RET_VAL mmi_dq_rfid_search_by_temp(unsigned char *index)
+  88          {
+  89   1        *index = mmi_dq_fs_check_rfid(rfid_uid_buff_temp, FDS_USE_TYPE_ALL);
+  90   1        if (*index != 0xFF)
+  91   1          return RET_SUCESS;
+  92   1      
+  93   1        return RET_FAIL;
+  94   1      }
+  95          
+  96          /*
+  97          parameter: 
+  98            none
+  99          return :
+ 100            none
+ 101          */
+ 102          RET_VAL mmi_dq_rfid_search_by_id(unsigned char id, unsigned char *index)
+ 103          {
+ 104   1        if (id > 1)
+ 105   1          return RET_FAIL;
+ 106   1      
+ 107   1        *index = mmi_dq_fs_check_rfid(rfid_uid_buff[id], FDS_USE_TYPE_ALL);
+ 108   1        if (*index != 0xFF)
+ 109   1          return RET_SUCESS;
+ 110   1      
+ 111   1        return RET_FAIL;
+ 112   1      }
+ 113          
+ 114          /*
+ 115          parameter: 
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 3   
 
- 116          parameter: 
- 117            none
- 118          return :
- 119            none
- 120          */
- 121          RET_VAL mmi_dq_rfid_delete(unsigned char index)
- 122          {
- 123   1        return mmi_dq_fs_del_rfid(index);
- 124   1      }
- 125          
- 126          /*
- 127          parameter: 
- 128            none
- 129          return :
- 130            none
- 131          */
- 132          RET_VAL mmi_dq_rfid_store(unsigned char id)
- 133          {
- 134   1        return mmi_dq_fs_set_rfid(rfid_uid_buff[id], FDS_USE_TYPE_USER);
- 135   1      }
- 136          
- 137          #endif
- 138          
- 139          #endif//__MMI_RFID_C__
+ 116            none
+ 117          return :
+ 118            none
+ 119          */
+ 120          RET_VAL mmi_dq_rfid_delete(unsigned char index)
+ 121          {
+ 122   1        return mmi_dq_fs_del_rfid(index);
+ 123   1      }
+ 124          
+ 125          /*
+ 126          parameter: 
+ 127            none
+ 128          return :
+ 129            none
+ 130          */
+ 131          RET_VAL mmi_dq_rfid_store(unsigned char id)
+ 132          {
+ 133   1        return mmi_dq_fs_set_rfid(rfid_uid_buff[id], FDS_USE_TYPE_USER);
+ 134   1      }
+ 135          
+ 136          #endif
+ 137          
+ 138          #endif //__MMI_RFID_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    305    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     40       6
+   XDATA SIZE       =     41       6
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

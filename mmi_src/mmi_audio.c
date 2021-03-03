@@ -237,7 +237,7 @@ return :
 void mmi_dq_aud_play_key_tone(void)
 {
 	mmi_dq_aud_stop();
-	//if(mmi_dq_sys_get_pro_sound_state())
+	if(mmi_dq_fs_get_pro_sound_state())
 		mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO);
 
 }

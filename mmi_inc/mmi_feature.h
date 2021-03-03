@@ -16,5 +16,7 @@
 
 // #define __FACTORY_TEST_SUPPORT__
 
+#define __Normal_handling__  0 //0特殊处理,1正常处理
+
 #endif //__MMI_FEATURE_H__
 

@@ -17,7 +17,6 @@
 //#include "stdio.h"
 
 extern uint16_t timer0_count;
-extern uint8_t audio_flag;
 
 void system_init(void)
 {
