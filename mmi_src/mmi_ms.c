@@ -42,6 +42,7 @@ void mmi_task_proc(void)
 	unsigned char touch_value = 0xFF;
 	unsigned char key_value = KEY_INVALID;
 	static unsigned char time_count = 0;
+
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	//check rfid press
 	if (mmi_dq_rfid_work() == RET_SUCESS)
@@ -340,7 +341,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			}
 		}
 
-		mmi_dq_aud_play_key_num(key_val);
+		// mmi_dq_aud_play_key_num(key_val);
+		mmi_dq_aud_play_key_tone();
+
 		//input pwd
 		if (key_val == KEY_S)
 		{
@@ -642,7 +645,8 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 		unsigned char str = mmi_dq_factory_mode_get_test_project();
 		if (str == STR_ID_KEY)
 		{
-			mmi_dq_aud_play_key_num(key_val);
+			// mmi_dq_aud_play_key_num(key_val);
+			mmi_dq_aud_play_key_tone();
 			mmi_dq_factory_mode_key_test(key_val);
 		}
 		else if (str == STR_ID_MOTO)

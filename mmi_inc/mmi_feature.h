@@ -16,7 +16,7 @@
 
 // #define __FACTORY_TEST_SUPPORT__
 
-#define __Normal_handling__  0 //0特殊处理,1正常处理
+#define __Normal_handling__  0 //0锟斤拷锟解处锟斤拷,1锟斤拷锟斤拷锟斤拷锟斤拷
 
 #endif //__MMI_FEATURE_H__
 

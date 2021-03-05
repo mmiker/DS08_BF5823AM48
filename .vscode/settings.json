@@ -2,6 +2,8 @@
     "files.associations": {
         "mmi_sys.h": "c",
         "dqiot_drv_audio.h": "c",
-        "dqiot_fp_sy.h": "c"
+        "dqiot_fp_sy.h": "c",
+        "stdio.h": "c",
+        "dqiot_drv.h": "c"
     }
 }

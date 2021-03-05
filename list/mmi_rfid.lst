@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/05/2021 16:00:16 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_RFID
@@ -62,7 +62,7 @@ line level    source
   51            none
   52          return :
   53            none
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/05/2021 16:00:16 PAGE 2   
 
   54          */
   55          RET_VAL mmi_dq_rfid_gen_char(unsigned char index)
@@ -126,7 +126,7 @@ line level    source
  113          
  114          /*
  115          parameter: 
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/01/2021 18:11:29 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          03/05/2021 16:00:16 PAGE 3   
 
  116            none
  117          return :

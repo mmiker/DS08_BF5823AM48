@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 1   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ISO14443
@@ -62,7 +62,7 @@ line level    source
   51   4                array_bit[j] = send_x();
   52   4                bit_last = 0;
   53   4              }
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 2   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 2   
 
   54   3              else 
   55   3              {
@@ -126,7 +126,7 @@ line level    source
  113          #else
               void typea_card_send_bit(u8 *inByte,u8 lenBit)
               {
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 3   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 3   
 
               
                   u8 m,n;
@@ -190,7 +190,7 @@ line level    source
                   {
                     RFID_BUF1 = temp_bit;
                     buf_flag = 0;
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 4   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 4   
 
                   }
                   
@@ -254,7 +254,7 @@ line level    source
               #endif
  238          
  239          #if RFID_ANTI_SEL==0
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 5   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 5   
 
               /***********************************************************
               ** 函 数 名: u8 typea_card_receive_bit(u8 *inByte,u8 byteBit,u8 len,u8 *anti_info)
@@ -318,7 +318,7 @@ line level    source
                     rec_bytes = j;      
                     goto endle;
                    }
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 6   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 6   
 
               
                      if(sdat!=0xff)
@@ -382,7 +382,7 @@ line level    source
  361          ** 功能描述: 终止对卡操作
  362          ** 输  　入: 无           
  363          ** 输  　出: 无
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 7   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 7   
 
  364          ** 返    回: RETURN_OK或RETURN_NO
  365          ***********************************************************/
@@ -446,7 +446,7 @@ line level    source
  423          **           uid:存储指针            
  424          ** 输  　出: 无
  425          ** 返    回: RETURN_OK或RETURN_NO
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 8   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 8   
 
  426          ***********************************************************/
  427          u8 piccAntiA(u8 SEL, u8 rand_bit, u8 *uid)
@@ -510,7 +510,7 @@ line level    source
               //     tmpBuf[recBytes] &= ~(0x01<<(recBits-1));//把出错的bit位置为0  
                    recUID[recBytes] = tmpBuf[recBytes]&BITS(recBits);//保存有效数据位
                    
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 9   
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 9   
 
                    recUID[recBytes] |= (rand_bit<<(recBits-1));//冲突位增加rand_bit
               
@@ -574,7 +574,7 @@ line level    source
                          currValidBits = 0;
                          currValidBytes++;
                       }
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 10  
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 10  
 
                     }
                     else  //有完整字节
@@ -638,7 +638,7 @@ line level    source
  606          ** 函 数 名: u8 get_card_number(u8 *uid)
  607          ** 功能描述: 获取卡号
  608          ** 输  　入: uid:存储指针,至少12byte缓存            
-C51 COMPILER V9.59.0.0   ISO14443                                                          02/26/2021 16:27:59 PAGE 11  
+C51 COMPILER V9.59.0.0   ISO14443                                                          03/04/2021 16:34:59 PAGE 11  
 
  609          ** 输  　出: 无
  610          ** 返    回: RETURN_OK或RETURN_NO

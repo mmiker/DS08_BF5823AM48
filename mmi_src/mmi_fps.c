@@ -54,7 +54,6 @@ void mmi_dq_fp_init(void)
 		}
 	}
 #else
-	delay_ms(10);
 	FP_Light(FP_BLUE);
 #endif
 
@@ -106,7 +105,7 @@ unsigned char mmi_dq_fp_gen_char(unsigned char id)
 	else if (id == 3)
 		real_buf_id = CHAR_BUFFER4;
 
-	retval = PS_GenChar(real_buf_id); //Éú³ÉÌØÕ÷
+	retval = PS_GenChar(real_buf_id); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	return retval;
 }
 
@@ -158,7 +157,7 @@ unsigned char mmi_dq_fp_store_char(unsigned char id, unsigned short index)
 	else if (id == 3)
 		real_buf_id = CHAR_BUFFER4;
 
-	retval = PS_StoreChar(real_buf_id, index); //´¢´æÄ£°å
+	retval = PS_StoreChar(real_buf_id, index); //ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
 	return retval;
 }
 
@@ -259,7 +258,7 @@ return :
 */
 void mmi_dq_fp_light(FP_COLOR_E light_id)
 {
-	FP_Light(light_id); //µãµÆ
+	FP_Light(light_id); //ï¿½ï¿½ï¿½
 }
 
 /*
@@ -275,7 +274,7 @@ FP_COLOR_E mmi_dq_fp_get_light(void)
 	return retval;
 }
 
-/* ´¥ÃþÅÐ¶Ï */
+/* ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ */
 unsigned char mmi_dq_fp_work(void)
 {
 	if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)

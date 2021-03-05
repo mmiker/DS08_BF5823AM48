@@ -11,7 +11,7 @@
 #define __DQIOT_DRV_C__
 
 #include "string.h"
-//#include <stdio.h>
+#include <stdio.h>
 #include "stdlib.h"
 #include "byd_ctk.h"
 #include "dqiot_drv.h"
@@ -105,7 +105,7 @@ void dqiot_drv_wake_up(void)
 
 	dqiot_drv_key_led_on();
 
-	//byd_setbaseline(0);//°´¼ü»ùÏß¸´Î»
+	//byd_setbaseline(0);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½Î»
 	//delay_ms(200);
 	return;
 }
@@ -178,6 +178,7 @@ void dqiot_drv_timer1_isr(void) interrupt 3
 		TL1 = TL1_reload;
 	}
 	timer1_count_flag++;
+
 }
 
 /*!
@@ -326,14 +327,14 @@ void dqiot_drv_timer2_init(void)
 	*/
 	uint16_t count;
 	count = 3276;
-	TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL); //TIMER2_CLOCK_XTALÑ¡ÔñÍâ²¿¾§ÕñÒªÊ¹ÄÜXTAL_32K_ENABLE()
+	TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL); //TIMER2_CLOCK_XTALÑ¡ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½XTAL_32K_ENABLE()
 	TIMER2_AUTO_RELOAD(ENABLE);				//ENABLE
 	TIMER2_PRESCALE(TIMER2_PRESCALE_1);		//TIMER2_PRESCALE_65536
 	TIMER2_COUNT_SET(count);
 
-	INT_WDT_TIMER2_CLR(); //Çå³ýÖÐ¶Ï±êÖ¾
-	TIMER2_IPL_SET(LOW);  //ÖÐ¶ÏÓÅÏÈ¼¶ÎªµÍ
-	TIMER2_INT_DISABLE(); //¹Ø±ÕÖÐ¶Ï
+	INT_WDT_TIMER2_CLR(); //ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾
+	TIMER2_IPL_SET(LOW);  //ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½Îªï¿½ï¿½
+	TIMER2_INT_DISABLE(); //ï¿½Ø±ï¿½ï¿½Ð¶ï¿½
 	return;
 }
 
@@ -373,34 +374,34 @@ return :
 */
 void dqiot_drv_uart0A_init(void)
 {
-	GPIOE_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //±ÜÃâÓÐÃ«´Ì
+	GPIOE_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã«ï¿½ï¿½
 
 	UART0_PORT_SET(UART0_PE4_PE5);
 	UART0_CON2 = 0;
 	UART0_STATE = 0;
-	uart_baudrate_config(UART0, UART_BAUDRATE_57600); //²¨ÌØÂÊ
+	uart_baudrate_config(UART0, UART_BAUDRATE_57600); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UART0_STOP_MODE(STOP_WIDTH_1BIT);				  //Í£Ö¹Î»
-	UART0_DATA_MODE(DATA_MODE_8BIT);				  //Êý¾ÝÎ»
-	UART0_PARITY_SET(DISABLE);						  //ÆæÅ¼Ð£ÑéÊ¹ÄÜ
-	UART0_PARITY_SEL(ODD_PARITY);					  //ÆæÅ¼Ð£ÑéÑ¡Ôñ
-	UART0_MULTI_MODE(DISABLE);						  //¶à´¦ÀíÆ÷Í¨ÐÅÄ£Ê½
+	UART0_DATA_MODE(DATA_MODE_8BIT);				  //ï¿½ï¿½ï¿½ï¿½Î»
+	UART0_PARITY_SET(DISABLE);						  //ï¿½ï¿½Å¼Ð£ï¿½ï¿½Ê¹ï¿½ï¿½
+	UART0_PARITY_SEL(ODD_PARITY);					  //ï¿½ï¿½Å¼Ð£ï¿½ï¿½Ñ¡ï¿½ï¿½
+	UART0_MULTI_MODE(DISABLE);						  //ï¿½à´¦ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½Ä£Ê½
 
-	UART0_RX_ENABLE(); //½ÓÊÕÊ¹ÄÜ
+	UART0_RX_ENABLE(); //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 #ifdef __DRV_UART0A_INT_SUPPORT__
-	UART0_TX_INT_ENABLE(); //·¢ËÍÖÐ¶ÏÊ¹ÄÜ
-	UART0_RX_INT_ENABLE(); //½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
-	INT_UART0_CLR();	   //Çå³ýÖÐ¶ÏÔ´±êÖ¾
-	UART0_IPL_SET(LOW);	   //ÖÐ¶ÏÓÅÏÈ¼¶ÉèÖÃ
-	UART0_INT_ENABLE();	   //ÖÐ¶ÏÔ´
+	UART0_TX_INT_ENABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
+	UART0_RX_INT_ENABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
+	INT_UART0_CLR();	   //ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ô´ï¿½ï¿½Ö¾
+	UART0_IPL_SET(LOW);	   //ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½
+	UART0_INT_ENABLE();	   //ï¿½Ð¶ï¿½Ô´
 #else
-	UART0_TX_INT_DISABLE(); //·¢ËÍÖÐ¶Ï¹Ø±Õ
-	UART0_RX_INT_DISABLE(); //½ÓÊÕÖÐ¶Ï¹Ø±Õ
+	UART0_TX_INT_DISABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¹Ø±ï¿½
+	UART0_RX_INT_DISABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¹Ø±ï¿½
 #endif
 
 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
 	// uart_getbuflen = 0;
 
-	UART0_ENABLE(); //Ê¹ÄÜuart0
+	UART0_ENABLE(); //Ê¹ï¿½ï¿½uart0
 	return;
 }
 
@@ -412,35 +413,35 @@ return :
 */
 void dqiot_drv_uart0B_init(void)
 {
-	GPIOF_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //±ÜÃâÓÐÃ«´Ì
+	GPIOF_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã«ï¿½ï¿½
 
 	UART0_PORT_SET(UART0_PF4_PF5);
 	UART0_CON2 = 0;
 	UART0_STATE = 0;
-	uart_baudrate_config(UART0, UART_BAUDRATE_57600); //²¨ÌØÂÊ
+	uart_baudrate_config(UART0, UART_BAUDRATE_57600); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UART0_STOP_MODE(STOP_WIDTH_1BIT);				  //Í£Ö¹Î»
-	UART0_DATA_MODE(DATA_MODE_8BIT);				  //Êý¾ÝÎ»
-	UART0_PARITY_SET(DISABLE);						  //ÆæÅ¼Ð£ÑéÊ¹ÄÜ
-	UART0_PARITY_SEL(ODD_PARITY);					  //ÆæÅ¼Ð£ÑéÑ¡Ôñ
-	UART0_MULTI_MODE(DISABLE);						  //¶à´¦ÀíÆ÷Í¨ÐÅÄ£Ê½
+	UART0_DATA_MODE(DATA_MODE_8BIT);				  //ï¿½ï¿½ï¿½ï¿½Î»
+	UART0_PARITY_SET(DISABLE);						  //ï¿½ï¿½Å¼Ð£ï¿½ï¿½Ê¹ï¿½ï¿½
+	UART0_PARITY_SEL(ODD_PARITY);					  //ï¿½ï¿½Å¼Ð£ï¿½ï¿½Ñ¡ï¿½ï¿½
+	UART0_MULTI_MODE(DISABLE);						  //ï¿½à´¦ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½Ä£Ê½
 
-	UART0_RX_ENABLE(); //½ÓÊÕÊ¹ÄÜ
+	UART0_RX_ENABLE(); //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 #ifdef __DRV_UART0B_INT_SUPPORT__
-	//UART0_TX_INT_ENABLE();//·¢ËÍÖÐ¶ÏÊ¹ÄÜ
-	UART0_TX_INT_ENABLE(); //·¢ËÍÖÐ¶Ï¹Ø±Õ
-	UART0_RX_INT_ENABLE(); //½ÓÊÕÖÐ¶ÏÊ¹ÄÜ
-	INT_UART0_CLR();	   //Çå³ýÖÐ¶ÏÔ´±êÖ¾
-	UART0_IPL_SET(HIGH);   //ÖÐ¶ÏÓÅÏÈ¼¶ÉèÖÃ
-	UART0_INT_ENABLE();	   //ÖÐ¶ÏÔ´
+	//UART0_TX_INT_ENABLE();//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
+	UART0_TX_INT_ENABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¹Ø±ï¿½
+	UART0_RX_INT_ENABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
+	INT_UART0_CLR();	   //ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ô´ï¿½ï¿½Ö¾
+	UART0_IPL_SET(HIGH);   //ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½ï¿½
+	UART0_INT_ENABLE();	   //ï¿½Ð¶ï¿½Ô´
 #else
-	UART0_TX_INT_DISABLE(); //·¢ËÍÖÐ¶Ï¹Ø±Õ
-	UART0_RX_INT_DISABLE(); //½ÓÊÕÖÐ¶Ï¹Ø±Õ
+	UART0_TX_INT_DISABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¹Ø±ï¿½
+	UART0_RX_INT_DISABLE(); //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï¹Ø±ï¿½
 #endif
 
 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
 	// uart_getbuflen = 0;
 
-	UART0_ENABLE(); //Ê¹ÄÜuart0
+	UART0_ENABLE(); //Ê¹ï¿½ï¿½uart0
 	return;
 }
 
@@ -459,11 +460,11 @@ void dqiot_drv_uart0_isr(void) interrupt 17
 			return;
 		else
 			uart_get_buf[uart_getbuflen++] = UART0_BUF;
-		CLR_UART0_RX_STATE(); //Çå³ý½ÓÊÕÖÐ¶Ï±êÖ¾Î»
+		CLR_UART0_RX_STATE(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾Î»
 	}
 	//if(GET_UART0_TX_STATE())
 	//{
-	//	CLR_UART0_TX_STATE();//Çå³ý·¢ËÍÖÐ¶Ï±êÖ¾Î»
+	//	CLR_UART0_TX_STATE();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾Î»
 	//	UART0_TX_INT_DISABLE();
 	//}
 }

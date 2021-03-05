@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_AUDIO
@@ -15,189 +15,209 @@ line level    source
    4          #include "mmi_audio.h"
    5          #include "dqiot_drv_audio.h"
    6          #include "mmi_com.h"
-   7          
-   8          #ifdef __LOCK_AUDIO_SUPPORT__
-   9          #ifdef __AUD_PLAY_BY_ARR__
-  10          
-  11          const unsigned char aud_play_arr[] = 
-  12          {
-  13            AUD_BASE_ID_INPUT_68_PWD,AUD_BASE_ID_INPUT_END,0,   //AUD_ID_INPUT_68_PWD = 0,//ÇëÊäÈë6-8Î»ÃÜÂë£¬°´#¼ü½áÊø
-  14            AUD_BASE_ID_PWD_68_LEN,AUD_BASE_ID_REINPUT,0,     //AUD_ID_PWD_68_LEN = 3,//ÃÜÂëÓ¦Îª6-8Î»£¬ÇëÖØÐÂÊäÈë
-  15            AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_PWD_INPUT_AGAIN = 6,//ÇëÔÙ´ÎÊäÈëÃÜÂë£¬°´#¼ü
-             -½áÊø
-  16            AUD_BASE_ID_CONTINUE,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_CONTINUE = 9,//¼ÌÐøÇë°´#£¬·µ»Ø°´*
-  17            AUD_BASE_ID_FAIL,AUD_BASE_ID_CONTACT_ADMIN,0,     //AUD_ID_ADD_PWD_FAIL = 12,//Ìí¼ÓÊ§°Ü£¬ÇëÁªÏµ¹ÜÀíÔ±
-  18            AUD_BASE_ID_INPUT_OLD_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_OLD_PWD = 15,//ÇëÊäÈë¾ÉÃÜÂë£¬°´#¼ü½áÊø
-  19            AUD_BASE_ID_PWD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_PWD_NOT_EXIST = 18,//ÃÜÂë²»´æÔÚ£¬ÇëÖØÐÂÊäÈë
-  20            AUD_BASE_ID_INPUT_NEW_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_NEW_PWD = 21,//ÇëÊäÈëÐÂÃÜÂë£¬°´#¼ü½áÊø
-  21            AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_NEW_PWD_AGAIN = 24,//ÇëÔÙÊäÈëÐÂÃÜÂë£¬
-             -°´#¼ü½áÊø
-  22                                        //AUD_ID_CHG_FAIL = 12,//ÐÞ¸ÄÊ§°Ü£¬ÇëÁªÏµ¹ÜÀíÔ±
-  23                                        //AUD_ID_DEL_FAIL = 12,//É¾³ýÊ§°Ü£¬ÇëÁªÏµ¹ÜÀíÔ±
-  24            AUD_BASE_ID_INPUT_DEL_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_DEL_NUM = 27,//ÇëÊäÈëÒªÉ¾³ýµÄ±àºÅ»òÃÜÂ
-             -ë£¬°´#¼ü½áÊø
-  25            AUD_BASE_ID_NUM_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_NUM_NOT_EXIST = 30,//±àºÅ²»´æÔÚ£¬ÇëÖØÐÂÊäÈë
-  26            AUD_BASE_ID_INPUT_CONFIRM,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_DEL_PWD_CONFIRM = 33,//ºÅÃÜÂë°´#¼üÈ·ÈÏÉ¾³ý£
-             -¬È¡ÏûÇë°´*¼ü
-  27                                        //AUD_ID_DEL_CONFIRM = 9,//¼ÌÐøÉ¾³ýÇë°´#£¬·µ»ØÇë°´*
-  28                                        //AUD_ID_CLR_PWD_CONFIRM = 33,//°´#¼üÈ·ÈÏÉ¾³ýËùÓÐÃÜÂë£¬È¡ÏûÇë°´*¼ü
-  29            AUD_BASE_ID_FAIL,AUD_BASE_ID_RETRY,0,         //AUD_ID_ADD_FAIL_RETRY = 36,//Ìí¼ÓÊ§°Ü£¬ÇëÖØÊÔ
-  30                                        //AUD_ID_CHG_FAIL_RETRY = 36,//ÐÞ¸ÄÊ§°Ü£¬ÇëÖØÊÔ
-  31                                        //AUD_ID_CHG_CONTINUE_CONFIRM = 9,//¼ÌÐøÐÞ¸ÄÇë°´#£¬·µ»ØÇë°´*
-  32            //0x27
-  33            AUD_BASE_ID_FP_NOT_EXIST,AUD_BASE_ID_REINPUT,0,     //AUD_ID_FP_NOT_EXIST = 39,//Ö¸ÎÆ²»´æÔÚ£¬ÇëÖØÐÂÊäÈë
-  34                                        //AUD_ID_DEL_FP_CONFIRM = 33,//ºÅÖ¸ÎÆ°´#È·ÈÏÉ¾³ý£¬È¡ÏûÇë°´*
-  35                                        //AUD_ID_DEL_FAIL_RETRY = 36,//É¾³ýÊ§°Ü£¬ÇëÖØÊÔ
-  36                                        //AUD_ID_CLR_FP_CONFIRM = 33,//°´#È·ÈÏÉ¾³ýËùÓÐÖ¸ÎÆ£¬È¡ÏûÇë°´*
-  37            AUD_BASE_ID_RFCARD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,   //AUD_ID_RFCARD_NOT_EXIST = 42,//RF¿¨²»´æÔÚ£¬ÇëÖØÐÂÊ
-             -äÈë
-  38                                        //AUD_ID_DEL_RFCARD_CONFIRM = 33,//ºÅRF¿¨°´#È·ÈÏÉ¾³ý£¬È¡ÏûÇë°´*
-  39                                        //AUD_ID_CLR_RFCARD_CONFIRM = 33,//°´#È·ÈÏÉ¾³ýËùÓÐRF¿¨£¬È¡ÏûÇë°´*
-  40            AUD_BASE_ID_INPUT_ADMIN_PWD,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_ADMIN_PWD = 45,//ÇëÊäÈë¹ÜÀíÔ±ÃÜÂë£¬°´
-             -#¼ü½áÊø
-  41                                        //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//ÇëÊäÈëÐÂ¹ÜÀíÔ±ÃÜÂë£¬°´#¼ü½áÊø
-  42            //
-  43                                        //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//ÇëÔÙ´ÎÊäÈëÐÂ¹ÜÀíÔ±ÃÜÂë£¬°´#¼ü½áÊø
-  44            AUD_BASE_ID_PWD_EXIST,AUD_BASE_ID_REINPUT,0,      //AUD_ID_PWD_EXIST = 48,//ÃÜÂëÒÑ´æÔÚ£¬ÇëÖØÐÂÊäÈë
-  45            AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//ÎªÁËÄúµÄÊ¹ÓÃ°
-             -²È«£¬ÇëÏÈÌí¼Ó¹ÜÀíÔ±ÃÜÂë£¬°´#¼ü½áÊø
-  46                                        //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//ÇëÔÙ´ÎÊäÈë¹ÜÀíÔ±ÃÜÂë£¬°´#¼ü½áÊø
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 2   
+   7          #include "stdio.h"
+   8          
+   9          #ifdef __LOCK_AUDIO_SUPPORT__
+  10          #ifdef __AUD_PLAY_BY_ARR__
+  11          
+  12          const unsigned char aud_play_arr[] =
+  13            {
+  14              AUD_BASE_ID_INPUT_68_PWD, AUD_BASE_ID_INPUT_END, 0,    //AUD_ID_INPUT_68_PWD = 0,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6-8
+             -Î»ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  15              AUD_BASE_ID_PWD_68_LEN, AUD_BASE_ID_REINPUT, 0,      //AUD_ID_PWD_68_LEN = 3,//ï¿½ï¿½ï¿½ï¿½Ó¦Îª6-8Î»ï¿½ï¿
+             -½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  16              AUD_BASE_ID_PWD_INPUT_AGAIN, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_PWD_INPUT_AGAIN = 6,//ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  17              AUD_BASE_ID_CONTINUE, AUD_BASE_ID_INPUT_BACK, 0,     //AUD_ID_CONTINUE = 9,//ï¿½ï¿½ï¿½ï¿½ï¿½ë°´#ï¿½ï¿½ï¿½
+             -ï¿½ï¿½Ø°ï¿½*
+  18              AUD_BASE_ID_FAIL, AUD_BASE_ID_CONTACT_ADMIN, 0,      //AUD_ID_ADD_PWD_FAIL = 12,//ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï
+             -¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
+  19              AUD_BASE_ID_INPUT_OLD_PWD, AUD_BASE_ID_INPUT_END, 0,   //AUD_ID_INPUT_OLD_PWD = 15,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  20              AUD_BASE_ID_PWD_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,     //AUD_ID_PWD_NOT_EXIST = 18,//ï¿½ï¿½ï¿½ë²»ï¿½ï¿½ï¿
+             -½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  21              AUD_BASE_ID_INPUT_NEW_PWD, AUD_BASE_ID_INPUT_END, 0,   //AUD_ID_INPUT_NEW_PWD = 21,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  22              AUD_BASE_ID_PWD_INPUT_AGAIN, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_INPUT_NEW_PWD_AGAIN = 24,//ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  23                                           //AUD_ID_CHG_FAIL = 12,//ï¿½Þ¸ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
+  24                                           //AUD_ID_DEL_FAIL = 12,//É¾ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
+  25              AUD_BASE_ID_INPUT_DEL_PWD, AUD_BASE_ID_INPUT_END, 0,   //AUD_ID_INPUT_DEL_NUM = 27,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò
+             -ªÉ¾ï¿½ï¿½ï¿½Ä±ï¿½Å»ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  26              AUD_BASE_ID_NUM_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,     //AUD_ID_NUM_NOT_EXIST = 30,//ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½
+             -Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  27              AUD_BASE_ID_INPUT_CONFIRM, AUD_BASE_ID_INPUT_BACK, 0,  //AUD_ID_DEL_PWD_CONFIRM = 33,//ï¿½ï¿½ï¿½ï¿½ï¿½ë°
+             -´#ï¿½ï¿½È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ë°´*ï¿½ï¿½
+  28                                           //AUD_ID_DEL_CONFIRM = 9,//ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ë°´#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë°´*
+  29                                           //AUD_ID_CLR_PWD_CONFIRM = 33,//ï¿½ï¿½#ï¿½ï¿½È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬È¡ï
+             -¿½ï¿½ï¿½ë°´*ï¿½ï¿½
+  30              AUD_BASE_ID_FAIL, AUD_BASE_ID_RETRY, 0,          //AUD_ID_ADD_FAIL_RETRY = 36,//ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿
+             -½ï¿½ï¿½ï¿½ï¿½
+  31                                           //AUD_ID_CHG_FAIL_RETRY = 36,//ï¿½Þ¸ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  32                                           //AUD_ID_CHG_CONTINUE_CONFIRM = 9,//ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ë°´#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë°´*
+  33              //0x27
+  34              AUD_BASE_ID_FP_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,    //AUD_ID_FP_NOT_EXIST = 39,//Ö¸ï¿½Æ²ï¿½ï¿½ï¿½ï¿½Ú£ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  35                                           //AUD_ID_DEL_FP_CONFIRM = 33,//ï¿½ï¿½Ö¸ï¿½Æ°ï¿½#È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ë°´*
+  36                                           //AUD_ID_DEL_FAIL_RETRY = 36,//É¾ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  37                                           //AUD_ID_CLR_FP_CONFIRM = 33,//ï¿½ï¿½#È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½Æ£ï¿½È¡ï¿½ï¿½ï¿½ë
+             -°´*
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 2   
 
-  47            AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 54,//ÃÜÂë´íÎó,ÇëÖØÊÔ
-  48            AUD_BASE_ID_FP_WRONG,AUD_BASE_ID_RETRY,0,       //AUD_ID_FP_WRONG_TRY = 57,//Ö¸ÎÆ´íÎó£¬ÇëÖØÊÔ
-  49            AUD_BASE_ID_RFCARD_WRONG,AUD_BASE_ID_RETRY,0,     //AUD_ID_RFCARD_WRONG_TRY = 60,//RF¿¨´íÎó£¬ÇëÖØÊÔ
-  50            //
-  51            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
-  52            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CHG_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_ADMIN = 63,//¹
-             -ÜÀíÔ±
-  53            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PRO_AUDIO,
-  54            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYS_SETTING = 69,//ÉèÖ
-             -Ã
-  55            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_NO1_ADMIN_FP,
-  56            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_NO2_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_CHG_ADMIN_FP =
-             - 75,//ÐÞ¸Ä¹ÜÀíÔ±Ö¸ÎÆ
-  57            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_OPEN_PRO_AUDIO,
-  58            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CLOSE_PRO_AUDIO,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PRO_AUDIO =
-             - 81,//ÌáÊ¾Òô
-  59            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_SIN_OPEN_MODE,
-  60            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_OPEN_MODE = 87,
-             -//¿ªÃÅ·½Ê½
-  61          
-  62            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADMIN,
-  63            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_SETTING,
-  64            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM2 = 93,//ÏµÍ³2
-  65          
-  66            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_PWD,
-  67            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_PWD,
-  68            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_PWD,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PASSWORD = 101,//ÃÜ
-             -Âë
-  69            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_FP,
-  70            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_FP,
-  71            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_FP,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_SYS_FP = 109,//Ö¸ÎÆ
-  72            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_RFCARD,
-  73            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_RFCARD,
-  74            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_RFCARD,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_RFCARD = 117,//R
-             -F¿¨
-  75          
+  38              AUD_BASE_ID_RFCARD_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,  //AUD_ID_RFCARD_NOT_EXIST = 42,//RFï¿½ï¿½ï¿½ï¿½ï¿
+             -½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  39                                           //AUD_ID_DEL_RFCARD_CONFIRM = 33,//ï¿½ï¿½RFï¿½ï¿½ï¿½ï¿½#È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿
+             -½ë°´*
+  40                                           //AUD_ID_CLR_RFCARD_CONFIRM = 33,//ï¿½ï¿½#È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½RFï¿½ï¿½ï¿½ï¿½È¡ï¿
+             -½ï¿½ï¿½ë°´*
+  41              AUD_BASE_ID_INPUT_ADMIN_PWD, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_INPUT_ADMIN_PWD = 45,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿
+             -½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  42                                           //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#
+             -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  43              //
+  44              //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿
+             -½ï¿½ï¿½ï¿½ï¿½ï¿½
+  45              AUD_BASE_ID_PWD_EXIST, AUD_BASE_ID_REINPUT, 0,         //AUD_ID_PWD_EXIST = 48,//ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½Ú£ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  46              AUD_BASE_ID_ADD_ADMIN_PWD_FIRST, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//Îªï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã°ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  47                                             //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿
+             -½ë£¬ï¿½ï¿½#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  48              AUD_BASE_ID_PWD_WRONG, AUD_BASE_ID_RETRY, 0,         //AUD_ID_PWD_WRONG_TRY = 54,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿
+             -½ï¿½ï¿½ï¿½ï¿½ï¿½
+  49              AUD_BASE_ID_FP_WRONG, AUD_BASE_ID_RETRY, 0,          //AUD_ID_FP_WRONG_TRY = 57,//Ö¸ï¿½Æ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+             -ï¿½ï¿½ï¿½
+  50              AUD_BASE_ID_RFCARD_WRONG, AUD_BASE_ID_RETRY, 0,        //AUD_ID_RFCARD_WRONG_TRY = 60,//RFï¿½ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  51              //
+  52              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
+  53              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_CHG_ADMIN_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_ADMIN = 63,
+             -//ï¿½ï¿½ï¿½ï¿½Ô±
+  54              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_PRO_AUDIO,
+  55              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_OPEN_MODE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_SETTING = 69,/
+             -/ï¿½ï¿½ï¿½ï¿½
+  56              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_NO1_ADMIN_FP,
+  57              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_NO2_ADMIN_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_CHG_ADMIN_F
+             -P = 75,//ï¿½Þ¸Ä¹ï¿½ï¿½ï¿½Ô±Ö¸ï¿½ï¿½
+  58              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_OPEN_PRO_AUDIO,
+  59              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_CLOSE_PRO_AUDIO, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_PRO_AUDI
+             -O = 81,//ï¿½ï¿½Ê¾ï¿½ï¿½
+  60              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_SIN_OPEN_MODE,
+  61              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DBL_OPEN_MODE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_OPEN_MODE 
+             -= 87,//ï¿½ï¿½ï¿½Å·ï¿½Ê½
+  62          
+  63              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADMIN,
+  64              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_SETTING,
+  65              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_RESTORE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYSTEM2 = 93,//ÏµÍ³2
+  66          
+  67              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_PWD,
+  68              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_PWD,
+  69              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_PWD, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_PASSWORD = 101,/
+             -/ï¿½ï¿½ï¿½ï¿½
+  70              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_FP,
+  71              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_FP,
+  72              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_FP = 109,//Ö¸ï¿½ï
+             -¿½
+  73              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_RFCARD,
+  74              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_RFCARD,
+  75              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_RFCARD, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_RFCARD = 117,
+             -//RFï¿½ï¿½
   76          
-  77            AUD_BASE_ID_NOT_SAME,AUD_BASE_ID_REINPUT,0,//AUD_ID_PWD_NOT_SAME_RETRY   = 125//Á½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ,ÇëÖØÐ
-             -ÂÊäÈë
+  77              AUD_BASE_ID_NOT_SAME, AUD_BASE_ID_REINPUT, 0, //AUD_ID_PWD_NOT_SAME_RETRY  = 125//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
+             -¿½ï¿½ï¿½ï¿½ï¿½ë²»Ò»ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   78          
-  79            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
-  80            AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_ADMIN2 = 128,//¹ÜÀíÔ±
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 3   
+
+  79              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
+  80              AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_ADMIN2 = 128,//ï¿½ï¿½ï¿½ï¿½Ô±
   81          #if 1
-  82          #ifdef __LOCK_RFID_CARD_SUPPORT__ 
-  83          #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__)||defined(__LOCK_FP_SUPPORT1_2__)
-  84            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
-  85            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
-  86            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
-  87            AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
-  88            AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
-  89            AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ÏµÍ³
-  90          #else 
-                AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
-                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_RFCARD,
-                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
-                AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ÏµÍ³
+  82          #ifdef __LOCK_RFID_CARD_SUPPORT__
+  83          #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__) || defined(__LOCK_FP_SUPPORT1_2__)
+  84              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_PASSWORD,
+  85              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_FP,
+  86              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_RFCARD,
+  87              AUD_BASE_ID_SYS_NUM_4, AUD_BASE_ID_SYS_ADMIN,
+  88              AUD_BASE_ID_SYS_NUM_5, AUD_BASE_ID_SYS_SETTING,
+  89              AUD_BASE_ID_SYS_NUM_6, AUD_BASE_ID_SYS_RESTORE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYSTEM = 132,//ÏµÍ³
+  90          #else
+                  AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_PASSWORD,
+                  AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_RFCARD,
+                  AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_ADMIN,
+                  AUD_BASE_ID_SYS_NUM_4, AUD_BASE_ID_SYS_SETTING,
+                  AUD_BASE_ID_SYS_NUM_5, AUD_BASE_ID_SYS_RESTORE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYSTEM = 132,//ÏµÍ³
               #endif
   97          #else
-                AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
-                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
-                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 3   
-
-                AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ÏµÍ³
+                  AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_PASSWORD,
+                  AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_FP,
+                  AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_ADMIN,
+                  AUD_BASE_ID_SYS_NUM_4, AUD_BASE_ID_SYS_SETTING,
+                  AUD_BASE_ID_SYS_NUM_5, AUD_BASE_ID_SYS_RESTORE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYSTEM = 132,//ÏµÍ³
               #endif
  104          #endif
  105          
- 106            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_PRESS_FP,0,//AUD_ID_DBL_OPEN_MODE_FP = 145
- 107            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
+ 106              //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_PRESS_FP,0,//AUD_ID_DBL_OPEN_MODE_FP = 145
+ 107              //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
  108          
- 109                //AUD_ID_ADD_PWD_FULL = 12,//ÃÜÂëÒÑÂú£¬ÇëÁªÏµ¹ÜÀíÔ±
- 110                //AUD_ID_FP_ADD_FULL = 12,//Ö¸ÎÆÒÑÂú£¬ÇëÁªÏµ¹ÜÀíÔ±
- 111                //AUD_ID_RFCARD_FULL = 12,//RF¿¨ÒÑÂú£¬ÇëÁªÏµ¹ÜÀíÔ±
+ 109              //AUD_ID_ADD_PWD_FULL = 12,//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
+ 110              //AUD_ID_FP_ADD_FULL = 12,//Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
+ 111              //AUD_ID_RFCARD_FULL = 12,//RFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô±
  112          };
  113          
- 114          
- 115          #endif
- 116          
- 117          
- 118          /*
- 119          parameter: 
+ 114          #endif
+ 115          
+ 116          /*
+ 117          parameter: 
+ 118            none
+ 119          return :
  120            none
- 121          return :
- 122            none
- 123          */
- 124          void mmi_dq_aud_init(void)
- 125          {
- 126   1        dqiot_drv_audio_init();
- 127   1      }
- 128          
- 129          /*
- 130          parameter: 
+ 121          */
+ 122          void mmi_dq_aud_init(void)
+ 123          {
+ 124   1        dqiot_drv_audio_init();
+ 125   1      }
+ 126          
+ 127          /*
+ 128          parameter: 
+ 129            none
+ 130          return :
  131            none
- 132          return :
- 133            none
- 134          */
- 135          AUD_PLAY_ID mmi_dq_aud_get_audio_id(unsigned char text_id)
- 136          {
- 137   1        unsigned char i = 0;
- 138   1        
- 139   1        for(i=0;msg_aud_list[i].msg_id<STR_ID_MAX_COUNT;i++)
- 140   1        {
- 141   2          if(msg_aud_list[i].msg_id == text_id)
- 142   2          {
- 143   3            break;
- 144   3          }
- 145   2        }
- 146   1      
- 147   1        return msg_aud_list[i].aud_id;
- 148   1      }
- 149          
- 150          /*
- 151          parameter: 
- 152            none
- 153          return :
- 154            none
- 155          */
- 156          void mmi_dq_aud_play_with_id(unsigned char aud_id)
- 157          {
- 158   1      #ifdef __AUD_PLAY_BY_ARR__  
- 159   1        if(aud_id<AUD_BASE_ID_MAX)
- 160   1          dqiot_drv_audio_play(aud_id);
- 161   1      #if 0
-                else if(aud_id == AUD_ID_SYSTEM)
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 4   
+ 132          */
+ 133          AUD_PLAY_ID mmi_dq_aud_get_audio_id(unsigned char text_id)
+ 134          {
+ 135   1        unsigned char i = 0;
+ 136   1      
+ 137   1        for (i = 0; msg_aud_list[i].msg_id < STR_ID_MAX_COUNT; i++)
+ 138   1        {
+ 139   2          if (msg_aud_list[i].msg_id == text_id)
+ 140   2          {
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 4   
 
+ 141   3            break;
+ 142   3          }
+ 143   2        }
+ 144   1      
+ 145   1        return msg_aud_list[i].aud_id;
+ 146   1      }
+ 147          
+ 148          /*
+ 149          parameter: 
+ 150            none
+ 151          return :
+ 152            none
+ 153          */
+ 154          void mmi_dq_aud_play_with_id(unsigned char aud_id)
+ 155          {
+ 156   1      #ifdef __AUD_PLAY_BY_ARR__
+ 157   1        if (aud_id < AUD_BASE_ID_MAX)
+ 158   1          dqiot_drv_audio_play(aud_id);
+ 159   1      #if 0
+                else if(aud_id == AUD_ID_SYSTEM)
                 {
                   unsigned char num = 1;
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_NUM_0 + num);
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_PASSWORD);
                   num++;
-              #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__)
+              #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__)
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_NUM_0 + num);
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_FP);
                   num++;
@@ -228,98 +248,98 @@ line level    source
                   dqiot_drv_audio_play(AUD_BASE_ID_INPUT_BACK);
                 }
               #endif
- 199   1        else
- 200   1        {
- 201   2          unsigned char a = aud_id - AUD_BASE_ID_MAX;
- 202   2          while(aud_play_arr[a]!=0)
- 203   2          {
- 204   3            dqiot_drv_audio_play(aud_play_arr[a]);
- 205   3            a++;
- 206   3          }
- 207   2        }
- 208   1      #else
+ 197   1        else
+ 198   1        {
+ 199   2          unsigned char a = aud_id - AUD_BASE_ID_MAX;
+ 200   2          while (aud_play_arr[a] != 0)
+ 201   2          {
+ 202   3            dqiot_drv_audio_play(aud_play_arr[a]);
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 5   
+
+ 203   3            a++;
+ 204   3          }
+ 205   2        }
+ 206   1      #else
                 dqiot_drv_audio_play(aud_id);
               #endif
- 211   1        
- 212   1        return;
- 213   1      }
- 214          
- 215          
- 216          /*
- 217          parameter: 
- 218            none
- 219          return :
- 220            none
- 221          */
- 222          void mmi_dq_aud_play_key_num(unsigned char key_val)
- 223          {
- 224   1        mmi_dq_aud_stop();
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 5   
-
- 225   1        //if(mmi_dq_sys_get_pro_sound_state())
- 226   1        //  mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO,NULL);
- 227   1        mmi_dq_aud_play_with_id(AUD_ID_SYS_NUM_0+key_val);
- 228   1      
- 229   1      }
- 230          
- 231          /*
- 232          parameter: 
- 233            none
- 234          return :
- 235            none
- 236          */
- 237          void mmi_dq_aud_play_key_tone(void)
- 238          {
- 239   1        mmi_dq_aud_stop();
- 240   1        if(mmi_dq_fs_get_pro_sound_state())
-*** WARNING C206 IN LINE 240 OF mmi_src\mmi_audio.c: 'mmi_dq_fs_get_pro_sound_state': missing function-prototype
- 241   1          mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO);
- 242   1      
- 243   1      }
- 244          /*
- 245          parameter: 
+ 209   1      
+ 210   1        return;
+ 211   1      }
+ 212          
+ 213          /*
+ 214          parameter: 
+ 215            none
+ 216          return :
+ 217            none
+ 218          */
+ 219          void mmi_dq_aud_play_key_num(unsigned char key_val)
+ 220          {
+ 221   1        mmi_dq_aud_stop();
+ 222   1        //if(mmi_dq_sys_get_pro_sound_state())
+ 223   1        //  mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO,NULL);
+ 224   1        mmi_dq_aud_play_with_id(AUD_ID_SYS_NUM_0 + key_val);
+ 225   1      }
+ 226          
+ 227          /*
+ 228          parameter: 
+ 229            none
+ 230          return :
+ 231            none
+ 232          */
+ 233          void mmi_dq_aud_play_key_tone(void)
+ 234          {
+ 235   1        unsigned char status = 0;
+ 236   1        mmi_dq_aud_stop();
+ 237   1        
+ 238   1        status = mmi_dq_fs_get_pro_sound_state();
+*** WARNING C206 IN LINE 238 OF mmi_src\mmi_audio.c: 'mmi_dq_fs_get_pro_sound_state': missing function-prototype
+ 239   1        if (status != 0)
+ 240   1          mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO);
+ 241   1      }
+ 242          /*
+ 243          parameter: 
+ 244            none
+ 245          return :
  246            none
- 247          return :
- 248            none
- 249          */
- 250          void mmi_dq_aud_stop(void)
- 251          {
- 252   1        dqiot_drv_audio_stop();
- 253   1      }
- 254          
- 255          /*
- 256          parameter: 
+ 247          */
+ 248          void mmi_dq_aud_stop(void)
+ 249          {
+ 250   1        dqiot_drv_audio_stop();
+ 251   1      }
+ 252          
+ 253          /*
+ 254          parameter: 
+ 255            none
+ 256          return :
  257            none
- 258          return :
- 259            none
- 260          */
- 261          unsigned char mmi_dq_aud_get_state(void)
- 262          {
- 263   1        return dqiot_drv_audio_get_state();
- 264   1      }
- 265          
- 266          /*
- 267          parameter: 
+ 258          */
+ 259          unsigned char mmi_dq_aud_get_state(void)
+ 260          {
+ 261   1        return dqiot_drv_audio_get_state();
+ 262   1      }
+ 263          
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/05/2021 16:00:15 PAGE 6   
+
+ 264          /*
+ 265          parameter: 
+ 266            none
+ 267          return :
  268            none
- 269          return :
- 270            none
- 271          */
- 272          unsigned char mmi_dq_aud_get_end_flag(void)
- 273          {
- 274   1        return dqiot_drv_audio_get_end_flag();
- 275   1      }
- 276          #endif
- 277          #endif//__MMI_AUD_C__
+ 269          */
+ 270          unsigned char mmi_dq_aud_get_end_flag(void)
+ 271          {
+ 272   1        return dqiot_drv_audio_get_end_flag();
+ 273   1      }
+ 274          #endif
+ 275          #endif //__MMI_AUD_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    155    ----
+   CODE SIZE        =    156    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =    146       3
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/01/2021 18:11:28 PAGE 6   
-
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----

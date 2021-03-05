@@ -124,7 +124,7 @@ void mmi_dq_sys_wake_up(void)
 	{
 		mmi_dq_wifi_wakeup();
 #ifdef __LOCK_FP_SUPPORT__
-		mmi_dq_fp_init(); //ÎÕÊÖ¡¢µãµÆ
+		mmi_dq_fp_init(); //ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½
 #endif
 		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	}
@@ -789,9 +789,9 @@ static void mmi_dq_sys_open_pro_sound(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_pro_sound(1) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_SUCESS);
+		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_SUCESS);
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_FAIL);
+		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_FAIL);
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;
@@ -808,9 +808,9 @@ static void mmi_dq_sys_close_pro_sound(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_pro_sound(0) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_SUCESS);
+		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_SUCESS);
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_FAIL);
+		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_FAIL);
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;

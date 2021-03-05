@@ -79,8 +79,8 @@ extern unsigned char uart_getbuflen;
 //}
 
 /**
-  * @brief  AS608_USART串口向指纹模块传递数�? 
-  * @param  data;传输的数�?
+  * @brief  AS608_USART串口向指纹模块传递数�? 
+  * @param  data;传输的数�?
   */
 void AS608_SendData(unsigned char send_data)
 {
@@ -88,8 +88,8 @@ void AS608_SendData(unsigned char send_data)
 }
 
 /**
-  * @brief  AS608_USART串口向指纹模块命令包头格�? 
-  * @param  �?
+  * @brief  AS608_USART串口向指纹模块命令包头格�? 
+  * @param  �?
   */
 unsigned char AS608_PackHead(void)
 {
@@ -109,6 +109,8 @@ unsigned char AS608_PackHead(void)
 	//	uart_init_block();
 	//	ps_start_flag = 2;
 	//}
+
+	uart_getbuflen = 0;
 
 	/*包头*/
 	AS608_SendData(0xEF);
@@ -142,7 +144,7 @@ unsigned char AS608_PackHead2(void)
 /**
   * @brief  发送包标识
   * @param  flag:包标识位
-  * @retval �?
+  * @retval �?
   */
 void SendFlag(unsigned char flag)
 {
@@ -151,8 +153,8 @@ void SendFlag(unsigned char flag)
 
 /**
   * @brief  发送包长度
-  * @param  length:包长�?
-  * @retval �?
+  * @param  length:包长�?
+  * @retval �?
   */
 void SendLength(unsigned short length)
 {
@@ -162,8 +164,8 @@ void SendLength(unsigned short length)
 
 /**
   * @brief  发送指令码
-  * @param  cmd;指令�?
-  * @retval �?
+  * @param  cmd;指令�?
+  * @retval �?
   */
 void Sendcmd(unsigned char cmd)
 {
@@ -173,7 +175,7 @@ void Sendcmd(unsigned char cmd)
 /**
   * @brief  发送校验和
   * @param  check:检查位
-  * @retval �?
+  * @retval �?
   */
 void SendCheck(unsigned short check)
 {
@@ -182,9 +184,9 @@ void SendCheck(unsigned short check)
 }
 
 /**
-  * @brief  判断�?�?接收的数组有没有应答�?
+  * @brief  判断�?�?接收的数组有没有应答�?
   * @param  
-  * waittime为等待中�?接收数据的时�?(单位1ms)
+  * waittime为等待中�?接收数据的时�?(单位1ms)
   * length为包长度
   * @return 数据包确认码
   * @note   1 failed
@@ -207,7 +209,7 @@ static u8 JudgeStr(u16 waittime, u8 length)
 	{
 		delay_ms(1);
 
-		/* 接收到一次数�? */
+		/* 接收到一次数�? */
 		if (uart_getbuflen >= 9 + length)
 		{
 			/* 寻找0xEF位置 */
@@ -217,7 +219,7 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					break;
 			}
 
-			/* 判断�?否为应答�? */
+			/* 判断�?否为应答�? */
 			if (uart_get_buf[i] == 0xEF && uart_get_buf[i + 1] == 0x01 && uart_get_buf[i + 6] == 0x07 && ((uart_get_buf[i + 7] << 8) + uart_get_buf[i + 8]) == length)
 			{
 				for (i; i < uart_getbuflen; i++)
@@ -225,7 +227,7 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					uart_rec_buff[j] = uart_get_buf[i];
 					j++;
 				}
-				getdata = uart_rec_buff[9]; //�?认码
+				getdata = uart_rec_buff[9]; //�?认码
 
 				/* 清空缓存 */
 				uart_getbuflen = 0;
@@ -240,9 +242,9 @@ static u8 JudgeStr(u16 waittime, u8 length)
 
 #if 0
 /**
-  * @brief  从缓冲区读出�?认码
-  * @param  *i:返回值（�?认码�?
-  * @retval �?
+  * @brief  从缓冲区读出�?认码
+  * @param  *i:返回值（�?认码�?
+  * @retval �?
   */
 unsigned char  ReturnFlag( unsigned char *i)
 {	
@@ -297,17 +299,16 @@ unsigned char PS_GetEcho(void)
 }
 
 //录入图像 PS_GetImage
-//功能:探测手指，探测到后录入指纹图像存于ImageBuffer�?
-//模块返回�?认字
+//功能:探测手指，探测到后录入指纹图像存于ImageBuffer�?
+//模块返回�?认字
 unsigned char PS_GetImage(void)
 {
-	uart_getbuflen = 0;
 	//delay_ms(300);
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); /*命令包标�?*/
+	SendFlag(0x01); /*命令包标�?*/
 	SendLength(0x03);
-	Sendcmd(0x01); /*录指纹指�?*/
+	Sendcmd(0x01); /*录指纹指�?*/
 	SendCheck(0x01 + 0x03 + 0x01);
 
 	//nrf_delay_ms(50);        /*等待指纹识别模块处理数据*/
@@ -317,9 +318,9 @@ unsigned char PS_GetImage(void)
 }
 
 //生成特征 PS_GenChar
-//功能:将ImageBuffer�?的原始图像生成指纹特征文件存于CharBuffer1或CharBuffer2
+//功能:将ImageBuffer�?的原始图像生成指纹特征文件存于CharBuffer1或CharBuffer2
 //参数:BufferID --> charBuffer1:0x01	charBuffer1:0x02
-//模块返回�?认字
+//模块返回�?认字
 unsigned char PS_GenChar(unsigned char BufferID)
 {
 	if (AS608_PackHead() == 1)
@@ -332,32 +333,32 @@ unsigned char PS_GenChar(unsigned char BufferID)
 	return JudgeStr(1000, 0x03);
 }
 
-//精确比�?�两枚指纹特�? PS_Match
-//功能:精确比�?�CharBuffer1 与CharBuffer2 �?的特征文�?
-//模块返回�?认字
+//精确比�?�两枚指纹特�? PS_Match
+//功能:精确比�?�CharBuffer1 与CharBuffer2 �?的特征文�?
+//模块返回�?认字
 unsigned char PS_Match(void)
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
 	SendFlag(0x01);
 	SendLength(0x03);
-	Sendcmd(0x03); /*精确比�?�指�?*/
+	Sendcmd(0x03); /*精确比�?�指�?*/
 	SendCheck(0x01 + 0x03 + 0x03);
 
 	// sure = ReturnFlag(&p);
 	return JudgeStr(1000, 0x05);
 }
 //搜索指纹 PS_Search
-//功能:�?CharBuffer1或CharBuffer2�?的特征文件搜索整�?或部分指纹库.若搜索到，则返回页码�?
+//功能:�?CharBuffer1或CharBuffer2�?的特征文件搜索整�?或部分指纹库.若搜索到，则返回页码�?
 //参数:  BufferID @ref CharBuffer1	CharBuffer2
-//说明:  模块返回�?认字，页码（相配指纹模板�?
+//说明:  模块返回�?认字，页码（相配指纹模板�?
 unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
 {
 
 	unsigned char sure;
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x08);
 	Sendcmd(0x04);
 	AS608_SendData(BufferID);
@@ -371,8 +372,8 @@ unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsign
 }
 
 //合并特征（生成模板）PS_RegModel
-//功能:将CharBuffer1与CharBuffer2�?的特征文件合并生�? 模板,结果存于CharBuffer1与CharBuffer2
-//说明:  模块返回�?认字
+//功能:将CharBuffer1与CharBuffer2�?的特征文件合并生�? 模板,结果存于CharBuffer1与CharBuffer2
+//说明:  模块返回�?认字
 unsigned char PS_RegModel(void)
 {
 	if (AS608_PackHead() == 1)
@@ -387,10 +388,10 @@ unsigned char PS_RegModel(void)
 }
 
 //储存模板 PS_StoreChar
-//功能:�? CharBuffer1 �? CharBuffer2 �?的模板文件存�? PageID 号flash数据库位�?�?
+//功能:�? CharBuffer1 �? CharBuffer2 �?的模板文件存�? PageID 号flash数据库位�?�?
 //参数:  BufferID @ref charBuffer1:0x01	charBuffer1:0x02
 //       PageID（指纹库位置号）
-//说明:  模块返回�?认字
+//说明:  模块返回�?认字
 unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 {
 	unsigned short;
@@ -410,16 +411,16 @@ unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID)
 }
 
 //删除模板 PS_DeletChar
-//功能:  删除flash数据库中指定ID号开始的N�?指纹模板
-//参数:  PageID(指纹库模板号)，N删除的模板个数�?
-//说明:  模块返回�?认字
+//功能:  删除flash数据库中指定ID号开始的N�?指纹模板
+//参数:  PageID(指纹库模板号)，N删除的模板个数�?
+//说明:  模块返回�?认字
 unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
 {
 	unsigned char sure; //,p=0;
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x07);
 	Sendcmd(0x0C); /*删除指定指纹模板指令*/
 	AS608_SendData(PageID >> 8);
@@ -434,12 +435,12 @@ unsigned char PS_DeletChar(unsigned short PageID, unsigned short N)
 	return JudgeStr(1000, 0x03);
 }
 
-//高速搜�?PS_HighSpeedSearch
-//功能：以 CharBuffer1或CharBuffer2�?的特征文件高速搜索整�?或部分指纹库�?
-//		  若搜索到，则返回页码,该指令�?�于的确存在于指纹库�? ，且登录时质�?
-//		  很好的指纹，会很�?给出搜索结果�?
-//参数:  BufferID�? StartPage(起�?�页)，PageNum（页数）
-//说明:  模块返回�?认字+页码（相配指纹模板）
+//高速搜�?PS_HighSpeedSearch
+//功能：以 CharBuffer1或CharBuffer2�?的特征文件高速搜索整�?或部分指纹库�?
+//		  若搜索到，则返回页码,该指令�?�于的确存在于指纹库�? ，且登录时质�?
+//		  很好的指纹，会很�?给出搜索结果�?
+//参数:  BufferID�? StartPage(起�?�页)，PageNum（页数）
+//说明:  模块返回�?认字+页码（相配指纹模板）
 unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p)
 {
 	unsigned char ensure;
@@ -464,15 +465,15 @@ unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPag
 	return ensure;
 }
 
-//清空指纹�? PS_Empty
-//功能:  删除flash数据库中所有指纹模�?
-//参数:  �?
-//说明:  模块返回�?认字
+//清空指纹�? PS_Empty
+//功能:  删除flash数据库中所有指纹模�?
+//参数:  �?
+//说明:  模块返回�?认字
 unsigned char PS_Empty(void)
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x03);
 	Sendcmd(0x0D);
 	SendCheck(0x01 + 0x03 + 0x0D);
@@ -483,9 +484,9 @@ unsigned char PS_Empty(void)
 
 #if 0
 /**
-  * @brief  检�?STM32与指纹模块的通信连接
+  * @brief  检�?STM32与指纹模块的通信连接
   * @param  PS_Addr指纹模块地址
-  * @retval 返回�?0通�??成功;1表示通�??不成�?
+  * @retval 返回�?0通�??成功;1表示通�??不成�?
   */
 unsigned char PS_Connect(unsigned long *PS_Addr)
 {
@@ -501,7 +502,7 @@ unsigned char PS_Connect(unsigned long *PS_Addr)
 //写系统寄存器 PS_WriteReg
 //功能:  写模块寄存器
 //参数:  寄存器序号RegNum:4\5\6
-//说明:  模块返回�?认字
+//说明:  模块返回�?认字
 unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 {
 	unsigned short temp;
@@ -509,7 +510,7 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
-	SendFlag(0x01);//鍛戒护鍖�?爣璇
+	SendFlag(0x01);//鍛戒护鍖�?爣璇
 	SendLength(0x05);
 	Sendcmd(0x0E);
 	AS608_SendData(RegNum);
@@ -519,10 +520,10 @@ unsigned char PS_WriteReg(unsigned char RegNum, unsigned char DATA)
 	sure=ReturnFlag(&p);
 	return sure;
 }
-//读系统基�?参数 PS_ReadSysPara
-//功能:  读取模块的基�?参数（波特率，包大小�?)
-//参数:  �?
-//说明:  模块返回�?认字 + 基本参数�?16bytes�?
+//读系统基�?参数 PS_ReadSysPara
+//功能:  读取模块的基�?参数（波特率，包大小�?)
+//参数:  �?
+//说明:  模块返回�?认字 + 基本参数�?16bytes�?
 unsigned char PS_ReadSysPara(void)
 {
 	unsigned short temp;
@@ -532,7 +533,7 @@ unsigned char PS_ReadSysPara(void)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-	SendFlag(0x01);//鍛戒护鍖�?爣璇
+	SendFlag(0x01);//鍛戒护鍖�?爣璇
 	SendLength(0x03);
 	Sendcmd(0x0F);
 	temp = 0x01+0x03+0x0F;
@@ -553,7 +554,7 @@ unsigned char PS_ReadSysPara(void)
 //设置模块地址 PS_SetAddr
 //功能:  设置模块地址
 //参数:  PS_addr
-//说明:  模块返回�?认字
+//说明:  模块返回�?认字
 unsigned char PS_SetAddr(unsigned long PS_addr)
 {
 	unsigned short temp;
@@ -561,7 +562,7 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	if(AS608_PackHead()==1)
 		return 0xFF;
-	SendFlag(0x01);//命令包标�?
+	SendFlag(0x01);//命令包标�?
 	SendLength(0x07);
 	Sendcmd(0x15);
 	AS608_SendData(PS_addr>>24);
@@ -575,10 +576,10 @@ unsigned char PS_SetAddr(unsigned long PS_addr)
 
 	return ensure;
 }
-//功能�? 模块内部为用户开辟了256bytes的FLASH空间用于存用户�?�事�?,
-//	该�?�事�?逻辑上�??分成 16 �?页�?
-//参数:  NotePageNum(0~15),Byte32(要写入内容，32�?字节)
-//说明:  模块返回�?认字
+//功能�? 模块内部为用户开辟了256bytes的FLASH空间用于存用户�?�事�?,
+//	该�?�事�?逻辑上�??分成 16 �?页�?
+//参数:  NotePageNum(0~15),Byte32(要写入内容，32�?字节)
+//说明:  模块返回�?认字
 unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -588,7 +589,7 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(36);
 	Sendcmd(0x18);
 	AS608_SendData(NotePageNum);
@@ -602,10 +603,10 @@ unsigned char PS_WriteNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 
 	return ensure;
 }
-//读�?�事PS_ReadNotepad
-//功能�?  读取FLASH用户区的128bytes数据
+//读�?�事PS_ReadNotepad
+//功能�?  读取FLASH用户区的128bytes数据
 //参数:  NotePageNum(0~15)
-//说明:  模块返回�?认字+用户信息
+//说明:  模块返回�?认字+用户信息
 unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 {
 	unsigned short temp;
@@ -615,7 +616,7 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 	
 	if(AS608_PackHead()==1)
 		return 0xFF;
-	SendFlag(0x01);//命令包标�?
+	SendFlag(0x01);//命令包标�?
 	SendLength(0x04);
 	Sendcmd(0x19);
 	AS608_SendData(NotePageNum);
@@ -626,17 +627,17 @@ unsigned char PS_ReadNotepad(unsigned char NotePageNum,unsigned char *Byte32)
 }
 #endif
 
-//读有效模板个�? PS_ValidTempleteNum
-//功能：�?�有效模板个�?
-//参数: �?
-//说明: 模块返回�?认字+有效模板�?数ValidN
+//读有效模板个�? PS_ValidTempleteNum
+//功能：�?�有效模板个�?
+//参数: �?
+//说明: 模块返回�?认字+有效模板�?数ValidN
 unsigned char PS_ValidTempleteNum(unsigned short *ValidN)
 {
 	unsigned char ensure;
 
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x03);
 	Sendcmd(0x1d);
 	SendCheck(0x01 + 0x03 + 0x1d);
@@ -653,7 +654,7 @@ unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x08);
 	Sendcmd(0x31);
 	AS608_SendData(id >> 8);
@@ -666,17 +667,17 @@ unsigned char PS_AutoEnRoll(unsigned short id, unsigned char num, unsigned short
 	return 0;
 }
 
-//�?动验证指�? PS_AutoIdentify
-//功能�?
-//1.�?动采集指纹，在指纹库�?搜索�?标模板并返回搜索结果�?
-//2.如果�?标模板同当前采集的指纹比对得分大于最高阀值，并且�?标模板为不完整特征则以采集的特征更新�?标模板的空白区域�?
-//参数: �?
-//说明: 模块返回�?认字+页码（相配指纹模板）
+//�?动验证指�? PS_AutoIdentify
+//功能�?
+//1.�?动采集指纹，在指纹库�?搜索�?标模板并返回搜索结果�?
+//2.如果�?标模板同当前采集的指纹比对得分大于最高阀值，并且�?标模板为不完整特征则以采集的特征更新�?标模板的空白区域�?
+//参数: �?
+//说明: 模块返回�?认字+页码（相配指纹模板）
 unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned short param)
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x08);
 	Sendcmd(0x32);
 	AS608_SendData(level);
@@ -691,7 +692,7 @@ unsigned char PS_AutoIdentify(unsigned short id, unsigned char level, unsigned s
 
 //与AS608握手 PS_HandShake
 //参数: PS_Addr地址指针
-//说明: 模块返新地址（�?�确地址�?
+//说明: 模块返新地址（�?�确地址�?
 unsigned char PS_HandShake(unsigned long *PS_Addr)
 {
 	*PS_Addr = 0;
@@ -715,7 +716,7 @@ unsigned char PS_Sleep(void)
 {
 	if (AS608_PackHead() == 1)
 		return 0xFF;
-	SendFlag(0x01); //命令包标�?
+	SendFlag(0x01); //命令包标�?
 	SendLength(0x03);
 	Sendcmd(0x60);
 	SendCheck(0x01 + 0x03 + 0x60);
@@ -782,8 +783,8 @@ void FP_Light(FP_COLOR_E light_id)
 	}
 	SendCheck(temp);
 
-	//sure=ReturnFlag(&p);
-	sure = JudgeStr(1000, 0x03);
+	// sure = ReturnFlag(&p);
+	// sure = JudgeStr(1000, 0x03);
 
 	// if (sure == 0)
 	Light_Color = light_id;
