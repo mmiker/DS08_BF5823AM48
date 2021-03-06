@@ -47,18 +47,22 @@ void mmi_task_proc(void)
 	if (g_rfid_flag == 1)
 	{
 		//check rfid press
-		if (mmi_dq_rfid_work() == RET_SUCESS)
+		if (mmi_dq_rfid_check() == RET_SUCESS)
 		{
-			if (rfid_last_flag == 0)
+			if (mmi_dq_rfid_work() == RET_SUCESS)
 			{
-				rfid_last_flag = 1;
-				mmi_dq_ms_set_msg_que(QUE_EVENT_RFID, QUE_PRO_LOW, 0);
+				if (rfid_last_flag == 0)
+				{
+					rfid_last_flag = 1;
+					mmi_dq_ms_set_msg_que(QUE_EVENT_RFID, QUE_PRO_LOW, 0);
+				}
+			}
+			else
+			{
+				rfid_last_flag = 0;
 			}
 		}
-		else
-		{
-			rfid_last_flag = 0;
-		}
+
 		g_rfid_flag = 0;
 	}
 #endif

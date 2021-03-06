@@ -9,7 +9,7 @@
 #include "delay.h"
 #include "mmi_fs.h"
 
-unsigned char rfid_uid_buff_temp[RFID_SEC_DATA_LEN];
+unsigned char rfid_uid_buff_temp[RFID_SEC_DATA_LEN] = {0};
 unsigned char rfid_uid_buff[2][RFID_SEC_DATA_LEN];
 unsigned char RF_oldStatus = 0;
 

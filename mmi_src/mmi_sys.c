@@ -27,8 +27,6 @@ static unsigned char g_wifi_check_count = 0;
 static unsigned char g_wifi_check_type = 0;
 
 /* RFID */
-static unsigned char g_rfid_check_flag = 1;
-static unsigned int g_rfid_count = 0;
 unsigned char g_rfid_flag = 0;
 
 #define LOCK_MAX_EEROR_TIMES 5
@@ -328,15 +326,7 @@ void System_timer_event_handler(void)
 {
 	SYS_BASE_STATUS state = mmi_dq_ms_get_sys_state();
 
-	if (g_rfid_check_flag == 1)
-	{
-		g_rfid_count++;
-		if (g_rfid_count == 2)
-		{
-			g_rfid_flag = 1;
-			g_rfid_count = 0;
-		}
-	}
+	g_rfid_flag = 1; /* RFID */
 
 	if (g_timer2_flag == 1)
 	{
