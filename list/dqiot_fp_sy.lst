@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +62,7 @@ line level    source
   51          //{
   52          //  send_data = 0;
   53          //}
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 2   
 
   54          
   55          //unsigned char fp_GetModeState(void)
@@ -126,7 +126,7 @@ line level    source
  113   1        uart_getbuflen = 0;
  114   1      
  115   1        /*包头*/
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 3   
 
  116   1        AS608_SendData(0xEF);
  117   1        AS608_SendData(0x01);
@@ -190,7 +190,7 @@ line level    source
  175          /**
  176            * @brief  发送校验和
  177            * @param  check:检查位
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 4   
 
  178            * @retval �?
  179            */
@@ -254,7 +254,7 @@ line level    source
  236   4            }
  237   3          }
  238   2        }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 5   
 
  239   1      
  240   1        return 1;
@@ -318,7 +318,7 @@ line level    source
  298   1        return JudgeStr(1000, 0x03);
  299   1      }
  300          
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 6   
 
  301          //录入图像 PS_GetImage
  302          //功能:探测手指，探测到后录入指纹图像存于ImageBuffer�?
@@ -382,7 +382,7 @@ line level    source
  358   1        unsigned char sure;
  359   1        if (AS608_PackHead() == 1)
  360   1          return 0xFF;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 7   
 
  361   1        SendFlag(0x01); //命令包标�?
  362   1        SendLength(0x08);
@@ -446,7 +446,7 @@ line level    source
  418          {
  419   1        unsigned char sure; //,p=0;
  420   1      
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 8   
 
  421   1        if (AS608_PackHead() == 1)
  422   1          return 0xFF;
@@ -510,7 +510,7 @@ line level    source
  476   1        SendFlag(0x01); //命令包标�?
  477   1        SendLength(0x03);
  478   1        Sendcmd(0x0D);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 9   
 
  479   1        SendCheck(0x01 + 0x03 + 0x0D);
  480   1      
@@ -574,7 +574,7 @@ line level    source
                 Sendcmd(0x0F);
                 temp = 0x01+0x03+0x0F;
                 SendCheck(temp);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 10  
 
                 ensure=ReturnFlag(&p);
                 if(send_data)
@@ -638,7 +638,7 @@ line level    source
                 }
                 temp =0x01+36+0x18+NotePageNum+temp;
                 SendCheck(temp);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 11  
 
               
                 return ensure;
@@ -702,7 +702,7 @@ line level    source
  662   1        AS608_SendData(num);
  663   1        AS608_SendData(param >> 8);
  664   1        AS608_SendData(param & 0xFF);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 12  
 
  665   1        SendCheck(0x01 + 0x08 + 0x31 + (id >> 8) + (id & 0xFF) + num + (param >> 8) + (param & 0xFF));
  666   1      
@@ -766,7 +766,7 @@ line level    source
  723   1        return 0;
  724   1      }
  725          
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 13  
 
  726          //void AS608_log(void)
  727          //{
@@ -830,7 +830,7 @@ line level    source
  785   1      
  786   1        // sure = ReturnFlag(&p);
  787   1        // sure = JudgeStr(1000, 0x03);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/05/2021 16:00:13 PAGE 14  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/06/2021 11:30:34 PAGE 14  
 
  788   1      
  789   1        // if (sure == 0)

@@ -3,7 +3,7 @@
 
 #include "mmi_com.h"
 
-
+extern unsigned char g_rfid_flag;
 typedef enum
 {
 	SYS_OPEN_BY_PASSWORD = 0x01,
