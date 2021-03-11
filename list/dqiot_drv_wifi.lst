@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_WIFI
@@ -15,349 +15,349 @@ line level    source
    4          #include "mmi_feature.h"
    5          #include "iic_master.h"
    6          #include "delay.h"
-   7          
-   8          /*
-   9          parameter: 
-  10            none
-  11          return :
-  12            none
-  13          */
-  14          uint8_t UH010_ReadDatas(uint8_t *send,uint8_t send_len,uint8_t *Buf,uint8_t len) 
-  15          {
-  16   1        uint8_t i;
-  17   1        
-  18   1        if(send_len>0)
-  19   1        {
-  20   2          EA = 0;
-  21   2          iic_master_start();
-  22   2            
-  23   2          if (iic_sendbyte_and_getnack(WIFI_ADDR)) {   
-  24   3            //iic_master_stop();
-  25   3            //EA = 1;
-  26   3            //return 1;
-  27   3          }
-  28   2          
-  29   2          for (i = 0; i < send_len; i++) {
-  30   3            if (iic_sendbyte_and_getnack(send[i])) {
-  31   4              //iic_master_stop();
-  32   4              //EA = 1;
-  33   4              //return 1;
-  34   4            }
-  35   3          } 
-  36   2      
-  37   2          if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01)) {
-  38   3            //iic_master_stop();
-  39   3            //EA = 1; 
-  40   3            //return 1;
-  41   3          } 
-  42   2          
-  43   2          for (i = 0; i < len; i++) {
-  44   3            Buf[i] = iic_receive_byte();
-  45   3            if (i == (len - 1))
-  46   3              break;
-  47   3            iic_respond(ACK);
-  48   3          }
-  49   2          
-  50   2          iic_respond(NACK);
-  51   2          
-  52   2          EA = 1;
-  53   2          iic_master_stop();       
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 2   
+   7          // #include <stdio.h>
+   8          
+   9          /*
+  10          parameter: 
+  11            none
+  12          return :
+  13            none
+  14          */
+  15          uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t len)
+  16          {
+  17   1        uint8_t i;
+  18   1      
+  19   1        if (send_len > 0)
+  20   1        {
+  21   2          EA = 0;
+  22   2          iic_master_start();
+  23   2      
+  24   2          if (iic_sendbyte_and_getnack(WIFI_ADDR))
+  25   2          {
+  26   3            //iic_master_stop();
+  27   3            //EA = 1;
+  28   3            //return 1;
+  29   3          }
+  30   2      
+  31   2          for (i = 0; i < send_len; i++)
+  32   2          {
+  33   3            if (iic_sendbyte_and_getnack(send[i]))
+  34   3            {
+  35   4              //iic_master_stop();
+  36   4              //EA = 1;
+  37   4              //return 1;
+  38   4            }
+  39   3          }
+  40   2      
+  41   2          if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
+  42   2          {
+  43   3            //iic_master_stop();
+  44   3            //EA = 1;
+  45   3            //return 1;
+  46   3          }
+  47   2      
+  48   2          for (i = 0; i < len; i++)
+  49   2          {
+  50   3            Buf[i] = iic_receive_byte();
+  51   3            if (i == (len - 1))
+  52   3              break;
+  53   3            iic_respond(ACK);
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 2   
 
-  54   2      
-  55   2        }
-  56   1        else
-  57   1        {   
-  58   2            EA = 0;
-  59   2            iic_master_start();        
-  60   2            if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01)) {
-  61   3              //iic_master_stop();
-  62   3              //EA = 1; 
-  63   3              //return 1;
-  64   3            }   
-  65   2            
-  66   2            for (i = 0; i < len; i++) {
-  67   3              Buf[i] = iic_receive_byte();
-  68   3              if (i == (len - 1))
-  69   3                break;
-  70   3              iic_respond(ACK);
-  71   3            }
-  72   2            
-  73   2            iic_respond(NACK);
-  74   2            
-  75   2            EA = 1;
-  76   2            iic_master_stop();       
-  77   2      
-  78   2        }
-  79   1      
-  80   1        return 0;
-  81   1      }
-  82          
-  83          /*
-  84          parameter: 
-  85            none
-  86          return :
-  87            none
-  88          */
-  89          unsigned char UH010_Write_Byte(uint8_t *send,uint8_t send_len)
-  90          {
-  91   1          uint8_t i;    
-  92   1      
-  93   1        EA = 0;
-  94   1          iic_master_start();
-  95   1              
-  96   1          if (iic_sendbyte_and_getnack(WIFI_ADDR & ~0x01)) {   
-  97   2              iic_master_stop();
-  98   2          EA = 1;
-  99   2              return 1;
- 100   2          }
+  54   3          }
+  55   2      
+  56   2          iic_respond(NACK);
+  57   2      
+  58   2          EA = 1;
+  59   2          iic_master_stop();
+  60   2        }
+  61   1        else
+  62   1        {
+  63   2          EA = 0;
+  64   2          iic_master_start();
+  65   2          if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
+  66   2          {
+  67   3            //iic_master_stop();
+  68   3            //EA = 1;
+  69   3            //return 1;
+  70   3          }
+  71   2      
+  72   2          for (i = 0; i < len; i++)
+  73   2          {
+  74   3            Buf[i] = iic_receive_byte();
+  75   3            if (i == (len - 1))
+  76   3              break;
+  77   3            iic_respond(ACK);
+  78   3          }
+  79   2      
+  80   2          iic_respond(NACK);
+  81   2      
+  82   2          EA = 1;
+  83   2          iic_master_stop();
+  84   2        }
+  85   1      
+  86   1        return 0;
+  87   1      }
+  88          
+  89          /*
+  90          parameter: 
+  91            none
+  92          return :
+  93            none
+  94          */
+  95          unsigned char UH010_Write_Byte(uint8_t *send, uint8_t send_len)
+  96          {
+  97   1        uint8_t i;
+  98   1      
+  99   1        EA = 0;
+ 100   1        iic_master_start();
  101   1      
- 102   1          for (i = 0; i < send_len; i++) {
- 103   2              if (iic_sendbyte_and_getnack(send[i])) {
- 104   3                  iic_master_stop();
- 105   3            EA = 1;
- 106   3                  return 1;
- 107   3              }
- 108   2          }   
- 109   1          EA = 1;                        
- 110   1          iic_master_stop();
- 111   1      
- 112   1        return 0;
- 113   1      }
- 114          
- 115          
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 3   
+ 102   1        if (iic_sendbyte_and_getnack(WIFI_ADDR & ~0x01))
+ 103   1        {
+ 104   2          iic_master_stop();
+ 105   2          EA = 1;
+ 106   2          return 1;
+ 107   2        }
+ 108   1      
+ 109   1        for (i = 0; i < send_len; i++)
+ 110   1        {
+ 111   2          if (iic_sendbyte_and_getnack(send[i]))
+ 112   2          {
+ 113   3            iic_master_stop();
+ 114   3            EA = 1;
+ 115   3            return 1;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 3   
 
- 116          /*
- 117          parameter: 
- 118            none
- 119          return :
- 120            none
- 121          */
- 122          void wifi_uh316_init(void)
- 123          {
- 124   1      
- 125   1      
- 126   1      }
- 127          
- 128          
- 129          /*
- 130          parameter: 
- 131            none
- 132          return :
- 133            none
- 134          */
- 135          uint8_t wifi_net_connect_send(void)
- 136          {
- 137   1        uint8_t wifi_data[2];
- 138   1        wifi_data[0] = WIFI_CMD_NET_CON;
- 139   1        wifi_data[1] = 100;
- 140   1        if(UH010_Write_Byte(wifi_data,2) == 0)
- 141   1          return 1;
- 142   1        else
- 143   1          return 0;
- 144   1      }
- 145          
- 146          /*
- 147          parameter: 
- 148            none
- 149          return :
- 150            none
- 151          */
- 152          uint8_t wifi_net_connect_state(void)
- 153          {
- 154   1        uint8_t wifi_data[2];
- 155   1        uint8_t data_2[2] = {0};
- 156   1        wifi_data[0] = WIFI_CMD_NET_STATE;
- 157   1        wifi_data[1] = 100;
- 158   1        UH010_Write_Byte(wifi_data,2);
- 159   1        delay_ms(10);
- 160   1        UH010_ReadDatas(wifi_data,0,data_2,2);
- 161   1        if(data_2[0]=='I'&&data_2[1]=='O')
- 162   1          return 1;
- 163   1        else
- 164   1          return 0;
- 165   1        
- 166   1      }
- 167          
- 168          /*
- 169          parameter: 
- 170            none
- 171          return :
- 172            none
- 173          */
- 174          uint8_t wifi_open_ask(void)
- 175          {
- 176   1        uint8_t wifi_data[2];
- 177   1        wifi_data[0] = WIFI_CMD_WF_OPEN_ASK;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 4   
+ 116   3          }
+ 117   2        }
+ 118   1        EA = 1;
+ 119   1        iic_master_stop();
+ 120   1      
+ 121   1        return 0;
+ 122   1      }
+ 123          
+ 124          /*
+ 125          parameter: 
+ 126            none
+ 127          return :
+ 128            none
+ 129          */
+ 130          void wifi_uh316_init(void)
+ 131          {
+ 132   1      }
+ 133          
+ 134          /*
+ 135          parameter: 
+ 136            none
+ 137          return :
+ 138            none
+ 139          */
+ 140          uint8_t wifi_net_connect_send(void)
+ 141          {
+ 142   1        uint8_t wifi_data[2];
+ 143   1        wifi_data[0] = WIFI_CMD_NET_CON;
+ 144   1        wifi_data[1] = 100;
+ 145   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 146   1          return 1;
+ 147   1        else
+ 148   1          return 0;
+ 149   1      }
+ 150          
+ 151          /*
+ 152          parameter: 
+ 153            none
+ 154          return :
+ 155            none
+ 156          */
+ 157          uint8_t wifi_net_connect_state(void)
+ 158          {
+ 159   1        uint8_t wifi_data[2];
+ 160   1        uint8_t data_2[2] = {0};
+ 161   1        wifi_data[0] = WIFI_CMD_NET_STATE;
+ 162   1        wifi_data[1] = 100;
+ 163   1        UH010_Write_Byte(wifi_data, 2);
+ 164   1        delay_ms(10);
+ 165   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 166   1        if (data_2[0] == 'I' && data_2[1] == 'O')
+ 167   1          return 1;
+ 168   1        else
+ 169   1          return 0;
+ 170   1      }
+ 171          
+ 172          /*
+ 173          parameter: 
+ 174            none
+ 175          return :
+ 176            none
+ 177          */
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 4   
 
- 178   1        wifi_data[1] = 100;
- 179   1        if(UH010_Write_Byte(wifi_data,2) == 0)
- 180   1          return 1;
- 181   1        else
- 182   1          return 0;
- 183   1      }
- 184          
- 185          /*
- 186          parameter: 
- 187            none
- 188          return :
- 189            none
- 190          */
- 191          uint8_t wifi_open_reply_get(void)
- 192          {
- 193   1        uint8_t wifi_data[2];
- 194   1        uint8_t data_2[2] = {0};
- 195   1        wifi_data[0] = WIFI_CMD_WF_OPEN_REPLY;
- 196   1        wifi_data[1] = 100;
- 197   1        UH010_Write_Byte(wifi_data,2);
- 198   1        delay_ms(10);
- 199   1        UH010_ReadDatas(wifi_data,0,data_2,2);
- 200   1        if(data_2[0]=='K'&&data_2[1]=='O')
- 201   1          return 1;
- 202   1        else if(data_2[0]=='K'&&data_2[1]=='E')
- 203   1          return 2;
- 204   1        else if(data_2[0]=='K'&&data_2[1]=='K')
- 205   1          return 3;
- 206   1        else
- 207   1          return 0;
- 208   1      
- 209   1      
- 210   1      }
- 211          
- 212          /*
- 213          parameter: 
- 214            none
- 215          return :
+ 178          uint8_t wifi_open_ask(void)
+ 179          {
+ 180   1        uint8_t wifi_data[2];
+ 181   1        wifi_data[0] = WIFI_CMD_WF_OPEN_ASK;
+ 182   1        wifi_data[1] = 100;
+ 183   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 184   1          return 1;
+ 185   1        else
+ 186   1          return 0;
+ 187   1      }
+ 188          
+ 189          /*
+ 190          parameter: 
+ 191            none
+ 192          return :
+ 193            none
+ 194          */
+ 195          uint8_t wifi_open_reply_get(void)
+ 196          {
+ 197   1        uint8_t wifi_data[2];
+ 198   1        uint8_t data_2[2] = {0};
+ 199   1        wifi_data[0] = WIFI_CMD_WF_OPEN_REPLY;
+ 200   1        wifi_data[1] = 100;
+ 201   1        UH010_Write_Byte(wifi_data, 2);
+ 202   1        delay_ms(10);
+ 203   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 204   1        if (data_2[0] == 'K' && data_2[1] == 'O')
+ 205   1          return 1;
+ 206   1        else if (data_2[0] == 'K' && data_2[1] == 'E')
+ 207   1          return 2;
+ 208   1        else if (data_2[0] == 'K' && data_2[1] == 'K')
+ 209   1          return 3;
+ 210   1        else
+ 211   1          return 0;
+ 212   1      }
+ 213          
+ 214          /*
+ 215          parameter: 
  216            none
- 217          */
- 218          void wifi_wake_up(void)
- 219          {
- 220   1      
- 221   1        uint8_t wifi_data[2];
- 222   1        wifi_data[0] = WIFI_CMD_WAKEUP;
- 223   1        wifi_data[1] = 100;
- 224   1        UH010_Write_Byte(wifi_data,2);
- 225   1      }
- 226          
- 227          /*
- 228          parameter: 
- 229            none
- 230          return :
- 231            none
- 232          */
- 233          void wifi_sleep_mode(void)
- 234          {
- 235   1        uint8_t wifi_data[2];
- 236   1        wifi_data[0] = WIFI_CMD_SLEEP;
- 237   1        wifi_data[1] = 100;
- 238   1        UH010_Write_Byte(wifi_data,2);
- 239   1      }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 5   
+ 217          return :
+ 218            none
+ 219          */
+ 220          void wifi_close_over_time(void)
+ 221          {
+ 222   1        uint8_t wifi_data[2];
+ 223   1        wifi_data[0] = WIFI_CMD_CLOSE_OVER_TIME;
+ 224   1        wifi_data[1] = 100;
+ 225   1        UH010_Write_Byte(wifi_data, 2);
+ 226   1      }
+ 227          
+ 228          /*
+ 229          parameter: 
+ 230            none
+ 231          return :
+ 232            none
+ 233          */
+ 234          unsigned char wifi_wake_up(void)
+ 235          {
+ 236   1      
+ 237   1        uint8_t wifi_data[2];
+ 238   1        wifi_data[0] = WIFI_CMD_WAKEUP;
+ 239   1        wifi_data[1] = 100;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 5   
 
- 240          
- 241          /*
- 242          parameter: 
- 243            none
- 244          return :
+ 240   1        return UH010_Write_Byte(wifi_data, 2);
+ 241   1      }
+ 242          
+ 243          /*
+ 244          parameter: 
  245            none
- 246          */
- 247          void wifi_add_password(void)
- 248          {
- 249   1        uint8_t wifi_data[2];
- 250   1        wifi_data[0] = WIFI_CMD_ADD_PW;
- 251   1        wifi_data[1] = 100;
- 252   1        UH010_Write_Byte(wifi_data,2);
- 253   1      }
- 254          
- 255          /*
- 256          parameter: 
- 257            none
- 258          return :
+ 246          return :
+ 247            none
+ 248          */
+ 249          void wifi_sleep_mode(void)
+ 250          {
+ 251   1        uint8_t wifi_data[2];
+ 252   1        wifi_data[0] = WIFI_CMD_SLEEP;
+ 253   1        wifi_data[1] = 100;
+ 254   1        UH010_Write_Byte(wifi_data, 2);
+ 255   1      }
+ 256          
+ 257          /*
+ 258          parameter: 
  259            none
- 260          */
- 261          void wifi_del_password(void)
- 262          {
- 263   1        uint8_t wifi_data[2];
- 264   1        wifi_data[0] = WIFI_CMD_DEL_PW;
- 265   1        wifi_data[1] = 100;
- 266   1        UH010_Write_Byte(wifi_data,2);
- 267   1      }
- 268          
- 269          /*
- 270          parameter: 
- 271            none
- 272          return :
+ 260          return :
+ 261            none
+ 262          */
+ 263          void wifi_add_password(void)
+ 264          {
+ 265   1        uint8_t wifi_data[2];
+ 266   1        wifi_data[0] = WIFI_CMD_ADD_PW;
+ 267   1        wifi_data[1] = 100;
+ 268   1        UH010_Write_Byte(wifi_data, 2);
+ 269   1      }
+ 270          
+ 271          /*
+ 272          parameter: 
  273            none
- 274          */
- 275          void wifi_add_fp(void)
- 276          {
- 277   1        uint8_t wifi_data[2];
- 278   1        wifi_data[0] = WIFI_CMD_ADD_FP;
- 279   1        wifi_data[1] = 100;
- 280   1        UH010_Write_Byte(wifi_data,2);
- 281   1      }
- 282          
- 283          /*
- 284          parameter: 
- 285            none
- 286          return :
+ 274          return :
+ 275            none
+ 276          */
+ 277          void wifi_del_password(void)
+ 278          {
+ 279   1        uint8_t wifi_data[2];
+ 280   1        wifi_data[0] = WIFI_CMD_DEL_PW;
+ 281   1        wifi_data[1] = 100;
+ 282   1        UH010_Write_Byte(wifi_data, 2);
+ 283   1      }
+ 284          
+ 285          /*
+ 286          parameter: 
  287            none
- 288          */
- 289          void wifi_del_fp(void)
- 290          {
- 291   1        uint8_t wifi_data[2];
- 292   1        wifi_data[0] = WIFI_CMD_DEL_FP;
- 293   1        wifi_data[1] = 100;
- 294   1        UH010_Write_Byte(wifi_data,2);
- 295   1      }
- 296          
- 297          /*
- 298          parameter: 
- 299            none
- 300          return :
+ 288          return :
+ 289            none
+ 290          */
+ 291          void wifi_add_fp(void)
+ 292          {
+ 293   1        uint8_t wifi_data[2];
+ 294   1        wifi_data[0] = WIFI_CMD_ADD_FP;
+ 295   1        wifi_data[1] = 100;
+ 296   1        UH010_Write_Byte(wifi_data, 2);
+ 297   1      }
+ 298          
+ 299          /*
+ 300          parameter: 
  301            none
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 6   
 
- 302          */
- 303          void wifi_open_by_wifi(void)
- 304          {
- 305   1        uint8_t wifi_data[2];
- 306   1        wifi_data[0] = WIFI_CMD_WF_OPEN;
- 307   1        wifi_data[1] = 100;
- 308   1        UH010_Write_Byte(wifi_data,2);
- 309   1      }
- 310          
- 311          
- 312          /*
- 313          parameter: 
- 314            none
- 315          return :
- 316            none
- 317          */
- 318          void wifi_open_by_password(void)
- 319          {
- 320   1        uint8_t wifi_data[2];
- 321   1        wifi_data[0] = WIFI_CMD_PW_OPEN;
- 322   1        wifi_data[1] = 100;
- 323   1        UH010_Write_Byte(wifi_data,2);
- 324   1      }
- 325          
- 326          /*
- 327          parameter: 
- 328            none
- 329          return :
- 330            none
- 331          */
- 332          void wifi_open_by_rfid(void)
- 333          {
- 334   1        uint8_t wifi_data[2];
- 335   1        wifi_data[0] = WIFI_CMD_RF_OPEN;
- 336   1        wifi_data[1] = 100;
- 337   1        UH010_Write_Byte(wifi_data,2);
- 338   1      }
- 339          
+ 302          return :
+ 303            none
+ 304          */
+ 305          void wifi_del_fp(void)
+ 306          {
+ 307   1        uint8_t wifi_data[2];
+ 308   1        wifi_data[0] = WIFI_CMD_DEL_FP;
+ 309   1        wifi_data[1] = 100;
+ 310   1        UH010_Write_Byte(wifi_data, 2);
+ 311   1      }
+ 312          
+ 313          /*
+ 314          parameter: 
+ 315            none
+ 316          return :
+ 317            none
+ 318          */
+ 319          void wifi_open_by_wifi(void)
+ 320          {
+ 321   1        uint8_t wifi_data[2];
+ 322   1        wifi_data[0] = WIFI_CMD_WF_OPEN;
+ 323   1        wifi_data[1] = 100;
+ 324   1        UH010_Write_Byte(wifi_data, 2);
+ 325   1      }
+ 326          
+ 327          /*
+ 328          parameter: 
+ 329            none
+ 330          return :
+ 331            none
+ 332          */
+ 333          void wifi_open_by_password(void)
+ 334          {
+ 335   1        uint8_t wifi_data[2];
+ 336   1        wifi_data[0] = WIFI_CMD_PW_OPEN;
+ 337   1        wifi_data[1] = 100;
+ 338   1        UH010_Write_Byte(wifi_data, 2);
+ 339   1      }
  340          
  341          /*
  342          parameter: 
@@ -365,12 +365,12 @@ line level    source
  344          return :
  345            none
  346          */
- 347          void wifi_open_by_fp(void)
+ 347          void wifi_open_by_rfid(void)
  348          {
  349   1        uint8_t wifi_data[2];
- 350   1        wifi_data[0] = WIFI_CMD_FP_OPEN;
+ 350   1        wifi_data[0] = WIFI_CMD_RF_OPEN;
  351   1        wifi_data[1] = 100;
- 352   1        UH010_Write_Byte(wifi_data,2);
+ 352   1        UH010_Write_Byte(wifi_data, 2);
  353   1      }
  354          
  355          /*
@@ -379,14 +379,14 @@ line level    source
  358          return :
  359            none
  360          */
- 361          void wifi_open_by_key(void)
+ 361          void wifi_open_by_fp(void)
  362          {
  363   1        uint8_t wifi_data[2];
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 7   
 
- 364   1        wifi_data[0] = WIFI_CMD_KEY_OPEN;
+ 364   1        wifi_data[0] = WIFI_CMD_FP_OPEN;
  365   1        wifi_data[1] = 100;
- 366   1        UH010_Write_Byte(wifi_data,2);
+ 366   1        UH010_Write_Byte(wifi_data, 2);
  367   1      }
  368          
  369          /*
@@ -395,12 +395,12 @@ line level    source
  372          return :
  373            none
  374          */
- 375          void wifi_door_close(void)
+ 375          void wifi_open_by_key(void)
  376          {
  377   1        uint8_t wifi_data[2];
- 378   1        wifi_data[0] = WIFI_CMD_CLOSE;
+ 378   1        wifi_data[0] = WIFI_CMD_KEY_OPEN;
  379   1        wifi_data[1] = 100;
- 380   1        UH010_Write_Byte(wifi_data,2);
+ 380   1        UH010_Write_Byte(wifi_data, 2);
  381   1      }
  382          
  383          /*
@@ -409,12 +409,12 @@ line level    source
  386          return :
  387            none
  388          */
- 389          void wifi_via_alarm(void)
+ 389          void wifi_door_close(void)
  390          {
  391   1        uint8_t wifi_data[2];
- 392   1        wifi_data[0] = WIFI_CMD_VIA_ALARM;
+ 392   1        wifi_data[0] = WIFI_CMD_CLOSE;
  393   1        wifi_data[1] = 100;
- 394   1        UH010_Write_Byte(wifi_data,2);
+ 394   1        UH010_Write_Byte(wifi_data, 2);
  395   1      }
  396          
  397          /*
@@ -423,12 +423,12 @@ line level    source
  400          return :
  401            none
  402          */
- 403          void wifi_pw_alarm(void)
+ 403          void wifi_via_alarm(void)
  404          {
  405   1        uint8_t wifi_data[2];
- 406   1        wifi_data[0] = WIFI_CMD_PW_ALARM;
+ 406   1        wifi_data[0] = WIFI_CMD_VIA_ALARM;
  407   1        wifi_data[1] = 100;
- 408   1        UH010_Write_Byte(wifi_data,2);
+ 408   1        UH010_Write_Byte(wifi_data, 2);
  409   1      }
  410          
  411          /*
@@ -437,56 +437,91 @@ line level    source
  414          return :
  415            none
  416          */
- 417          void wifi_fp_alarm(void)
+ 417          void wifi_pw_alarm(void)
  418          {
  419   1        uint8_t wifi_data[2];
- 420   1        wifi_data[0] = WIFI_CMD_FP_ALARM;
+ 420   1        wifi_data[0] = WIFI_CMD_PW_ALARM;
  421   1        wifi_data[1] = 100;
- 422   1        UH010_Write_Byte(wifi_data,2);
+ 422   1        UH010_Write_Byte(wifi_data, 2);
  423   1      }
  424          
  425          /*
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/06/2021 11:30:35 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 8   
 
  426          parameter: 
  427            none
  428          return :
  429            none
  430          */
- 431          void wifi_rf_alarm(void)
+ 431          void wifi_fp_alarm(void)
  432          {
  433   1        uint8_t wifi_data[2];
- 434   1        wifi_data[0] = WIFI_CMD_RF_ALARM;
+ 434   1        wifi_data[0] = WIFI_CMD_FP_ALARM;
  435   1        wifi_data[1] = 100;
- 436   1        UH010_Write_Byte(wifi_data,2);
+ 436   1        UH010_Write_Byte(wifi_data, 2);
  437   1      }
  438          
- 439          
- 440          /*
- 441          parameter: 
- 442            none
- 443          return :
- 444            none
- 445          */
- 446          void wifi_lowpower_alarm(void)
- 447          {
- 448   1        uint8_t wifi_data[2];
- 449   1        wifi_data[0] = WIFI_CMD_LOWPOWER_ALARM;
- 450   1        wifi_data[1] = 100;
- 451   1        UH010_Write_Byte(wifi_data,2);
- 452   1      }
- 453          
- 454          #endif
- 455          
- 456          
- 457          
- 458          
+ 439          /*
+ 440          parameter: 
+ 441            none
+ 442          return :
+ 443            none
+ 444          */
+ 445          void wifi_rf_alarm(void)
+ 446          {
+ 447   1        uint8_t wifi_data[2];
+ 448   1        wifi_data[0] = WIFI_CMD_RF_ALARM;
+ 449   1        wifi_data[1] = 100;
+ 450   1        UH010_Write_Byte(wifi_data, 2);
+ 451   1      }
+ 452          
+ 453          /*
+ 454          parameter: 
+ 455            none
+ 456          return :
+ 457            none
+ 458          */
+ 459          void wifi_lowpower_alarm(void)
+ 460          {
+ 461   1        uint8_t wifi_data[2];
+ 462   1        wifi_data[0] = WIFI_CMD_LOWPOWER_ALARM;
+ 463   1        wifi_data[1] = 100;
+ 464   1        UH010_Write_Byte(wifi_data, 2);
+ 465   1      }
+ 466          
+ 467          void wifi_send_fp_110(void)
+ 468          {
+ 469   1        uint8_t wifi_data[2];
+ 470   1        wifi_data[0] = WIFI_CMD_WF_OPEN_FP_110;
+ 471   1        wifi_data[1] = 100;
+ 472   1        UH010_Write_Byte(wifi_data, 2);
+ 473   1      }
+ 474          
+ 475          void wifi_send_pwd_110(void)
+ 476          {
+ 477   1        uint8_t wifi_data[2];
+ 478   1        wifi_data[0] = WIFI_CMD_WF_OPEN_PSW_110;
+ 479   1        wifi_data[1] = 100;
+ 480   1        UH010_Write_Byte(wifi_data, 2);
+ 481   1      }
+ 482          
+ 483          void wifi_set_110(void)
+ 484          {
+ 485   1        uint8_t wifi_data[2];
+ 486   1        wifi_data[0] = WIFI_CMD_WF_SET_110;
+ 487   1        wifi_data[1] = 100;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/11/2021 15:25:41 PAGE 9   
+
+ 488   1        UH010_Write_Byte(wifi_data, 2);
+ 489   1      }
+ 490          
+ 491          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    969    ----
+   CODE SIZE        =   1053    ----
    CONSTANT SIZE    =      4    ----
-   XDATA SIZE       =      4      60
+   XDATA SIZE       =      4      68
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

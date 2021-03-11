@@ -3,13 +3,18 @@
 
 #include "mmi_com.h"
 
-extern unsigned char g_rfid_flag;
+
 typedef enum
 {
 	SYS_OPEN_BY_PASSWORD = 0x01,
 	SYS_OPEN_BY_FP = 0x02,
 	SYS_OPEN_BY_RFID = 0x04,
+	SYS_OPEN_BY_ADMIN_PASSWORD = 0x20,
+	SYS_OPEN_BY_USER_PASSWORD = 0x40,
 	SYS_OPEN_BY_WIFI = 0x08,
+	SYS_OPEN_BY_110 = 0x10,
+	SYS_OPEN_BY_110_PASSWORD = 0x11,
+	SYS_OPEN_BY_110_FP = 0x12,
 }sys_open_type;
 
 typedef enum
@@ -102,6 +107,14 @@ return :
 	none
 */
 void mmi_dq_sys_show_message_with_id(unsigned char text_id,unsigned long time_msec);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_sys_get_rfid_flag(void);
 
 /*
 function: 

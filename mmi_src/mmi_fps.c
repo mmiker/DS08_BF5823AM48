@@ -6,9 +6,10 @@
 #include "string.h"
 #include "mmi_fps.h"
 #include "dqiot_drv.h"
-#include "delay.h"
+// #include <stdio.h>
 
 unsigned char FP_oldStatus = 0;
+
 /*
 parameter: 
 	current status machine
@@ -40,10 +41,7 @@ return :
 void mmi_dq_fp_init(void)
 {
 	u16 waittime = 2000;
-	dqiot_drv_uart0B_init();
 	dqiot_drv_fp_poweron();
-
-#if __Normal_handling__
 	while (--waittime)
 	{
 		delay_ms(1);
@@ -53,9 +51,6 @@ void mmi_dq_fp_init(void)
 			return;
 		}
 	}
-#else
-	FP_Light(FP_BLUE);
-#endif
 
 	return;
 }
@@ -222,6 +217,7 @@ unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *
 		real_buf_id = CHAR_BUFFER3;
 	else if (Buf_id == 3)
 		real_buf_id = CHAR_BUFFER4;
+	
 	retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
 	return retval;
 }

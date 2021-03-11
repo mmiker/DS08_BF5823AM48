@@ -19,7 +19,8 @@ typedef enum
 {
 	FDS_USE_TYPE_ADMIN = 0x00,
 	FDS_USE_TYPE_USER = 0x01,
-	FDS_USE_TYPE_ALL = 0x02,
+	FDS_USE_TYPE_110 = 0x02,
+	FDS_USE_TYPE_ALL = 0x03,
 	FDS_USE_TYPE_INVALID = 0xFF
 }fds_use_type;
 
@@ -45,6 +46,8 @@ typedef struct mmi_fs_setting
 	unsigned char admin_status;
 	unsigned char factory_flag;
 	unsigned char wifi_flag;
+	unsigned char business_flag;
+	unsigned char check_data[8];
 	//unsigned char touch_sensitivity;
 	//unsigned char unused[3];
 }mmi_fs_setting;
@@ -122,6 +125,14 @@ parameter:
 return :
 	none
 */
+unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd,unsigned char len);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
 RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char size,fds_use_type type);
 
 /*
@@ -149,6 +160,16 @@ return :
 	none
 */
 unsigned char mmi_dq_fs_get_fp_unuse_index(void);
+
+#ifdef __LOCK_110_SUPPORT__
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_fp_110_unuse_index(void);
+#endif
 
 /*
 parameter: 
@@ -312,7 +333,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_set_wifi_setting(unsigned char flag);
+//RET_VAL mmi_dq_fs_set_wifi_setting(unsigned char flag);
 
 /*
 parameter: 
@@ -320,6 +341,21 @@ parameter:
 return :
 	none
 */
-unsigned char mmi_dq_fs_get_wifi_setting(void);
+//unsigned char mmi_dq_fs_get_wifi_setting(void);
 
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_business_flag(unsigned char flag);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_business_flag(void);
 #endif

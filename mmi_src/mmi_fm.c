@@ -1,7 +1,7 @@
 #ifndef __MMI_FM_C__
 #define __MMI_FM_C__
-
-
+#include "mmi_feature.h"
+#ifdef __FACTORY_TEST_SUPPORT__
 #include "mmi_ms.h"
 #include "mmi_fm.h"
 #include "mmi_audio.h"
@@ -54,7 +54,7 @@ void mmi_dq_factory_mode_test_item_select(unsigned char item_num)
 		case STR_ID_KEY:
 			mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
 			if(mmi_dq_fs_get_factory_flag()!=0)
-				mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+				mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
 			g_fm_key_flag = 0;
 			break;
 #ifdef __LOCK_OLED_SUPPORT__
@@ -68,7 +68,7 @@ void mmi_dq_factory_mode_test_item_select(unsigned char item_num)
 			mmi_ms_opt_time_init();
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
 			if(mmi_dq_fs_get_factory_flag()!=0)
-				mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+				mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
 			break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
@@ -76,7 +76,7 @@ void mmi_dq_factory_mode_test_item_select(unsigned char item_num)
 			mmi_ms_opt_time_init();
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
 			if(mmi_dq_fs_get_factory_flag()!=0)
-				mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+				mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
 			break;
 #endif
 		case STR_ID_MOTO:
@@ -90,7 +90,7 @@ void mmi_dq_factory_mode_test_item_select(unsigned char item_num)
 		case STR_ID_RESET:
 			mmi_dq_aud_play_with_id(AUD_ID_FM_RESET);
 			if(mmi_dq_fs_get_factory_flag()!=0)
-				mmi_dq_aud_play_with_id(AUD_BASE_ID_INPUT_BACK);
+				mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
 			break;
 		default:
 			break;
@@ -264,4 +264,5 @@ void mmi_dq_factory_mode_reset_test(void)
 {
 	mmi_dq_factory_mode_test_item_result(STR_ID_RESET,1);
 }
+#endif
 #endif

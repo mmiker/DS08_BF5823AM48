@@ -1,5 +1,5 @@
-
-
+#include "mmi_feature.h"
+#if defined (__LOCK_MOTOR_SUPPORT__)
 #include "mmi_motor.h"
 #include "dqiot_drv_motor.h"
 
@@ -49,6 +49,7 @@ void mmi_dq_motor_stop(void)
 
 
 
+#endif
 
 
 

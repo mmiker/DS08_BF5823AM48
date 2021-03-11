@@ -6,9 +6,11 @@
 #include "mcu02_sfr.h"
 #include "mcu02_eeprom.h"
 #include "string.h"
-#include "stdio.h"
-#include "delay.h"
+// #include <stdio.h>
+
 #include "mmi_fps.h"
+#include "mmi_ms.h"
+#include "dq_otp.h"
 
 mmi_fs_setting data g_dq_fs_init_set;
 
@@ -16,7 +18,7 @@ mmi_fs_setting data g_dq_fs_init_set;
 mmi_fs_pwd g_dq_fs_pwd[MMI_DQ_FS_PWD_MAX_NUM];
 
 #if defined(__LOCK_FP_SUPPORT__)
-#define MMI_DQ_FS_FP_MAX_NUM 50
+#define MMI_DQ_FS_FP_MAX_NUM 30
 mmi_fs_fp g_dq_fs_fp[MMI_DQ_FS_FP_MAX_NUM];
 #endif
 
@@ -24,6 +26,12 @@ mmi_fs_fp g_dq_fs_fp[MMI_DQ_FS_FP_MAX_NUM];
 #define MMI_DQ_FS_RFID_MAX_NUM 10
 mmi_fs_rfid g_dq_fs_rfid[MMI_DQ_FS_RFID_MAX_NUM];
 #endif
+
+#define	FP_ADMIN_NUM 2
+#define	FP_110_NUM 3
+
+#define	PWD_ADMIN_NUM 1
+#define	PWD_110_NUM 1
 
 static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_size)
 {
@@ -35,14 +43,14 @@ static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_si
 		eeprom_select(0);
 		for (i = 0; i < r_size; i++)
 		{
-			r_data[i] = eeprom_read_byte(0, i); //??????
+			r_data[i] = eeprom_read_byte(0, i); //����һҳ
 		}
 		break;
 	case MID_FDS_FILE_PWD:
 		eeprom_select(0);
 		for (i = 0; i < r_size; i++)
 		{
-			r_data[i] = eeprom_read_byte(0, i + 24); //??????
+			r_data[i] = eeprom_read_byte(0, i + 24); //����һҳ
 		}
 		break;
 #ifdef __LOCK_FP_SUPPORT__
@@ -74,10 +82,10 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		uint8_t *w_data2 = (uint8_t *)g_dq_fs_pwd;
 		uint16_t w_size2 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
 		eeprom_select(0);
-		eeprom_erase_page(0); //????1K
+		eeprom_erase_page(0); //����1K
 		for (i = 0; i < w_size; i++)
 		{
-			ret = eeprom_write_byte(0, i, w_data[i]); //??????
+			ret = eeprom_write_byte(0, i, w_data[i]); //����һҳ
 			if (ret == ERROR)
 			{
 				//printf("mmi_dq_fds_write  error  %d\n",i);
@@ -86,7 +94,7 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		}
 		for (i = 0; i < w_size2; i++)
 		{
-			ret = eeprom_write_byte(0, i + 24, w_data2[i]); //??????
+			ret = eeprom_write_byte(0, i + 24, w_data2[i]); //����һҳ
 			if (ret == ERROR)
 			{
 				//printf("mmi_dq_fds_write  error  %d\n",i);
@@ -100,10 +108,10 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
 		uint16_t w_size2 = sizeof(mmi_fs_setting);
 		eeprom_select(0);
-		eeprom_erase_page(0); //????1K
+		eeprom_erase_page(0); //����1K
 		for (i = 0; i < w_size2; i++)
 		{
-			ret = eeprom_write_byte(0, i, w_data2[i]); //??????
+			ret = eeprom_write_byte(0, i, w_data2[i]); //����һҳ
 			if (ret == ERROR)
 			{
 				//printf("mmi_dq_fds_write  error  %d\n",i);
@@ -112,7 +120,7 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		}
 		for (i = 0; i < w_size; i++)
 		{
-			ret = eeprom_write_byte(0, i + 24, w_data[i]); //??????
+			ret = eeprom_write_byte(0, i + 24, w_data[i]); //����һҳ
 			if (ret == ERROR)
 			{
 				//printf("mmi_dq_fds_write  error  %d\n",i);
@@ -124,7 +132,7 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 #ifdef __LOCK_FP_SUPPORT__
 	case MID_FDS_FILE_FP:
 		eeprom_select(1);
-		eeprom_erase_page(0); //????512byte
+		eeprom_erase_page(0); //����512byte
 		for (i = 0; i < w_size; i++)
 		{
 			ret = eeprom_write_byte(0, i, w_data[i]);
@@ -139,7 +147,7 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	case MID_FDS_FILE_RF:
 		eeprom_select(1);
-		eeprom_erase_page(1); //????512byte
+		eeprom_erase_page(1); //����512byte
 		for (i = 0; i < w_size; i++)
 		{
 			ret = eeprom_write_byte(1, i, w_data[i]);
@@ -218,7 +226,7 @@ void mmi_dq_fs_init(void)
 }
 
 /**
-  * @brief  ????????
+  * @brief  �ֶ���ʼ��
   * @param  none
   * @return none
   * @note   none
@@ -233,7 +241,7 @@ RET_VAL mmi_dq_fs_clr_set(void)
 }
 
 /**
-  * @brief  ??��?????
+  * @brief  ��λ��ʼ��
   * @param  none
   * @return none
   * @note   none
@@ -291,25 +299,30 @@ parameter:
 return :
 	none
 */
-void mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd, unsigned char *output_pwd)
+unsigned char mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd,unsigned char *output_pwd)
 {
 	unsigned char i = 0;
 	unsigned char pwd = 0;
-	for (i = 0; i < 4; i++)
+	unsigned char len = 0;
+	for(i=0;i<4;i++)
 	{
 		pwd = *(input_pwd + i);
 		if (pwd == 0xFF)
 			break;
-		else
-			*output_pwd++ = (pwd & 0xF0) >> 4;
-		if ((pwd & 0x0F) == 0x0F)
+		else 
+		{
+			*output_pwd++ = (pwd&0xF0)>>4;
+			len++;
+		}
+		if((pwd&0x0F) == 0x0F)
 			break;
 		else
 		{
-			*output_pwd++ = pwd & 0x0F;
+			*output_pwd++ = pwd&0x0F;
+			len++;
 		}
 	}
-	return;
+	return len;
 }
 
 /*
@@ -320,9 +333,11 @@ return :
 */
 unsigned char mmi_dq_fs_get_pwd_unuse_index(void)
 {
-	unsigned char i = 0;
-
-	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+	unsigned char i = PWD_ADMIN_NUM;
+#ifdef __LOCK_110_SUPPORT__
+	i+=PWD_110_NUM;
+#endif
+	for(;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 	{
 		if (g_dq_fs_pwd[i].flag == 0xFF)
 			break;
@@ -384,22 +399,94 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd, unsigned char pwd_size, fds_use_type type)
+unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd,unsigned char len)
 {
-	unsigned char i = 0xFF;
-	unsigned char password[4];
-
-	if (type == FDS_USE_TYPE_ADMIN)
+	unsigned char i = 0,n = 0;
+	unsigned char k,j;
+	unsigned char password[8];
+	unsigned char passlen = 0;
+	unsigned char ret_val = 0xFF;
+	
+	for(i=0;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 	{
-		for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+		if(g_dq_fs_pwd[i].flag == FDS_USE_TYPE_INVALID)
+			continue;
+		memset(password,0xFF,sizeof(password));
+		passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[i].key_pwd,password);
+		for(k = 0;k+passlen <= len; k++)
 		{
-			if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
+			for(j=0;j<passlen;j++)
+			{
+				if(password[j] != input_pwd[k+j])
+					break;
+			}
+			if(j==passlen)
 				break;
 		}
+		if(j == passlen)
+			break;
 	}
-	if (i >= MMI_DQ_FS_PWD_MAX_NUM)
+	if(i<MMI_DQ_FS_PWD_MAX_NUM)
 	{
-		for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+		//printf("check input return i: %d",(unsigned int)i);
+		return i;
+	}
+	else
+	{
+		unsigned char adminword[8];
+		unsigned char checkCode_out[8];
+		unsigned char pass = 0;
+		memset(adminword,0xFF,sizeof(adminword));
+		passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[0].key_pwd,adminword);
+		for(i=0;i<8;i++)
+		{
+			if(adminword[i]==0xFF)
+				adminword[i] = 0;
+			else
+				adminword[i] += '0';
+
+			if(input_pwd[i]==0xFF)
+				password[i] = 0;
+			else
+				password[i] = input_pwd[i] + '0';
+		}
+		pass = dq_check_otp((char *)password,(char *)adminword,g_dq_fs_init_set.check_data,checkCode_out);
+		if(pass > 0)
+		{
+			memcpy(g_dq_fs_init_set.check_data,checkCode_out,8);
+			mmi_dq_fds_write(MID_FDS_FILE_SET,(unsigned char *)&g_dq_fs_init_set,sizeof(mmi_fs_setting));
+			return 0xFE;
+		}
+	}
+	//printf("check input return 0xFF");
+	return 0xFF;
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char pwd_size,fds_use_type type)
+{
+	unsigned char i = 0;
+	unsigned char password[4];
+
+	if(type == FDS_USE_TYPE_ADMIN)
+		i = 0;
+#ifdef __LOCK_110_SUPPORT__
+	else if(type == FDS_USE_TYPE_110)
+		i = 1;
+#endif
+	else
+	{
+#ifdef __LOCK_110_SUPPORT__
+		i = PWD_ADMIN_NUM+PWD_110_NUM;
+#else
+		i = PWD_ADMIN_NUM;
+#endif
+		for(;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 		{
 			if (g_dq_fs_pwd[i].flag == 0xFF)
 				break;
@@ -443,9 +530,11 @@ return :
 */
 RET_VAL mmi_dq_fs_clr_pwd(void)
 {
-	unsigned char i = 0;
-
-	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+	unsigned char i = PWD_ADMIN_NUM;
+#ifdef __LOCK_110_SUPPORT__
+	i += PWD_110_NUM;
+#endif
+	for(;i<MMI_DQ_FS_PWD_MAX_NUM;i++)
 	{
 		if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_USER)
 		{
@@ -466,9 +555,11 @@ return :
 */
 unsigned char mmi_dq_fs_get_fp_unuse_index(void)
 {
-	unsigned char i = 2;
-
-	for (; i < MMI_DQ_FS_FP_MAX_NUM; i++)
+	unsigned char i = FP_ADMIN_NUM;
+#ifdef __LOCK_110_SUPPORT__
+	i += FP_110_NUM;
+#endif
+	for(;i<MMI_DQ_FS_FP_MAX_NUM;i++)
 	{
 		if (g_dq_fs_fp[i].fp_index == 0xFF)
 			break;
@@ -477,6 +568,29 @@ unsigned char mmi_dq_fs_get_fp_unuse_index(void)
 		return 0xFF;
 	return i;
 }
+
+#ifdef __LOCK_110_SUPPORT__
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_fp_110_unuse_index(void)
+{
+	unsigned char i = FP_ADMIN_NUM;
+	unsigned char j = 0;
+
+	for(;j<FP_110_NUM;j++)
+	{
+		if(g_dq_fs_fp[i+j].fp_index == 0xFF)
+			break;
+	}
+	if(j>=FP_110_NUM)
+		return 0xFF;
+	return i+j;
+}
+#endif
 
 /*
 parameter: 
@@ -530,25 +644,24 @@ return :
 */
 RET_VAL mmi_dq_fs_clr_fp(void)
 {
-	unsigned char i = 0;
+	unsigned char i = FP_ADMIN_NUM;
 	unsigned short fp_ret = 0;
-
-	for (i = 0; i < MMI_DQ_FS_FP_MAX_NUM; i++)
+#ifdef __LOCK_110_SUPPORT__
+	i += FP_110_NUM;
+#endif
+	for(;i<MMI_DQ_FS_FP_MAX_NUM;i++)
 	{
-		if (g_dq_fs_fp[i].flag != FDS_USE_TYPE_ADMIN)
+		if(g_dq_fs_fp[i].fp_index != 0xFF)
 		{
-			if (g_dq_fs_fp[i].fp_index != 0xFF)
+			fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
+			if(fp_ret == 0)
 			{
-				fp_ret = mmi_dq_fp_delete(g_dq_fs_fp[i].fp_index);
-				if (fp_ret == 0)
-				{
-					g_dq_fs_fp[i].flag = FDS_USE_TYPE_INVALID;
-					g_dq_fs_fp[i].fp_index = 0xFF;
-				}
+				g_dq_fs_fp[i].flag = FDS_USE_TYPE_INVALID;
+				g_dq_fs_fp[i].fp_index = 0xFF;
 			}
 		}
 	}
-	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
+	return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp)*MMI_DQ_FS_FP_MAX_NUM);
 }
 
 #endif
@@ -792,6 +905,7 @@ RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
 	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
 }
 
+#if 0
 /*
 parameter: 
 	none
@@ -814,5 +928,61 @@ unsigned char mmi_dq_fs_get_wifi_setting(void)
 {
 	return g_dq_fs_init_set.wifi_flag;
 }
+#endif
+
+
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+RET_VAL mmi_dq_fs_set_business_flag(unsigned char flag)
+{
+	#if 1
+	if(flag != g_dq_fs_init_set.business_flag)
+	{
+		g_dq_fs_init_set.business_flag = flag;
+		return mmi_dq_fds_write(MID_FDS_FILE_SET,(unsigned char *)&g_dq_fs_init_set,sizeof(mmi_fs_setting));
+	}
+	#else
+	g_dq_fs_init_set.business_flag = flag;
+	#endif
+	return RET_SUCESS;
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_fs_get_business_flag(void)
+{
+	return g_dq_fs_init_set.business_flag;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif

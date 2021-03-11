@@ -40,10 +40,10 @@ uint16_t rawdata3[SENSOR_NUM];
 uint16_t rawdata4[SENSOR_NUM];
 #endif
 
-uint8_t xdata g_ucBtPNthCnt[SENSOR_NUM];//»ùÏß¸üÐÂdiffer>=ÕýÔëÉù¼ÆÊý
-uint8_t xdata g_ucStPNthCnt[SENSOR_NUM];//»ùÏß¸üÐÂdiffer<ÕýÔëÉù¼ÆÊý
-uint8_t xdata g_ucBtNNthCnt[SENSOR_NUM];//»ùÏß¸üÐÂdiffer>=¸ºÔëÉù¼ÆÊý
-uint8_t xdata g_ucStNNthCnt[SENSOR_NUM];//»ùÏß¸üÐÂdiffer<¸ºÔëÉù¼ÆÊý
+uint8_t xdata g_ucBtPNthCnt[SENSOR_NUM];//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8_t xdata g_ucStPNthCnt[SENSOR_NUM];//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8_t xdata g_ucBtNNthCnt[SENSOR_NUM];//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+uint8_t xdata g_ucStNNthCnt[SENSOR_NUM];//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 uint8_t xdata g_ucWaterBaseRenoCnt[SENSOR_NUM];
 
 uint8_t xdata g_ucJudgeKeyTouchUpCnt[SENSOR_NUM];
@@ -51,7 +51,7 @@ uint8_t xdata g_ucJudgeKeyTouchCnt[SENSOR_NUM];
 uint8_t xdata g_ucSenSorTouchFlag[SENSOR_NUM];
 uint8_t xdata g_ucKeyTouchFlag[SENSOR_NUM];/*the touch state of each key,1: touch ;0: no touch*/
 #if CTK_FIRST_KEY_EN
-uint8_t xdata g_ucFirstTouchKeyIndex;//µ±Ç°µÚÒ»¸ö±»´¥ÃþµÄ°´¼üÍ¨µÀÏÂ±ê£¬0xff´ú±íÎÞÐ§£¬0~SENSOR_NUMÓÐÐ§
+uint8_t xdata g_ucFirstTouchKeyIndex;//ï¿½ï¿½Ç°ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä°ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½Â±ê£¬0xffï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½0~SENSOR_NUMï¿½ï¿½Ð§
 #endif
 
 uint8_t xdata g_ucExceptionCnt = 0;
@@ -67,7 +67,7 @@ uint16_t xdata g_uiTouchFrame = 0;
 code byd_parameter_struct byd_parameter={
 
 /* csd */    
-	VTH_2,               //uint8_t vth;		        /* vth select,notice£ºVCC-VTH>0.5V*/
+	VTH_2,               //uint8_t vth;		        /* vth select,noticeï¿½ï¿½VCC-VTH>0.5V*/
 	DS_24M,              //uint8_t ds;			    /* detect speed select */
 	PRE_CHARGE_20us,     //uint8_t pre_charge;	    /* pre charge select time us*/
 	PRE_DISCHARGE_2us,  //uint8_t pre_discharge;	/* pre discharge select time us*/
@@ -84,7 +84,7 @@ code byd_parameter_struct byd_parameter={
 #else
 	RESO_2048,//uint8_t reso;			/* reso select */
 #endif
-	SW_CLK_2,//uint8_t pre_div;/* pre select,csdµÍ¹¦ºÄÄ£Ê½ºÍÕý³£¹¤×÷Ä£Ê½Ëù¶ÔÓ¦µÄÇ°¶ËÆµÂÊÊÇ²»Ò»ÑùµÄ,ÓÉ²ÎÊýcsd_lowpowerÖµ¾ö¶¨£¬¾ßÌå¿´CSD_PREDIV_enum*/
+	SW_CLK_2,//uint8_t pre_div;/* pre select,csdï¿½Í¹ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ç°ï¿½ï¿½Æµï¿½ï¿½ï¿½Ç²ï¿½Ò»ï¿½ï¿½ï¿½ï¿½,ï¿½É²ï¿½ï¿½ï¿½csd_lowpowerÖµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å¿´CSD_PREDIV_enum*/
 
 /*csd parallel mode config */
 	RB_200K,   //uint8_t parallel_rb;		/* parallel_rb select */
@@ -116,38 +116,38 @@ code byd_parameter_struct byd_parameter={
 
 	300,//uint16_t parallel_pull_current;       /* detect sensor current at parallel mode*/
 
-	0,//uint8_t filterenable;//¸Ã¹¦ÄÜÒÑ¹Ø±Õ,²ÎÊýÎÞÐ§
-	SCAN_FILTER_NUM,//uint8_t filterframe;//¸Ã¹¦ÄÜÒÑ¹Ø±Õ,²ÎÊýÎÞÐ§
+	0,//uint8_t filterenable;//ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ñ¹Ø±ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+	SCAN_FILTER_NUM,//uint8_t filterframe;//ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ñ¹Ø±ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
 
-	0,//uint8_t abnormal_mul;      /*ÓÐ¸Ç°åÌî2,ÎÞ¸Ç°åÌî0; Òì³£×îÐ¡ÖµÏµÊý,Ð¡ÓÚ(Òç³öÖµ*abnormal_mulrate/10)»ùÏß¸´Î»*/			
+	2,//uint8_t abnormal_mul;      /*ï¿½Ð¸Ç°ï¿½ï¿½ï¿½2,ï¿½Þ¸Ç°ï¿½ï¿½ï¿½0; ï¿½ì³£ï¿½ï¿½Ð¡ÖµÏµï¿½ï¿½,Ð¡ï¿½ï¿½(ï¿½ï¿½ï¿½Öµ*abnormal_mulrate/10)ï¿½ï¿½ï¿½ß¸ï¿½Î»*/			
 
 	0,//uint8_t renovatemode;   /* renovatemode select 0:normal 1;water*/
 	
-	11,//uint8_t fthrate; //ÊÖÖ¸ãÐÖµÏµÊý,ÊÖÖ¸ãÐÖµ=(fingerthreshold*fthrate)>>4,²ÎÊýÎÞÐ§
-	7,//uint8_t nthrate; //ÔëÉùãÐÖµÏµÊý,ÔëÉùãÐÖµ=(fingerthreshold*nthrate)>>4	
+	11,//uint8_t fthrate; //ï¿½ï¿½Ö¸ï¿½ï¿½ÖµÏµï¿½ï¿½,ï¿½ï¿½Ö¸ï¿½ï¿½Öµ=(fingerthreshold*fthrate)>>4,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+	7,//uint8_t nthrate; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÏµï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ=(fingerthreshold*nthrate)>>4	
 
-//Õý³£È«ËÙÅÜÊ±µÄ»ùÏß¸üÐÂËÙ¶È
-	30,//uint8_t bt_ponth_maxcnt;//»ùÏß¸üÐÂdiffer>=ÕýÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	20,//uint8_t st_ponth_maxcnt;//»ùÏß¸üÐÂdiffer<ÕýÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	10,//uint8_t bt_nenth_maxcnt;//»ùÏß¸üÐÂdiffer>=¸ºÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	20,//uint8_t st_nenth_maxcnt;//»ùÏß¸üÐÂdiffer<¸ºÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì	
+//ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ä»ï¿½ï¿½ß¸ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+	30,//uint8_t bt_ponth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	20,//uint8_t st_ponth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	10,//uint8_t bt_nenth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	20,//uint8_t st_nenth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½	
 	
-//ÐÝÃßÖ¡ÆµµÍÊ±µÄ»ùÏß¸üÐÂËÙ¶È	
-	6,//uint8_t wakeup_bt_ponth_maxcnt;//»ùÏß¸üÐÂdiffer>=ÕýÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	3,//uint8_t wakeup_st_ponth_maxcnt;//»ùÏß¸üÐÂdiffer<ÕýÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	2,//uint8_t wakeup_bt_nenth_maxcnt;//»ùÏß¸üÐÂdiffer>=¸ºÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì
-	3,//uint8_t wakeup_st_nenth_maxcnt;//»ùÏß¸üÐÂdiffer<¸ºÔëÉù¼ÆÊý,¸üÐÂ»ùÏß£¬ÖµÔ½Ð¡£¬»ùÏß¸üÐÂÔ½¿ì	
+//ï¿½ï¿½ï¿½ï¿½Ö¡Æµï¿½ï¿½Ê±ï¿½Ä»ï¿½ï¿½ß¸ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½	
+	6,//uint8_t wakeup_bt_ponth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	3,//uint8_t wakeup_st_ponth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	2,//uint8_t wakeup_bt_nenth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ>=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½
+	3,//uint8_t wakeup_st_nenth_maxcnt;//ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½differ<ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Â»ï¿½ï¿½ß£ï¿½ÖµÔ½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½Ô½ï¿½ï¿½	
 	
-	8,//uint8_t waterflowrate;	//ÒçË®ÅÐ¶ÏãÐÖµ±ÈÀýÏµÊý	
-	8,//uint8_t watermoderate;  //·ÀË®ÊÖÖ¸ãÐÖµÏµÊý
+	8,//uint8_t waterflowrate;	//ï¿½ï¿½Ë®ï¿½Ð¶ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½	
+	8,//uint8_t watermoderate;  //ï¿½ï¿½Ë®ï¿½ï¿½Ö¸ï¿½ï¿½ÖµÏµï¿½ï¿½
 
-	50,//uint8_t water_base_renomaxcnt;//bak_baseline»ùÏß¸üÐÂÅÐ¶Ï´ÎÊý
+	50,//uint8_t water_base_renomaxcnt;//bak_baselineï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½
 	
-	2,//uint8_t multikey_maxcnt;	//¶à°´¼üÏû³ýÅÐ¶Ï´ÎÊý;
+	2,//uint8_t multikey_maxcnt;	//ï¿½à°´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½;
     
-	3,//uint8_t judge_water_maxcnt;      //ÒçË®ÅÐ¶ÏÍ¨µÀ¸öÊý;
+	3,//uint8_t judge_water_maxcnt;      //ï¿½ï¿½Ë®ï¿½Ð¶ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
 
-	30,//uint16_t judge_waterleave_maxcnt;//ÒçË®Àë¿ªÅÐ¶Ï´ÎÊý
+	30,//uint16_t judge_waterleave_maxcnt;//ï¿½ï¿½Ë®ï¿½ë¿ªï¿½Ð¶Ï´ï¿½ï¿½ï¿½
 		
 	{
 	#if 0
@@ -171,8 +171,8 @@ code byd_parameter_struct byd_parameter={
 	 55,55,55,55,55,55,55,55,
 	},//int16_t	fingerthreshold[SENSOR_MAX_NUM];
 */    
-	150,//uint16_t threshold_parallel;//²¢ÁªÄ£Ê½ÏÂãÐÖµ
-	10,//uint16_t finger_latency;//Í¨µÀÓÐ´¥Ãþºó,µ±²îÖµÐ¡ÓÚfingerthreshold-finger_latencyÊ±ÈÏÎªÌ§Æð
+	150,//uint16_t threshold_parallel;//ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½Öµ
+	10,//uint16_t finger_latency;//Í¨ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ÖµÐ¡ï¿½ï¿½fingerthreshold-finger_latencyÊ±ï¿½ï¿½ÎªÌ§ï¿½ï¿½
 	
 	0,/*judging the number of finger touch*/
 	0,/*judging the number of finger up*/
@@ -444,7 +444,7 @@ uint8_t byd_get_maxkey(void)
 		}
 	}
 #if CTK_FIRST_KEY_EN
-	if(g_ucFirstTouchKeyIndex != index)//»¬¶¯Ê±´¦Àí
+	if(g_ucFirstTouchKeyIndex != index)//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 	{
 	   differ = (int)baseline[g_ucFirstTouchKeyIndex] - (int)rawdata[g_ucFirstTouchKeyIndex];
 	   differ = max_differ - differ;
@@ -544,7 +544,7 @@ void byd_ctk_normal(void)
 
 #endif
 							
-		if(i < SENSOR_NUM-1)//É¨ÃèÏÂÒ»¸öÍ¨µÀ
+		if(i < SENSOR_NUM-1)//É¨ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¨ï¿½ï¿½
 		{	
 			CSD_PULL_I_SET(csd_pull_current[i+1]);
 	    	CSD_SCANADDR_SET(byd_parameter.sensorindex[i+1]);//csd_sensor_index[i]
@@ -565,7 +565,7 @@ void byd_ctk_normal(void)
 		if(g_bExceptionFlag)return;     
 	}
 
-#else //////////////////´®ÐÐ
+#else //////////////////ï¿½ï¿½ï¿½ï¿½
 
 	for(i = 0; i < SENSOR_NUM;i++)
 	{
@@ -687,12 +687,12 @@ void byd_ctk_work(void)
 		for(i = 0; i < SENSOR_NUM;i++)
 	    {
 #if CTK_FIRST_KEY_EN
-			if(g_ucFirstTouchKeyIndex == i)//g_ucFirstTouchKeyIndex=0~11,¼´´ú±í°´¼ü1~12
+			if(g_ucFirstTouchKeyIndex == i)//g_ucFirstTouchKeyIndex=0~11,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1~12
 			{
 				
 			}
 #else			
-			if(g_ucKeyTouchFlag[i])//ÅÐ¶ÏÄÄ¸ö°´¼üÓÐ´¥Ãþ,´¥ÃþÎª1
+			if(g_ucKeyTouchFlag[i])//ï¿½Ð¶ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îª1
 			{
 				 
 			}
@@ -713,7 +713,7 @@ void byd_ctk_work(void)
 		 g_ulKeyTouchFlag = 0;
 #else
 		 	
-//		 byd_idlemode();//½øÈëÐÝÃß,Ê¹ÓÃtimer2»½ÐÑ		 
+//		 byd_idlemode();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Ê¹ï¿½ï¿½timer2ï¿½ï¿½ï¿½ï¿½		 
   
 #endif
 	}

@@ -2,7 +2,7 @@
 #define __MMI_FM_H__
 
 #include "mmi_feature.h"
-
+#ifdef __FACTORY_TEST_SUPPORT__
 
 /*
 parameter: 
@@ -83,5 +83,5 @@ return :
 	none
 */
 void mmi_dq_factory_mode_reset_test(void);
-
+#endif
 #endif

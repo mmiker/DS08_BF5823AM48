@@ -14,7 +14,7 @@
 #define AUDIO_OUT_DATA_HI       gpio_bit_set(AUD_DATA_PORT,AUD_DATA_PIN)
 #define AUDIO_OUT_DATA_Toggle   gpio_bit_get(AUD_DATA_PORT,AUD_DATA_PIN) ? gpio_bit_reset(AUD_DATA_PORT,AUD_DATA_PIN) : gpio_bit_set(AUD_DATA_PORT,AUD_DATA_PIN)
 
-uint8_t audio_flag=0; // 
+uint8_t audio_flag=0;
 uint8_t audio_section=0,audio_time_count=0;
 #define AUDIO_MAX_CACHE_NUM  	20
 static uint8_t audio_cache[AUDIO_MAX_CACHE_NUM] = {0};
@@ -68,7 +68,7 @@ return :
 */
 void dqiot_drv_audio_init(void)
 {
-	dqiot_drv_timer0_init(200);
+	dqiot_drv_timer0_init(50);
 	return;
 }
 
@@ -223,7 +223,7 @@ void Audio_Select_Handle_in_Timer(void)
 			audio_time_count = 0;
 			AUDIO_OUT_RST_LO;
 			AUDIO_OUT_DATA_LO;
-			audio_flag = 2;
+			audio_flag = 4;
 		}
 	}
 	else if(audio_flag == 3)
@@ -249,6 +249,11 @@ void Audio_Select_Handle_in_Timer(void)
  			audio_flag = 2;
 		}
 		
+	}
+	else if(audio_flag == 4)
+	{
+		if(AUDIO_IN_BUSY == 0)
+			audio_flag = 2;
 	}
 
 }

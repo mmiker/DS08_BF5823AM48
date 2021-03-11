@@ -1,5 +1,7 @@
 #ifndef __DQIOT_FP_SY_H__
 #define __DQIOT_FP_SY_H__
+#include "mmi_feature.h"
+#if defined (__LOCK_FP_SY_SUPPORT__)
 
 #include "dq_project.h"
 
@@ -10,17 +12,17 @@ static unsigned long AS608_Addr = 0xFFFFFFFF;
 #define CHAR_BUFFER3 0x03
 #define CHAR_BUFFER4 0x04
 
-#define PS_MAXNUM 299 /*Ö¸ÎÆÄ£¿é×î´ó´æ´¢Ö¸ÎÆÄ£°åÊý*/
+#define PS_MAXNUM   299          /*Ö¸ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢Ö¸ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½*/
 
 //typedef void (*fp_irq_handle_callback)(void);
 //typedef void (*fp_uart_handle_callback)(unsigned char type,unsigned char *reply,unsigned short reply_len);
 
-typedef enum
+typedef enum 
 {
 	BTL_M_FREE = 1,
 	BTL_M_INPUT,
 	BTL_M_COMPARE,
-} BTL_MODE_E;
+}BTL_MODE_E;
 
 typedef enum
 {
@@ -28,7 +30,9 @@ typedef enum
 	FP_BLUE,
 	FP_GREEN,
 	FP_RED,
-} FP_COLOR_E;
+}FP_COLOR_E;
+
+
 
 typedef enum
 {
@@ -36,7 +40,8 @@ typedef enum
 	FP_BTL,
 	FP_LT5X,
 	FP_UNKNOW,
-} FP_TYPE;
+}FP_TYPE;
+
 
 //extern uint8_t BTL_Input_Return;
 
@@ -45,34 +50,35 @@ typedef enum
 
 //FP_TYPE fp_get_type(void);
 
-//void AS608_SendData(unsigned char buf_data);//AS608_USART´®¿ÚÏòÖ¸ÎÆÄ£¿é´«µÝÊý¾Ý
-//unsigned char AS608_PackHead(void);// AS608_USART´®¿ÚÏòÖ¸ÎÆÄ£¿éÃüÁî°üÍ·¸ñÊ½
-//unsigned char AS608_PackHead2(void);// AS608_USART´®¿ÚÏòÖ¸ÎÆÄ£¿éÃüÁî°üÍ·¸ñÊ½
+//void AS608_SendData(unsigned char buf_data);//AS608_USARTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½é´«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+//unsigned char AS608_PackHead(void);// AS608_USARTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Ê½ 
+//unsigned char AS608_PackHead2(void);// AS608_USARTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Ê½ 
 
-//void SendFlag(unsigned char flag);//·¢ËÍ°ü±êÊ¶
-//void SendLength(unsigned short length);// ·¢ËÍ°ü³¤¶È
-//void Sendcmd(unsigned char cmd);// ·¢ËÍÖ¸ÁîÂë
-//void SendCheck(unsigned short check);//·¢ËÍÐ£ÑéºÍ
-
-unsigned char PS_GetEcho(void);
-unsigned char PS_GetImage(void);																							   // Ì½²âÊÖÖ¸£¬Ì½²âµ½ºóÂ¼ÈëÖ¸ÎÆÍ¼Ïñ´æÓÚ ImageBuffer
-unsigned char PS_GenChar(unsigned char BufferID);																			   //½«ImageBufferÖÐµÄÔ­Ê¼Í¼ÏñÉú³ÉÖ¸ÎÆÌØÕ÷ÎÄ¼þ´æÓÚCHARBUFFER1»òCHARBUFFER2
-unsigned char PS_Match(void);																								   // ¾«È·±È¶Ô CHARBUFFER1ÓëCHARBUFFER2ÖÐµÄÌØÕ÷ÎÄ¼þ
-unsigned char PS_RegModel(void);																							   //½«CHARBUFFER1ÓëCHARBUFFER2 ÖÐµÄÌØÕ÷ÎÄ¼þºÏ²¢Éú³ÉÄ£°å£¬
-unsigned char PS_StoreChar(unsigned char BufferID, unsigned short PageID);													   //½« CHARBUFFER1 »ò CHARBUFFER2 ÖÐµÄÄ£°åÎÄ¼þ´æµ½ PageID ºÅflash Êý¾Ý¿âÎ»ÖÃ¡£
-unsigned char PS_DeletChar(unsigned short PageID, unsigned short N);														   //É¾³ý flash Êý¾Ý¿âÖÐÖ¸¶¨IDºÅ¿ªÊ¼µÄN¸öÖ¸ÎÆÄ£°å
-unsigned char PS_HighSpeedSearch(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p); //ÒÔCHARBUFFER1»òCHARBUFFER2ÖÐµÄÌØÕ÷ÎÄ¼þ¸ßËÙËÑË÷Õû¸ö»ò²¿·ÖÖ¸ÎÆ¿â
-unsigned char PS_Empty(void);																								   // É¾³ý flash Êý¾Ý¿âÖÐËùÓÐÖ¸ÎÆÄ£°å
-//unsigned char PS_Connect(unsigned long *PS_Addr);//¼ì²éSTM32ÓëÖ¸ÎÆÄ£¿éµÄÍ¨ÐÅÁ¬½Ó
-unsigned char PS_ValidTempleteNum(unsigned short *ValidN);
-unsigned char PS_Search(unsigned char BufferID, unsigned short StartPage, unsigned short PageNum, unsigned short *p);
+//void SendFlag(unsigned char flag);//ï¿½ï¿½ï¿½Í°ï¿½ï¿½ï¿½Ê¶
+//void SendLength(unsigned short length);// ï¿½ï¿½ï¿½Í°ï¿½ï¿½ï¿½ï¿½ï¿½
+//void Sendcmd(unsigned char cmd);// ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½
+//void SendCheck(unsigned short check);//ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½
+ 
+ 
+ unsigned char PS_GetEcho(void);
+ unsigned char PS_GetImage(void);// Ì½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ì½ï¿½âµ½ï¿½ï¿½Â¼ï¿½ï¿½Ö¸ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ ImageBuffer
+ unsigned char PS_GenChar(unsigned char BufferID);//ï¿½ï¿½ImageBufferï¿½Ðµï¿½Ô­Ê¼Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½CHARBUFFER1ï¿½ï¿½CHARBUFFER2
+ unsigned char PS_Match(void);// ï¿½ï¿½È·ï¿½È¶ï¿½ CHARBUFFER1ï¿½ï¿½CHARBUFFER2ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+ unsigned char PS_RegModel(void);//ï¿½ï¿½CHARBUFFER1ï¿½ï¿½CHARBUFFER2 ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½å£¬
+ unsigned char PS_StoreChar(unsigned char BufferID,unsigned short PageID);//ï¿½ï¿½ CHARBUFFER1 ï¿½ï¿½ CHARBUFFER2 ï¿½Ðµï¿½Ä£ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½æµ½ PageID ï¿½ï¿½flash ï¿½ï¿½ï¿½Ý¿ï¿½Î»ï¿½Ã¡ï¿½
+ unsigned char PS_DeletChar(unsigned short PageID,unsigned short N);//É¾ï¿½ï¿½ flash ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½IDï¿½Å¿ï¿½Ê¼ï¿½ï¿½Nï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½ï¿½
+ unsigned char PS_HighSpeedSearch(unsigned char BufferID,unsigned short StartPage,unsigned short PageNum,unsigned short *p);//ï¿½ï¿½CHARBUFFER1ï¿½ï¿½CHARBUFFER2ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò²¿·ï¿½Ö¸ï¿½Æ¿ï¿½
+ unsigned char  PS_Empty(void);// É¾ï¿½ï¿½ flash ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½ï¿½
+ //unsigned char PS_Connect(unsigned long *PS_Addr);//ï¿½ï¿½ï¿½STM32ï¿½ï¿½Ö¸ï¿½ï¿½Ä£ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ unsigned char PS_ValidTempleteNum(unsigned short *ValidN);
+ unsigned char PS_Search(unsigned char BufferID,unsigned short StartPage,unsigned short PageNum,unsigned short *p);
 unsigned char PS_HandShake(unsigned long *PS_Addr);
 //unsigned char PS_ReadSysPara(void);
 void FP_Light(FP_COLOR_E light_id);
 //void AS608_EnterSleep(void);
 FP_COLOR_E FP_Get_Light(void);
-FP_COLOR_E FP_Set_Light(FP_COLOR_E light_id);
 
 unsigned char FP_Get_Start_Flag(void);
-
+#endif
 #endif //__DQIOT_FP_AS608_H__
+

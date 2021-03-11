@@ -53,7 +53,8 @@
 ".\output\mmi_fs.obj",
 ".\output\mmi_motor.obj",
 ".\output\mmi_fm.obj",
-".\output\mmi_wifi.obj" 
+".\output\mmi_wifi.obj",
+".\output\dq_otp.obj" 
 TO ".\output\DS08_HEX" 
 
 PRINT(".\list\DS08_HEX.map") REMOVEUNUSED 

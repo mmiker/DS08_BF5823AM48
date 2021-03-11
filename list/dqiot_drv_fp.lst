@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      03/06/2021 11:30:34 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      03/10/2021 16:14:59 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_FP
@@ -11,101 +11,102 @@ line level    source
 
    1          #ifndef __DQIOT_DRV_FP_C__
    2          #define __DQIOT_DRV_FP_C__
-   3          
-   4          #include "dqiot_drv.h"
-   5          #include "dqiot_drv_fp.h"
-   6          #include "delay.h"
-   7          
-   8          //unsigned char test_data[] ={0xAA,0xAA,0x87,0x00,0x02,0x0A,0x01,0x01,0xE8};
-   9          unsigned char test_data[] ={0xEF,0x01,0xFF,0xFF,0xFF,0xFF,0x01,0x00,0x07,0x41,0x01,0x01,0x00,0x50,0x00,0x9
+   3          #include "mmi_feature.h"
+   4          #ifdef __LOCK_FP_SUPPORT__
+   5          #include "dqiot_drv.h"
+   6          #include "dqiot_drv_fp.h"
+   7          #include "delay.h"
+   8          
+   9          //unsigned char test_data[] ={0xAA,0xAA,0x87,0x00,0x02,0x0A,0x01,0x01,0xE8};
+  10          unsigned char test_data[] ={0xEF,0x01,0xFF,0xFF,0xFF,0xFF,0x01,0x00,0x07,0x41,0x01,0x01,0x00,0x50,0x00,0x9
              -B};
-  10          
-  11          /*
-  12          parameter: 
-  13            none
-  14          return :
-  15            none
-  16          */
-  17          void dqiot_drv_fp_gpio_init(void)
-  18          {
-  19   1        /*指纹
-  20   1        UART0_TX  PF4 输出
-  21   1        UART0_RX  PF5 输入
-  22   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
-  23   1        NRST_CTR  PF7 供电
-  24   1        */
-  25   1        gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_OUT);
-  26   1        gpio_bit_set(FP_TX_PORT, FP_TX_PIN);
-  27   1      
-  28   1        gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IPU);
-  29   1        gpio_bit_set(FP_RX_PORT, FP_RX_PIN);
-  30   1      
-  31   1        gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_OUT);
-  32   1        gpio_bit_set(FP_PWR_PORT, FP_PWR_PIN);
-  33   1      
-  34   1        gpio_init(FP_INT_PORT, FP_INT_PIN, GPIO_MODE_IPU);
-  35   1      
-  36   1        return;
-  37   1      }
-  38          
-  39          /*
-  40          parameter: 
-  41            none
-  42          return :
-  43            none
-  44          */
-  45          void dqiot_drv_fp_gpio_deinit(void)
-  46          {
-  47   1        /*指纹
-  48   1        UART0_TX  PF4 输出
-  49   1        UART0_RX  PF5 输入
-  50   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
-  51   1        NRST_CTR  PF7 供电
-  52   1        */
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      03/06/2021 11:30:34 PAGE 2   
+  11          
+  12          /*
+  13          parameter: 
+  14            none
+  15          return :
+  16            none
+  17          */
+  18          void dqiot_drv_fp_gpio_init(void)
+  19          {
+  20   1        /*指纹
+  21   1        UART0_TX  PF4 输出
+  22   1        UART0_RX  PF5 输入
+  23   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
+  24   1        NRST_CTR  PF7 供电
+  25   1        */
+  26   1        gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_OUT);
+  27   1        gpio_bit_set(FP_TX_PORT, FP_TX_PIN);
+  28   1      
+  29   1        gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IPU);
+  30   1        gpio_bit_set(FP_RX_PORT, FP_RX_PIN);
+  31   1      
+  32   1        gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_OUT);
+  33   1        gpio_bit_set(FP_PWR_PORT, FP_PWR_PIN);
+  34   1      
+  35   1        gpio_init(FP_INT_PORT, FP_INT_PIN, GPIO_MODE_IPU);
+  36   1      
+  37   1        return;
+  38   1      }
+  39          
+  40          /*
+  41          parameter: 
+  42            none
+  43          return :
+  44            none
+  45          */
+  46          void dqiot_drv_fp_gpio_deinit(void)
+  47          {
+  48   1        /*指纹
+  49   1        UART0_TX  PF4 输出
+  50   1        UART0_RX  PF5 输入
+  51   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
+  52   1        NRST_CTR  PF7 供电
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      03/10/2021 16:14:59 PAGE 2   
 
-  53   1        gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
-  54   1        gpio_bit_reset(FP_TX_PORT,FP_TX_PIN);
-  55   1        
-  56   1        gpio_init(FP_RX_PORT,FP_RX_PIN,GPIO_MODE_IN_FLOATING);
-  57   1        gpio_bit_reset(FP_RX_PORT,FP_RX_PIN);
-  58   1        
-  59   1        gpio_init(FP_PWR_PORT,FP_PWR_PIN,GPIO_MODE_IN_FLOATING);
-  60   1        gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
-  61   1      
-  62   1        //gpio_init(FP_INT_PORT,FP_INT_PIN,GPIO_MODE_IPU);
-  63   1      
-  64   1        return;
-  65   1      }
-  66          
+  53   1        */
+  54   1        gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
+  55   1        gpio_bit_reset(FP_TX_PORT,FP_TX_PIN);
+  56   1        
+  57   1        gpio_init(FP_RX_PORT,FP_RX_PIN,GPIO_MODE_IN_FLOATING);
+  58   1        gpio_bit_reset(FP_RX_PORT,FP_RX_PIN);
+  59   1        
+  60   1        gpio_init(FP_PWR_PORT,FP_PWR_PIN,GPIO_MODE_IN_FLOATING);
+  61   1        gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
+  62   1      
+  63   1        //gpio_init(FP_INT_PORT,FP_INT_PIN,GPIO_MODE_IPU);
+  64   1      
+  65   1        return;
+  66   1      }
   67          
-  68          /*
-  69          parameter: 
-  70            none
-  71          return :
-  72            none
-  73          */
-  74          void dqiot_drv_fp_poweron(void)
-  75          {
-  76   1          gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
-  77   1        return;
-  78   1      }
-  79          
-  80          /*
-  81          parameter: 
-  82            none
-  83          return :
-  84            none
-  85          */
-  86          void dqiot_drv_fp_poweroff(void)
-  87          {
-  88   1          gpio_bit_set(FP_PWR_PORT,FP_PWR_PIN);
-  89   1        return;
-  90   1      }
-  91          
+  68          
+  69          /*
+  70          parameter: 
+  71            none
+  72          return :
+  73            none
+  74          */
+  75          void dqiot_drv_fp_poweron(void)
+  76          {
+  77   1          gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
+  78   1        return;
+  79   1      }
+  80          
+  81          /*
+  82          parameter: 
+  83            none
+  84          return :
+  85            none
+  86          */
+  87          void dqiot_drv_fp_poweroff(void)
+  88          {
+  89   1          gpio_bit_set(FP_PWR_PORT,FP_PWR_PIN);
+  90   1        return;
+  91   1      }
   92          
-  93          #endif//__DQIOT_DRV_FP_C__
-  94          
+  93          #endif
+  94          #endif//__DQIOT_DRV_FP_C__
+  95          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

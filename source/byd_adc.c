@@ -14,6 +14,7 @@
 #include "delay.h"
 #include "dqiot_gpio.h"
 #include "dqiot_drv.h"
+// #include <stdio.h>
 
 #if ADC_MODE == 0
 volatile bit g_bAdcIntFlag = 0;
@@ -34,53 +35,52 @@ uint8_t xdata g_ucAdcRawdata[ADC_MAX_COUNT];
 void byd_adc_init(void)
 {
 #if ADC_HANDLE
-    uint8_t i;
+	uint8_t i;
 #endif
 
-	ADC_ADCK_SET(ADC_CLK_8M);			 	/* adc clock */	
-	ADC_CKV_SET(ADC_ANALOG_CLK_8M);		 	/* adc analog clock */
-	ADC_SAMBG_SET(1);					    /* sampling time sequence and comparison time interval:0~1*/
-	ADC_SAMDELAY_SET(ADC_SAMPLE_TIME_8_CLK);/* sampling delay time */
-	ADC_FLTER_SET(ADC_FILTER_ENABLE);      	/* filter select */
-	ADC_ADDR_SET(ADC_CHANNEL_7);	 		/* adc channel address */
+	ADC_ADCK_SET(ADC_CLK_8M);				 /* adc clock */
+	ADC_CKV_SET(ADC_ANALOG_CLK_8M);			 /* adc analog clock */
+	ADC_SAMBG_SET(1);						 /* sampling time sequence and comparison time interval:0~1*/
+	ADC_SAMDELAY_SET(ADC_SAMPLE_TIME_8_CLK); /* sampling delay time */
+	ADC_FLTER_SET(ADC_FILTER_ENABLE);		 /* filter select */
+	ADC_ADDR_SET(ADC_CHANNEL_7);			 /* adc channel address */
 	ADC_ADDR_SET(ADC_CHANNEL_6);			 /* adc channel address */
-	ADC_WNUM_SET(31);	 				    /* conversion interval time:2~31*/
-	ADC_I_SET(3);	         			    /* adc bias current select:0~3*/
-	ADC_CTRL(2);	         			    /* compare ctrl select:0~3*/
-	ADC_SAMP_SET(255);	     		        /* adc sample time:0~255*/		
+	ADC_WNUM_SET(31);						 /* conversion interval time:2~31*/
+	ADC_I_SET(3);							 /* adc bias current select:0~3*/
+	ADC_CTRL(2);							 /* compare ctrl select:0~3*/
+	ADC_SAMP_SET(255);						 /* adc sample time:0~255*/
 
-	ADC_VREF_IN_SEL(ADC_VREF_IN_1);				/* input vref vol*/	
-	ADC_VREF_VOL_SEL(ADC_VREF_VOL_OUT_1);		/* output vref vol*/	
-	ADC_VREF_SIGNAL_SEL(ADC_VREF_SIGNAL_OUT_0);	/* output vref signal*/	
+	ADC_VREF_IN_SEL(ADC_VREF_IN_1);				/* input vref vol*/
+	ADC_VREF_VOL_SEL(ADC_VREF_VOL_OUT_1);		/* output vref vol*/
+	ADC_VREF_SIGNAL_SEL(ADC_VREF_SIGNAL_OUT_0); /* output vref signal*/
 
 	adc_io_reset();
 
-    ADC_07_PH7_ENABLE();/*enable adc io*/
+	ADC_07_PH7_ENABLE(); /*enable adc io*/
 	ADC_06_PH6_ENABLE(); /*enable adc io*/
 	//ADC_01_PH1_ENABLE();
 
-/*!!!!!!!!!»Ö¸´IO¿Ú¹¦ÄÜÒª¹Ø±ÕadcÍ¨µÀ¹¦ÄÜ!!!!!!!!!*/	
-//	ADC_00_PH0_DISABLE();
-//  ADC_01_PH1_DISABLE();
+	/*!!!!!!!!!ï¿½Ö¸ï¿½IOï¿½Ú¹ï¿½ï¿½ï¿½Òªï¿½Ø±ï¿½adcÍ¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!!!!!!!!!*/
+	//	ADC_00_PH0_DISABLE();
+	//  ADC_01_PH1_DISABLE();
 
-	ADC_ENABLE();/*enable adc*/
+	ADC_ENABLE(); /*enable adc*/
 
 /* adc interrupt config*/
 #if ADC_MODE == 0
-  	INT_ADC_CLR();
+	INT_ADC_CLR();
 	ADC_IPL_SET(LOW);
-    ADC_INT_ENABLE();
+	ADC_INT_ENABLE();
 #endif
 
 #if ADC_HANDLE
-	for(i = 0; i < ADC_MAX_COUNT; i++)
+	for (i = 0; i < ADC_MAX_COUNT; i++)
 	{
 		g_ucAdcRawdata[i] = 0;
 	}
 #endif
-    ADC_DISABLE();			
+	ADC_DISABLE();
 }
-
 
 /*!
     \brief      get adc data
@@ -88,41 +88,41 @@ void byd_adc_init(void)
 				ADC_CHANNEL_0~44
     \param[out] none
     \retval     adc data
-*/        
+*/
 uint16_t get_adc_data(uint8_t adc_channel_addr)
 {
-    uint16_t adc_data;
+	uint16_t adc_data;
 
 	ADC_ADDR_SET(adc_channel_addr);
 
 #if ADC_MODE == 0
 	g_bAdcIntFlag = 0;
 	ADC_SCAN_EN;
-	while(!g_bAdcIntFlag)
+	while (!g_bAdcIntFlag)
 	{
-	   WDT_CTRL = 7;
+		WDT_CTRL = 7;
 	}
 #else
-	
+
 	ADC_SCAN_EN;
-	while(!(IRCON1&0x10))
+	while (!(IRCON1 & 0x10))
 	{
-	   WDT_CTRL = 7;	
+		WDT_CTRL = 7;
 	}
 	INT_ADC_CLR();
 
 #endif
 
-    adc_data = ((uint16_t)(ADC_RDATAH&0x0F) << 8) | (uint16_t)ADC_RDATAL;
+	adc_data = ((uint16_t)(ADC_RDATAH & 0x0F) << 8) | (uint16_t)ADC_RDATAL;
 
 	return adc_data;
 }
 
 /**
-  * @brief  »ñÈ¡adcÊý¾ÝµÄÆ½¾ùÖµ
+  * @brief  ï¿½ï¿½È¡adcï¿½ï¿½ï¿½Ýµï¿½Æ½ï¿½ï¿½Öµ
   * @param  
   * adc_channel_addr ADC_CHANNEL_0~44;
-  * times Ê±¼äms
+  * times Ê±ï¿½ï¿½ms
   * @return none
   * @note   none
   * @see    none
@@ -140,7 +140,7 @@ static uint16_t Get_Adc_Average(uint8_t adc_channel_addr, uint8_t times)
 }
 
 /**
-  * @brief  µçÑ¹¼ÆËã
+  * @brief  ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½
   * @param  none
   * @return none
   * @note   none
@@ -151,17 +151,17 @@ unsigned char adc_VolT(void)
 	unsigned int adcx;
 	float temp;
 	ADC_ENABLE();
-	gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //¿ªÆô
+	gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //ï¿½ï¿½ï¿½ï¿½
 	delay_ms(5);
-	adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //»ñÈ¡10msÆ½¾ùÖµ
-	gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //¹Ø±Õ
+	adcx = Get_Adc_Average(ADC_CHANNEL_6, 10);	   //ï¿½ï¿½È¡10msÆ½ï¿½ï¿½Öµ
+	// gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //ï¿½Ø±ï¿½
 	ADC_DISABLE();
-	temp = (float)adcx * (3.3 / 4095); //¼ÆËãµçÑ¹
+	temp = (float)adcx * (3.3 / 4095); //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹
 
-	if(temp < 1.25)
+	if (temp < 1.25)
 		return 2;
-	else if (temp < 1.5625)//<5v
-		return 1;//mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+	else if (temp < 1.5625) //<5v
+		return 1;			//mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
 
 	return 0;
 }
@@ -187,31 +187,30 @@ void adc_isr(void) interrupt 11
     \param[out] none
     \retval     sort avedata
 */
-uint8_t byd_data_sort(uint8_t *buffer,uint8_t count)
+uint8_t byd_data_sort(uint8_t *buffer, uint8_t count)
 {
-	uint8_t  i = 0,j = 0;
-	uint8_t  temp  = 0;
-	uint16_t average  = 0;
+	uint8_t i = 0, j = 0;
+	uint8_t temp = 0;
+	uint16_t average = 0;
 
-	for(i = 0; i < count; i++)
+	for (i = 0; i < count; i++)
 	{
-		for(j = i; j < count-1;j++ )
+		for (j = i; j < count - 1; j++)
 		{
-			if((*(buffer+i)) >= (*(buffer+j+1)))
+			if ((*(buffer + i)) >= (*(buffer + j + 1)))
 			{
-				temp = (*(buffer+i));
-				(*(buffer+i)) = (*(buffer+j+1));
-				(*(buffer+j+1)) = temp;
+				temp = (*(buffer + i));
+				(*(buffer + i)) = (*(buffer + j + 1));
+				(*(buffer + j + 1)) = temp;
 			}
 		}
-		
 	}
-	for(i = 3; i < count-3; i++)
+	for (i = 3; i < count - 3; i++)
 	{
-		average += (*(buffer+i));
+		average += (*(buffer + i));
 	}
-	
-	return (uint8_t)(average/(count-6));
+
+	return (uint8_t)(average / (count - 6));
 }
 
 /*!
@@ -225,18 +224,18 @@ uint8_t byd_data_sort(uint8_t *buffer,uint8_t count)
 */
 uint8_t byd_adcdata(uint8_t addr)
 {
-	uint8_t i = 0,j = 0;	
+	uint8_t i = 0, j = 0;
 	uint8_t avg_cnt = 0;
 
-	int adc_differ  = 0;
-	uint16_t average  = 0;
+	int adc_differ = 0;
+	uint16_t average = 0;
 
-	for(i = 0; i < ADC_MAX_COUNT; i++)
+	for (i = 0; i < ADC_MAX_COUNT; i++)
 	{
 		adc_differ = (int)g_ucAdcRawdata[i] - (int)g_ucAdcBaseline[addr];
-		if(adc_differ >= 0)
+		if (adc_differ >= 0)
 		{
-			if(adc_differ <= ADC_NOISE_THRESHOLD)
+			if (adc_differ <= ADC_NOISE_THRESHOLD)
 			{
 				avg_cnt++;
 				average += g_ucAdcRawdata[i];
@@ -244,7 +243,7 @@ uint8_t byd_adcdata(uint8_t addr)
 		}
 		else
 		{
-			if(adc_differ >= -((int)ADC_NOISE_THRESHOLD))
+			if (adc_differ >= -((int)ADC_NOISE_THRESHOLD))
 			{
 				avg_cnt++;
 				average += g_ucAdcRawdata[i];
@@ -252,15 +251,15 @@ uint8_t byd_adcdata(uint8_t addr)
 		}
 	}
 
-	if(avg_cnt == 0)
+	if (avg_cnt == 0)
 	{
-		g_ucAdcBaseline[addr] = byd_data_sort(g_ucAdcRawdata,ADC_MAX_COUNT);
+		g_ucAdcBaseline[addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT);
 	}
 	else
 	{
-		g_ucAdcBaseline[addr] = average/avg_cnt;
+		g_ucAdcBaseline[addr] = average / avg_cnt;
 	}
-		
+
 	return g_ucAdcBaseline[addr];
 }
 
@@ -273,24 +272,24 @@ uint8_t byd_adcdata(uint8_t addr)
 
 uint8_t byd_adc_handle(uint8_t adc_channel_addr)
 {
-	uint8_t i;	
-	
-	for(i = 0;i < ADC_MAX_COUNT;i++)
+	uint8_t i;
+
+	for (i = 0; i < ADC_MAX_COUNT; i++)
 	{
-		g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4);//ADC×ª»¯Îª8Î»,´æ´¢µ½Êý×é¶ÔÓ¦Î»ÖÃ´¦	
-		delay_ms(1);		
+		g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4); //ADC×ªï¿½ï¿½Îª8Î»,ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦Î»ï¿½Ã´ï¿½
+		delay_ms(1);
 	}
-	
-	if((g_ucAdcBaseFlag & (0x01 << adc_channel_addr)) == 0)
+
+	if ((g_ucAdcBaseFlag & (0x01 << adc_channel_addr)) == 0)
 	{
 		g_ucAdcBaseFlag |= (0x01 << adc_channel_addr);
-		g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata,ADC_MAX_COUNT);//Ã°ÅÝÅÅÐò²¢È¡ÖÐ¼äµÄ¾ùÖµ×÷Îª³õÊ¼ÉÏµçADCÆ½¾ùÖµ
+		g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT); //Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ð¼ï¿½Ä¾ï¿½Öµï¿½ï¿½Îªï¿½ï¿½Ê¼ï¿½Ïµï¿½ADCÆ½ï¿½ï¿½Öµ
 	}
 	else
 	{
-		g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr);//»ñµÃ´¦ÀíºóµÄADCÖµ
+		g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr); //ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ADCÖµ
 	}
-	return g_ucAdcBaseline[adc_channel_addr];	
+	return g_ucAdcBaseline[adc_channel_addr];
 }
 #endif
 
@@ -305,10 +304,9 @@ void byd_adc_work(void)
 {
 	uint16_t temp;
 
-#if ADC_HANDLE     
-    temp = byd_adc_handle(ADC_CHANNEL_0);
+#if ADC_HANDLE
+	temp = byd_adc_handle(ADC_CHANNEL_0);
 #else
 	temp = get_adc_data(ADC_CHANNEL_0);
 #endif
 }
-

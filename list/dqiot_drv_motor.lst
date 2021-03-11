@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   03/06/2021 11:30:34 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   03/10/2021 16:15:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_MOTOR
@@ -11,104 +11,105 @@ line level    source
 
    1          #ifndef __DQIOT_DRV_MOTOR_C__
    2          #define __DQIOT_DRV_MOTOR_C__
-   3          
-   4          #include "dqiot_drv.h"
-   5          
-   6          /*
-   7          parameter: 
-   8            none
-   9          return :
-  10            none
-  11          */
-  12          void dqiot_drv_motor_gpio_init(void)
-  13          {
-  14   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_OUT);
-  15   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
-  16   1      
-  17   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_OUT);
-  18   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
-  19   1      
-  20   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_OUT);
-  21   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
-  22   1        return;
-  23   1      }
-  24          
-  25          /*
-  26          parameter: 
-  27            none
-  28          return :
-  29            none
-  30          */
-  31          void dqiot_drv_motor_gpio_deinit(void)
-  32          {
-  33   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_IN_FLOATING);
-  34   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
-  35   1      
-  36   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_IN_FLOATING);
-  37   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
-  38   1      
-  39   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_IN_FLOATING);
-  40   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
-  41   1        return;
-  42   1      }
-  43          
+   3          #include "mmi_feature.h"
+   4          #ifdef __LOCK_MOTOR_SUPPORT__
+   5          #include "dqiot_drv.h"
+   6          
+   7          /*
+   8          parameter: 
+   9            none
+  10          return :
+  11            none
+  12          */
+  13          void dqiot_drv_motor_gpio_init(void)
+  14          {
+  15   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_OUT);
+  16   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  17   1      
+  18   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_OUT);
+  19   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  20   1      
+  21   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_OUT);
+  22   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  23   1        return;
+  24   1      }
+  25          
+  26          /*
+  27          parameter: 
+  28            none
+  29          return :
+  30            none
+  31          */
+  32          void dqiot_drv_motor_gpio_deinit(void)
+  33          {
+  34   1        gpio_init(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN,GPIO_MODE_IN_FLOATING);
+  35   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  36   1      
+  37   1        gpio_init(MOTOR_A_PORT,MOTOR_A_PIN,GPIO_MODE_IN_FLOATING);
+  38   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  39   1      
+  40   1        gpio_init(MOTOR_B_PORT,MOTOR_B_PIN,GPIO_MODE_IN_FLOATING);
+  41   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  42   1        return;
+  43   1      }
   44          
-  45          /*
-  46          parameter: 
-  47            none
-  48          return :
-  49            none
-  50          */
-  51          void dqiot_drv_motor_init(void)
-  52          {
-  53   1        
-C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   03/06/2021 11:30:34 PAGE 2   
+  45          
+  46          /*
+  47          parameter: 
+  48            none
+  49          return :
+  50            none
+  51          */
+  52          void dqiot_drv_motor_init(void)
+  53          {
+C51 COMPILER V9.59.0.0   DQIOT_DRV_MOTOR                                                   03/10/2021 16:15:00 PAGE 2   
 
-  54   1        return;
-  55   1      }
-  56          
-  57          /*
-  58          parameter: 
-  59            none
-  60          return :
-  61            none
-  62          */
-  63          void dqiot_drv_motor_turn_right(void)
-  64          {
-  65   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
-  66   1        gpio_bit_set(MOTOR_A_PORT,MOTOR_A_PIN);
-  67   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
-  68   1        return;
-  69   1      }
-  70          
-  71          /*
-  72          parameter: 
-  73            none
-  74          return :
-  75            none
-  76          */
-  77          void dqiot_drv_motor_turn_back(void)
-  78          {
-  79   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
-  80   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
-  81   1        gpio_bit_set(MOTOR_B_PORT,MOTOR_B_PIN);
-  82   1        return;
-  83   1      }
-  84          
-  85          /*
-  86          parameter: 
-  87            none
-  88          return :
-  89            none
-  90          */
-  91          void dqiot_drv_motor_stop(void)
-  92          {
-  93   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
-  94   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
-  95   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
-  96   1      }
-  97          
+  54   1        
+  55   1        return;
+  56   1      }
+  57          
+  58          /*
+  59          parameter: 
+  60            none
+  61          return :
+  62            none
+  63          */
+  64          void dqiot_drv_motor_turn_right(void)
+  65          {
+  66   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  67   1        gpio_bit_set(MOTOR_A_PORT,MOTOR_A_PIN);
+  68   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  69   1        return;
+  70   1      }
+  71          
+  72          /*
+  73          parameter: 
+  74            none
+  75          return :
+  76            none
+  77          */
+  78          void dqiot_drv_motor_turn_back(void)
+  79          {
+  80   1        gpio_bit_set(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  81   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  82   1        gpio_bit_set(MOTOR_B_PORT,MOTOR_B_PIN);
+  83   1        return;
+  84   1      }
+  85          
+  86          /*
+  87          parameter: 
+  88            none
+  89          return :
+  90            none
+  91          */
+  92          void dqiot_drv_motor_stop(void)
+  93          {
+  94   1        gpio_bit_reset(MOTOR_A_PORT,MOTOR_A_PIN);
+  95   1        gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
+  96   1        gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
+  97   1      }
   98          #endif
+  99          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

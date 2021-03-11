@@ -22,6 +22,8 @@
 #include "dqiot_drv_touch.h"
 
 #include "bydmcu_libopt.h"
+#include "delay.h"
+#include "byd_adc.h"
 
 
 #define __DRV_UART0A_INT_SUPPORT__
@@ -41,7 +43,7 @@ parameter:
 return :
 	none
 */
-void dqiot_drv_gpio_init(void);
+void dqiot_drv_init(void);
 
 /*
 parameter: 

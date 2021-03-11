@@ -13,16 +13,8 @@ return :
 */
 void mmi_dq_bsp_init(void)
 {
-	dqiot_drv_gpio_init();
-	
-	dqiot_drv_ext_ldo_on();
+	dqiot_drv_init();
 
-	dqiot_drv_key_led_on();
-
-	
-	dqiot_drv_timer2_init();
-	
-	dqiot_drv_timer2_start();
 	return;
 }
 
@@ -35,8 +27,6 @@ return :
 void mmi_dq_bsp_wake_up(void)
 {
 	dqiot_drv_wake_up();
-
-
 }
 
 /*
@@ -47,7 +37,7 @@ return :
 */
 void mmi_dq_bsp_enter_sleep(void)
 {
+	FP_Light(FP_NONE_COLOR);
 	dqiot_drv_enter_sleep();
-
 }
 #endif

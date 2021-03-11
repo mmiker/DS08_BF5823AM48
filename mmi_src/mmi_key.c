@@ -5,7 +5,7 @@
 #include "mmi_feature.h"
 #include "mmi_key.h"
 
-unsigned char g_touch_flag = 0;
+
 /*
 parameter: 
 	none

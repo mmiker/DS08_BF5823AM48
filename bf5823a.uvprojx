@@ -988,6 +988,11 @@
               <FileType>1</FileType>
               <FilePath>.\mmi_src\mmi_wifi.c</FilePath>
             </File>
+            <File>
+              <FileName>dq_otp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mmi_src\dq_otp.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

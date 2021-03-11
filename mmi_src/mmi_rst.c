@@ -8,7 +8,7 @@
 #include "mmi_queue.h"
 
 static unsigned char rst_flag = 0;
-static unsigned int  rst_count = 0;
+static unsigned int rst_count = 0;
 /*
 parameter: 
 	none
@@ -17,8 +17,6 @@ return :
 */
 void mmi_dq_rst_init(void)
 {
-
-
 }
 
 /*
@@ -30,19 +28,19 @@ return :
 unsigned char mmi_dq_rst_timer_event(void)
 {
 	unsigned char ret = 0;
-	if(dqiot_drv_get_reset_pin() == 0)
+	if (dqiot_drv_get_reset_pin() == 0)
 	{
-		if(rst_flag == 0)
+		if (rst_flag == 0)
 		{
-			rst_count ++;
-			if(rst_count >= 40)
+			rst_count++;
+			if (rst_count >= 40)
 			{
 				rst_flag = 1;
 				//mmi_dq_ms_set_msg_que(QUE_EVENT_RST,QUE_PRO_LOW,0);
 			}
-		}	
+		}
 	}
-	else 
+	else
 	{
 		rst_count = 0;
 		rst_flag = 0;
@@ -59,8 +57,10 @@ return :
 */
 unsigned char mmi_dq_rst_get_pin(void)
 {
-	return dqiot_drv_get_reset_pin();
-
+	if (dqiot_drv_get_reset_pin() == 0)
+		return 1;
+	else
+		return 0;
 }
 
 /*
@@ -71,15 +71,12 @@ return :
 */
 unsigned char mmi_dq_rst_get_state(void)
 {
-	if(rst_flag == 1)
+	if (rst_flag == 1)
 	{
 		rst_flag = 2;
 		return 1;
 	}
 	return 0;
-
 }
-
-
 
 #endif

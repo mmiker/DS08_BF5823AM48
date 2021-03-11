@@ -1,6 +1,7 @@
 #ifndef __DQIOT_DRV_MOTOR_C__
 #define __DQIOT_DRV_MOTOR_C__
-
+#include "mmi_feature.h"
+#ifdef __LOCK_MOTOR_SUPPORT__
 #include "dqiot_drv.h"
 
 /*
@@ -94,5 +95,5 @@ void dqiot_drv_motor_stop(void)
 	gpio_bit_reset(MOTOR_B_PORT,MOTOR_B_PIN);
 	gpio_bit_reset(MOTOR_PWREN_PORT,MOTOR_PWREN_PIN);
 }
-
+#endif
 #endif

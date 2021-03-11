@@ -1,6 +1,9 @@
 #ifndef __DQIOT_DRV_FP_H__
 #define __DQIOT_DRV_FP_H__
 
+#include "mmi_feature.h"
+#ifdef __LOCK_FP_SUPPORT__
+
 #include "dqiot_gpio.h"
 
 
@@ -38,6 +41,6 @@ return :
 void dqiot_drv_fp_poweroff(void);
 
 
-
+#endif
 #endif//__DQIOT_DRV_FP_H__
 

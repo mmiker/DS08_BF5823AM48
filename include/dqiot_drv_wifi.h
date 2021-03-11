@@ -34,6 +34,11 @@
 #define WIFI_CMD_WF_OPEN_ASK			'k'
 #define WIFI_CMD_WF_OPEN_REPLY			'K'
 
+#define WIFI_CMD_WF_OPEN_FP_110			'A'       // 23
+#define WIFI_CMD_WF_OPEN_PSW_110		'a'       // 23
+#define WIFI_CMD_WF_SET_110		        'B'       // 23
+
+#define WIFI_CMD_CLOSE_OVER_TIME		'N'
 
 uint8_t wifi_net_connect_send(void);
 uint8_t wifi_net_connect_state(void);
@@ -41,7 +46,9 @@ uint8_t wifi_net_connect_state(void);
 uint8_t wifi_open_ask(void);
 uint8_t wifi_open_reply_get(void);
 
-void wifi_wake_up(void);
+void wifi_close_over_time(void);
+
+unsigned char wifi_wake_up(void);
 
 void wifi_sleep_mode(void);
 
@@ -57,6 +64,8 @@ void wifi_open_by_password(void);
 
 void wifi_open_by_fp(void);
 
+void wifi_open_by_rfid(void);
+
 void wifi_open_by_wifi(void);
 
 void wifi_open_by_key(void);
@@ -69,9 +78,18 @@ void wifi_pw_alarm(void);
 
 void wifi_fp_alarm(void);
 
+void wifi_rf_alarm(void);
+
 //void wifi_unclose_alarm(void);
 
 void wifi_lowpower_alarm(void);
+
+
+void wifi_send_fp_110(void);
+
+void wifi_send_pwd_110(void);
+
+void wifi_set_110(void);
 
 #endif
 

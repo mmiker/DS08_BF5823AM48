@@ -4,9 +4,10 @@
 #include "mmi_queue.h"
 #include "mmi_com.h"
 
+#define KEY_INPUT_MAX_LEN	32
 #define PWD_INPUT_MAX_LEN	8
 #define PWD_INPUT_MIN_LEN	6
-#define FPS_MAX_INPUT_TIME 	OPT_THREE_TIME
+#define FPS_MAX_INPUT_TIME 	OPT_FOUR_TIME
 
 typedef enum
 {
@@ -20,6 +21,7 @@ typedef enum
 	SYS_STATUS_CLR_PWD = 0x14,
 	SYS_STATUS_ADD_PWD_CON = 0x15,
 	SYS_STATUS_DEL_PWD_CON = 0x16,
+	SYS_STATUS_ADD_110_PWD = 0x17,
 	
 #ifdef	__LOCK_FP_SUPPORT__
 	SYS_STATUS_INPUT_FP = 0x01,
@@ -29,6 +31,8 @@ typedef enum
 	SYS_STATUS_CLR_FP = 0x24,
 	SYS_STATUS_ADD_FP_CON = 0x25,
 	SYS_STATUS_DEL_FP_CON = 0x26,
+	SYS_STATUS_ADD_110_FP = 0x27,
+	SYS_STATUS_DEL_110_FP = 0x28,
 #endif
 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
@@ -153,7 +157,6 @@ return :
 */
 SYS_BASE_STATUS mmi_dq_ms_get_sys_state(void);
 
-#ifdef	__LOCK_FP_SUPPORT__
 /*
 parameter: 
 	none
@@ -161,8 +164,8 @@ return :
 	none
 */
 void mmi_ms_pwd_opt_fun(unsigned char key_val);
-#endif
 
+#ifdef	__LOCK_FP_SUPPORT__
 /*
 parameter: 
 	none
@@ -170,6 +173,7 @@ return :
 	none
 */
 void mmi_ms_fps_opt_fun(unsigned char fps_val);
+#endif
 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 /*

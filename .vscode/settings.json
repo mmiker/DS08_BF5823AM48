@@ -1,9 +1,14 @@
 {
     "files.associations": {
-        "mmi_sys.h": "c",
-        "dqiot_drv_audio.h": "c",
-        "dqiot_fp_sy.h": "c",
+        "mmi_fps.h": "c",
+        "dqiot_drv.h": "c",
+        "mmi_ms.h": "c",
         "stdio.h": "c",
-        "dqiot_drv.h": "c"
+        "mmi_fm.h": "c",
+        "mmi_rst.h": "c",
+        "mmi_wifi.h": "c",
+        "mmi_audio.h": "c",
+        "mmi_sys.h": "c",
+        "mmi_com.h": "c"
     }
 }

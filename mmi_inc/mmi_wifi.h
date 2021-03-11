@@ -1,6 +1,21 @@
 #ifndef __MMI_WIFI_H__
 #define __MMI_WIFI_H__
 
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_wakeup(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+unsigned char mmi_dq_wifi_check(void);
 
 /*
 parameter: 
@@ -25,6 +40,22 @@ return :
 	none
 */
 unsigned char mmi_dq_wifi_open_ask(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_check_open(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_close_over_time(void);
 
 /*
 parameter: 
@@ -145,6 +176,30 @@ return :
 	none
 */
 void mmi_dq_wifi_lowpower_alarm(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_send_pwd_110(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_send_fp_110(void);
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_wifi_set_110(void);
 
 /*
 parameter: 

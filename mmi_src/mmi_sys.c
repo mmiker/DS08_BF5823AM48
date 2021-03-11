@@ -12,8 +12,7 @@
 #include "mmi_bsp.h"
 #include "mmi_motor.h"
 #include "mmi_wifi.h"
-#include "delay.h"
-#include "dqiot_fp_sy.h"
+// #include <stdio.h>
 
 static unsigned char g_sys_door_open_flag = 0;
 
@@ -27,7 +26,7 @@ static unsigned char g_wifi_check_count = 0;
 static unsigned char g_wifi_check_type = 0;
 
 /* RFID */
-unsigned char g_rfid_flag = 0;
+static unsigned char g_rfid_flag = 0;
 
 #define LOCK_MAX_EEROR_TIMES 5
 static unsigned char g_lock_error_flag = 0;
@@ -44,6 +43,8 @@ timer2_delay_pro g_timer2_delay_pro = 0;
 #define MMI_TIMER_DOOR_OPEN_COUNT (MMI_TIMER_DOOR_OPEN / MMI_TIMER_BASE_TIME)
 #define MMI_TIMER_MOTOR 300
 #define MMI_TIMER_MOTOR_COUNT (MMI_TIMER_MOTOR / MMI_TIMER_BASE_TIME)
+#define MMI_TIMER_WIFI_CHECK 1000
+#define MMI_TIMER_WIFI_CHECK_COUNT (MMI_TIMER_WIFI_CHECK / MMI_TIMER_BASE_TIME)
 #define MMI_WIFI_SETTING_DELAY 60000
 #define MMI_WIFI_SETTING_DELAY_COUNT (MMI_WIFI_SETTING_DELAY / MMI_TIMER_BASE_TIME)
 #define MMI_LOCK_ERROR_DELAY 60000
@@ -107,7 +108,6 @@ void mmi_dq_sys_enter_sleep(void)
 
 	g_timer2_flag = 0;
 	g_sys_door_open_flag = 0;
-	FP_Set_Light(FP_NONE_COLOR);
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ENTER_SLEEP);
 }
@@ -142,7 +142,9 @@ return :
 */
 void mmi_dq_sys_door_open_cb(void)
 {
+#ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_stop();
+#endif
 	mmi_dq_aud_play_with_id(AUD_ID_DOOR_OPEN);
 	mmi_dq_sys_set_delay_event(MMI_TIMER_DOOR_OPEN_COUNT, mmi_dq_sys_door_close);
 }
@@ -156,16 +158,38 @@ return :
 */
 void mmi_dq_sys_door_open(sys_open_type type)
 {
-	g_lock_error_flag = 0;
-	if (mmi_dq_fs_get_open_mode() == SYS_OPEN_MODE_DBL && SYS_OPEN_BY_WIFI != type)
+#ifdef __LOCK_BUS_SUPPORT__
+	if ((mmi_dq_fs_get_business_flag() == 1) && ((type & SYS_OPEN_BY_110) == 0) && (SYS_OPEN_BY_WIFI != type))
 	{
-		if (g_sys_door_open_flag & (~type) != 0)
+		mmi_dq_aud_play_with_id(AUD_ID_IS_BUSINESS);
+#ifdef __LOCK_WIFI_SUPPORT__
+		switch (type)
+		{
+		case SYS_OPEN_BY_PASSWORD:
+			mmi_dq_wifi_pw_alarm();
+			break;
+		case SYS_OPEN_BY_FP:
+			mmi_dq_wifi_fp_alarm();
+			break;
+		case SYS_OPEN_BY_RFID:
+			mmi_dq_wifi_rfid_alarm();
+			break;
+		}
+#endif
+		return;
+	}
+#endif
+	g_lock_error_flag = 0;
+	if ((mmi_dq_fs_get_open_mode() == SYS_OPEN_MODE_DBL) && (SYS_OPEN_BY_WIFI != type) && ((type & SYS_OPEN_BY_110) == 0))
+	{
+		if ((g_sys_door_open_flag & (~type)) != 0)
 		{
 			g_sys_door_open_flag = 0;
 		}
 		else
 		{
-			g_sys_door_open_flag &= type;
+			g_sys_door_open_flag |= type;
+			mmi_dq_aud_play_with_id(AUD_ID_SYS_DBL_OPEN_MODE);
 			return;
 		}
 	}
@@ -176,21 +200,36 @@ void mmi_dq_sys_door_open(sys_open_type type)
 	//mmi_dq_wifi_open_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_open_cb);
 
+#ifdef __LOCK_WIFI_SUPPORT__
 	switch (type)
 	{
+#ifdef __LOCK_110_SUPPORT__
+	case SYS_OPEN_BY_110_PASSWORD:
+		mmi_dq_wifi_send_pwd_110();
+		break;
+	case SYS_OPEN_BY_110_FP:
+		mmi_dq_wifi_send_fp_110();
+		break;
+#endif
 	case SYS_OPEN_BY_PASSWORD:
 		mmi_dq_wifi_open_by_password();
 		break;
+#ifdef __LOCK_FP_SUPPORT__
 	case SYS_OPEN_BY_FP:
 		mmi_dq_wifi_open_by_fp();
 		break;
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 	case SYS_OPEN_BY_RFID:
 		mmi_dq_wifi_open_by_rfid();
 		break;
+#endif
 	case SYS_OPEN_BY_WIFI:
 		mmi_dq_wifi_open_by_wifi();
 		break;
 	}
+
+#endif
 }
 
 /*
@@ -208,19 +247,29 @@ void mmi_dq_sys_door_open_fail(sys_open_type type)
 	{
 	case SYS_OPEN_BY_PASSWORD:
 		mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_pw_alarm();
+#endif
 		break;
+#ifdef __LOCK_FP_SUPPORT__
 	case SYS_OPEN_BY_FP:
 		mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_fp_alarm();
+#endif
 		break;
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 	case SYS_OPEN_BY_RFID:
 		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_WRONG_TRY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_rfid_alarm();
+#endif
 		break;
+#endif
 	}
 }
 
@@ -247,9 +296,11 @@ return :
 */
 void mmi_dq_sys_door_close_cb(void)
 {
+#ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_stop();
+#endif
 	mmi_dq_aud_play_with_id(AUD_ID_DOOR_CLOSE);
-	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+	mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 }
 
 /*
@@ -291,7 +342,7 @@ void mmi_dq_sys_time_out_handle(void)
 
 	if ((state >= SYS_STATUS_ADD_PWD && state < SYS_STATUS_ADD_ADMIN_PWD) || (state == SYS_STATUS_SYS_MENU) || (state == SYS_STATUS_CHG_ADMIN_PWD))
 	{
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+		mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 	}
 #ifdef __LOCK_FP_SUPPORT__
@@ -301,7 +352,7 @@ void mmi_dq_sys_time_out_handle(void)
 			g_timer2_sleep_count = 0;
 		else
 		{
-			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+			mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 		}
 	}
@@ -342,7 +393,7 @@ void System_timer_event_handler(void)
 	if (g_wifi_check_flag == 1)
 	{
 		g_wifi_check_count++;
-		if (g_wifi_check_count >= 4)
+		if (g_wifi_check_count >= MMI_TIMER_WIFI_CHECK_COUNT)
 		{
 			g_wifi_check_flag = 2;
 			g_wifi_check_count = 0;
@@ -356,7 +407,7 @@ void System_timer_event_handler(void)
 			g_lock_error_flag = 0;
 	}
 
-	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 1) && (mmi_dq_wifi_get_running_flag() == 0))
+	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 0) && (mmi_dq_wifi_get_running_flag() == 0))
 	{
 		unsigned char flag = 0;
 		g_timer2_sleep_count++;
@@ -374,7 +425,7 @@ void System_timer_event_handler(void)
 				flag = 1;
 			}
 		}
-		else if (g_timer2_sleep_count > MMI_TIMER_ENTER_SLEEP)
+		else if (g_timer2_sleep_count > MMI_TIMER_ENTER_SLEEP_COUNT)
 		{
 			flag = 1;
 		}
@@ -386,6 +437,16 @@ void System_timer_event_handler(void)
 	}
 	else
 		g_timer2_sleep_count = 0;
+}
+
+unsigned char mmi_dq_sys_get_rfid_flag(void)
+{
+	if (g_rfid_flag == 1)
+	{
+		g_rfid_flag = 0;
+		return 1;
+	}
+	return 0;
 }
 
 /*
@@ -470,11 +531,15 @@ return :
 */
 void mmi_dq_sys_set_delay_event(unsigned int count, timer2_delay_pro pro)
 {
-	g_timer2_count = 0;
-	g_timer2_set_count = count;
-	g_timer2_delay_pro = pro;
-	g_timer2_flag = 1;
-	//dqiot_drv_timer2_start();
+	if (count != 0)
+	{
+		g_timer2_count = 0;
+		g_timer2_set_count = count;
+		g_timer2_delay_pro = pro;
+		g_timer2_flag = 1;
+	}
+	else
+		pro();
 }
 
 /*
@@ -486,7 +551,8 @@ return :
 */
 void mmi_dq_sys_delay_event_pro(void)
 {
-	g_timer2_delay_pro();
+	if (g_timer2_delay_pro != 0)
+		g_timer2_delay_pro();
 }
 
 /*
@@ -501,14 +567,12 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	unsigned char state = adc_VolT();
 	if (state > 0)
 	{
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_LOW_BATTERY);
+		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
 		mmi_dq_wifi_lowpower_alarm();
 		if (state == 2)
 		{
-#if __Normal_handling__
-			mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
-			return 1;
-#endif
+			// mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
+			// return 1;
 		}
 	}
 
@@ -524,8 +588,8 @@ return :
 */
 void mmi_dq_sys_wifi_open(void)
 {
-	if ((mmi_dq_fs_get_wifi_setting() == 0) || (mmi_dq_wifi_open_ask() == 0))
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+	if (mmi_dq_wifi_open_ask() == 0)
+		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
 }
 
 /*
@@ -581,6 +645,28 @@ void mmi_dq_sys_add_pwd_con(void)
 	return;
 }
 
+#ifdef __LOCK_110_SUPPORT__
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_add_110_pwd(void)
+{
+	mmi_dq_wifi_wakeup();
+	if (mmi_dq_wifi_check() == 1)
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+		mmi_dq_sys_show_cur_menu_list();
+		return;
+	}
+	mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+	mmi_ms_pwd_init_var();
+	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_PWD);
+	return;
+}
+#endif
 /*
 parameter: 
 	none
@@ -657,6 +743,53 @@ void mmi_dq_sys_add_fp_con(void)
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP_CON);
 	return;
 }
+
+#ifdef __LOCK_110_SUPPORT__
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_add_110_fp(void)
+{
+	mmi_dq_wifi_wakeup();
+	if (mmi_dq_wifi_check() == 1)
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+		mmi_dq_sys_show_cur_menu_list();
+		return;
+	}
+	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+	mmi_dq_fp_light(FP_BLUE);
+	mmi_ms_opt_time_init();
+	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_FP);
+	return;
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+void mmi_dq_sys_del_110_fp(void)
+{
+	mmi_dq_wifi_wakeup();
+	if (mmi_dq_wifi_check() == 1)
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+		mmi_dq_sys_show_cur_menu_list();
+		return;
+	}
+	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+	mmi_dq_fp_light(FP_BLUE);
+	mmi_ms_opt_time_init();
+	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_110_FP);
+	return;
+}
+
+#endif
 
 /*
 parameter: 
@@ -901,7 +1034,7 @@ void mmi_dq_sys_chg_admin_pwd(void)
 {
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD);
 	mmi_ms_pwd_init_var();
-	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
+	mmi_dq_ms_set_sys_state(SYS_STATUS_CHG_ADMIN_PWD);
 	return;
 }
 
@@ -930,9 +1063,9 @@ void mmi_dq_sys_restore_lock(void)
 #endif
 
 	if (retval == 0)
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_SYS_RESTORE_SUCCESS);
+		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_SUCESS);
 	else
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL);
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	return;
@@ -960,13 +1093,13 @@ static void mmi_dq_sys_wifi_setting(void)
 {
 	if (0 == mmi_dq_wifi_setting())
 	{
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
-		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
 	}
 }
 
@@ -996,6 +1129,12 @@ const sys_menu_t sys_menu_tree[] =
 		{STR_ID_SYSTEM, STR_ID_SETTING, 0},
 		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock_con},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
+#ifdef __LOCK_110_SUPPORT__
+		{STR_ID_SYSTEM, STR_ID_PASSWORD_110, mmi_dq_sys_add_110_pwd},
+#if defined(__LOCK_FP_SUPPORT__)
+		{STR_ID_SYSTEM, STR_ID_FINGERPRINT_110, 0},
+#endif
+#endif
 
 		{STR_ID_SYSTEM2, STR_ID_ADMIN, 0},
 		{STR_ID_SYSTEM2, STR_ID_SETTING, 0},
@@ -1012,6 +1151,10 @@ const sys_menu_t sys_menu_tree[] =
 		//{STR_ID_FINGERPRINT,STR_ID_CHG_FP,mmi_dq_sys_chg_fp},
 		{STR_ID_FINGERPRINT, STR_ID_DEL_FP, mmi_dq_sys_del_fp},
 		{STR_ID_FINGERPRINT, STR_ID_CLR_FP, mmi_dq_sys_clear_fp},
+#ifdef __LOCK_110_SUPPORT__
+		{STR_ID_FINGERPRINT_110, STR_ID_ADD_FP, mmi_dq_sys_add_110_fp},
+		{STR_ID_FINGERPRINT_110, STR_ID_DEL_FP, mmi_dq_sys_del_110_fp},
+#endif
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 		//RF
@@ -1038,7 +1181,7 @@ const sys_menu_t sys_menu_tree[] =
 };
 
 static unsigned char g_dq_menu_father_id;
-static sys_menu_list g_dq_menu_list_id[8];
+static sys_menu_list g_dq_menu_list_id[10];
 static unsigned char g_dq_menu_count;
 
 /*
@@ -1109,7 +1252,6 @@ void mmi_dq_sys_show_cur_menu_list(void)
 #ifdef __LOCK_FP_SUPPORT__
 	mmi_dq_fp_light(FP_NONE_COLOR);
 #endif
-
 	mmi_dq_ms_set_sys_state(SYS_STATUS_SYS_MENU);
 	return;
 }
@@ -1134,7 +1276,10 @@ void mmi_dq_sys_get_pre_menu_list(void)
 		for (i = 0; i < menu_tree_size; i++)
 		{
 			if (sys_menu_tree[i].menu_sub_id == g_dq_menu_father_id)
+			{
 				g_dq_menu_father_id = sys_menu_tree[i].menu_father_id;
+				break;
+			}
 		}
 		mmi_dq_sys_get_menu_list(g_dq_menu_father_id);
 #ifdef __LOCK_AUDIO_SUPPORT__

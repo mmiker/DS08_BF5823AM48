@@ -2,7 +2,7 @@
 #define __DQIOT_DRV_RFID_H__
 
 #include "mmi_feature.h"
-
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 /*
 parameter: 
 	none
@@ -27,4 +27,5 @@ return :
 */
 uint8_t dqiot_drv_rfid_get_card_number(uint8_t *uid);
 
+#endif
 #endif

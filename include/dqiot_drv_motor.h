@@ -1,6 +1,7 @@
 #ifndef __DQIOT_DRV_MOTOR_H__
 #define __DQIOT_DRV_MOTOR_H__
-
+#include "mmi_feature.h"
+#ifdef __LOCK_MOTOR_SUPPORT__
 #include "dqiot_gpio.h"
 /*
 parameter: 
@@ -49,6 +50,6 @@ return :
 	none
 */
 void dqiot_drv_motor_stop(void);
-
+#endif
 #endif//__DQIOT_DRV_MOTOR_H__
 

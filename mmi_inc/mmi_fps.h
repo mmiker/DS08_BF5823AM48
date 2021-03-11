@@ -4,7 +4,7 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_FP_SUPPORT__
 #include "dqiot_fp_sy.h"
-#include "mcu02_sfr.h"
+
 
 // typedef void (*fp_irq_handle_callback)(void);
 

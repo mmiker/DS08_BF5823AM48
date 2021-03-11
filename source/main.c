@@ -13,10 +13,7 @@
 #include "mmi_audio.h"
 #include "mmi_bsp.h"
 #include "mmi_fm.h"
-#include "dqiot_drv_audio.h"
-//#include "stdio.h"
-
-extern uint16_t timer0_count;
+// #include <stdio.h>
 
 void system_init(void)
 {
@@ -39,7 +36,6 @@ void system_init(void)
 
 int main(void)
 {
-	unsigned char i = 0;
 	WDT_DISABLE();
 
 	system_init();
@@ -66,21 +62,21 @@ int main(void)
 
 	if (0 == mmi_dq_sys_check_vbat())
 	{
-#ifdef __FACTORY_TEST_SUPPORT__
-		if (mmi_dq_fs_get_factory_flag() == 0)
+#if 0 //def __FACTORY_TEST_SUPPORT__
+		if(mmi_dq_fs_get_factory_flag() == 0)
 		{
 			mmi_dq_factory_mode_test_start();
 		}
-		else
+		else 
 		{
 #endif
-			if (mmi_dq_fs_get_admin_status() == 0)
-			{
-				mmi_dq_sys_add_admin_pwd();
-			}
-			else
-				mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-#ifdef __FACTORY_TEST_SUPPORT__
+		if (mmi_dq_fs_get_admin_status() == 0)
+		{
+			mmi_dq_sys_add_admin_pwd();
+		}
+		else
+			mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+#if 0 //def __FACTORY_TEST_SUPPORT__
 		}
 #endif
 	}

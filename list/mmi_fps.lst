@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FPS
@@ -17,313 +17,309 @@ line level    source
    6          #include "string.h"
    7          #include "mmi_fps.h"
    8          #include "dqiot_drv.h"
-   9          #include "delay.h"
+   9          // #include <stdio.h>
   10          
   11          unsigned char FP_oldStatus = 0;
-  12          /*
-  13          parameter: 
-  14            current status machine
-  15          return :
-  16            none
-  17          */
-  18          //void mmi_dq_fp_set_fp_uart_handle_cb(fp_uart_handle_callback cb)
-  19          //{
-  20          
-  21          //}
-  22          
-  23          /*
-  24          parameter: 
-  25            current status machine
-  26          return :
-  27            none
-  28          */
-  29          //void mmi_dq_fps_set_irq_handle_cb(fp_irq_handle_callback cb)
-  30          //{
-  31          //  cb = NULL;
-  32          //}
-  33          
-  34          /*
-  35          parameter: 
-  36            current status machine
-  37          return :
-  38            none
-  39          */
-  40          void mmi_dq_fp_init(void)
-  41          {
-  42   1        u16 waittime = 2000;
-  43   1        dqiot_drv_uart0B_init();
+  12          
+  13          /*
+  14          parameter: 
+  15            current status machine
+  16          return :
+  17            none
+  18          */
+  19          //void mmi_dq_fp_set_fp_uart_handle_cb(fp_uart_handle_callback cb)
+  20          //{
+  21          
+  22          //}
+  23          
+  24          /*
+  25          parameter: 
+  26            current status machine
+  27          return :
+  28            none
+  29          */
+  30          //void mmi_dq_fps_set_irq_handle_cb(fp_irq_handle_callback cb)
+  31          //{
+  32          //  cb = NULL;
+  33          //}
+  34          
+  35          /*
+  36          parameter: 
+  37            current status machine
+  38          return :
+  39            none
+  40          */
+  41          void mmi_dq_fp_init(void)
+  42          {
+  43   1        u16 waittime = 2000;
   44   1        dqiot_drv_fp_poweron();
-  45   1      
-  46   1      #if __Normal_handling__
-                while (--waittime)
-                {
-                  delay_ms(1);
-                  if (FP_Get_Start_Flag() == 1)
-                  {
-                    FP_Light(FP_BLUE);
-                    return;
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 2   
+  45   1        while (--waittime)
+  46   1        {
+  47   2          delay_ms(1);
+  48   2          if (FP_Get_Start_Flag() == 1)
+  49   2          {
+  50   3            FP_Light(FP_BLUE);
+  51   3            return;
+  52   3          }
+  53   2        }
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 2   
 
-                  }
-                }
-              #else
-  57   1        FP_Light(FP_BLUE);
-  58   1      #endif
-  59   1      
-  60   1        return;
-  61   1      }
-  62          
-  63          /*
-  64          parameter: 
-  65            current status machine
-  66          return :
-  67            none
-  68          */
-  69          unsigned char mmi_dq_fp_get_fp_mode(void)
-  70          {
-  71   1        return 1;
-  72   1      }
-  73          
-  74          /*
-  75          parameter: 
-  76            current status machine
-  77          return :
-  78            none
-  79          */
-  80          unsigned char mmi_dq_fp_get_image(void)
-  81          {
-  82   1        unsigned char retval = 0;
-  83   1      
-  84   1        retval = PS_GetImage();
-  85   1        return retval;
-  86   1      }
-  87          
-  88          /*
-  89          parameter: 
-  90            current status machine
-  91          return :
-  92            none
-  93          */
-  94          unsigned char mmi_dq_fp_gen_char(unsigned char id)
-  95          {
-  96   1        unsigned char retval = 0;
-  97   1        unsigned char real_buf_id;
-  98   1      
-  99   1        if (id == 0)
- 100   1          real_buf_id = CHAR_BUFFER1;
- 101   1        else if (id == 1)
- 102   1          real_buf_id = CHAR_BUFFER2;
- 103   1        else if (id == 2)
- 104   1          real_buf_id = CHAR_BUFFER3;
- 105   1        else if (id == 3)
- 106   1          real_buf_id = CHAR_BUFFER4;
- 107   1      
- 108   1        retval = PS_GenChar(real_buf_id); //��������
- 109   1        return retval;
- 110   1      }
- 111          
- 112          /*
- 113          parameter: 
- 114            current status machine
- 115          return :
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 3   
+  54   1      
+  55   1        return;
+  56   1      }
+  57          
+  58          /*
+  59          parameter: 
+  60            current status machine
+  61          return :
+  62            none
+  63          */
+  64          unsigned char mmi_dq_fp_get_fp_mode(void)
+  65          {
+  66   1        return 1;
+  67   1      }
+  68          
+  69          /*
+  70          parameter: 
+  71            current status machine
+  72          return :
+  73            none
+  74          */
+  75          unsigned char mmi_dq_fp_get_image(void)
+  76          {
+  77   1        unsigned char retval = 0;
+  78   1      
+  79   1        retval = PS_GetImage();
+  80   1        return retval;
+  81   1      }
+  82          
+  83          /*
+  84          parameter: 
+  85            current status machine
+  86          return :
+  87            none
+  88          */
+  89          unsigned char mmi_dq_fp_gen_char(unsigned char id)
+  90          {
+  91   1        unsigned char retval = 0;
+  92   1        unsigned char real_buf_id;
+  93   1      
+  94   1        if (id == 0)
+  95   1          real_buf_id = CHAR_BUFFER1;
+  96   1        else if (id == 1)
+  97   1          real_buf_id = CHAR_BUFFER2;
+  98   1        else if (id == 2)
+  99   1          real_buf_id = CHAR_BUFFER3;
+ 100   1        else if (id == 3)
+ 101   1          real_buf_id = CHAR_BUFFER4;
+ 102   1      
+ 103   1        retval = PS_GenChar(real_buf_id); //��������
+ 104   1        return retval;
+ 105   1      }
+ 106          
+ 107          /*
+ 108          parameter: 
+ 109            current status machine
+ 110          return :
+ 111            none
+ 112          */
+ 113          unsigned char mmi_dq_fp_match(void)
+ 114          {
+ 115   1        unsigned char retval = 0;
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 3   
 
- 116            none
- 117          */
- 118          unsigned char mmi_dq_fp_match(void)
- 119          {
- 120   1        unsigned char retval = 0;
- 121   1      
- 122   1        retval = PS_Match();
- 123   1        return retval;
- 124   1      }
- 125          
- 126          /*
- 127          parameter: 
- 128            current status machine
- 129          return :
- 130            none
- 131          */
- 132          unsigned char mmi_dq_fp_reg_module(void)
- 133          {
- 134   1        unsigned char retval = 0;
- 135   1      
- 136   1        retval = PS_RegModel();
- 137   1        return retval;
- 138   1      }
- 139          
- 140          /*
- 141          parameter: 
- 142            current status machine
- 143          return :
- 144            none
- 145          */
- 146          unsigned char mmi_dq_fp_store_char(unsigned char id, unsigned short index)
- 147          {
- 148   1        unsigned char retval = 0;
- 149   1        unsigned char real_buf_id;
- 150   1      
- 151   1        if (id == 0)
- 152   1          real_buf_id = CHAR_BUFFER1;
- 153   1        else if (id == 1)
- 154   1          real_buf_id = CHAR_BUFFER2;
- 155   1        else if (id == 2)
- 156   1          real_buf_id = CHAR_BUFFER3;
- 157   1        else if (id == 3)
- 158   1          real_buf_id = CHAR_BUFFER4;
- 159   1      
- 160   1        retval = PS_StoreChar(real_buf_id, index); //����ģ��
- 161   1        return retval;
- 162   1      }
- 163          
- 164          /*
- 165          parameter: 
- 166            current status machine
- 167          return :
- 168            none
- 169          */
- 170          unsigned char mmi_dq_fp_delete(unsigned short index)
- 171          {
- 172   1        unsigned char retval = 0;
- 173   1      
- 174   1        retval = PS_DeletChar(index, 1);
- 175   1        return retval;
- 176   1      }
- 177          
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 4   
+ 116   1      
+ 117   1        retval = PS_Match();
+ 118   1        return retval;
+ 119   1      }
+ 120          
+ 121          /*
+ 122          parameter: 
+ 123            current status machine
+ 124          return :
+ 125            none
+ 126          */
+ 127          unsigned char mmi_dq_fp_reg_module(void)
+ 128          {
+ 129   1        unsigned char retval = 0;
+ 130   1      
+ 131   1        retval = PS_RegModel();
+ 132   1        return retval;
+ 133   1      }
+ 134          
+ 135          /*
+ 136          parameter: 
+ 137            current status machine
+ 138          return :
+ 139            none
+ 140          */
+ 141          unsigned char mmi_dq_fp_store_char(unsigned char id, unsigned short index)
+ 142          {
+ 143   1        unsigned char retval = 0;
+ 144   1        unsigned char real_buf_id;
+ 145   1      
+ 146   1        if (id == 0)
+ 147   1          real_buf_id = CHAR_BUFFER1;
+ 148   1        else if (id == 1)
+ 149   1          real_buf_id = CHAR_BUFFER2;
+ 150   1        else if (id == 2)
+ 151   1          real_buf_id = CHAR_BUFFER3;
+ 152   1        else if (id == 3)
+ 153   1          real_buf_id = CHAR_BUFFER4;
+ 154   1      
+ 155   1        retval = PS_StoreChar(real_buf_id, index); //����ģ��
+ 156   1        return retval;
+ 157   1      }
+ 158          
+ 159          /*
+ 160          parameter: 
+ 161            current status machine
+ 162          return :
+ 163            none
+ 164          */
+ 165          unsigned char mmi_dq_fp_delete(unsigned short index)
+ 166          {
+ 167   1        unsigned char retval = 0;
+ 168   1      
+ 169   1        retval = PS_DeletChar(index, 1);
+ 170   1        return retval;
+ 171   1      }
+ 172          
+ 173          /*
+ 174          parameter: 
+ 175            current status machine
+ 176          return :
+ 177            none
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 4   
 
- 178          /*
- 179          parameter: 
- 180            current status machine
- 181          return :
- 182            none
- 183          */
- 184          unsigned char mmi_dq_fp_empty(void)
- 185          {
- 186   1        unsigned char retval = 0;
- 187   1      
- 188   1        retval = PS_Empty();
- 189   1        return retval;
- 190   1      }
- 191          
- 192          /*
- 193          parameter: 
- 194            current status machine
- 195          return :
- 196            none
- 197          */
- 198          unsigned char mmi_dq_fp_get_valid_templete(unsigned short *count)
- 199          {
- 200   1        unsigned char retval = 0;
- 201   1      
- 202   1        retval = PS_ValidTempleteNum(count);
- 203   1        return retval;
- 204   1      }
- 205          
- 206          /*
- 207          parameter: 
- 208            current status machine
- 209          return :
- 210            none
- 211          */
- 212          unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *index)
- 213          {
- 214   1        unsigned char retval = 0;
- 215   1        unsigned char real_buf_id;
- 216   1      
- 217   1        if (Buf_id == 0)
- 218   1          real_buf_id = CHAR_BUFFER1;
- 219   1        else if (Buf_id == 1)
- 220   1          real_buf_id = CHAR_BUFFER2;
- 221   1        else if (Buf_id == 2)
- 222   1          real_buf_id = CHAR_BUFFER3;
- 223   1        else if (Buf_id == 3)
- 224   1          real_buf_id = CHAR_BUFFER4;
- 225   1        retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
- 226   1        return retval;
- 227   1      }
- 228          
- 229          /*
- 230          parameter: 
- 231            current status machine
- 232          return :
- 233            none
- 234          */
- 235          unsigned char mmi_dq_fp_search(unsigned char Buf_id, unsigned short *index)
- 236          {
- 237   1        unsigned char retval = 0;
- 238   1        unsigned char real_buf_id;
- 239   1      
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 5   
+ 178          */
+ 179          unsigned char mmi_dq_fp_empty(void)
+ 180          {
+ 181   1        unsigned char retval = 0;
+ 182   1      
+ 183   1        retval = PS_Empty();
+ 184   1        return retval;
+ 185   1      }
+ 186          
+ 187          /*
+ 188          parameter: 
+ 189            current status machine
+ 190          return :
+ 191            none
+ 192          */
+ 193          unsigned char mmi_dq_fp_get_valid_templete(unsigned short *count)
+ 194          {
+ 195   1        unsigned char retval = 0;
+ 196   1      
+ 197   1        retval = PS_ValidTempleteNum(count);
+ 198   1        return retval;
+ 199   1      }
+ 200          
+ 201          /*
+ 202          parameter: 
+ 203            current status machine
+ 204          return :
+ 205            none
+ 206          */
+ 207          unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *index)
+ 208          {
+ 209   1        unsigned char retval = 0;
+ 210   1        unsigned char real_buf_id;
+ 211   1      
+ 212   1        if (Buf_id == 0)
+ 213   1          real_buf_id = CHAR_BUFFER1;
+ 214   1        else if (Buf_id == 1)
+ 215   1          real_buf_id = CHAR_BUFFER2;
+ 216   1        else if (Buf_id == 2)
+ 217   1          real_buf_id = CHAR_BUFFER3;
+ 218   1        else if (Buf_id == 3)
+ 219   1          real_buf_id = CHAR_BUFFER4;
+ 220   1        
+ 221   1        retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
+ 222   1        return retval;
+ 223   1      }
+ 224          
+ 225          /*
+ 226          parameter: 
+ 227            current status machine
+ 228          return :
+ 229            none
+ 230          */
+ 231          unsigned char mmi_dq_fp_search(unsigned char Buf_id, unsigned short *index)
+ 232          {
+ 233   1        unsigned char retval = 0;
+ 234   1        unsigned char real_buf_id;
+ 235   1      
+ 236   1        if (Buf_id == 0)
+ 237   1          real_buf_id = CHAR_BUFFER1;
+ 238   1        else if (Buf_id == 1)
+ 239   1          real_buf_id = CHAR_BUFFER2;
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 5   
 
- 240   1        if (Buf_id == 0)
- 241   1          real_buf_id = CHAR_BUFFER1;
- 242   1        else if (Buf_id == 1)
- 243   1          real_buf_id = CHAR_BUFFER2;
- 244   1        else if (Buf_id == 2)
- 245   1          real_buf_id = CHAR_BUFFER3;
- 246   1        else if (Buf_id == 3)
- 247   1          real_buf_id = CHAR_BUFFER4;
- 248   1      
- 249   1        retval = PS_Search(real_buf_id, 0, 300, index);
- 250   1        return retval;
- 251   1      }
- 252          
- 253          /*
- 254          parameter: 
- 255            current status machine
- 256          return :
- 257            none
- 258          */
- 259          void mmi_dq_fp_light(FP_COLOR_E light_id)
- 260          {
- 261   1        FP_Light(light_id); //���
- 262   1      }
- 263          
- 264          /*
- 265          parameter: 
- 266            current status machine
- 267          return :
- 268            none
- 269          */
- 270          FP_COLOR_E mmi_dq_fp_get_light(void)
- 271          {
- 272   1        FP_COLOR_E retval = 0;
- 273   1        retval = FP_Get_Light();
- 274   1        return retval;
- 275   1      }
- 276          
- 277          /* �����ж� */
- 278          unsigned char mmi_dq_fp_work(void)
- 279          {
- 280   1        if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)
- 281   1        {
- 282   2          if (FP_oldStatus == 0)
- 283   2          {
- 284   3            FP_oldStatus = 1;
- 285   3            return 1;
- 286   3          }
- 287   2        }
- 288   1        else
- 289   1          FP_oldStatus = 0;
- 290   1        return 0;
- 291   1      }
- 292          
- 293          unsigned char mmi_dq_fp_get_pin(void)
- 294          {
- 295   1        return gpio_bit_get(GPIOF, GPIO_PIN_6);
- 296   1      }
- 297          
- 298          #endif //__LOCK_FP_SUPPORT__
- 299          
- 300          #endif //__MMI_FPC_C__
-
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/06/2021 16:17:11 PAGE 6   
+ 240   1        else if (Buf_id == 2)
+ 241   1          real_buf_id = CHAR_BUFFER3;
+ 242   1        else if (Buf_id == 3)
+ 243   1          real_buf_id = CHAR_BUFFER4;
+ 244   1      
+ 245   1        retval = PS_Search(real_buf_id, 0, 300, index);
+ 246   1        return retval;
+ 247   1      }
+ 248          
+ 249          /*
+ 250          parameter: 
+ 251            current status machine
+ 252          return :
+ 253            none
+ 254          */
+ 255          void mmi_dq_fp_light(FP_COLOR_E light_id)
+ 256          {
+ 257   1        FP_Light(light_id); //���
+ 258   1      }
+ 259          
+ 260          /*
+ 261          parameter: 
+ 262            current status machine
+ 263          return :
+ 264            none
+ 265          */
+ 266          FP_COLOR_E mmi_dq_fp_get_light(void)
+ 267          {
+ 268   1        FP_COLOR_E retval = 0;
+ 269   1        retval = FP_Get_Light();
+ 270   1        return retval;
+ 271   1      }
+ 272          
+ 273          /* �����ж� */
+ 274          unsigned char mmi_dq_fp_work(void)
+ 275          {
+ 276   1        if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)
+ 277   1        {
+ 278   2          if (FP_oldStatus == 0)
+ 279   2          {
+ 280   3            FP_oldStatus = 1;
+ 281   3            return 1;
+ 282   3          }
+ 283   2        }
+ 284   1        else
+ 285   1          FP_oldStatus = 0;
+ 286   1        return 0;
+ 287   1      }
+ 288          
+ 289          unsigned char mmi_dq_fp_get_pin(void)
+ 290          {
+ 291   1        return gpio_bit_get(GPIOF, GPIO_PIN_6);
+ 292   1      }
+ 293          
+ 294          #endif //__LOCK_FP_SUPPORT__
+ 295          
+ 296          #endif //__MMI_FPC_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    439    ----
+   CODE SIZE        =    466    ----
    CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           03/10/2021 17:03:16 PAGE 6   
+
    XDATA SIZE       =      5      14
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

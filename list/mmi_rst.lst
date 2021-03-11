@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_RST                                                           03/06/2021 11:30:39 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_RST                                                           03/10/2021 16:15:05 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_RST
@@ -19,7 +19,7 @@ line level    source
    8          #include "mmi_queue.h"
    9          
   10          static unsigned char rst_flag = 0;
-  11          static unsigned int  rst_count = 0;
+  11          static unsigned int rst_count = 0;
   12          /*
   13          parameter: 
   14            none
@@ -28,52 +28,52 @@ line level    source
   17          */
   18          void mmi_dq_rst_init(void)
   19          {
-  20   1      
-  21   1      
-  22   1      }
-  23          
-  24          /*
-  25          parameter: 
+  20   1      }
+  21          
+  22          /*
+  23          parameter: 
+  24            none
+  25          return :
   26            none
-  27          return :
-  28            none
-  29          */
-  30          unsigned char mmi_dq_rst_timer_event(void)
-  31          {
-  32   1        unsigned char ret = 0;
-  33   1        if(dqiot_drv_get_reset_pin() == 0)
-  34   1        {
-  35   2          if(rst_flag == 0)
-  36   2          {
-  37   3            rst_count ++;
-  38   3            if(rst_count >= 40)
-  39   3            {
-  40   4              rst_flag = 1;
-  41   4              //mmi_dq_ms_set_msg_que(QUE_EVENT_RST,QUE_PRO_LOW,0);
-  42   4            }
-  43   3          } 
-  44   2        }
-  45   1        else 
-  46   1        {
-  47   2          rst_count = 0;
-  48   2          rst_flag = 0;
-  49   2          ret = 1;
-  50   2        }
-  51   1        return ret;
-  52   1      }
-  53          
-C51 COMPILER V9.59.0.0   MMI_RST                                                           03/06/2021 11:30:39 PAGE 2   
+  27          */
+  28          unsigned char mmi_dq_rst_timer_event(void)
+  29          {
+  30   1        unsigned char ret = 0;
+  31   1        if (dqiot_drv_get_reset_pin() == 0)
+  32   1        {
+  33   2          if (rst_flag == 0)
+  34   2          {
+  35   3            rst_count++;
+  36   3            if (rst_count >= 40)
+  37   3            {
+  38   4              rst_flag = 1;
+  39   4              //mmi_dq_ms_set_msg_que(QUE_EVENT_RST,QUE_PRO_LOW,0);
+  40   4            }
+  41   3          }
+  42   2        }
+  43   1        else
+  44   1        {
+  45   2          rst_count = 0;
+  46   2          rst_flag = 0;
+  47   2          ret = 1;
+  48   2        }
+  49   1        return ret;
+  50   1      }
+  51          
+  52          /*
+  53          parameter: 
+C51 COMPILER V9.59.0.0   MMI_RST                                                           03/10/2021 16:15:05 PAGE 2   
 
-  54          /*
-  55          parameter: 
+  54            none
+  55          return :
   56            none
-  57          return :
-  58            none
-  59          */
-  60          unsigned char mmi_dq_rst_get_pin(void)
-  61          {
-  62   1        return dqiot_drv_get_reset_pin();
-  63   1      
+  57          */
+  58          unsigned char mmi_dq_rst_get_pin(void)
+  59          {
+  60   1        if (dqiot_drv_get_reset_pin() == 0)
+  61   1          return 1;
+  62   1        else
+  63   1          return 0;
   64   1      }
   65          
   66          /*
@@ -84,22 +84,19 @@ line level    source
   71          */
   72          unsigned char mmi_dq_rst_get_state(void)
   73          {
-  74   1        if(rst_flag == 1)
+  74   1        if (rst_flag == 1)
   75   1        {
   76   2          rst_flag = 2;
   77   2          return 1;
   78   2        }
   79   1        return 0;
-  80   1      
-  81   1      }
-  82          
-  83          
-  84          
-  85          #endif
+  80   1      }
+  81          
+  82          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     97    ----
+   CODE SIZE        =    105    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      7       1
    PDATA SIZE       =   ----    ----
