@@ -40,10 +40,10 @@ uint16_t rawdata3[SENSOR_NUM];
 uint16_t rawdata4[SENSOR_NUM];
 #endif
 
-uint8_t xdata g_ucBtPNthCnt[SENSOR_NUM];//���߸���differ>=����������
-uint8_t xdata g_ucStPNthCnt[SENSOR_NUM];//���߸���differ<����������
-uint8_t xdata g_ucBtNNthCnt[SENSOR_NUM];//���߸���differ>=����������
-uint8_t xdata g_ucStNNthCnt[SENSOR_NUM];//���߸���differ<����������
+uint8_t xdata g_ucBtPNthCnt[SENSOR_NUM];//基线更新differ>=正噪声计数
+uint8_t xdata g_ucStPNthCnt[SENSOR_NUM];//基线更新differ<正噪声计数
+uint8_t xdata g_ucBtNNthCnt[SENSOR_NUM];//基线更新differ>=负噪声计数
+uint8_t xdata g_ucStNNthCnt[SENSOR_NUM];//基线更新differ<负噪声计数
 uint8_t xdata g_ucWaterBaseRenoCnt[SENSOR_NUM];
 
 uint8_t xdata g_ucJudgeKeyTouchUpCnt[SENSOR_NUM];
@@ -51,7 +51,7 @@ uint8_t xdata g_ucJudgeKeyTouchCnt[SENSOR_NUM];
 uint8_t xdata g_ucSenSorTouchFlag[SENSOR_NUM];
 uint8_t xdata g_ucKeyTouchFlag[SENSOR_NUM];/*the touch state of each key,1: touch ;0: no touch*/
 #if CTK_FIRST_KEY_EN
-uint8_t xdata g_ucFirstTouchKeyIndex;//��ǰ��һ���������İ���ͨ���±꣬0xff������Ч��0~SENSOR_NUM��Ч
+uint8_t xdata g_ucFirstTouchKeyIndex;//当前第一个被触摸的按键通道下标，0xff代表无效，0~SENSOR_NUM有效
 #endif
 
 uint8_t xdata g_ucExceptionCnt = 0;
@@ -67,7 +67,7 @@ uint16_t xdata g_uiTouchFrame = 0;
 code byd_parameter_struct byd_parameter={
 
 /* csd */    
-	VTH_2,               //uint8_t vth;		        /* vth select,notice��VCC-VTH>0.5V*/
+	VTH_2,               //uint8_t vth;		        /* vth select,notice：VCC-VTH>0.5V*/
 	DS_24M,              //uint8_t ds;			    /* detect speed select */
 	PRE_CHARGE_20us,     //uint8_t pre_charge;	    /* pre charge select time us*/
 	PRE_DISCHARGE_2us,  //uint8_t pre_discharge;	/* pre discharge select time us*/
@@ -84,7 +84,7 @@ code byd_parameter_struct byd_parameter={
 #else
 	RESO_2048,//uint8_t reso;			/* reso select */
 #endif
-	SW_CLK_2,//uint8_t pre_div;/* pre select,csd�͹���ģʽ����������ģʽ����Ӧ��ǰ��Ƶ���ǲ�һ����,�ɲ���csd_lowpowerֵ���������忴CSD_PREDIV_enum*/
+	SW_CLK_2,//uint8_t pre_div;/* pre select,csd低功耗模式和正常工作模式所对应的前端频率是不一样的,由参数csd_lowpower值决定，具体看CSD_PREDIV_enum*/
 
 /*csd parallel mode config */
 	RB_200K,   //uint8_t parallel_rb;		/* parallel_rb select */
@@ -116,38 +116,38 @@ code byd_parameter_struct byd_parameter={
 
 	300,//uint16_t parallel_pull_current;       /* detect sensor current at parallel mode*/
 
-	0,//uint8_t filterenable;//�ù����ѹر�,������Ч
-	SCAN_FILTER_NUM,//uint8_t filterframe;//�ù����ѹر�,������Ч
+	0,//uint8_t filterenable;//该功能已关闭,参数无效
+	SCAN_FILTER_NUM,//uint8_t filterframe;//该功能已关闭,参数无效
 
-	2,//uint8_t abnormal_mul;      /*�иǰ���2,�޸ǰ���0; �쳣��Сֵϵ��,С��(���ֵ*abnormal_mulrate/10)���߸�λ*/			
+	2,//uint8_t abnormal_mul;      /*有盖板填2,无盖板填0; 异常最小值系数,小于(溢出值*abnormal_mulrate/10)基线复位*/			
 
 	0,//uint8_t renovatemode;   /* renovatemode select 0:normal 1;water*/
 	
-	11,//uint8_t fthrate; //��ָ��ֵϵ��,��ָ��ֵ=(fingerthreshold*fthrate)>>4,������Ч
-	7,//uint8_t nthrate; //������ֵϵ��,������ֵ=(fingerthreshold*nthrate)>>4	
+	11,//uint8_t fthrate; //手指阈值系数,手指阈值=(fingerthreshold*fthrate)>>4,参数无效
+	7,//uint8_t nthrate; //噪声阈值系数,噪声阈值=(fingerthreshold*nthrate)>>4	
 
-//����ȫ����ʱ�Ļ��߸����ٶ�
-	30,//uint8_t bt_ponth_maxcnt;//���߸���differ>=����������,���»��ߣ�ֵԽС�����߸���Խ��
-	20,//uint8_t st_ponth_maxcnt;//���߸���differ<����������,���»��ߣ�ֵԽС�����߸���Խ��
-	10,//uint8_t bt_nenth_maxcnt;//���߸���differ>=����������,���»��ߣ�ֵԽС�����߸���Խ��
-	20,//uint8_t st_nenth_maxcnt;//���߸���differ<����������,���»��ߣ�ֵԽС�����߸���Խ��	
+//正常全速跑时的基线更新速度
+	30,//uint8_t bt_ponth_maxcnt;//基线更新differ>=正噪声计数,更新基线，值越小，基线更新越快
+	20,//uint8_t st_ponth_maxcnt;//基线更新differ<正噪声计数,更新基线，值越小，基线更新越快
+	10,//uint8_t bt_nenth_maxcnt;//基线更新differ>=负噪声计数,更新基线，值越小，基线更新越快
+	20,//uint8_t st_nenth_maxcnt;//基线更新differ<负噪声计数,更新基线，值越小，基线更新越快	
 	
-//����֡Ƶ��ʱ�Ļ��߸����ٶ�	
-	6,//uint8_t wakeup_bt_ponth_maxcnt;//���߸���differ>=����������,���»��ߣ�ֵԽС�����߸���Խ��
-	3,//uint8_t wakeup_st_ponth_maxcnt;//���߸���differ<����������,���»��ߣ�ֵԽС�����߸���Խ��
-	2,//uint8_t wakeup_bt_nenth_maxcnt;//���߸���differ>=����������,���»��ߣ�ֵԽС�����߸���Խ��
-	3,//uint8_t wakeup_st_nenth_maxcnt;//���߸���differ<����������,���»��ߣ�ֵԽС�����߸���Խ��	
+//休眠帧频低时的基线更新速度	
+	6,//uint8_t wakeup_bt_ponth_maxcnt;//基线更新differ>=正噪声计数,更新基线，值越小，基线更新越快
+	3,//uint8_t wakeup_st_ponth_maxcnt;//基线更新differ<正噪声计数,更新基线，值越小，基线更新越快
+	2,//uint8_t wakeup_bt_nenth_maxcnt;//基线更新differ>=负噪声计数,更新基线，值越小，基线更新越快
+	3,//uint8_t wakeup_st_nenth_maxcnt;//基线更新differ<负噪声计数,更新基线，值越小，基线更新越快	
 	
-	8,//uint8_t waterflowrate;	//��ˮ�ж���ֵ����ϵ��	
-	8,//uint8_t watermoderate;  //��ˮ��ָ��ֵϵ��
+	8,//uint8_t waterflowrate;	//溢水判断阈值比例系数	
+	8,//uint8_t watermoderate;  //防水手指阈值系数
 
-	50,//uint8_t water_base_renomaxcnt;//bak_baseline���߸����жϴ���
+	50,//uint8_t water_base_renomaxcnt;//bak_baseline基线更新判断次数
 	
-	2,//uint8_t multikey_maxcnt;	//�ఴ�������жϴ���;
+	2,//uint8_t multikey_maxcnt;	//多按键消除判断次数;
     
-	3,//uint8_t judge_water_maxcnt;      //��ˮ�ж�ͨ������;
+	3,//uint8_t judge_water_maxcnt;      //溢水判断通道个数;
 
-	30,//uint16_t judge_waterleave_maxcnt;//��ˮ�뿪�жϴ���
+	30,//uint16_t judge_waterleave_maxcnt;//溢水离开判断次数
 		
 	{
 	#if 0
@@ -171,8 +171,8 @@ code byd_parameter_struct byd_parameter={
 	 55,55,55,55,55,55,55,55,
 	},//int16_t	fingerthreshold[SENSOR_MAX_NUM];
 */    
-	150,//uint16_t threshold_parallel;//����ģʽ����ֵ
-	10,//uint16_t finger_latency;//ͨ���д�����,����ֵС��fingerthreshold-finger_latencyʱ��Ϊ̧��
+	150,//uint16_t threshold_parallel;//并联模式下阈值
+	10,//uint16_t finger_latency;//通道有触摸后,当差值小于fingerthreshold-finger_latency时认为抬起
 	
 	0,/*judging the number of finger touch*/
 	0,/*judging the number of finger up*/
@@ -444,7 +444,7 @@ uint8_t byd_get_maxkey(void)
 		}
 	}
 #if CTK_FIRST_KEY_EN
-	if(g_ucFirstTouchKeyIndex != index)//����ʱ����
+	if(g_ucFirstTouchKeyIndex != index)//滑动时处理
 	{
 	   differ = (int)baseline[g_ucFirstTouchKeyIndex] - (int)rawdata[g_ucFirstTouchKeyIndex];
 	   differ = max_differ - differ;
@@ -544,7 +544,7 @@ void byd_ctk_normal(void)
 
 #endif
 							
-		if(i < SENSOR_NUM-1)//ɨ����һ��ͨ��
+		if(i < SENSOR_NUM-1)//扫描下一个通道
 		{	
 			CSD_PULL_I_SET(csd_pull_current[i+1]);
 	    	CSD_SCANADDR_SET(byd_parameter.sensorindex[i+1]);//csd_sensor_index[i]
@@ -565,7 +565,7 @@ void byd_ctk_normal(void)
 		if(g_bExceptionFlag)return;     
 	}
 
-#else //////////////////����
+#else //////////////////串行
 
 	for(i = 0; i < SENSOR_NUM;i++)
 	{
@@ -687,12 +687,12 @@ void byd_ctk_work(void)
 		for(i = 0; i < SENSOR_NUM;i++)
 	    {
 #if CTK_FIRST_KEY_EN
-			if(g_ucFirstTouchKeyIndex == i)//g_ucFirstTouchKeyIndex=0~11,����������1~12
+			if(g_ucFirstTouchKeyIndex == i)//g_ucFirstTouchKeyIndex=0~11,即代表按键1~12
 			{
 				
 			}
 #else			
-			if(g_ucKeyTouchFlag[i])//�ж��ĸ������д���,����Ϊ1
+			if(g_ucKeyTouchFlag[i])//判断哪个按键有触摸,触摸为1
 			{
 				 
 			}
@@ -713,7 +713,7 @@ void byd_ctk_work(void)
 		 g_ulKeyTouchFlag = 0;
 #else
 		 	
-//		 byd_idlemode();//��������,ʹ��timer2����		 
+//		 byd_idlemode();//进入休眠,使用timer2唤醒		 
   
 #endif
 	}

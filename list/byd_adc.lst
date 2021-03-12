@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 1   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_ADC
@@ -62,7 +62,7 @@ line level    source
   51   1        ADC_SAMP_SET(255);             /* adc sample time:0~255*/
   52   1      
   53   1        ADC_VREF_IN_SEL(ADC_VREF_IN_1);       /* input vref vol*/
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 2   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 2   
 
   54   1        ADC_VREF_VOL_SEL(ADC_VREF_VOL_OUT_1);   /* output vref vol*/
   55   1        ADC_VREF_SIGNAL_SEL(ADC_VREF_SIGNAL_OUT_0); /* output vref signal*/
@@ -73,9 +73,9 @@ line level    source
   60   1        ADC_06_PH6_ENABLE(); /*enable adc io*/
   61   1        //ADC_01_PH1_ENABLE();
   62   1      
-  63   1        /*!!!!!!!!!�ָ�IO�ڹ���Ҫ�ر�adcͨ������!!!!!!!!!*/
-  64   1        //  ADC_00_PH0_DISABLE();
-  65   1        //  ADC_01_PH1_DISABLE();
+  63   1      /*!!!!!!!!!恢复IO口功能要关闭adc通道功能!!!!!!!!!*/ 
+  64   1      //  ADC_00_PH0_DISABLE();
+  65   1      //  ADC_01_PH1_DISABLE();
   66   1      
   67   1        ADC_ENABLE(); /*enable adc*/
   68   1      
@@ -126,7 +126,7 @@ line level    source
  113   1      
  114   1      #endif
  115   1      
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 3   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 3   
 
  116   1        adc_data = ((uint16_t)(ADC_RDATAH & 0x0F) << 8) | (uint16_t)ADC_RDATAL;
  117   1      
@@ -134,10 +134,10 @@ line level    source
  119   1      }
  120          
  121          /**
- 122            * @brief  ��ȡadc���ݵ�ƽ��ֵ
+ 122            * @brief  获取adc数据的平均值
  123            * @param  
  124            * adc_channel_addr ADC_CHANNEL_0~44;
- 125            * times ʱ��ms
+ 125            * times 时间ms
  126            * @return none
  127            * @note   none
  128            * @see    none
@@ -155,7 +155,7 @@ line level    source
  140   1      }
  141          
  142          /**
- 143            * @brief  ��ѹ����
+ 143            * @brief  电压计算
  144            * @param  none
  145            * @return none
  146            * @note   none
@@ -166,12 +166,12 @@ line level    source
  151   1        unsigned int adcx;
  152   1        float temp;
  153   1        ADC_ENABLE();
- 154   1        gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //����
+ 154   1        gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //开启
  155   1        delay_ms(5);
- 156   1        adcx = Get_Adc_Average(ADC_CHANNEL_6, 10);     //��ȡ10msƽ��ֵ
- 157   1        // gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //�ر�
+ 156   1        adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //获取10ms平均值
+ 157   1        gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //关闭
  158   1        ADC_DISABLE();
- 159   1        temp = (float)adcx * (3.3 / 4095); //�����ѹ
+ 159   1        temp = (float)adcx * (3.3 / 4095); //计算电压
  160   1      
  161   1        if (temp < 1.25)
  162   1          return 2;
@@ -190,7 +190,7 @@ line level    source
  175          #if ADC_MODE == 0
               void adc_isr(void) interrupt 11
               {
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 4   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 4   
 
                 INT_ADC_CLR();
                 g_bAdcIntFlag = 1;
@@ -254,7 +254,7 @@ line level    source
                   {
                     if (adc_differ <= ADC_NOISE_THRESHOLD)
                     {
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 5   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 5   
 
                       avg_cnt++;
                       average += g_ucAdcRawdata[i];
@@ -295,20 +295,20 @@ line level    source
               
                 for (i = 0; i < ADC_MAX_COUNT; i++)
                 {
-                  g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4); //ADCת��Ϊ8λ,�洢����
-             -����Ӧλ�ô�
-                  delay_ms(1);
+                  g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4);//ADC转化为8位,存储到数组对
+             -应位置处  
+                  delay_ms(1);    
                 }
               
                 if ((g_ucAdcBaseFlag & (0x01 << adc_channel_addr)) == 0)
                 {
                   g_ucAdcBaseFlag |= (0x01 << adc_channel_addr);
-                  g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT); //ð������
-             -ȡ�м�ľ�ֵ��Ϊ��ʼ�ϵ�ADCƽ��ֵ
+                  g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata,ADC_MAX_COUNT);//冒泡排序并取中�
+             -��的均值作为初始上电ADC平均值
                 }
                 else
                 {
-                  g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr); //��ô������ADCֵ
+                  g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr);//获得处理后的ADC值
                 }
                 return g_ucAdcBaseline[adc_channel_addr];
               }
@@ -318,7 +318,7 @@ line level    source
  297              \brief      adc work example
  298              \param[in]  none
  299              \param[out] none
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/11/2021 15:25:40 PAGE 6   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           03/12/2021 12:09:29 PAGE 6   
 
  300              \retval     none
  301          */
@@ -336,9 +336,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    411    ----
+   CODE SIZE        =    430    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4      13
+   XDATA SIZE       =      4      15
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_AUDIO
@@ -20,270 +20,248 @@ line level    source
    9          #ifdef __LOCK_AUDIO_SUPPORT__
   10          #ifdef __AUD_PLAY_BY_ARR__
   11          
-  12          const unsigned char aud_play_arr[] =
-  13            {
+  12          const unsigned char aud_play_arr[] = 
+  13          {
   14          #if 0
-                AUD_BASE_ID_INPUT_68_PWD,AUD_BASE_ID_INPUT_END,0,   //AUD_ID_INPUT_68_PWD = 0,//������6-8λ�
-             -��룬��#������
-                AUD_BASE_ID_PWD_68_LEN,AUD_BASE_ID_REINPUT,0,     //AUD_ID_PWD_68_LEN = 3,//����ӦΪ6-8λ����
-             -����������
-                AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_PWD_INPUT_AGAIN = 6,//���ٴ����
-             -������룬��#������
-                AUD_BASE_ID_CONTINUE,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_CONTINUE = 9,//�����밴#�����
-             -��ذ�*
-                AUD_BASE_ID_FAIL,AUD_BASE_ID_CONTACT_ADMIN,0,     //AUD_ID_ADD_PWD_FAIL = 12,//����ʧ�ܣ���
-             -��ϵ����Ա
-                AUD_BASE_ID_INPUT_OLD_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_OLD_PWD = 15,//��������
-             -���룬��#������
-                AUD_BASE_ID_PWD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_PWD_NOT_EXIST = 18,//���벻���ڣ�
-             -�����������
-                AUD_BASE_ID_INPUT_NEW_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_NEW_PWD = 21,//��������
-             -����룬��#������
-                AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_NEW_PWD_AGAIN = 24,//������
-             -���������룬��#������
-                                            //AUD_ID_CHG_FAIL = 12,//�޸�ʧ�ܣ�����ϵ����Ա
-                                            //AUD_ID_DEL_FAIL = 12,//ɾ��ʧ�ܣ�����ϵ����Ա
-                AUD_BASE_ID_INPUT_DEL_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_DEL_NUM = 27,//������Ҫɾ�
-             -����ı�Ż����룬��#������
-                AUD_BASE_ID_NUM_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_NUM_NOT_EXIST = 30,//��Ų����ڣ�
-             -����������
-                AUD_BASE_ID_INPUT_CONFIRM,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_DEL_PWD_CONFIRM = 33,//�����밴#�
-             -���ȷ��ɾ����ȡ���밴*��
-                                            //AUD_ID_DEL_CONFIRM = 9,//����ɾ���밴#�������밴*
-                                            //AUD_ID_CLR_PWD_CONFIRM = 33,//��#��ȷ��ɾ���������룬ȡ��
-             -���밴*��
-                AUD_BASE_ID_FAIL,AUD_BASE_ID_RETRY,0,         //AUD_ID_ADD_FAIL_RETRY = 36,//����ʧ�ܣ�����
-             -����
-                                            //AUD_ID_CHG_FAIL_RETRY = 36,//�޸�ʧ�ܣ�������
-                                            //AUD_ID_CHG_CONTINUE_CONFIRM = 9,//�����޸��밴#�������밴*
+                AUD_BASE_ID_INPUT_68_PWD,AUD_BASE_ID_INPUT_END,0,   //AUD_ID_INPUT_68_PWD = 0,//请输入6-8位密码，�
+             -�#键结束
+                AUD_BASE_ID_PWD_68_LEN,AUD_BASE_ID_REINPUT,0,     //AUD_ID_PWD_68_LEN = 3,//密码应为6-8位，请重新�
+             -��入
+                AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_PWD_INPUT_AGAIN = 6,//请再次输入密码
+             -，按#键结束
+                AUD_BASE_ID_CONTINUE,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_CONTINUE = 9,//继续请按#，返回按*
+                AUD_BASE_ID_FAIL,AUD_BASE_ID_CONTACT_ADMIN,0,     //AUD_ID_ADD_PWD_FAIL = 12,//添加失败，请联系管�
+             -��员
+                AUD_BASE_ID_INPUT_OLD_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_OLD_PWD = 15,//请输入旧密码，�
+             -�#键结束
+                AUD_BASE_ID_PWD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_PWD_NOT_EXIST = 18,//密码不存在，请重�
+             -��输入
+                AUD_BASE_ID_INPUT_NEW_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_NEW_PWD = 21,//请输入新密码，�
+             -�#键结束
+                AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_NEW_PWD_AGAIN = 24,//请再输入新�
+             -��码，按#键结束
+                                            //AUD_ID_CHG_FAIL = 12,//修改失败，请联系管理员
+                                            //AUD_ID_DEL_FAIL = 12,//删除失败，请联系管理员
+                AUD_BASE_ID_INPUT_DEL_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_DEL_NUM = 27,//请输入要删除的�
+             -�号或密码，按#键结束
+                AUD_BASE_ID_NUM_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_NUM_NOT_EXIST = 30,//编号不存在，请重�
+             -��输入
+                AUD_BASE_ID_INPUT_CONFIRM,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_DEL_PWD_CONFIRM = 33,//号密码按#键确�
+             -��删除，取消请按*键
+                                            //AUD_ID_DEL_CONFIRM = 9,//继续删除请按#，返回请按*
+                                            //AUD_ID_CLR_PWD_CONFIRM = 33,//按#键确认删除所有密码，取消请按*键
+                AUD_BASE_ID_FAIL,AUD_BASE_ID_RETRY,0,         //AUD_ID_ADD_FAIL_RETRY = 36,//添加失败，请重试
+                                            //AUD_ID_CHG_FAIL_RETRY = 36,//修改失败，请重试
+                                            //AUD_ID_CHG_CONTINUE_CONFIRM = 9,//继续修改请按#，返回请按*
                 //0x27
-                AUD_BASE_ID_FP_NOT_EXIST,AUD_BASE_ID_REINPUT,0,     //AUD_ID_FP_NOT_EXIST = 39,//ָ�Ʋ����ڣ��
-             -����������
-                                            //AUD_ID_DEL_FP_CONFIRM = 33,//��ָ�ư�#ȷ��ɾ����ȡ���밴*
-                                            //AUD_ID_DEL_FAIL_RETRY = 36,//ɾ��ʧ�ܣ�������
-                                            //AUD_ID_CLR_FP_CONFIRM = 33,//��#ȷ��ɾ������ָ�ƣ�ȡ���밴*
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 2   
+                AUD_BASE_ID_FP_NOT_EXIST,AUD_BASE_ID_REINPUT,0,     //AUD_ID_FP_NOT_EXIST = 39,//指纹不存在，请重�
+             -�输入
+                                            //AUD_ID_DEL_FP_CONFIRM = 33,//号指纹按#确认删除，取消请按*
+                                            //AUD_ID_DEL_FAIL_RETRY = 36,//删除失败，请重试
+                                            //AUD_ID_CLR_FP_CONFIRM = 33,//按#确认删除所有指纹，取消请按*
+                AUD_BASE_ID_RFCARD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,   //AUD_ID_RFCARD_NOT_EXIST = 42,//RF卡不存在，�
+             -�重新输入
+                                            //AUD_ID_DEL_RFCARD_CONFIRM = 33,//号RF卡按#确认删除，取消请按*
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 2   
 
-                AUD_BASE_ID_RFCARD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,   //AUD_ID_RFCARD_NOT_EXIST = 42,//RF������
-             -��ڣ�����������
-                                            //AUD_ID_DEL_RFCARD_CONFIRM = 33,//��RF����#ȷ��ɾ����ȡ����
-             -�*
-                                            //AUD_ID_CLR_RFCARD_CONFIRM = 33,//��#ȷ��ɾ������RF����ȡ��
-             -��밴*
-                AUD_BASE_ID_INPUT_ADMIN_PWD,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_ADMIN_PWD = 45,//�������
-             -���Ա���룬��#������
-                                            //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//�������¹���Ա���룬��#�
-             -�����
+                                            //AUD_ID_CLR_RFCARD_CONFIRM = 33,//按#确认删除所有RF卡，取消请按*
+                AUD_BASE_ID_INPUT_ADMIN_PWD,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_ADMIN_PWD = 45,//请输入管理员�
+             -�码，按#键结束
+                                            //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//请输入新管理员密码，按#键结束
                 //
-                                            //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//���ٴ������¹���Ա���
-             -�룬��#������
-                AUD_BASE_ID_PWD_EXIST,AUD_BASE_ID_REINPUT,0,      //AUD_ID_PWD_EXIST = 48,//�����Ѵ��ڣ���
-             -����������
-                AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//Ϊ����
-             -���ʹ�ð�ȫ���������ӹ���Ա���룬��#������
-                                            //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//���ٴ��������Ա���룬
-             -��#������
-                AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 54,//�������,���
-             -�����
-                AUD_BASE_ID_FP_WRONG,AUD_BASE_ID_RETRY,0,       //AUD_ID_FP_WRONG_TRY = 57,//ָ�ƴ��������
-             -�
-                AUD_BASE_ID_RFCARD_WRONG,AUD_BASE_ID_RETRY,0,     //AUD_ID_RFCARD_WRONG_TRY = 60,//RF��������
-             -������
+                                            //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//请再次输入新管理员密码，按#键结束
+                AUD_BASE_ID_PWD_EXIST,AUD_BASE_ID_REINPUT,0,      //AUD_ID_PWD_EXIST = 48,//密码已存在，请重新输�
+             -�
+                AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 51,//为了您的�
+             -��用安全，请先添加管理员密码，按#键结束
+                                            //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//请再次输入管理员密码，按#键结束
+                AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 54,//密码错误,请重试
+                AUD_BASE_ID_FP_WRONG,AUD_BASE_ID_RETRY,0,       //AUD_ID_FP_WRONG_TRY = 57,//指纹错误，请重试
+                AUD_BASE_ID_RFCARD_WRONG,AUD_BASE_ID_RETRY,0,     //AUD_ID_RFCARD_WRONG_TRY = 60,//RF卡错误，请重试
                 //
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
-                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CHG_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_ADMIN = 63,//�
-             -�����Ա
+                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CHG_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_ADMIN = 63,//�
+             -��理员
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PRO_AUDIO,
-                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYS_SETTING = 69,//�
-             -���
+                AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYS_SETTING = 69,//设
+             -置
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_NO1_ADMIN_FP,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_NO2_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_CHG_ADMIN_FP =
-             - 75,//�޸Ĺ���Աָ��
+             - 75,//修改管理员指纹
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_OPEN_PRO_AUDIO,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CLOSE_PRO_AUDIO,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PRO_AUDIO =
-             - 81,//��ʾ��
+             - 81,//提示音
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_SIN_OPEN_MODE,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_OPEN_MODE = 87,
-             -//���ŷ�ʽ
+             -//开门方式
               
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM2 = 93,//ϵͳ2
+                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM2 = 93,//系统2
               
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_PWD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_PWD,
-                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_PWD,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PASSWORD = 101,//�
-             -����
+                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_PWD,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PASSWORD = 101,//�
+             -�码
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_FP,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_FP,
-                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_FP,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_SYS_FP = 109,//ָ��
+                AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_FP,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_SYS_FP = 109,//指纹
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_RFCARD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_RFCARD,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_RFCARD,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_RFCARD = 117,//R
-             -F��
+             -F卡
               
               
-                AUD_BASE_ID_NOT_SAME,AUD_BASE_ID_REINPUT,0,//AUD_ID_PWD_NOT_SAME_RETRY   = 125//���������
-             -����벻һ��,����������
+                AUD_BASE_ID_NOT_SAME,AUD_BASE_ID_REINPUT,0,//AUD_ID_PWD_NOT_SAME_RETRY   = 125//两次输入的密码不�
+             -�致,请重新输入
               
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 3   
-
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
-                AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_ADMIN2 = 128,//����Ա
+                AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_ADMIN2 = 128,//管理员
               #if 1
-              #ifdef __LOCK_RFID_CARD_SUPPORT__
-              #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__) || defined(__LOCK_FP_SUPPORT1_2__)
+              #ifdef __LOCK_RFID_CARD_SUPPORT__ 
+              #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__)||defined(__LOCK_FP_SUPPORT1_2__)
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ϵͳ
+                AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//系统
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 3   
+
               #else 
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_RFCARD,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ϵͳ
+                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//系统
               #endif
               #else
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
-                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//ϵͳ
+                AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//系统
               #endif
               #endif
               
                 //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_PRESS_FP,0,//AUD_ID_DBL_OPEN_MODE_FP = 145
                 //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
               
-                    //AUD_ID_ADD_PWD_FULL = 12,//��������������ϵ����Ա
-                    //AUD_ID_FP_ADD_FULL = 12,//ָ������������ϵ����Ա
-                    //AUD_ID_RFCARD_FULL = 12,//RF������������ϵ����Ա
+                    //AUD_ID_ADD_PWD_FULL = 12,//密码已满，请联系管理员
+                    //AUD_ID_FP_ADD_FULL = 12,//指纹已满，请联系管理员
+                    //AUD_ID_RFCARD_FULL = 12,//RF卡已满，请联系管理员
               #else
  115          
- 116              AUD_BASE_ID_INPUT_68_PWD, AUD_BASE_ID_INPUT_END, 0,    //AUD_ID_INPUT_68_PWD = 0,//������6-8
-             -λ���룬��#������
- 117              AUD_BASE_ID_PWD_68_LEN, AUD_BASE_ID_REINPUT, 0,      //AUD_ID_PWD_68_LEN = 3,//����ӦΪ6-8λ��
-             -�����������
- 118              AUD_BASE_ID_PWD_INPUT_AGAIN, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_PWD_INPUT_AGAIN = 6,//���ٴ���
-             -�������룬��#������
- 119              AUD_BASE_ID_CONTINUE, AUD_BASE_ID_INPUT_BACK, 0,     //AUD_ID_CONTINUE = 9,//�����밴#���
-             -��ذ�*
- 120              AUD_BASE_ID_FAIL, AUD_BASE_ID_CONTACT_ADMIN, 0,      //AUD_ID_ADD_PWD_FAIL = 12,//����ʧ�ܣ��
-             -�����ϵ����Ա
- 121              AUD_BASE_ID_PWD_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,     //AUD_ID_PWD_NOT_EXIST = 15,//���벻���
-             -�ڣ�����������
- 122                                           //AUD_ID_DEL_FAIL = 12,//ɾ��ʧ�ܣ�����ϵ����Ա
- 123              AUD_BASE_ID_INPUT_DEL_PWD, AUD_BASE_ID_INPUT_END, 0,   //AUD_ID_INPUT_DEL_NUM = 18,//�������
-             -�ɾ���ı�Ż����룬��#������
- 124              AUD_BASE_ID_INPUT_CONFIRM, AUD_BASE_ID_INPUT_BACK, 0,  //AUD_ID_DEL_PWD_CONFIRM = 21,//������
-             -�#��ȷ��ɾ����ȡ���밴*��
- 125                                           //AUD_ID_DEL_CONFIRM = 9,//����ɾ���밴#�������밴*
- 126                                           //AUD_ID_CLR_PWD_CONFIRM = 21,//��#��ȷ��ɾ���������룬ȡ�
-             -����밴*��
- 127              AUD_BASE_ID_FAIL, AUD_BASE_ID_RETRY, 0,          //AUD_ID_ADD_FAIL_RETRY = 24,//����ʧ�ܣ���
-             -�����
- 128              //0x27
- 129              AUD_BASE_ID_FP_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,    //AUD_ID_FP_NOT_EXIST = 27,//ָ�Ʋ����ڣ�
-             -������������
- 130                                           //AUD_ID_DEL_FP_CONFIRM = 21,//��ָ�ư�#ȷ��ɾ����ȡ���밴*
- 131                                           //AUD_ID_DEL_FAIL_RETRY = 24,//ɾ��ʧ�ܣ�������
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 4   
+ 116            AUD_BASE_ID_INPUT_68_PWD,AUD_BASE_ID_INPUT_END,0,   //AUD_ID_INPUT_68_PWD = 0,//请输入6-8位密码，�
+             -�#键结束
+ 117            AUD_BASE_ID_PWD_68_LEN,AUD_BASE_ID_REINPUT,0,     //AUD_ID_PWD_68_LEN = 3,//密码应为6-8位，请重新�
+             -��入
+ 118            AUD_BASE_ID_PWD_INPUT_AGAIN,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_PWD_INPUT_AGAIN = 6,//请再次输入密码
+             -，按#键结束
+ 119            AUD_BASE_ID_CONTINUE,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_CONTINUE = 9,//继续请按#，返回按*
+ 120            AUD_BASE_ID_FAIL,AUD_BASE_ID_CONTACT_ADMIN,0,     //AUD_ID_ADD_PWD_FAIL = 12,//添加失败，请联系管�
+             -��员
+ 121            AUD_BASE_ID_PWD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,    //AUD_ID_PWD_NOT_EXIST = 15,//密码不存在，请重�
+             -��输入
+ 122                                        //AUD_ID_DEL_FAIL = 12,//删除失败，请联系管理员
+ 123            AUD_BASE_ID_INPUT_DEL_PWD,AUD_BASE_ID_INPUT_END,0,    //AUD_ID_INPUT_DEL_NUM = 18,//请输入要删除的�
+             -�号或密码，按#键结束
+ 124            AUD_BASE_ID_INPUT_CONFIRM,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_DEL_PWD_CONFIRM = 21,//号密码按#键确�
+             -��删除，取消请按*键
+ 125                                        //AUD_ID_DEL_CONFIRM = 9,//继续删除请按#，返回请按*
+ 126                                        //AUD_ID_CLR_PWD_CONFIRM = 21,//按#键确认删除所有密码，取消请按*键
+ 127            AUD_BASE_ID_FAIL,AUD_BASE_ID_RETRY,0,         //AUD_ID_ADD_FAIL_RETRY = 24,//添加失败，请重试
+ 128            //0x27
+ 129            AUD_BASE_ID_FP_NOT_EXIST,AUD_BASE_ID_REINPUT,0,     //AUD_ID_FP_NOT_EXIST = 27,//指纹不存在，请重�
+             -�输入
+ 130                                        //AUD_ID_DEL_FP_CONFIRM = 21,//号指纹按#确认删除，取消请按*
+ 131                                        //AUD_ID_DEL_FAIL_RETRY = 24,//删除失败，请重试
+ 132                                        //AUD_ID_CLR_FP_CONFIRM = 21,//按#确认删除所有指纹，取消请按*
+ 133            AUD_BASE_ID_RFCARD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,   //AUD_ID_RFCARD_NOT_EXIST = 30,//RF卡不存在，�
+             -�重新输入
+ 134                                        //AUD_ID_DEL_RFCARD_CONFIRM = 21,//号RF卡按#确认删除，取消请按*
+ 135                                        //AUD_ID_CLR_RFCARD_CONFIRM = 21,//按#确认删除所有RF卡，取消请按*
+ 136            AUD_BASE_ID_INPUT_ADMIN_PWD,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_ADMIN_PWD = 33,//请输入管理员�
+             -�码，按#键结束
+ 137                                        //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//请输入新管理员密码，按#键结束
+ 138            //
+ 139                                        //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//请再次输入新管理员密码，按#键结束
+ 140            AUD_BASE_ID_PWD_EXIST,AUD_BASE_ID_REINPUT,0,      //AUD_ID_PWD_EXIST = 36,//密码已存在，请重新输�
+             -�
+ 141            AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 39,//为了您的�
+             -��用安全，请先添加管理员密码，按#键结束
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 4   
 
- 132                                           //AUD_ID_CLR_FP_CONFIRM = 21,//��#ȷ��ɾ������ָ�ƣ�ȡ����
-             -��*
- 133              AUD_BASE_ID_RFCARD_NOT_EXIST, AUD_BASE_ID_REINPUT, 0,  //AUD_ID_RFCARD_NOT_EXIST = 30,//RF�����
-             -���ڣ�����������
- 134                                           //AUD_ID_DEL_RFCARD_CONFIRM = 21,//��RF����#ȷ��ɾ����ȡ���
-             -�밴*
- 135                                           //AUD_ID_CLR_RFCARD_CONFIRM = 21,//��#ȷ��ɾ������RF����ȡ�
-             -���밴*
- 136              AUD_BASE_ID_INPUT_ADMIN_PWD, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_INPUT_ADMIN_PWD = 33,//������
-             -����Ա���룬��#������
- 137                                           //AUD_ID_INPUT_NEW_ADMIN_PWD = 0,//�������¹���Ա���룬��#
-             -������
- 138              //
- 139              //AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN = 6,//���ٴ������¹���Ա���룬��#�
-             -������
- 140              AUD_BASE_ID_PWD_EXIST, AUD_BASE_ID_REINPUT, 0,         //AUD_ID_PWD_EXIST = 36,//�����Ѵ��ڣ�
-             -������������
- 141              AUD_BASE_ID_ADD_ADMIN_PWD_FIRST, AUD_BASE_ID_INPUT_END, 0, //AUD_ID_ADD_ADMIN_PWD_FIRST = 39,//Ϊ���
-             -�����ʹ�ð�ȫ���������ӹ���Ա���룬��#������
- 142                                             //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//���ٴ��������Ա���
-             -�룬��#������
- 143              AUD_BASE_ID_PWD_WRONG, AUD_BASE_ID_RETRY, 0,         //AUD_ID_PWD_WRONG_TRY = 42,//�������,�
-             -������
- 144              AUD_BASE_ID_FP_WRONG, AUD_BASE_ID_RETRY, 0,          //AUD_ID_FP_WRONG_TRY = 45,//ָ�ƴ������
-             -���
- 145              AUD_BASE_ID_RFCARD_WRONG, AUD_BASE_ID_RETRY, 0,        //AUD_ID_RFCARD_WRONG_TRY = 48,//RF������
-             -��������
- 146              //
- 147              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
- 148              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_CHG_ADMIN_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_ADMIN = 51,
-             -//����Ա
- 149              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_PRO_AUDIO,
- 150              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_OPEN_MODE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_SETTING = 57,/
-             -/����
- 151              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_NO1_ADMIN_FP,
- 152              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_NO2_ADMIN_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_CHG_ADMIN_F
-             -P = 63,//�޸Ĺ���Աָ��
- 153              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_OPEN_PRO_AUDIO,
- 154              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_CLOSE_PRO_AUDIO, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_PRO_AUDI
-             -O = 69,//��ʾ��
- 155              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_SIN_OPEN_MODE,
- 156              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DBL_OPEN_MODE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_OPEN_MODE 
-             -= 75,//���ŷ�ʽ
+ 142                                        //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//请再次输入管理员密码，按#键结束
+ 143            AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 42,//密码错误,请重试
+ 144            AUD_BASE_ID_FP_WRONG,AUD_BASE_ID_RETRY,0,       //AUD_ID_FP_WRONG_TRY = 45,//指纹错误，请重试
+ 145            AUD_BASE_ID_RFCARD_WRONG,AUD_BASE_ID_RETRY,0,     //AUD_ID_RFCARD_WRONG_TRY = 48,//RF卡错误，请重试
+ 146            //
+ 147            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
+ 148            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CHG_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_ADMIN = 51,//�
+             -��理员
+ 149            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PRO_AUDIO,
+ 150            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYS_SETTING = 57,//设
+             -置
+ 151            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_NO1_ADMIN_FP,
+ 152            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_NO2_ADMIN_FP,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_CHG_ADMIN_FP =
+             - 63,//修改管理员指纹
+ 153            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_OPEN_PRO_AUDIO,
+ 154            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_CLOSE_PRO_AUDIO,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PRO_AUDIO =
+             - 69,//提示音
+ 155            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_SIN_OPEN_MODE,
+ 156            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_OPEN_MODE = 75,
+             -//开门方式
  157          
- 158              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADMIN,
- 159              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_SETTING,
- 160              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_RESTORE, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYSTEM2 = 81,//ϵͳ2
+ 158            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADMIN,
+ 159            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_SETTING,
+ 160            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM2 = 81,//系统2
  161          
- 162              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_PWD,
- 163              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_PWD,
- 164              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_PWD, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_PASSWORD = 89,//
-             -����
- 165              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_FP,
- 166              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_FP,
- 167              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_FP, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_FP = 97,//ָ��
-             -�
- 168              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_ADD_RFCARD,
- 169              AUD_BASE_ID_SYS_NUM_2, AUD_BASE_ID_SYS_DEL_RFCARD,
- 170              AUD_BASE_ID_SYS_NUM_3, AUD_BASE_ID_SYS_CLR_RFCARD, AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_RFCARD = 105,
-             -//RF��
+ 162            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_PWD,
+ 163            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_PWD,
+ 164            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_PWD,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_PASSWORD = 89,//密
+             -码
+ 165            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_FP,
+ 166            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_FP,
+ 167            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_FP,AUD_BASE_ID_INPUT_BACK,0,      //AUD_ID_SYS_FP = 97,//指纹
+ 168            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_RFCARD,
+ 169            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_RFCARD,
+ 170            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_CLR_RFCARD,AUD_BASE_ID_INPUT_BACK,0,    //AUD_ID_SYS_RFCARD = 105,//R
+             -F卡
  171          
- 172              AUD_BASE_ID_NOT_SAME, AUD_BASE_ID_REINPUT, 0, //AUD_ID_PWD_NOT_SAME_RETRY  = 113//��������
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 5   
+ 172          
+ 173            AUD_BASE_ID_NOT_SAME,AUD_BASE_ID_REINPUT,0,//AUD_ID_PWD_NOT_SAME_RETRY   = 113//两次输入的密码不�
+             -�致,请重新输入
+ 174          
+ 175            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
+ 176            AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYS_ADMIN2 = 116,//管理员
+ 177            
+ 178          #ifdef __LOCK_WIFI_SUPPORT__
+ 179          #ifdef __LOCK_110_SUPPORT__
+ 180          
+ 181            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
+ 182            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
+ 183            AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_110 = 120
+ 184          
+ 185            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_FP,
+ 186            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_FP,
+ 187            AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_FP_110 = 126
+ 188          
+ 189          
+ 190          #ifdef __LOCK_RFID_CARD_SUPPORT__ 
+ 191          #if defined(__LOCK_FP_SUPPORT__)
+ 192            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
+ 193            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
+ 194            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
+ 195            AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 5   
 
-             -������벻һ��,����������
- 173          
- 174              AUD_BASE_ID_SYS_NUM_1, AUD_BASE_ID_SYS_CHG_ADMIN_PWD,
- 175              AUD_BASE_ID_INPUT_BACK, 0, //AUD_ID_SYS_ADMIN2 = 116,//����Ա
- 176          #ifdef __LOCK_WIFI_SUPPORT__
- 177          #ifdef __LOCK_110_SUPPORT__
- 178          
- 179            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
- 180            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
- 181            AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_110 = 120
- 182          
- 183            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_ADD_FP,
- 184            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_DEL_FP,
- 185            AUD_BASE_ID_INPUT_BACK,0,//AUD_ID_SYS_FP_110 = 126
- 186          
- 187          
- 188          #ifdef __LOCK_RFID_CARD_SUPPORT__ 
- 189          #if defined(__LOCK_FP_SUPPORT__)
- 190            AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
- 191            AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
- 192            AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
- 193            AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
- 194            AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
- 195            AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,
- 196            AUD_BASE_ID_SYS_NUM_7,AUD_BASE_ID_SYS_WIFI,
- 197            AUD_BASE_ID_SYS_NUM_8,AUD_BASE_ID_SYSTEM_XIEPO,
- 198            AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYSTEM = 132,//系统
- 199          #else 
+ 196            AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
+ 197            AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,
+ 198            AUD_BASE_ID_SYS_NUM_7,AUD_BASE_ID_SYS_WIFI,
+ 199            AUD_BASE_ID_SYS_NUM_8,AUD_BASE_ID_SYSTEM_XIEPO,
+ 200            AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYSTEM = 132,//系统
+ 201          #else 
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_RFCARD,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
@@ -293,7 +271,7 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_7,AUD_BASE_ID_SYSTEM_XIEPO,
                 AUD_BASE_ID_INPUT_BACK,0, //AUD_ID_SYSTEM = 132,//系统
               #endif//fp
- 209          #else
+ 211          #else
               #if defined(__LOCK_FP_SUPPORT__)
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
@@ -314,12 +292,10 @@ line level    source
                 
               #endif//fp
               #endif//rfid
- 230          
- 231          #else//__LOCK_110_SUPPORT__
+ 232          
+ 233          #else//__LOCK_110_SUPPORT__
               #ifdef __LOCK_RFID_CARD_SUPPORT__ 
               #if defined(__LOCK_FP_SUPPORT__)
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 6   
-
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
@@ -342,6 +318,8 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 6   
+
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,
                 AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_WIFI,
@@ -358,8 +336,8 @@ line level    source
               
               
               #endif//__LOCK_110_SUPPORT__
- 272          
- 273          #else//__LOCK_WIFI_SUPPORT__
+ 274          
+ 275          #else//__LOCK_WIFI_SUPPORT__
               
               
               #ifdef __LOCK_RFID_CARD_SUPPORT__ 
@@ -382,8 +360,6 @@ line level    source
               #else
               #if defined(__LOCK_FP_SUPPORT__)
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 7   
-
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
@@ -401,73 +377,77 @@ line level    source
               
               
               #endif
- 313          
- 314            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_PRESS_FP,0,//AUD_ID_DBL_OPEN_MODE_FP = 145
- 315            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
- 316          
- 317                //AUD_ID_ADD_PWD_FULL = 12,//密码已满，请联系管理员
- 318                //AUD_ID_FP_ADD_FULL = 12,//指纹已满，请联系管理员
- 319                //AUD_ID_RFCARD_FULL = 12,//RF卡已满，请联系管理员
- 320          
- 321          #endif
- 322          };
- 323          
- 324          #endif
- 325          
- 326          /*
- 327          parameter: 
- 328            none
- 329          return :
- 330            none
- 331          */
- 332          void mmi_dq_aud_init(void)
- 333          {
- 334   1        dqiot_drv_audio_init();
- 335   1      }
- 336          
- 337          /*
- 338          parameter: 
- 339            none
- 340          return :
- 341            none
- 342          */
- 343          AUD_PLAY_ID mmi_dq_aud_get_audio_id(unsigned char text_id)
- 344          {
- 345   1        unsigned char i = 0;
- 346   1      
- 347   1        for (i = 0; msg_aud_list[i].msg_id < STR_ID_MAX_COUNT; i++)
- 348   1        {
- 349   2          if (msg_aud_list[i].msg_id == text_id)
- 350   2          {
- 351   3            break;
- 352   3          }
- 353   2        }
- 354   1      
- 355   1        return msg_aud_list[i].aud_id;
- 356   1      }
- 357          
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 8   
+ 315          
+ 316            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_PRESS_FP,0,//AUD_ID_DBL_OPEN_MODE_FP = 145
+ 317            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
+ 318          
+ 319                //AUD_ID_ADD_PWD_FULL = 12,//密码已满，请联系管理员
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 7   
 
- 358          /*
- 359          parameter: 
- 360            none
- 361          return :
- 362            none
- 363          */
- 364          void mmi_dq_aud_play_with_id(unsigned char aud_id)
- 365          {
- 366   1      #ifdef __AUD_PLAY_BY_ARR__
- 367   1        if (aud_id < AUD_BASE_ID_MAX)
- 368   1          dqiot_drv_audio_play(aud_id);
- 369   1      #if 0
+ 320                //AUD_ID_FP_ADD_FULL = 12,//指纹已满，请联系管理员
+ 321                //AUD_ID_RFCARD_FULL = 12,//RF卡已满，请联系管理员
+ 322          
+ 323          #endif
+ 324          };
+ 325          
+ 326          
+ 327          #endif
+ 328          
+ 329          
+ 330          /*
+ 331          parameter: 
+ 332            none
+ 333          return :
+ 334            none
+ 335          */
+ 336          void mmi_dq_aud_init(void)
+ 337          {
+ 338   1        dqiot_drv_audio_init();
+ 339   1      }
+ 340          
+ 341          /*
+ 342          parameter: 
+ 343            none
+ 344          return :
+ 345            none
+ 346          */
+ 347          AUD_PLAY_ID mmi_dq_aud_get_audio_id(unsigned char text_id)
+ 348          {
+ 349   1        unsigned char i = 0;
+ 350   1        
+ 351   1        for(i=0;msg_aud_list[i].msg_id<STR_ID_MAX_COUNT;i++)
+ 352   1        {
+ 353   2          if(msg_aud_list[i].msg_id == text_id)
+ 354   2          {
+ 355   3            break;
+ 356   3          }
+ 357   2        }
+ 358   1      
+ 359   1        return msg_aud_list[i].aud_id;
+ 360   1      }
+ 361          
+ 362          /*
+ 363          parameter: 
+ 364            none
+ 365          return :
+ 366            none
+ 367          */
+ 368          void mmi_dq_aud_play_with_id(unsigned char aud_id)
+ 369          {
+ 370   1      #ifdef __AUD_PLAY_BY_ARR__  
+ 371   1        if(aud_id<AUD_BASE_ID_MAX)
+ 372   1          dqiot_drv_audio_play(aud_id);
+ 373   1      #if 0
                 else if(aud_id == AUD_ID_SYSTEM)
                 {
                   unsigned char num = 1;
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_NUM_0 + num);
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_PASSWORD);
                   num++;
-              #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__)
+              #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__)
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_NUM_0 + num);
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 8   
+
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_FP);
                   num++;
               #elif defined(__LOCK_FP_SUPPORT1_2__)
@@ -497,87 +477,87 @@ line level    source
                   dqiot_drv_audio_play(AUD_BASE_ID_INPUT_BACK);
                 }
               #endif
- 407   1        else
- 408   1        {
- 409   2          unsigned char a = aud_id - AUD_BASE_ID_MAX;
- 410   2          while (aud_play_arr[a] != 0)
- 411   2          {
- 412   3            dqiot_drv_audio_play(aud_play_arr[a]);
- 413   3            a++;
- 414   3          }
- 415   2        }
- 416   1      #else
+ 411   1        else
+ 412   1        {
+ 413   2          unsigned char a = aud_id - AUD_BASE_ID_MAX;
+ 414   2          while(aud_play_arr[a]!=0)
+ 415   2          {
+ 416   3            dqiot_drv_audio_play(aud_play_arr[a]);
+ 417   3            a++;
+ 418   3          }
+ 419   2        }
+ 420   1      #else
                 dqiot_drv_audio_play(aud_id);
               #endif
- 419   1      
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 9   
+ 423   1        
+ 424   1        return;
+ 425   1      }
+ 426          
+ 427          
+ 428          /*
+ 429          parameter: 
+ 430            none
+ 431          return :
+ 432            none
+ 433          */
+ 434          void mmi_dq_aud_play_key_num(unsigned char key_val)
+ 435          {
+ 436   1        mmi_dq_aud_stop();
+ 437   1        //if(mmi_dq_sys_get_pro_sound_state())
+ 438   1        //  mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO,NULL);
+ 439   1        mmi_dq_aud_play_with_id(AUD_ID_SYS_NUM_0+key_val);
+ 440   1      
+ 441   1      }
+ 442          
+ 443          /*
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/12/2021 12:09:37 PAGE 9   
 
- 420   1        return;
- 421   1      }
- 422          
- 423          /*
- 424          parameter: 
- 425            none
- 426          return :
- 427            none
- 428          */
- 429          void mmi_dq_aud_play_key_num(unsigned char key_val)
- 430          {
- 431   1        mmi_dq_aud_stop();
- 432   1        //if(mmi_dq_sys_get_pro_sound_state())
- 433   1        //  mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO,NULL);
- 434   1        mmi_dq_aud_play_with_id(AUD_ID_SYS_NUM_0 + key_val);
- 435   1      }
- 436          
- 437          /*
- 438          parameter: 
- 439            none
- 440          return :
- 441            none
- 442          */
- 443          void mmi_dq_aud_play_key_tone(void)
- 444          {
- 445   1        mmi_dq_aud_stop();
- 446   1      
- 447   1        if (mmi_dq_fs_get_pro_sound_state() != 0)
- 448   1          mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO);
- 449   1      }
- 450          /*
- 451          parameter: 
- 452            none
- 453          return :
- 454            none
- 455          */
- 456          void mmi_dq_aud_stop(void)
- 457          {
- 458   1        dqiot_drv_audio_stop();
- 459   1      }
- 460          
- 461          /*
- 462          parameter: 
- 463            none
- 464          return :
- 465            none
- 466          */
- 467          unsigned char mmi_dq_aud_get_state(void)
- 468          {
- 469   1        return dqiot_drv_audio_get_state();
- 470   1      }
- 471          
- 472          /*
- 473          parameter: 
- 474            none
- 475          return :
- 476            none
- 477          */
- 478          unsigned char mmi_dq_aud_get_end_flag(void)
- 479          {
- 480   1        return dqiot_drv_audio_get_end_flag();
- 481   1      }
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         03/10/2021 17:03:15 PAGE 10  
-
- 482          #endif
- 483          #endif //__MMI_AUD_C__
+ 444          parameter: 
+ 445            none
+ 446          return :
+ 447            none
+ 448          */
+ 449          void mmi_dq_aud_play_key_tone(void)
+ 450          {
+ 451   1        mmi_dq_aud_stop();
+ 452   1        if(mmi_dq_fs_get_pro_sound_state() != 0)
+ 453   1          mmi_dq_aud_play_with_id(AUD_ID_PRO_AUDIO);
+ 454   1      
+ 455   1      }
+ 456          /*
+ 457          parameter: 
+ 458            none
+ 459          return :
+ 460            none
+ 461          */
+ 462          void mmi_dq_aud_stop(void)
+ 463          {
+ 464   1        dqiot_drv_audio_stop();
+ 465   1      }
+ 466          
+ 467          /*
+ 468          parameter: 
+ 469            none
+ 470          return :
+ 471            none
+ 472          */
+ 473          unsigned char mmi_dq_aud_get_state(void)
+ 474          {
+ 475   1        return dqiot_drv_audio_get_state();
+ 476   1      }
+ 477          
+ 478          /*
+ 479          parameter: 
+ 480            none
+ 481          return :
+ 482            none
+ 483          */
+ 484          unsigned char mmi_dq_aud_get_end_flag(void)
+ 485          {
+ 486   1        return dqiot_drv_audio_get_end_flag();
+ 487   1      }
+ 488          #endif
+ 489          #endif//__MMI_AUD_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

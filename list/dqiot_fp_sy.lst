@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +62,7 @@ line level    source
   51          //static void UART_Callback(unsigned char send_data)
   52          //{
   53          //  send_data = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 2   
 
   54          //}
   55          
@@ -126,7 +126,7 @@ line level    source
  113   1      
  114   1        // dqiot_drv_uart0B_init();
  115   1        uart_getbuflen = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 3   
 
  116   1      
  117   1        /*包头*/
@@ -190,7 +190,7 @@ line level    source
  175   1      }
  176          
  177          /**
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 4   
 
  178            * @brief  发送校验和
  179            * @param  check:检查位
@@ -254,7 +254,7 @@ line level    source
  236   4      
  237   4              return uart_rec_buff[9];
  238   4            }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 5   
 
  239   3          }
  240   2        }
@@ -318,7 +318,7 @@ line level    source
  298   1      
  299   1        //sure=ReturnFlag(&p);
  300   1        return JudgeStr(1000, 0x03);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 6   
 
  301   1      }
  302          
@@ -382,7 +382,7 @@ line level    source
  358          {
  359   1        unsigned char sure;
  360   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 7   
 
  361   1          return 0xFF;
  362   1        SendFlag(0x01); //命令包标识
@@ -446,7 +446,7 @@ line level    source
  418          {
  419   1        if (AS608_PackHead() == 1)
  420   1          return 0xFF;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 8   
 
  421   1        SendFlag(0x01); //命令包标识
  422   1        SendLength(0x07);
@@ -510,7 +510,7 @@ line level    source
  478   1      
  479   1        // sure = ReturnFlag(&p);
  480   1        return JudgeStr(1000, 0x03);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 9   
 
  481   1      }
  482          
@@ -574,7 +574,7 @@ line level    source
                 if(send_data)
                 {
               
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 10  
 
                 }   
                 else
@@ -638,7 +638,7 @@ line level    source
                 return ensure;
               }
               //读记事PS_ReadNotepad
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 11  
 
               //功能：  读取FLASH用户区的128bytes数据
               //参数:  NotePageNum(0~15)
@@ -702,7 +702,7 @@ line level    source
  664   1      
  665   1        return 0;
  666   1      }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 12  
 
  667          
  668          //自动验证指纹 PS_AutoIdentify
@@ -766,7 +766,7 @@ line level    source
  725          //{
  726          //  unsigned char i =0;
  727          ////  NRF_LOG_PRINTF_DEBUG("receive :");
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 13  
 
  728          //  for(i=0;i<25;i++)
  729          //  {
@@ -830,7 +830,7 @@ line level    source
  787   1        Light_Color = light_id;
  788   1      
  789   1        //  }
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/10/2021 16:15:00 PAGE 14  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       03/12/2021 12:09:30 PAGE 14  
 
  790   1      }
  791          

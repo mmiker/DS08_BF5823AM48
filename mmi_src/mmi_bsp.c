@@ -14,7 +14,7 @@ return :
 void mmi_dq_bsp_init(void)
 {
 	dqiot_drv_init();
-
+	
 	return;
 }
 
@@ -27,6 +27,8 @@ return :
 void mmi_dq_bsp_wake_up(void)
 {
 	dqiot_drv_wake_up();
+
+
 }
 
 /*
@@ -39,5 +41,6 @@ void mmi_dq_bsp_enter_sleep(void)
 {
 	FP_Light(FP_NONE_COLOR);
 	dqiot_drv_enter_sleep();
+
 }
 #endif

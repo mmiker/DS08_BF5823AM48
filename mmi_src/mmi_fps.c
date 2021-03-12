@@ -9,7 +9,6 @@
 // #include <stdio.h>
 
 unsigned char FP_oldStatus = 0;
-
 /*
 parameter: 
 	current status machine
@@ -100,7 +99,7 @@ unsigned char mmi_dq_fp_gen_char(unsigned char id)
 	else if (id == 3)
 		real_buf_id = CHAR_BUFFER4;
 
-	retval = PS_GenChar(real_buf_id); //��������
+	retval = PS_GenChar(real_buf_id); //生成特征
 	return retval;
 }
 
@@ -152,7 +151,7 @@ unsigned char mmi_dq_fp_store_char(unsigned char id, unsigned short index)
 	else if (id == 3)
 		real_buf_id = CHAR_BUFFER4;
 
-	retval = PS_StoreChar(real_buf_id, index); //����ģ��
+	retval = PS_StoreChar(real_buf_id, index); //储存模板
 	return retval;
 }
 
@@ -217,7 +216,7 @@ unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *
 		real_buf_id = CHAR_BUFFER3;
 	else if (Buf_id == 3)
 		real_buf_id = CHAR_BUFFER4;
-	
+
 	retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
 	return retval;
 }
@@ -254,7 +253,7 @@ return :
 */
 void mmi_dq_fp_light(FP_COLOR_E light_id)
 {
-	FP_Light(light_id); //���
+	FP_Light(light_id); //点灯
 }
 
 /*
@@ -270,7 +269,7 @@ FP_COLOR_E mmi_dq_fp_get_light(void)
 	return retval;
 }
 
-/* �����ж� */
+/* 触摸判断 */
 unsigned char mmi_dq_fp_work(void)
 {
 	if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)

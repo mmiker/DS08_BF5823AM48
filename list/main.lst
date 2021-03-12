@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              03/11/2021 09:54:16 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -62,14 +62,14 @@ line level    source
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              03/11/2021 09:54:16 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
   56   1      
   57   1        wdt_init(WDT_TIME_2304MS);
   58   1      
-  59   1        //WDT_ENABLE();
+  59   1        WDT_ENABLE();
   60   1      
   61   1        mmi_dq_sys_init();
   62   1      
@@ -100,34 +100,36 @@ line level    source
   87   2          {
   88   3            lowpower_idle();
   89   3      
-  90   3            mmi_sleep_task_proc();
-  91   3          }
-  92   2          else
-  93   2          {
-  94   3            WDT_CTRL = WDT_TIME_2304MS;
-  95   3      
-  96   3            mmi_task_proc();
-  97   3          }
-  98   2      
-  99   2          mmi_dq_ms_sys_msg_handle();
+  90   3            WDT_CTRL = WDT_TIME_2304MS;
+  91   3      
+  92   3            mmi_sleep_task_proc();
+  93   3          }
+  94   2          else
+  95   2          {
+  96   3            WDT_CTRL = WDT_TIME_2304MS;
+  97   3      
+  98   3            mmi_task_proc();
+  99   3          }
  100   2      
- 101   2          if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 102   2            mmi_wait_sleep_task_proc();
- 103   2        }
- 104   1      }
+ 101   2          mmi_dq_ms_sys_msg_handle();
+ 102   2      
+ 103   2          if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+ 104   2            mmi_wait_sleep_task_proc();
+ 105   2        }
+ 106   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    126    ----
+   CODE SIZE        =    132    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 3   
+
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----
-C51 COMPILER V9.59.0.0   MAIN                                                              03/11/2021 09:54:16 PAGE 3   
-
    HDATA SIZE       =   ----    ----
    XDATA CONST SIZE =   ----    ----
    FAR CONST SIZE   =   ----    ----

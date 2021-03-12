@@ -56,7 +56,7 @@ int main(void)
 
 	wdt_init(WDT_TIME_2304MS);
 
-	//WDT_ENABLE();
+	WDT_ENABLE();
 
 	mmi_dq_sys_init();
 
@@ -86,6 +86,8 @@ int main(void)
 		if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
 		{
 			lowpower_idle();
+
+			WDT_CTRL = WDT_TIME_2304MS;
 
 			mmi_sleep_task_proc();
 		}

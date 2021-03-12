@@ -125,7 +125,7 @@ void dqiot_drv_wake_up(void)
 
 	dqiot_drv_key_led_on();
 
-	//byd_setbaseline(0);//�������߸�λ
+	//byd_setbaseline(0);//按键基线复位
 	//delay_ms(200);
 	return;
 }
@@ -149,6 +149,7 @@ void dqiot_drv_enter_sleep(void)
 #endif
 #ifdef __LOCK_FP_SUPPORT__
 	dqiot_drv_fp_gpio_deinit();
+
 #endif
 #ifdef __LOCK_MOTOR_SUPPORT__
 	dqiot_drv_motor_gpio_deinit();
@@ -355,14 +356,14 @@ void dqiot_drv_timer2_init(void)
 	*/	  
 	uint16_t count;
 	count = 3276;
-	TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL);//TIMER2_CLOCK_XTALѡ���ⲿ����Ҫʹ��XTAL_32K_ENABLE()
+	TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL);//TIMER2_CLOCK_XTAL选择外部晶振要使能XTAL_32K_ENABLE()
 	TIMER2_AUTO_RELOAD(ENABLE);//ENABLE
 	TIMER2_PRESCALE(TIMER2_PRESCALE_1);//TIMER2_PRESCALE_65536
 	TIMER2_COUNT_SET(count);
 	
-	INT_WDT_TIMER2_CLR();//����жϱ�־	
-	TIMER2_IPL_SET(LOW); //�ж����ȼ�Ϊ��
-	TIMER2_INT_DISABLE();//�ر��ж�
+	INT_WDT_TIMER2_CLR();//清除中断标志	
+	TIMER2_IPL_SET(LOW); //中断优先级为低
+	TIMER2_INT_DISABLE();//关闭中断
 	return;
 }
 
@@ -403,34 +404,34 @@ return :
 */
 void dqiot_drv_uart0A_init(void)
 {
-	GPIOE_BIT_SET(GPIO_PIN_4|GPIO_PIN_5);//������ë��
+	GPIOE_BIT_SET(GPIO_PIN_4|GPIO_PIN_5);//避免有毛刺
 	 	
 	UART0_PORT_SET(UART0_PE4_PE5);
 	UART0_CON2 = 0;
 	UART0_STATE = 0;
-    uart_baudrate_config(UART0,UART_BAUDRATE_57600);//������
-	UART0_STOP_MODE(STOP_WIDTH_1BIT);//ֹͣλ
-	UART0_DATA_MODE(DATA_MODE_8BIT);//����λ
-	UART0_PARITY_SET(DISABLE); //��żУ��ʹ��
-	UART0_PARITY_SEL(ODD_PARITY);//��żУ��ѡ��
-    UART0_MULTI_MODE(DISABLE);//�ദ����ͨ��ģʽ
+    uart_baudrate_config(UART0,UART_BAUDRATE_57600);//波特率
+	UART0_STOP_MODE(STOP_WIDTH_1BIT);//停止位
+	UART0_DATA_MODE(DATA_MODE_8BIT);//数据位
+	UART0_PARITY_SET(DISABLE); //奇偶校验使能
+	UART0_PARITY_SEL(ODD_PARITY);//奇偶校验选择
+    UART0_MULTI_MODE(DISABLE);//多处理器通信模式
 	
-	UART0_RX_ENABLE();//����ʹ�� 
+	UART0_RX_ENABLE();//接收使能 
 #ifdef __DRV_UART0A_INT_SUPPORT__   
-	UART0_TX_INT_ENABLE();//�����ж�ʹ��
-	UART0_RX_INT_ENABLE();//�����ж�ʹ��
-	INT_UART0_CLR();//����ж�Դ��־
-	UART0_IPL_SET(LOW);//�ж����ȼ�����
-	UART0_INT_ENABLE();//�ж�Դ	
+	UART0_TX_INT_ENABLE();//发送中断使能
+	UART0_RX_INT_ENABLE();//接收中断使能
+	INT_UART0_CLR();//清除中断源标志
+	UART0_IPL_SET(LOW);//中断优先级设置
+	UART0_INT_ENABLE();//中断源	
 #else
-	UART0_TX_INT_DISABLE();//�����жϹر�
-	UART0_RX_INT_DISABLE();//�����жϹر�
+	UART0_TX_INT_DISABLE();//发送中断关闭
+	UART0_RX_INT_DISABLE();//接收中断关闭
 #endif
 
 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
 	// uart_getbuflen = 0;
 
-	UART0_ENABLE();//ʹ��uart0
+	UART0_ENABLE();//使能uart0
 	return;
 }
 
@@ -442,35 +443,35 @@ return :
 */
 void dqiot_drv_uart0B_init(void)
 {
-	GPIOF_BIT_SET(GPIO_PIN_4|GPIO_PIN_5);//������ë��
+	GPIOF_BIT_SET(GPIO_PIN_4|GPIO_PIN_5);//避免有毛刺
 	 	
 	UART0_PORT_SET(UART0_PF4_PF5);
 	UART0_CON2 = 0;
 	UART0_STATE = 0;
-    uart_baudrate_config(UART0,UART_BAUDRATE_57600);//������
-	UART0_STOP_MODE(STOP_WIDTH_1BIT);//ֹͣλ
-	UART0_DATA_MODE(DATA_MODE_8BIT);//����λ
-	UART0_PARITY_SET(DISABLE); //��żУ��ʹ��
-	UART0_PARITY_SEL(ODD_PARITY);//��żУ��ѡ��
-    UART0_MULTI_MODE(DISABLE);//�ദ����ͨ��ģʽ
+    uart_baudrate_config(UART0,UART_BAUDRATE_57600);//波特率
+	UART0_STOP_MODE(STOP_WIDTH_1BIT);//停止位
+	UART0_DATA_MODE(DATA_MODE_8BIT);//数据位
+	UART0_PARITY_SET(DISABLE); //奇偶校验使能
+	UART0_PARITY_SEL(ODD_PARITY);//奇偶校验选择
+    UART0_MULTI_MODE(DISABLE);//多处理器通信模式
 	
-	UART0_RX_ENABLE();//����ʹ�� 
+	UART0_RX_ENABLE();//接收使能 
 #ifdef __DRV_UART0B_INT_SUPPORT__   
-   	//UART0_TX_INT_ENABLE();//�����ж�ʹ��
-   	UART0_TX_INT_ENABLE();//�����жϹر�
-	UART0_RX_INT_ENABLE();//�����ж�ʹ��
-	INT_UART0_CLR();//����ж�Դ��־
-	UART0_IPL_SET(HIGH);//�ж����ȼ�����
-	UART0_INT_ENABLE();//�ж�Դ	
+   	//UART0_TX_INT_ENABLE();//发送中断使能
+   	UART0_TX_INT_ENABLE();//发送中断关闭
+	UART0_RX_INT_ENABLE();//接收中断使能
+	INT_UART0_CLR();//清除中断源标志
+	UART0_IPL_SET(HIGH);//中断优先级设置
+	UART0_INT_ENABLE();//中断源	
 #else
-	UART0_TX_INT_DISABLE();//�����жϹر�
-	UART0_RX_INT_DISABLE();//�����жϹر�
+	UART0_TX_INT_DISABLE();//发送中断关闭
+	UART0_RX_INT_DISABLE();//接收中断关闭
 #endif
 
 	// memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
 	// uart_getbuflen = 0;
 
-	UART0_ENABLE();//ʹ��uart0
+	UART0_ENABLE();//使能uart0
 	return;
 }
 
@@ -489,11 +490,11 @@ void dqiot_drv_uart0_isr(void) interrupt 17
 				return;
 			else
 				uart_get_buf[uart_getbuflen++] = UART0_BUF;
-			CLR_UART0_RX_STATE();//��������жϱ�־λ
+			CLR_UART0_RX_STATE();//清除接收中断标志位
 		}
 		//if(GET_UART0_TX_STATE())
 		//{
-		//	CLR_UART0_TX_STATE();//��������жϱ�־λ
+		//	CLR_UART0_TX_STATE();//清除发送中断标志位
 		//	UART0_TX_INT_DISABLE(); 	
 		//}
 

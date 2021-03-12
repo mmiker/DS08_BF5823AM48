@@ -2,6 +2,7 @@
 #define __MMI_WIFI_C__
 
 #include "mmi_feature.h"
+#ifdef __LOCK_WIFI_SUPPORT__
 #include "dqiot_drv_wifi.h"
 #include "mmi_sys.h"
 #include "mmi_ms.h"
@@ -87,7 +88,8 @@ void mmi_dq_wifi_connected_fail(void)
 		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
 		mmi_dq_sys_wake_up();
-	mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+	mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+	mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 	return;
 }
 
@@ -134,7 +136,7 @@ void mmi_dq_wifi_check_connect(void)
 		wifi_check_connect_flag = 0;
 	}
 
-	if (wifi_check_times > 600)
+	if (wifi_check_times > 60)
 	{
 		mmi_dq_wifi_connected_fail();
 		wifi_check_times = 0;
@@ -186,11 +188,17 @@ void mmi_dq_wifi_check_open(void)
 		mmi_dq_sys_door_open(SYS_OPEN_BY_WIFI);
 		wifi_check_times = 0;
 	}
-	else if (state == 2 || wifi_check_times > 300)
+	else if (state == 2 || wifi_check_times > 30)
 	{
 		if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
 			mmi_dq_sys_wake_up();
-		mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+		if (state == 2)
+			mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL);
+		else if (mmi_dq_ms_get_sys_state() == SYS_STATUS_IDLE)
+		{
+			mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+		}
 		wifi_check_times = 0;
 	}
 	else
@@ -460,5 +468,5 @@ unsigned char mmi_dq_wifi_get_running_flag(void)
 		return 1;
 	return 0;
 }
-
+#endif
 #endif

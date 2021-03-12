@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_WIFI
@@ -13,484 +13,492 @@ line level    source
    2          #define __MMI_WIFI_C__
    3          
    4          #include "mmi_feature.h"
-   5          #include "dqiot_drv_wifi.h"
-   6          #include "mmi_sys.h"
-   7          #include "mmi_ms.h"
-   8          #include "mmi_audio.h"
-   9          #include "mmi_fs.h"
-  10          #include "delay.h"
-  11          #include "mmi_wifi.h"
-  12          // #include <stdio.h>
-  13          
-  14          static unsigned int wifi_check_times = 0;
-  15          
-  16          /*
-  17          parameter: 
-  18            none
-  19          return :
-  20            none
-  21          */
-  22          void mmi_dq_wifi_wakeup(void)
-  23          {
-  24   1        wifi_wake_up();
-  25   1      
-  26   1        delay_ms(150);
-  27   1      }
-  28          
-  29          /*
-  30          parameter: 
-  31            none
-  32          return :
-  33            none
-  34          */
-  35          unsigned char mmi_dq_wifi_check(void)
-  36          {
-  37   1        return wifi_wake_up(); //1:false  0: true
-  38   1      }
-  39          
-  40          /*
-  41          parameter: 
-  42            none
-  43          return :
-  44            none
-  45          */
-  46          void mmi_dq_wifi_sleep(void)
-  47          {
-  48   1        wifi_sleep_mode();
-  49   1      }
-  50          
-  51          /*
-  52          parameter: 
-  53            none
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 2   
+   5          #ifdef __LOCK_WIFI_SUPPORT__
+   6          #include "dqiot_drv_wifi.h"
+   7          #include "mmi_sys.h"
+   8          #include "mmi_ms.h"
+   9          #include "mmi_audio.h"
+  10          #include "mmi_fs.h"
+  11          #include "delay.h"
+  12          #include "mmi_wifi.h"
+  13          // #include <stdio.h>
+  14          
+  15          static unsigned int wifi_check_times = 0;
+  16          
+  17          /*
+  18          parameter: 
+  19            none
+  20          return :
+  21            none
+  22          */
+  23          void mmi_dq_wifi_wakeup(void)
+  24          {
+  25   1        wifi_wake_up();
+  26   1      
+  27   1        delay_ms(150);
+  28   1      }
+  29          
+  30          /*
+  31          parameter: 
+  32            none
+  33          return :
+  34            none
+  35          */
+  36          unsigned char mmi_dq_wifi_check(void)
+  37          {
+  38   1        return wifi_wake_up(); //1:false  0: true
+  39   1      }
+  40          
+  41          /*
+  42          parameter: 
+  43            none
+  44          return :
+  45            none
+  46          */
+  47          void mmi_dq_wifi_sleep(void)
+  48          {
+  49   1        wifi_sleep_mode();
+  50   1      }
+  51          
+  52          /*
+  53          parameter: 
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 2   
 
-  54          return :
-  55            none
-  56          */
-  57          unsigned char mmi_dq_wifi_setting(void)
-  58          {
-  59   1        unsigned char ret = 1;
-  60   1        if (wifi_check_times > 0)
-  61   1          return 0;
-  62   1        wifi_wake_up();
-  63   1        delay_ms(100);
-  64   1        if (wifi_net_connect_send() == 0)
-  65   1        {
-  66   2          delay_ms(250);
-  67   2          ret = wifi_net_connect_send();
-  68   2        }
-  69   1        if (ret == 1)
-  70   1        {
-  71   2          wifi_check_times = 1;
-  72   2          mmi_dq_sys_set_wifi_check(0);
-  73   2        }
-  74   1        return ret;
-  75   1      }
-  76          
-  77          /*
-  78          parameter: 
-  79            none
-  80          return :
-  81            none
-  82          */
-  83          void mmi_dq_wifi_connected_fail(void)
-  84          {
-  85   1        //mmi_dq_fs_set_wifi_setting(0);
-  86   1        if (SYS_STATUS_WIFI_MODE == mmi_dq_ms_get_sys_state())
-  87   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-  88   1        else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
-  89   1          mmi_dq_sys_wake_up();
-  90   1        mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
-  91   1        return;
-  92   1      }
-  93          
-  94          /*
-  95          parameter: 
-  96            none
-  97          return :
+  54            none
+  55          return :
+  56            none
+  57          */
+  58          unsigned char mmi_dq_wifi_setting(void)
+  59          {
+  60   1        unsigned char ret = 1;
+  61   1        if (wifi_check_times > 0)
+  62   1          return 0;
+  63   1        wifi_wake_up();
+  64   1        delay_ms(100);
+  65   1        if (wifi_net_connect_send() == 0)
+  66   1        {
+  67   2          delay_ms(250);
+  68   2          ret = wifi_net_connect_send();
+  69   2        }
+  70   1        if (ret == 1)
+  71   1        {
+  72   2          wifi_check_times = 1;
+  73   2          mmi_dq_sys_set_wifi_check(0);
+  74   2        }
+  75   1        return ret;
+  76   1      }
+  77          
+  78          /*
+  79          parameter: 
+  80            none
+  81          return :
+  82            none
+  83          */
+  84          void mmi_dq_wifi_connected_fail(void)
+  85          {
+  86   1        //mmi_dq_fs_set_wifi_setting(0);
+  87   1        if (SYS_STATUS_WIFI_MODE == mmi_dq_ms_get_sys_state())
+  88   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+  89   1        else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+  90   1          mmi_dq_sys_wake_up();
+  91   1        mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+  92   1        mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+  93   1        return;
+  94   1      }
+  95          
+  96          /*
+  97          parameter: 
   98            none
-  99          */
- 100          void mmi_dq_wifi_connected_suc(void)
- 101          {
- 102   1        //mmi_dq_fs_set_wifi_setting(1);
- 103   1        if (SYS_STATUS_WIFI_MODE == mmi_dq_ms_get_sys_state())
- 104   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
- 105   1        else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 106   1          mmi_dq_sys_wake_up();
- 107   1        mmi_dq_aud_play_with_id(AUD_ID_SET_SUCESS);
- 108   1        return;
- 109   1      }
- 110          
- 111          /*
- 112          parameter: 
- 113            none
- 114          return :
+  99          return :
+ 100            none
+ 101          */
+ 102          void mmi_dq_wifi_connected_suc(void)
+ 103          {
+ 104   1        //mmi_dq_fs_set_wifi_setting(1);
+ 105   1        if (SYS_STATUS_WIFI_MODE == mmi_dq_ms_get_sys_state())
+ 106   1          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+ 107   1        else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+ 108   1          mmi_dq_sys_wake_up();
+ 109   1        mmi_dq_aud_play_with_id(AUD_ID_SET_SUCESS);
+ 110   1        return;
+ 111   1      }
+ 112          
+ 113          /*
+ 114          parameter: 
  115            none
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 3   
 
- 116          */
- 117          void mmi_dq_wifi_check_connect(void)
- 118          {
- 119   1        static unsigned char wifi_check_connect_flag = 0;
- 120   1        wifi_check_times++;
- 121   1        if (wifi_net_connect_state() == 1)
- 122   1        {
- 123   2          wifi_check_connect_flag++;
- 124   2          if (wifi_check_connect_flag >= 2)
- 125   2          {
- 126   3            mmi_dq_wifi_connected_suc();
- 127   3            wifi_check_connect_flag = 0;
- 128   3            wifi_check_times = 0;
- 129   3            return;
- 130   3          }
- 131   2        }
- 132   1        else
- 133   1        {
- 134   2          wifi_check_connect_flag = 0;
- 135   2        }
- 136   1      
- 137   1        if (wifi_check_times > 600)
- 138   1        {
- 139   2          mmi_dq_wifi_connected_fail();
- 140   2          wifi_check_times = 0;
- 141   2        }
- 142   1        else
- 143   1          mmi_dq_sys_set_wifi_check(0);
- 144   1      }
- 145          
- 146          /*
- 147          parameter: 
- 148            none
- 149          return :
+ 116          return :
+ 117            none
+ 118          */
+ 119          void mmi_dq_wifi_check_connect(void)
+ 120          {
+ 121   1        static unsigned char wifi_check_connect_flag = 0;
+ 122   1        wifi_check_times++;
+ 123   1        if (wifi_net_connect_state() == 1)
+ 124   1        {
+ 125   2          wifi_check_connect_flag++;
+ 126   2          if (wifi_check_connect_flag >= 2)
+ 127   2          {
+ 128   3            mmi_dq_wifi_connected_suc();
+ 129   3            wifi_check_connect_flag = 0;
+ 130   3            wifi_check_times = 0;
+ 131   3            return;
+ 132   3          }
+ 133   2        }
+ 134   1        else
+ 135   1        {
+ 136   2          wifi_check_connect_flag = 0;
+ 137   2        }
+ 138   1      
+ 139   1        if (wifi_check_times > 60)
+ 140   1        {
+ 141   2          mmi_dq_wifi_connected_fail();
+ 142   2          wifi_check_times = 0;
+ 143   2        }
+ 144   1        else
+ 145   1          mmi_dq_sys_set_wifi_check(0);
+ 146   1      }
+ 147          
+ 148          /*
+ 149          parameter: 
  150            none
- 151          */
- 152          unsigned char mmi_dq_wifi_open_ask(void)
- 153          {
- 154   1        unsigned char ret = 1;
- 155   1        if (wifi_check_times > 0)
- 156   1          return 0;
- 157   1        mmi_dq_wifi_wakeup();
- 158   1        delay_ms(100);
- 159   1        if (wifi_open_ask() == 0)
- 160   1        {
- 161   2          delay_ms(250);
- 162   2          ret = wifi_open_ask();
- 163   2        }
- 164   1        if (ret == 1)
- 165   1        {
- 166   2          wifi_check_times = 1;
- 167   2          mmi_dq_sys_set_wifi_check(1);
- 168   2        }
- 169   1        return ret;
- 170   1      }
- 171          
- 172          /*
- 173          parameter: 
- 174            none
- 175          return :
+ 151          return :
+ 152            none
+ 153          */
+ 154          unsigned char mmi_dq_wifi_open_ask(void)
+ 155          {
+ 156   1        unsigned char ret = 1;
+ 157   1        if (wifi_check_times > 0)
+ 158   1          return 0;
+ 159   1        mmi_dq_wifi_wakeup();
+ 160   1        delay_ms(100);
+ 161   1        if (wifi_open_ask() == 0)
+ 162   1        {
+ 163   2          delay_ms(250);
+ 164   2          ret = wifi_open_ask();
+ 165   2        }
+ 166   1        if (ret == 1)
+ 167   1        {
+ 168   2          wifi_check_times = 1;
+ 169   2          mmi_dq_sys_set_wifi_check(1);
+ 170   2        }
+ 171   1        return ret;
+ 172   1      }
+ 173          
+ 174          /*
+ 175          parameter: 
  176            none
- 177          */
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 4   
+ 177          return :
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 4   
 
- 178          void mmi_dq_wifi_check_open(void)
- 179          {
- 180   1        unsigned char state = wifi_open_reply_get();
- 181   1        wifi_check_times++;
- 182   1        if (state == 1)
- 183   1        {
- 184   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 185   2            mmi_dq_sys_wake_up();
- 186   2          mmi_dq_sys_door_open(SYS_OPEN_BY_WIFI);
- 187   2          wifi_check_times = 0;
- 188   2        }
- 189   1        else if (state == 2 || wifi_check_times > 300)
- 190   1        {
- 191   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 192   2            mmi_dq_sys_wake_up();
- 193   2          mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
- 194   2          wifi_check_times = 0;
- 195   2        }
- 196   1        else
- 197   1          mmi_dq_sys_set_wifi_check(1);
- 198   1      }
- 199          
- 200          /*
- 201          parameter: 
- 202            none
- 203          return :
- 204            none
- 205          */
- 206          void mmi_dq_wifi_close_over_time(void)
- 207          {
- 208   1        mmi_dq_wifi_wakeup();
- 209   1      
- 210   1        wifi_close_over_time();
- 211   1      }
- 212          
- 213          /*
- 214          parameter: 
- 215            none
- 216          return :
- 217            none
- 218          */
- 219          void mmi_dq_wifi_add_password(void)
- 220          {
- 221   1        mmi_dq_wifi_wakeup();
- 222   1      
- 223   1        wifi_add_password();
- 224   1      }
- 225          
- 226          /*
- 227          parameter: 
- 228            none
- 229          return :
- 230            none
- 231          */
- 232          void mmi_dq_wifi_del_password(void)
- 233          {
- 234   1        mmi_dq_wifi_wakeup();
- 235   1      
- 236   1        wifi_del_password();
- 237   1      }
- 238          
- 239          /*
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 5   
+ 178            none
+ 179          */
+ 180          void mmi_dq_wifi_check_open(void)
+ 181          {
+ 182   1        unsigned char state = wifi_open_reply_get();
+ 183   1        wifi_check_times++;
+ 184   1        if (state == 1)
+ 185   1        {
+ 186   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+ 187   2            mmi_dq_sys_wake_up();
+ 188   2          mmi_dq_sys_door_open(SYS_OPEN_BY_WIFI);
+ 189   2          wifi_check_times = 0;
+ 190   2        }
+ 191   1        else if (state == 2 || wifi_check_times > 30)
+ 192   1        {
+ 193   2          if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+ 194   2            mmi_dq_sys_wake_up();
+ 195   2          if (state == 2)
+ 196   2            mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL);
+ 197   2          else if (mmi_dq_ms_get_sys_state() == SYS_STATUS_IDLE)
+ 198   2          {
+ 199   3            mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+ 200   3            mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+ 201   3          }
+ 202   2          wifi_check_times = 0;
+ 203   2        }
+ 204   1        else
+ 205   1          mmi_dq_sys_set_wifi_check(1);
+ 206   1      }
+ 207          
+ 208          /*
+ 209          parameter: 
+ 210            none
+ 211          return :
+ 212            none
+ 213          */
+ 214          void mmi_dq_wifi_close_over_time(void)
+ 215          {
+ 216   1        mmi_dq_wifi_wakeup();
+ 217   1      
+ 218   1        wifi_close_over_time();
+ 219   1      }
+ 220          
+ 221          /*
+ 222          parameter: 
+ 223            none
+ 224          return :
+ 225            none
+ 226          */
+ 227          void mmi_dq_wifi_add_password(void)
+ 228          {
+ 229   1        mmi_dq_wifi_wakeup();
+ 230   1      
+ 231   1        wifi_add_password();
+ 232   1      }
+ 233          
+ 234          /*
+ 235          parameter: 
+ 236            none
+ 237          return :
+ 238            none
+ 239          */
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 5   
 
- 240          parameter: 
- 241            none
- 242          return :
- 243            none
- 244          */
- 245          void mmi_dq_wifi_add_fp(void)
- 246          {
- 247   1        mmi_dq_wifi_wakeup();
- 248   1      
- 249   1        wifi_add_fp();
- 250   1      }
- 251          
- 252          /*
- 253          parameter: 
- 254            none
- 255          return :
- 256            none
- 257          */
- 258          void mmi_dq_wifi_del_fp(void)
- 259          {
- 260   1        mmi_dq_wifi_wakeup();
- 261   1      
- 262   1        wifi_del_fp();
- 263   1      }
- 264          
- 265          /*
- 266          parameter: 
- 267            none
- 268          return :
- 269            none
- 270          */
- 271          void mmi_dq_wifi_open_by_password(void)
- 272          {
- 273   1        mmi_dq_wifi_wakeup();
- 274   1      
- 275   1        wifi_open_by_password();
- 276   1      }
- 277          
- 278          /*
- 279          parameter: 
- 280            none
- 281          return :
- 282            none
- 283          */
- 284          void mmi_dq_wifi_open_by_fp(void)
- 285          {
- 286   1        mmi_dq_wifi_wakeup();
- 287   1      
- 288   1        wifi_open_by_fp();
- 289   1      }
- 290          
- 291          /*
- 292          parameter: 
- 293            none
- 294          return :
- 295            none
- 296          */
- 297          void mmi_dq_wifi_open_by_rfid(void)
- 298          {
- 299   1        mmi_dq_wifi_wakeup();
- 300   1      
- 301   1        wifi_open_by_rfid();
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 6   
+ 240          void mmi_dq_wifi_del_password(void)
+ 241          {
+ 242   1        mmi_dq_wifi_wakeup();
+ 243   1      
+ 244   1        wifi_del_password();
+ 245   1      }
+ 246          
+ 247          /*
+ 248          parameter: 
+ 249            none
+ 250          return :
+ 251            none
+ 252          */
+ 253          void mmi_dq_wifi_add_fp(void)
+ 254          {
+ 255   1        mmi_dq_wifi_wakeup();
+ 256   1      
+ 257   1        wifi_add_fp();
+ 258   1      }
+ 259          
+ 260          /*
+ 261          parameter: 
+ 262            none
+ 263          return :
+ 264            none
+ 265          */
+ 266          void mmi_dq_wifi_del_fp(void)
+ 267          {
+ 268   1        mmi_dq_wifi_wakeup();
+ 269   1      
+ 270   1        wifi_del_fp();
+ 271   1      }
+ 272          
+ 273          /*
+ 274          parameter: 
+ 275            none
+ 276          return :
+ 277            none
+ 278          */
+ 279          void mmi_dq_wifi_open_by_password(void)
+ 280          {
+ 281   1        mmi_dq_wifi_wakeup();
+ 282   1      
+ 283   1        wifi_open_by_password();
+ 284   1      }
+ 285          
+ 286          /*
+ 287          parameter: 
+ 288            none
+ 289          return :
+ 290            none
+ 291          */
+ 292          void mmi_dq_wifi_open_by_fp(void)
+ 293          {
+ 294   1        mmi_dq_wifi_wakeup();
+ 295   1      
+ 296   1        wifi_open_by_fp();
+ 297   1      }
+ 298          
+ 299          /*
+ 300          parameter: 
+ 301            none
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 6   
 
- 302   1      }
- 303          
- 304          /*
- 305          parameter: 
- 306            none
- 307          return :
- 308            none
- 309          */
- 310          void mmi_dq_wifi_open_by_key(void)
- 311          {
- 312   1        mmi_dq_wifi_wakeup();
- 313   1      
- 314   1        wifi_open_by_key();
- 315   1      }
- 316          
- 317          /*
- 318          parameter: 
- 319            none
- 320          return :
- 321            none
- 322          */
- 323          void mmi_dq_wifi_open_by_wifi(void)
- 324          {
- 325   1      
- 326   1        wifi_open_by_wifi();
- 327   1      }
- 328          
- 329          /*
- 330          parameter: 
- 331            none
- 332          return :
- 333            none
- 334          */
- 335          void mmi_dq_wifi_door_close(void)
- 336          {
- 337   1      
- 338   1        wifi_door_close();
- 339   1      }
- 340          
- 341          /*
- 342          parameter: 
- 343            none
- 344          return :
- 345            none
- 346          */
- 347          void mmi_dq_wifi_via_alarm(void)
- 348          {
- 349   1        mmi_dq_wifi_wakeup();
- 350   1      
- 351   1        wifi_via_alarm();
- 352   1      }
- 353          
- 354          /*
- 355          parameter: 
- 356            none
- 357          return :
- 358            none
- 359          */
- 360          void mmi_dq_wifi_pw_alarm(void)
- 361          {
- 362   1        mmi_dq_wifi_wakeup();
- 363   1      
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 7   
+ 302          return :
+ 303            none
+ 304          */
+ 305          void mmi_dq_wifi_open_by_rfid(void)
+ 306          {
+ 307   1        mmi_dq_wifi_wakeup();
+ 308   1      
+ 309   1        wifi_open_by_rfid();
+ 310   1      }
+ 311          
+ 312          /*
+ 313          parameter: 
+ 314            none
+ 315          return :
+ 316            none
+ 317          */
+ 318          void mmi_dq_wifi_open_by_key(void)
+ 319          {
+ 320   1        mmi_dq_wifi_wakeup();
+ 321   1      
+ 322   1        wifi_open_by_key();
+ 323   1      }
+ 324          
+ 325          /*
+ 326          parameter: 
+ 327            none
+ 328          return :
+ 329            none
+ 330          */
+ 331          void mmi_dq_wifi_open_by_wifi(void)
+ 332          {
+ 333   1      
+ 334   1        wifi_open_by_wifi();
+ 335   1      }
+ 336          
+ 337          /*
+ 338          parameter: 
+ 339            none
+ 340          return :
+ 341            none
+ 342          */
+ 343          void mmi_dq_wifi_door_close(void)
+ 344          {
+ 345   1      
+ 346   1        wifi_door_close();
+ 347   1      }
+ 348          
+ 349          /*
+ 350          parameter: 
+ 351            none
+ 352          return :
+ 353            none
+ 354          */
+ 355          void mmi_dq_wifi_via_alarm(void)
+ 356          {
+ 357   1        mmi_dq_wifi_wakeup();
+ 358   1      
+ 359   1        wifi_via_alarm();
+ 360   1      }
+ 361          
+ 362          /*
+ 363          parameter: 
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 7   
 
- 364   1        wifi_pw_alarm();
- 365   1      }
- 366          
- 367          /*
- 368          parameter: 
- 369            none
- 370          return :
- 371            none
- 372          */
- 373          void mmi_dq_wifi_fp_alarm(void)
- 374          {
- 375   1        mmi_dq_wifi_wakeup();
- 376   1      
- 377   1        wifi_fp_alarm();
- 378   1      }
- 379          
- 380          /*
- 381          parameter: 
- 382            none
- 383          return :
- 384            none
- 385          */
- 386          void mmi_dq_wifi_rfid_alarm(void)
- 387          {
- 388   1        mmi_dq_wifi_wakeup();
- 389   1      
- 390   1        wifi_rf_alarm();
- 391   1      }
- 392          
- 393          /*
- 394          parameter: 
- 395            none
- 396          return :
- 397            none
- 398          */
- 399          void mmi_dq_wifi_lowpower_alarm(void)
- 400          {
- 401   1        static uint8_t wifi_lowpower_flag = 0;
- 402   1        if (wifi_lowpower_flag == 0)
- 403   1        {
- 404   2          wifi_lowpower_flag = 1;
- 405   2          mmi_dq_wifi_wakeup();
- 406   2      
- 407   2          wifi_lowpower_alarm();
- 408   2        }
- 409   1      }
- 410          
- 411          /*
- 412          parameter: 
- 413            none
- 414          return :
- 415            none
- 416          */
- 417          void mmi_dq_wifi_send_pwd_110(void)
- 418          {
- 419   1        mmi_dq_wifi_wakeup();
- 420   1        wifi_send_pwd_110();
- 421   1        delay_ms(20);
- 422   1        wifi_open_by_password();
- 423   1      }
- 424          
- 425          /*
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/11/2021 15:26:02 PAGE 8   
+ 364            none
+ 365          return :
+ 366            none
+ 367          */
+ 368          void mmi_dq_wifi_pw_alarm(void)
+ 369          {
+ 370   1        mmi_dq_wifi_wakeup();
+ 371   1      
+ 372   1        wifi_pw_alarm();
+ 373   1      }
+ 374          
+ 375          /*
+ 376          parameter: 
+ 377            none
+ 378          return :
+ 379            none
+ 380          */
+ 381          void mmi_dq_wifi_fp_alarm(void)
+ 382          {
+ 383   1        mmi_dq_wifi_wakeup();
+ 384   1      
+ 385   1        wifi_fp_alarm();
+ 386   1      }
+ 387          
+ 388          /*
+ 389          parameter: 
+ 390            none
+ 391          return :
+ 392            none
+ 393          */
+ 394          void mmi_dq_wifi_rfid_alarm(void)
+ 395          {
+ 396   1        mmi_dq_wifi_wakeup();
+ 397   1      
+ 398   1        wifi_rf_alarm();
+ 399   1      }
+ 400          
+ 401          /*
+ 402          parameter: 
+ 403            none
+ 404          return :
+ 405            none
+ 406          */
+ 407          void mmi_dq_wifi_lowpower_alarm(void)
+ 408          {
+ 409   1        static uint8_t wifi_lowpower_flag = 0;
+ 410   1        if (wifi_lowpower_flag == 0)
+ 411   1        {
+ 412   2          wifi_lowpower_flag = 1;
+ 413   2          mmi_dq_wifi_wakeup();
+ 414   2      
+ 415   2          wifi_lowpower_alarm();
+ 416   2        }
+ 417   1      }
+ 418          
+ 419          /*
+ 420          parameter: 
+ 421            none
+ 422          return :
+ 423            none
+ 424          */
+ 425          void mmi_dq_wifi_send_pwd_110(void)
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 8   
 
- 426          parameter: 
- 427            none
- 428          return :
- 429            none
- 430          */
- 431          void mmi_dq_wifi_send_fp_110(void)
- 432          {
- 433   1        mmi_dq_wifi_wakeup();
- 434   1        wifi_send_fp_110();
- 435   1        delay_ms(20);
- 436   1        wifi_open_by_fp();
- 437   1      }
- 438          
- 439          /*
- 440          parameter: 
- 441            none
- 442          return :
- 443            none
- 444          */
- 445          void mmi_dq_wifi_set_110(void)
- 446          {
- 447   1        mmi_dq_wifi_wakeup();
- 448   1        wifi_set_110();
- 449   1      }
- 450          
- 451          /*
- 452          parameter: 
- 453            none
- 454          return :
- 455            none
- 456          */
- 457          unsigned char mmi_dq_wifi_get_running_flag(void)
- 458          {
- 459   1        if (wifi_check_times > 0)
- 460   1          return 1;
- 461   1        return 0;
- 462   1      }
- 463          
- 464          #endif
+ 426          {
+ 427   1        mmi_dq_wifi_wakeup();
+ 428   1        wifi_send_pwd_110();
+ 429   1        delay_ms(20);
+ 430   1        wifi_open_by_password();
+ 431   1      }
+ 432          
+ 433          /*
+ 434          parameter: 
+ 435            none
+ 436          return :
+ 437            none
+ 438          */
+ 439          void mmi_dq_wifi_send_fp_110(void)
+ 440          {
+ 441   1        mmi_dq_wifi_wakeup();
+ 442   1        wifi_send_fp_110();
+ 443   1        delay_ms(20);
+ 444   1        wifi_open_by_fp();
+ 445   1      }
+ 446          
+ 447          /*
+ 448          parameter: 
+ 449            none
+ 450          return :
+ 451            none
+ 452          */
+ 453          void mmi_dq_wifi_set_110(void)
+ 454          {
+ 455   1        mmi_dq_wifi_wakeup();
+ 456   1        wifi_set_110();
+ 457   1      }
+ 458          
+ 459          /*
+ 460          parameter: 
+ 461            none
+ 462          return :
+ 463            none
+ 464          */
+ 465          unsigned char mmi_dq_wifi_get_running_flag(void)
+ 466          {
+ 467   1        if (wifi_check_times > 0)
+ 468   1          return 1;
+ 469   1        return 0;
+ 470   1      }
+ 471          #endif
+ 472          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    577    ----
+   CODE SIZE        =    610    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      8       3
    PDATA SIZE       =   ----    ----
@@ -502,6 +510,8 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    XDATA CONST SIZE =   ----    ----
    FAR CONST SIZE   =   ----    ----
 END OF MODULE INFORMATION.
+
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          03/12/2021 12:09:38 PAGE 9   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

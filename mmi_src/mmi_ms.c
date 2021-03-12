@@ -16,7 +16,7 @@
 #include "mmi_fs.h"
 #include "mmi_fm.h"
 #include "mmi_wifi.h"
-// #include "stdio.h"
+// #include <stdio.h>
 
 unsigned char input_key_1[KEY_INPUT_MAX_LEN];
 unsigned char input_key_2[KEY_INPUT_MAX_LEN];
@@ -301,6 +301,7 @@ return :
 void mmi_ms_pwd_opt_fun(unsigned char key_val)
 {
 	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
+	//printf("mmi_ms_pwd_opt_fun status: 0x%x  key: %d",status,key_val);
 	switch (status)
 	{
 	case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
@@ -783,6 +784,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
 	if (status == SYS_STATUS_LOW_POWER)
 	{
+		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
 		return;
 	}
@@ -923,6 +925,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 				if (status == SYS_STATUS_INPUT_FP)
 				{
 					mmi_dq_fp_light(FP_RED);
+					//mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
 					mmi_dq_sys_door_open_fail(SYS_OPEN_BY_FP);
 				}
 				else if (status == SYS_STATUS_ADD_FP || status == SYS_STATUS_ADD_ADMIN_FP1 || status == SYS_STATUS_ADD_ADMIN_FP2 || status == SYS_STATUS_ADD_110_FP || status == SYS_STATUS_FM_MODE)
@@ -1090,6 +1093,7 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 
 	if (status == SYS_STATUS_LOW_POWER)
 	{
+		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
 		return;
 	}

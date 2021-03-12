@@ -39,20 +39,20 @@ static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_si
 
 	switch (file)
 	{
-	case MID_FDS_FILE_SET:
-		eeprom_select(0);
-		for (i = 0; i < r_size; i++)
-		{
-			r_data[i] = eeprom_read_byte(0, i); //����һҳ
-		}
-		break;
-	case MID_FDS_FILE_PWD:
-		eeprom_select(0);
-		for (i = 0; i < r_size; i++)
-		{
-			r_data[i] = eeprom_read_byte(0, i + 24); //����һҳ
-		}
-		break;
+		case MID_FDS_FILE_SET:
+			eeprom_select(0);
+			for(i = 0; i < r_size; i++)
+			{
+				r_data[i] = eeprom_read_byte(0,i);//读第一页
+			}
+			break;
+		case MID_FDS_FILE_PWD:
+			eeprom_select(0);
+			for(i = 0; i < r_size; i++)
+			{
+				r_data[i] = eeprom_read_byte(0,i+24);//读第一页
+			}
+			break;
 #ifdef __LOCK_FP_SUPPORT__
 	case MID_FDS_FILE_FP:
 		eeprom_select(1);
@@ -77,87 +77,87 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 	eeprom_erase_time(9);
 	switch (file)
 	{
-	case MID_FDS_FILE_SET:
-	{
-		uint8_t *w_data2 = (uint8_t *)g_dq_fs_pwd;
-		uint16_t w_size2 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
-		eeprom_select(0);
-		eeprom_erase_page(0); //����1K
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data[i]); //����һҳ
-			if (ret == ERROR)
+		case MID_FDS_FILE_SET:
 			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
+				uint8_t* w_data2 = (uint8_t *)g_dq_fs_pwd;
+				uint16_t w_size2 = sizeof(mmi_fs_pwd)*MMI_DQ_FS_PWD_MAX_NUM;
+				eeprom_select(0);
+				eeprom_erase_page(0);//擦除1K
+				for(i = 0; i < w_size; i++)
+				{
+					ret = eeprom_write_byte(0,i,w_data[i]);//读第一页
+					if(ret==ERROR) 
+					{
+						//printf("mmi_dq_fds_write  error  %d\n",i);
+						return RET_FAIL;
+					}
+				}
+				for(i = 0; i < w_size2; i++)
+				{
+					ret = eeprom_write_byte(0,i+24,w_data2[i]);//读第一页
+					if(ret==ERROR) 
+					{
+						//printf("mmi_dq_fds_write  error  %d\n",i);
+						return RET_FAIL;
+					}
+				}
 			}
-		}
-		for (i = 0; i < w_size2; i++)
-		{
-			ret = eeprom_write_byte(0, i + 24, w_data2[i]); //����һҳ
-			if (ret == ERROR)
+			break;
+		case MID_FDS_FILE_PWD:
 			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
+				uint8_t* w_data2 = (uint8_t *)&g_dq_fs_init_set;
+				uint16_t w_size2 = sizeof(mmi_fs_setting);
+				eeprom_select(0);
+				eeprom_erase_page(0);//擦除1K
+				for(i = 0; i < w_size2; i++)
+				{
+					ret = eeprom_write_byte(0,i,w_data2[i]);//读第一页
+					if(ret==ERROR) 
+					{
+						//printf("mmi_dq_fds_write  error  %d\n",i);
+						return RET_FAIL;
+					}
+				}
+				for(i = 0; i < w_size; i++)
+				{
+					ret = eeprom_write_byte(0,i+24,w_data[i]);//读第一页
+					if(ret==ERROR) 
+					{
+						//printf("mmi_dq_fds_write  error  %d\n",i);
+						return RET_FAIL;
+					}
+				}
 			}
-		}
-	}
-	break;
-	case MID_FDS_FILE_PWD:
-	{
-		uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
-		uint16_t w_size2 = sizeof(mmi_fs_setting);
-		eeprom_select(0);
-		eeprom_erase_page(0); //����1K
-		for (i = 0; i < w_size2; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data2[i]); //����һҳ
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i + 24, w_data[i]); //����һҳ
-			if (ret == ERROR)
-			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
-			}
-		}
-	}
-	break;
+			break;
 #ifdef __LOCK_FP_SUPPORT__
-	case MID_FDS_FILE_FP:
-		eeprom_select(1);
-		eeprom_erase_page(0); //����512byte
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(0, i, w_data[i]);
-			if (ret == ERROR)
+		case MID_FDS_FILE_FP:
+			eeprom_select(1);
+			eeprom_erase_page(0);//擦除512byte
+			for(i = 0; i < w_size; i++)
 			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
+				ret = eeprom_write_byte(0,i,w_data[i]);
+				if(ret==ERROR) 
+				{
+					//printf("mmi_dq_fds_write  error  %d\n",i);
+					return RET_FAIL;
+				}
 			}
-		}
-		break;
+			break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
-	case MID_FDS_FILE_RF:
-		eeprom_select(1);
-		eeprom_erase_page(1); //����512byte
-		for (i = 0; i < w_size; i++)
-		{
-			ret = eeprom_write_byte(1, i, w_data[i]);
-			if (ret == ERROR)
+		case MID_FDS_FILE_RF:
+			eeprom_select(1);
+			eeprom_erase_page(1);//擦除512byte
+			for(i = 0; i < w_size; i++)
 			{
-				//printf("mmi_dq_fds_write  error  %d\n",i);
-				return RET_FAIL;
+				ret = eeprom_write_byte(1,i,w_data[i]);
+				if(ret==ERROR) 
+				{
+					//printf("mmi_dq_fds_write  error  %d\n",i);
+					return RET_FAIL;
+				}
 			}
-		}
-		break;
+			break;
 #endif
 	default:
 		return RET_FAIL;
@@ -226,7 +226,7 @@ void mmi_dq_fs_init(void)
 }
 
 /**
-  * @brief  �ֶ���ʼ��
+  * @brief  手动初始化
   * @param  none
   * @return none
   * @note   none
@@ -241,7 +241,7 @@ RET_VAL mmi_dq_fs_clr_set(void)
 }
 
 /**
-  * @brief  ��λ��ʼ��
+  * @brief  复位初始化
   * @param  none
   * @return none
   * @note   none
@@ -798,6 +798,7 @@ RET_VAL mmi_dq_fs_set_open_mode(sys_open_mode mode)
 
 	g_dq_fs_init_set.open_mode = mode;
 	return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+	
 }
 /*
 parameter: 

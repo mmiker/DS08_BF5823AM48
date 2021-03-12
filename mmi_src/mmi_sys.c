@@ -127,7 +127,7 @@ void mmi_dq_sys_wake_up(void)
 	{
 		mmi_dq_wifi_wakeup();
 #ifdef __LOCK_FP_SUPPORT__
-		mmi_dq_fp_init(); //���֡����
+		mmi_dq_fp_init(); //握手、点灯
 #endif
 		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	}
@@ -439,6 +439,13 @@ void System_timer_event_handler(void)
 		g_timer2_sleep_count = 0;
 }
 
+/*
+function: 
+parameter: 
+	none
+return :
+	none
+*/
 unsigned char mmi_dq_sys_get_rfid_flag(void)
 {
 	if (g_rfid_flag == 1)
@@ -1130,9 +1137,11 @@ const sys_menu_t sys_menu_tree[] =
 		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock_con},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
 #ifdef __LOCK_110_SUPPORT__
-		{STR_ID_SYSTEM, STR_ID_PASSWORD_110, mmi_dq_sys_add_110_pwd},
+		{STR_ID_SYSTEM, STR_ID_110, 0},
+
+		{STR_ID_110, STR_ID_PASSWORD_110, mmi_dq_sys_add_110_pwd},
 #if defined(__LOCK_FP_SUPPORT__)
-		{STR_ID_SYSTEM, STR_ID_FINGERPRINT_110, 0},
+		{STR_ID_110, STR_ID_FINGERPRINT_110, 0},
 #endif
 #endif
 

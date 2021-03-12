@@ -60,9 +60,9 @@ void byd_adc_init(void)
 	ADC_06_PH6_ENABLE(); /*enable adc io*/
 	//ADC_01_PH1_ENABLE();
 
-	/*!!!!!!!!!�ָ�IO�ڹ���Ҫ�ر�adcͨ������!!!!!!!!!*/
-	//	ADC_00_PH0_DISABLE();
-	//  ADC_01_PH1_DISABLE();
+/*!!!!!!!!!恢复IO口功能要关闭adc通道功能!!!!!!!!!*/	
+//	ADC_00_PH0_DISABLE();
+//  ADC_01_PH1_DISABLE();
 
 	ADC_ENABLE(); /*enable adc*/
 
@@ -119,10 +119,10 @@ uint16_t get_adc_data(uint8_t adc_channel_addr)
 }
 
 /**
-  * @brief  ��ȡadc���ݵ�ƽ��ֵ
+  * @brief  获取adc数据的平均值
   * @param  
   * adc_channel_addr ADC_CHANNEL_0~44;
-  * times ʱ��ms
+  * times 时间ms
   * @return none
   * @note   none
   * @see    none
@@ -140,7 +140,7 @@ static uint16_t Get_Adc_Average(uint8_t adc_channel_addr, uint8_t times)
 }
 
 /**
-  * @brief  ��ѹ����
+  * @brief  电压计算
   * @param  none
   * @return none
   * @note   none
@@ -151,12 +151,12 @@ unsigned char adc_VolT(void)
 	unsigned int adcx;
 	float temp;
 	ADC_ENABLE();
-	gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //����
+	gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //开启
 	delay_ms(5);
-	adcx = Get_Adc_Average(ADC_CHANNEL_6, 10);	   //��ȡ10msƽ��ֵ
-	// gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //�ر�
+	adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //获取10ms平均值
+	gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //关闭
 	ADC_DISABLE();
-	temp = (float)adcx * (3.3 / 4095); //�����ѹ
+	temp = (float)adcx * (3.3 / 4095); //计算电压
 
 	if (temp < 1.25)
 		return 2;
@@ -276,18 +276,18 @@ uint8_t byd_adc_handle(uint8_t adc_channel_addr)
 
 	for (i = 0; i < ADC_MAX_COUNT; i++)
 	{
-		g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4); //ADCת��Ϊ8λ,�洢�������Ӧλ�ô�
-		delay_ms(1);
+		g_ucAdcRawdata[i] = (uint8_t)(get_adc_data(adc_channel_addr) >> 4);//ADC转化为8位,存储到数组对应位置处	
+		delay_ms(1);		
 	}
 
 	if ((g_ucAdcBaseFlag & (0x01 << adc_channel_addr)) == 0)
 	{
 		g_ucAdcBaseFlag |= (0x01 << adc_channel_addr);
-		g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata, ADC_MAX_COUNT); //ð������ȡ�м�ľ�ֵ��Ϊ��ʼ�ϵ�ADCƽ��ֵ
+		g_ucAdcBaseline[adc_channel_addr] = byd_data_sort(g_ucAdcRawdata,ADC_MAX_COUNT);//冒泡排序并取中间的均值作为初始上电ADC平均值
 	}
 	else
 	{
-		g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr); //��ô������ADCֵ
+		g_ucAdcBaseline[adc_channel_addr] = byd_adcdata(adc_channel_addr);//获得处理后的ADC值
 	}
 	return g_ucAdcBaseline[adc_channel_addr];
 }
