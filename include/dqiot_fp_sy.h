@@ -61,6 +61,8 @@ typedef enum
  
  
  unsigned char PS_GetEcho(void);
+ unsigned char PS_CheckSensor(void);// 检测传感器(正常0x00/错误0x29)
+ unsigned char PS_CheckFinger(void);// 检测手指状态
  unsigned char PS_GetImage(void);// 探测手指，探测到后录入指纹图像存于 ImageBuffer
  unsigned char PS_GenChar(unsigned char BufferID);//将ImageBuffer中的原始图像生成指纹特征文件存于CHARBUFFER1或CHARBUFFER2
  unsigned char PS_Match(void);// 精确比对 CHARBUFFER1与CHARBUFFER2中的特征文件

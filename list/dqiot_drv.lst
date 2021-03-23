@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV
@@ -62,7 +62,7 @@ line level    source
   51   1        dqiot_drv_uart0B_init();
   52   1        dqiot_drv_motor_gpio_init();
   53   1        
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 2   
 
   54   1        gpio_init(VBAT_TEST_PORT,VBAT_TEST_PIN,GPIO_MODE_OUT);
   55   1        gpio_bit_reset(VBAT_TEST_PORT,VBAT_TEST_PIN);
@@ -126,7 +126,7 @@ line level    source
  113   1        dqiot_drv_audio_gpio_init();
  114   1      #endif
  115   1      #ifdef __LOCK_FP_SUPPORT__
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 3   
 
  116   1        dqiot_drv_fp_gpio_init();
  117   1      
@@ -190,7 +190,7 @@ line level    source
  175              \brief      timer0 isr
  176              \param[in]  none
  177              \param[out] none
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 4   
 
  178              \retval     none
  179          */
@@ -254,7 +254,7 @@ line level    source
  237          return :
  238            none
  239          */
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 5   
 
  240          uint16_t dqiot_drv_get_timer1_count(void)
  241          {
@@ -318,7 +318,7 @@ line level    source
  299          
  300          /*
  301          parameter: 
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 6   
 
  302            none
  303          return :
@@ -382,7 +382,7 @@ line level    source
  361   1        TIMER2_PRESCALE(TIMER2_PRESCALE_1);//TIMER2_PRESCALE_65536
  362   1        TIMER2_COUNT_SET(count);
  363   1        
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 7   
 
  364   1        INT_WDT_TIMER2_CLR();//清除中断标志 
  365   1        TIMER2_IPL_SET(LOW); //中断优先级为低
@@ -446,7 +446,7 @@ line level    source
  423   1        INT_UART0_CLR();//清除中断源标志
  424   1        UART0_IPL_SET(LOW);//中断优先级设置
  425   1        UART0_INT_ENABLE();//中断源  
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 8   
 
  426   1      #else
                 UART0_TX_INT_DISABLE();//发送中断关闭
@@ -510,7 +510,7 @@ line level    source
  485          {
  486   1      
  487   1          if(GET_UART0_RX_STATE())
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 9   
 
  488   1          {
  489   2            if(uart_getbuflen >= UART0_GET_DATA_LEN )
@@ -574,7 +574,7 @@ line level    source
  547   1      }
  548          
  549          char putchar(char c)
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/12/2021 12:09:30 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         03/20/2021 15:44:08 PAGE 10  
 
  550          {
  551   1           uart_tx_byte(UART0,c);

@@ -31,6 +31,10 @@ static unsigned char rfid_last_flag = 0;
 #ifdef __LOCK_BUS_SUPPORT__
 static unsigned char admin_check_type = 0;
 #endif
+
+// void printfS(char *show, char *status);
+// void printfV(char *show, char *value);
+
 /*
 parameter: 
 	none
@@ -128,7 +132,7 @@ void mmi_sleep_task_proc(void)
 #endif
 		(mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() != 0)
 #ifdef __LOCK_FP_SUPPORT__
-		|| (mmi_dq_fp_get_pin() == 0)
+		|| (mmi_dq_fp_get_pin() == 1)
 #endif
 	)
 	{
@@ -171,7 +175,7 @@ unsigned char mmi_dq_ms_get_run_flag(void)
 {
 	if ((key_last_value == KEY_INVALID) && (mmi_dq_aud_get_state() == 0) && (mmi_dq_rst_get_pin() == 0)
 #ifdef __LOCK_FP_SUPPORT__
-		&& (mmi_dq_fp_get_pin() != 0)
+		&& (mmi_dq_fp_get_pin() != 1)
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 		&& rfid_last_flag == 0
@@ -812,15 +816,18 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 
 	if (retval == 0)
 	{
-		if (opt_time != 0)
-			retval = mmi_dq_fp_gen_char(0);
-		if (retval == 0)
+		// printfS("mmi_dq_fp_get_image", "ok");
+		// if (opt_time != 0)
+		// 	retval = mmi_dq_fp_gen_char(0);
+		// if (retval == 0)
 			retval = mmi_dq_fp_gen_char(opt_time);
 		if (retval == 0)
 		{
+			// printfS("mmi_dq_fp_gen_char", "ok");
 			retval = mmi_dq_fp_high_speed_search(opt_time, &index);
 			if (retval == 0)
 			{
+				// printfS("mmi_dq_fp_high_speed_search", "ok");
 				if (status == SYS_STATUS_INPUT_FP)
 				{
 					retval = mmi_dq_fs_check_fp((unsigned char)index, FDS_USE_TYPE_ALL);
@@ -922,6 +929,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 			}
 			else
 			{
+				// printfS("mmi_dq_fp_high_speed_search", "error");
 				if (status == SYS_STATUS_INPUT_FP)
 				{
 					mmi_dq_fp_light(FP_RED);
@@ -935,6 +943,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 						retval = mmi_dq_fp_reg_module();
 						if (retval == 0)
 						{
+							// printfS("mmi_dq_fp_reg_module", "ok");
 							if (status == SYS_STATUS_ADD_FP || status == SYS_STATUS_ADD_110_FP || status == SYS_STATUS_FM_MODE)
 							{
 #ifdef __LOCK_110_SUPPORT__
@@ -945,28 +954,34 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 									index = mmi_dq_fs_get_fp_unuse_index();
 								if (index == 0xFF)
 								{
+									// printfS("mmi_dq_fs_get_fp_unuse_index", "error");
 									mmi_dq_fp_light(FP_RED);
 									mmi_dq_aud_play_with_id(AUD_ID_FP_FULL);
 									mmi_dq_sys_show_cur_menu_list();
 								}
 								else
 								{
+									// printfS("mmi_dq_fs_get_fp_unuse_index", "ok");
+									// printfV("index", (unsigned char *)index);
 									retval = mmi_dq_fp_store_char(0, index);
 									if (status == SYS_STATUS_ADD_FP)
 									{
 										if (retval == 0)
 										{
+											// printfS("mmi_dq_fp_store_char", "ok");
 											retval = mmi_dq_fs_set_fp((unsigned char)index, FDS_USE_TYPE_USER);
 											if (retval != 0)
 												mmi_dq_fp_delete(index);
 										}
 										if (retval == 0)
 										{
+											// printfS("mmi_dq_fs_set_fp", "ok");
 											mmi_dq_fp_light(FP_GREEN);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FP_SUCESS);
 										}
 										else
 										{
+											// printfS("mmi_dq_fp_store_char", "error");
 											mmi_dq_fp_light(FP_RED);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
 										}
@@ -1071,6 +1086,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 			return;
 		}
 	}
+	// printfS("mmi_dq_fp_get_image", "error");
 
 	mmi_dq_fp_light(FP_RED);
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP_AGAIN);

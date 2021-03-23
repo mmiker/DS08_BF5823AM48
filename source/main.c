@@ -13,7 +13,7 @@
 #include "mmi_audio.h"
 #include "mmi_bsp.h"
 #include "mmi_fm.h"
-// #include <stdio.h>
+#include <stdio.h>
 
 void system_init(void)
 {
@@ -104,3 +104,33 @@ int main(void)
 			mmi_wait_sleep_task_proc();
 	}
 }
+
+// /**
+//   * @brief  输出字符串
+//   * @param  show	说明
+//   * @param  status	状态
+//   * @return none
+//   * @note   none
+//   * @see    none
+//   */
+// void printfS(char *show, char *status)
+// {
+// 	dqiot_drv_uart0A_init();
+// 	printf("%s is %s\n", show, status);
+// 	dqiot_drv_uart0B_init();
+// }
+
+// /**
+//   * @brief  输出值
+//   * @param  show	说明
+//   * @param  value	值
+//   * @return none
+//   * @note   none
+//   * @see    none
+//   */
+// void printfV(char *show, char *value)
+// {
+// 	dqiot_drv_uart0A_init();
+// 	printf("%s is %d\n", show, value);
+// 	dqiot_drv_uart0B_init();
+// }

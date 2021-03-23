@@ -231,6 +231,11 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					j++;
 				}
 
+				// dqiot_drv_uart0A_init();
+				// for (i = 0; i < uart_getbuflen - 1; i++)
+				// 	printf("uart_rec_buff[%d] is %d\n", (int)i, (int)uart_rec_buff[i]);
+				// dqiot_drv_uart0B_init();
+
 				/* 清空缓存 */
 				uart_getbuflen = 0;
 
@@ -297,6 +302,44 @@ unsigned char PS_GetEcho(void)
 	SendCheck(0x57);
 
 	//sure=ReturnFlag(&p);
+	return JudgeStr(1000, 0x03);
+}
+
+/**
+  * @brief  检测传感器 PS_CheckSensor
+  * @param  none
+  * @return 确认码(正常0x00/错误0x29)
+  * @note   none
+  * @see    none
+  */
+unsigned char PS_CheckSensor(void)
+{
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01);
+	SendLength(0x03);
+	Sendcmd(0x36);
+	SendCheck(0x01 + 0x03 + 0x36);
+
+	return JudgeStr(1000, 0x03);
+}
+
+/**
+  * @brief  检测手指状态 PS_CheckFinger
+  * @param  none
+  * @return 确认码
+  * @note   none
+  * @see    none
+  */
+unsigned char PS_CheckFinger(void)
+{
+	if (AS608_PackHead() == 1)
+		return 0xFF;
+	SendFlag(0x01);
+	SendLength(0x03);
+	Sendcmd(0x2a);
+	SendCheck(0x01 + 0x03 + 0x2a);
+
 	return JudgeStr(1000, 0x03);
 }
 

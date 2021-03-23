@@ -35,6 +35,28 @@ return :
 */
 void mmi_dq_fp_init(void);
 
+/**
+  * @brief  检测传感器
+  * @param  none
+  * @return 确认码(正常0x00/错误0x29)
+  * @note   none
+  * @see    none
+  */
+unsigned char mmi_dq_fp_check_sensor(void);
+
+/**
+  * @brief  检测手指状态
+  * @param  none
+  * @return  
+  * 确认码=0x00，表示传感器上有手指；
+  * 确认码=0x01，表示收包有错；
+  * 确认码=0x02，表示传感器上无手指；
+  * 确认码=0x29，表示传感器硬件错误。
+  * @note   none
+  * @see    none
+  */
+unsigned char mmi_dq_fp_check_finger(void);
+
 /*
 parameter: 
 	current status machine

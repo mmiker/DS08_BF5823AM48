@@ -99,21 +99,21 @@
 
 /* system oscillator and voltage definitions */
 
-#define BOR_ENABLE()          {REG_ADDR = PD_ANA;REG_DATA &= 0xdf;}//ø™µÙµÁ∏¥Œª
-#define BOR_DISABLE()         {REG_ADDR = PD_ANA;REG_DATA |= 0x20;}//πÿµÙµÁ∏¥Œª
+#define BOR_ENABLE()          {REG_ADDR = PD_ANA;REG_DATA &= 0xdf;}//ÂºÄÊéâÁîµÂ§ç‰Ωç
+#define BOR_DISABLE()         {REG_ADDR = PD_ANA;REG_DATA |= 0x20;}//ÂÖ≥ÊéâÁîµÂ§ç‰Ωç
 
-#define PLL_WAKE_TIME_SET(x)        {REG_ADDR = IDLE_WAKE_CFG;REG_DATA &= ~(0x07);REG_DATA |= (0x07&x);}//ªΩ–—PLL ±º‰…Ë÷√0~7:(0.2ms,0.3ms,0.4ms,0.5ms,0.6ms,0.7ms,0.9ms,1ms)
-#define PLL_13P56M_WAKE_TIME_SET(x) {REG_ADDR = IDLE_WAKE_CFG;REG_DATA &= ~(0x18);REG_DATA |= (0x18&(x<<3));}//ªΩ–—PLL_13.56M ±º‰…Ë÷√0~3:(1ms,1.5ms,2ms,2.5ms)
+#define PLL_WAKE_TIME_SET(x)        {REG_ADDR = IDLE_WAKE_CFG;REG_DATA &= ~(0x07);REG_DATA |= (0x07&x);}//Âî§ÈÜíPLLÊó∂Èó¥ËÆæÁΩÆ0~7:(0.2ms,0.3ms,0.4ms,0.5ms,0.6ms,0.7ms,0.9ms,1ms)
+#define PLL_13P56M_WAKE_TIME_SET(x) {REG_ADDR = IDLE_WAKE_CFG;REG_DATA &= ~(0x18);REG_DATA |= (0x18&(x<<3));}//Âî§ÈÜíPLL_13.56MÊó∂Èó¥ËÆæÁΩÆ0~3:(1ms,1.5ms,2ms,2.5ms)
 
-#define PLL_13P56M_ENABLE()   {REG_ADDR = PD_ANA;REG_DATA &= 0xf7;}//¥Úø™æß’Ò13.56M
-#define PLL_13P56M_DISABLE()  {REG_ADDR = PD_ANA;REG_DATA |= 0x08;}//πÿ±’æß’Ò13.56M
-#define XTAL_32K_ENABLE()     {REG_ADDR = PD_ANA;REG_DATA &= 0xef;}//¥Úø™æß’Ò32K
-#define XTAL_32K_DISABLE()    {REG_ADDR = PD_ANA;REG_DATA |= 0x10;}//πÿ±’æß’Ò32K
+#define PLL_13P56M_ENABLE()   {REG_ADDR = PD_ANA;REG_DATA &= 0xf7;}//ÊâìÂºÄÊô∂ÊåØ13.56M
+#define PLL_13P56M_DISABLE()  {REG_ADDR = PD_ANA;REG_DATA |= 0x08;}//ÂÖ≥Èó≠Êô∂ÊåØ13.56M
+#define XTAL_32K_ENABLE()     {REG_ADDR = PD_ANA;REG_DATA &= 0xef;}//ÊâìÂºÄÊô∂ÊåØ32K
+#define XTAL_32K_DISABLE()    {REG_ADDR = PD_ANA;REG_DATA |= 0x10;}//ÂÖ≥Èó≠Êô∂ÊåØ32K
 
-#define SFR_LDO_SELECT(x)     {REG_ADDR = SFR_LDO_CTRL;REG_DATA &= ~0x08;REG_DATA |= (x<<3);}//0:≈‰÷√◊÷øÿ÷∆LDOπ¶∫ƒ; 1:SFRøÿ÷∆LDOπ¶∫ƒ
-#define SFR_LDO_SET(x)        {REG_ADDR = SFR_LDO_CTRL;REG_DATA &= ~0x07;REG_DATA |= (x);}//…Ë÷√LDO÷µ
+#define SFR_LDO_SELECT(x)     {REG_ADDR = SFR_LDO_CTRL;REG_DATA &= ~0x08;REG_DATA |= (x<<3);}//0:ÈÖçÁΩÆÂ≠óÊéßÂà∂LDOÂäüËÄó; 1:SFRÊéßÂà∂LDOÂäüËÄó
+#define SFR_LDO_SET(x)        {REG_ADDR = SFR_LDO_CTRL;REG_DATA &= ~0x07;REG_DATA |= (x);}//ËÆæÁΩÆLDOÂÄº
 
-#define SOFT_RESET()          SOFT_RST = 0x55 //»Ì∏¥Œª
+#define SOFT_RESET()          SOFT_RST = 0x55 //ËΩØÂ§ç‰Ωç
 
 #define W8(addr,value)       (*(volatile unsigned char *)(addr))=((unsigned char)(value))
 #define R8(addr)             (*(volatile unsigned char *)(addr))

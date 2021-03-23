@@ -6,7 +6,7 @@
 #include "string.h"
 #include "mmi_fps.h"
 #include "dqiot_drv.h"
-// #include <stdio.h>
+#include <stdio.h>
 
 unsigned char FP_oldStatus = 0;
 /*
@@ -63,6 +63,36 @@ return :
 unsigned char mmi_dq_fp_get_fp_mode(void)
 {
 	return 1;
+}
+
+/**
+  * @brief  检测传感器
+  * @param  none
+  * @return 确认码(正常0x00/错误0x29)
+  * @note   none
+  * @see    none
+  */
+unsigned char mmi_dq_fp_check_sensor(void)
+{
+	unsigned char retval = 0;
+
+	retval = PS_CheckSensor();
+	return retval;
+}
+
+/**
+  * @brief  检测手指状态
+  * @param  none
+  * @return 确认码
+  * @note   none
+  * @see    none
+  */
+unsigned char mmi_dq_fp_check_finger(void)
+{
+	unsigned char retval = 0;
+
+	retval = PS_CheckFinger();
+	return retval;
 }
 
 /*
@@ -217,7 +247,8 @@ unsigned char mmi_dq_fp_high_speed_search(unsigned char Buf_id, unsigned short *
 	else if (Buf_id == 3)
 		real_buf_id = CHAR_BUFFER4;
 
-	retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
+	// retval = PS_HighSpeedSearch(real_buf_id, 0, 300, index);
+	retval = PS_Search(real_buf_id, 0, 300, index);
 	return retval;
 }
 
@@ -272,7 +303,7 @@ FP_COLOR_E mmi_dq_fp_get_light(void)
 /* 触摸判断 */
 unsigned char mmi_dq_fp_work(void)
 {
-	if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 0)
+	if (gpio_bit_get(GPIOF, GPIO_PIN_6) == 1)
 	{
 		if (FP_oldStatus == 0)
 		{

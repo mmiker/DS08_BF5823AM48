@@ -107,7 +107,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <nTsel>-1</nTsel>
+        <nTsel>0</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -118,7 +118,7 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile></tIfile>
-        <pMon>C:\Keil_v5\BYD\Bin51\MPT51.DLL</pMon>
+        <pMon>D:\Keil_v5\BYD\Bin51\MPT51.DLL</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
@@ -129,7 +129,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>MPT51</Key>
-          <Name>DapParam=0x0 OptionFile=CodeOption.bin IncludeOption=0 Erase=0 Program=1 Verify=0 Reset=1 ResetBeforeDownload=0 ResetScript=High;Delay(100);HiZ;Delay(10); VoutVoltage=5000#</Name>
+          <Name>DapParam=0x0 OptionFile=CodeOption.bin IncludeOption=0 Erase=0 Program=1 Verify=0 Reset=1 ResetBeforeDownload=0 ResetScript=High;Delay(100);HiZ;Delay(10); VoutVoltage=3300#</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint>

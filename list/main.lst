@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              03/23/2021 16:00:51 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -24,7 +24,7 @@ line level    source
   13          #include "mmi_audio.h"
   14          #include "mmi_bsp.h"
   15          #include "mmi_fm.h"
-  16          // #include <stdio.h>
+  16          #include <stdio.h>
   17          
   18          void system_init(void)
   19          {
@@ -62,7 +62,7 @@ line level    source
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              03/23/2021 16:00:51 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
@@ -117,6 +117,38 @@ line level    source
  104   2            mmi_wait_sleep_task_proc();
  105   2        }
  106   1      }
+ 107          
+ 108          // /**
+ 109          //   * @brief  输出字符串
+ 110          //   * @param  show 说明
+ 111          //   * @param  status 状态
+ 112          //   * @return none
+ 113          //   * @note   none
+ 114          //   * @see    none
+ 115          //   */
+C51 COMPILER V9.59.0.0   MAIN                                                              03/23/2021 16:00:51 PAGE 3   
+
+ 116          // void printfS(char *show, char *status)
+ 117          // {
+ 118          //  dqiot_drv_uart0A_init();
+ 119          //  printf("%s is %s\n", show, status);
+ 120          //  dqiot_drv_uart0B_init();
+ 121          // }
+ 122          
+ 123          // /**
+ 124          //   * @brief  输出值
+ 125          //   * @param  show 说明
+ 126          //   * @param  value  值
+ 127          //   * @return none
+ 128          //   * @note   none
+ 129          //   * @see    none
+ 130          //   */
+ 131          // void printfV(char *show, char *value)
+ 132          // {
+ 133          //  dqiot_drv_uart0A_init();
+ 134          //  printf("%s is %d\n", show, value);
+ 135          //  dqiot_drv_uart0B_init();
+ 136          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -126,8 +158,6 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.59.0.0   MAIN                                                              03/12/2021 12:09:30 PAGE 3   
-
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----
    HDATA SIZE       =   ----    ----
