@@ -39,8 +39,9 @@ return :
 */
 void mmi_dq_bsp_enter_sleep(void)
 {
+#ifdef __LOCK_FP_SY_SUPPORT__
 	FP_Light(FP_NONE_COLOR);
+#endif
 	dqiot_drv_enter_sleep();
-
 }
 #endif

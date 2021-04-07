@@ -104,7 +104,7 @@ typedef enum
 	AUD_BASE_ID_SYS_NUM_H = 91,//#
 	AUD_BASE_ID_MEM_FULL = 92,//操作失败，锁内储存空间已满
 	AUD_BASE_ID_SYS_WIFI	= 93,//wifi配网
-	AUD_BASE_ID_WIFI_CONNECTING			= 94,//配网中
+	AUD_BASE_ID_WIFI_CONNECTING			= 77,//配网中
 	AUD_BASE_ID_OUT_OPEN 		=	95,//开启出差模式	
 	AUD_BASE_ID_OUT_CLOSED 		=	96,//关闭出差模式
 	AUD_BASE_ID_SYSTEM_XIEPO	=	97,//系统设置胁迫

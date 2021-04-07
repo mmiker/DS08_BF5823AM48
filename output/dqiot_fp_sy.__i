@@ -1,1 +1,0 @@
-"source\dqiot_fp_sy.c" LARGE OMF2 OPTIMIZE (8,SPEED) BROWSE INCDIR(.\include;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_rfid;.\mmi_inc) DEBUG PRINT(.\list\dqiot_fp_sy.lst) TABS (2) OBJECT(.\output\dqiot_fp_sy.obj)

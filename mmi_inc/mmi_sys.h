@@ -229,13 +229,13 @@ return :
 */
 unsigned char mmi_dq_sys_check_vbat(void);
 
-/*
-function: 
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  远程开门
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
 void mmi_dq_sys_wifi_open(void);
 
 /*

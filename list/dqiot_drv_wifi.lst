@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_WIFI
@@ -15,513 +15,966 @@ line level    source
    4          #include "mmi_feature.h"
    5          #include "iic_master.h"
    6          #include "delay.h"
-   7          // #include <stdio.h>
-   8          
-   9          /*
-  10          parameter: 
-  11            none
-  12          return :
-  13            none
-  14          */
-  15          uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t len)
-  16          {
-  17   1        uint8_t i;
-  18   1      
-  19   1        if (send_len > 0)
-  20   1        {
-  21   2          EA = 0;
-  22   2          iic_master_start();
-  23   2      
-  24   2          if (iic_sendbyte_and_getnack(WIFI_ADDR))
-  25   2          {
-  26   3            //iic_master_stop();
-  27   3            //EA = 1;
-  28   3            //return 1;
-  29   3          }
-  30   2      
-  31   2          for (i = 0; i < send_len; i++)
-  32   2          {
-  33   3            if (iic_sendbyte_and_getnack(send[i]))
-  34   3            {
-  35   4              //iic_master_stop();
-  36   4              //EA = 1;
-  37   4              //return 1;
-  38   4            }
-  39   3          }
-  40   2      
-  41   2          if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
-  42   2          {
-  43   3            //iic_master_stop();
-  44   3            //EA = 1;
-  45   3            //return 1;
-  46   3          }
-  47   2      
-  48   2          for (i = 0; i < len; i++)
-  49   2          {
-  50   3            Buf[i] = iic_receive_byte();
-  51   3            if (i == (len - 1))
-  52   3              break;
-  53   3            iic_respond(ACK);
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 2   
+   7          #include "mmi_fs.h"
+   8          #include "mmi_audio.h"
+   9          #include "mmi_wifi.h"
+  10          #include "mmi_fps.h"
+  11          #include "mmi_ms.h"
+  12          // #include <stdio.h>
+  13          
+  14          unsigned char wifi_add_flag = 0;
+  15          extern unsigned char uart_get_buf[];
+  16          extern unsigned char uart_getbuflen;
+  17          
+  18          /*
+  19          parameter: 
+  20            none
+  21          return :
+  22            none
+  23          */
+  24          uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t len)
+  25          {
+  26   1      #if 0
+                uint8_t i;
+              
+                if (send_len > 0)
+                {
+                  EA = 0;
+                  iic_master_start();
+              
+                  if (iic_sendbyte_and_getnack(WIFI_ADDR))
+                  {
+                    //iic_master_stop();
+                    //EA = 1;
+                    //return 1;
+                  }
+              
+                  for (i = 0; i < send_len; i++)
+                  {
+                    if (iic_sendbyte_and_getnack(send[i]))
+                    {
+                      //iic_master_stop();
+                      //EA = 1;
+                      //return 1;
+                    }
+                  }
+              
+                  if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
+                  {
+                    //iic_master_stop();
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 2   
 
-  54   3          }
-  55   2      
-  56   2          iic_respond(NACK);
-  57   2      
-  58   2          EA = 1;
-  59   2          iic_master_stop();
-  60   2        }
-  61   1        else
-  62   1        {
-  63   2          EA = 0;
-  64   2          iic_master_start();
-  65   2          if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
-  66   2          {
-  67   3            //iic_master_stop();
-  68   3            //EA = 1;
-  69   3            //return 1;
-  70   3          }
-  71   2      
-  72   2          for (i = 0; i < len; i++)
-  73   2          {
-  74   3            Buf[i] = iic_receive_byte();
-  75   3            if (i == (len - 1))
-  76   3              break;
-  77   3            iic_respond(ACK);
-  78   3          }
-  79   2      
-  80   2          iic_respond(NACK);
-  81   2      
-  82   2          EA = 1;
-  83   2          iic_master_stop();
-  84   2        }
-  85   1      
-  86   1        return 0;
-  87   1      }
-  88          
-  89          /*
-  90          parameter: 
-  91            none
-  92          return :
-  93            none
-  94          */
-  95          unsigned char UH010_Write_Byte(uint8_t *send, uint8_t send_len)
-  96          {
-  97   1        uint8_t i;
-  98   1      
-  99   1        EA = 0;
- 100   1        iic_master_start();
- 101   1      
- 102   1        if (iic_sendbyte_and_getnack(WIFI_ADDR & ~0x01))
- 103   1        {
- 104   2          iic_master_stop();
- 105   2          EA = 1;
- 106   2          return 1;
- 107   2        }
- 108   1      
- 109   1        for (i = 0; i < send_len; i++)
- 110   1        {
- 111   2          if (iic_sendbyte_and_getnack(send[i]))
- 112   2          {
- 113   3            iic_master_stop();
- 114   3            EA = 1;
- 115   3            return 1;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 3   
+                    //EA = 1;
+                    //return 1;
+                  }
+              
+                  for (i = 0; i < len; i++)
+                  {
+                    Buf[i] = iic_receive_byte();
+                    if (i == (len - 1))
+                      break;
+                    iic_respond(ACK);
+                  }
+              
+                  iic_respond(NACK);
+              
+                  EA = 1;
+                  iic_master_stop();
+                }
+                else
+                {
+                  EA = 0;
+                  iic_master_start();
+                  if (iic_sendbyte_and_getnack(WIFI_ADDR | 0x01))
+                  {
+                    //iic_master_stop();
+                    //EA = 1;
+                    //return 1;
+                  }
+              
+                  for (i = 0; i < len; i++)
+                  {
+                    Buf[i] = iic_receive_byte();
+                    if (i == (len - 1))
+                      break;
+                    iic_respond(ACK);
+                  }
+              
+                  iic_respond(NACK);
+              
+                  EA = 1;
+                  iic_master_stop();
+                }
+              
+                return 0;
+              #else
+  98   1        uint8_t i;
+  99   1        uint16_t waittime = 1000;
+ 100   1      
+ 101   1        if (send_len > 0)
+ 102   1        {
+ 103   2          EA = 0;
+ 104   2      
+ 105   2          for (i = 0; i < send_len; i++)
+ 106   2            uart_tx_byte(UART0, send[i]);
+ 107   2      
+ 108   2          while (--waittime)
+ 109   2          {
+ 110   3            if (uart_getbuflen >= 2)
+ 111   3            {
+ 112   4              for (i = 0; i < len; i++)
+ 113   4              {
+ 114   5                Buf[i] = uart_get_buf[i];
+ 115   5                if (i == (len - 1))
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 3   
 
- 116   3          }
- 117   2        }
- 118   1        EA = 1;
- 119   1        iic_master_stop();
- 120   1      
- 121   1        return 0;
- 122   1      }
- 123          
- 124          /*
- 125          parameter: 
- 126            none
- 127          return :
- 128            none
- 129          */
- 130          void wifi_uh316_init(void)
- 131          {
- 132   1      }
- 133          
- 134          /*
- 135          parameter: 
- 136            none
- 137          return :
- 138            none
- 139          */
- 140          uint8_t wifi_net_connect_send(void)
- 141          {
- 142   1        uint8_t wifi_data[2];
- 143   1        wifi_data[0] = WIFI_CMD_NET_CON;
- 144   1        wifi_data[1] = 100;
- 145   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
- 146   1          return 1;
- 147   1        else
- 148   1          return 0;
- 149   1      }
- 150          
- 151          /*
- 152          parameter: 
- 153            none
- 154          return :
- 155            none
- 156          */
- 157          uint8_t wifi_net_connect_state(void)
- 158          {
- 159   1        uint8_t wifi_data[2];
- 160   1        uint8_t data_2[2] = {0};
- 161   1        wifi_data[0] = WIFI_CMD_NET_STATE;
- 162   1        wifi_data[1] = 100;
- 163   1        UH010_Write_Byte(wifi_data, 2);
- 164   1        delay_ms(10);
- 165   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
- 166   1        if (data_2[0] == 'I' && data_2[1] == 'O')
- 167   1          return 1;
- 168   1        else
- 169   1          return 0;
- 170   1      }
- 171          
- 172          /*
- 173          parameter: 
- 174            none
- 175          return :
- 176            none
- 177          */
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 4   
+ 116   5                  break;
+ 117   5              }
+ 118   4      
+ 119   4              /* 清空缓存 */
+ 120   4              uart_getbuflen = 0;
+ 121   4              EA = 1;
+ 122   4      
+ 123   4              return 0;
+ 124   4            }
+ 125   3          }
+ 126   2      
+ 127   2          EA = 1;
+ 128   2        }
+ 129   1        else
+ 130   1        {
+ 131   2          EA = 0;
+ 132   2      
+ 133   2          while (--waittime)
+ 134   2          {
+ 135   3            if (uart_getbuflen >= 2)
+ 136   3            {
+ 137   4              for (i = 0; i < len; i++)
+ 138   4              {
+ 139   5                Buf[i] = uart_get_buf[i];
+ 140   5                if (i == (len - 1))
+ 141   5                  break;
+ 142   5              }
+ 143   4      
+ 144   4              /* 清空缓存 */
+ 145   4              uart_getbuflen = 0;
+ 146   4              EA = 1;
+ 147   4      
+ 148   4              return 0;
+ 149   4            }
+ 150   3          }
+ 151   2      
+ 152   2          EA = 1;
+ 153   2        }
+ 154   1      
+ 155   1        return 0;
+ 156   1      #endif
+ 157   1      }
+ 158          
+ 159          /*
+ 160          parameter: 
+ 161            none
+ 162          return :
+ 163            none
+ 164          */
+ 165          uint8_t UH010_Write_Byte(uint8_t *send, uint8_t send_len)
+ 166          {
+ 167   1      #if 0
+                uint8_t i;
+              
+                EA = 0;
+                iic_master_start();
+              
+                if (iic_sendbyte_and_getnack(WIFI_ADDR & ~0x01))
+                {
+                  iic_master_stop();
+                  EA = 1;
+                  return 1;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 4   
 
- 178          uint8_t wifi_open_ask(void)
- 179          {
- 180   1        uint8_t wifi_data[2];
- 181   1        wifi_data[0] = WIFI_CMD_WF_OPEN_ASK;
- 182   1        wifi_data[1] = 100;
- 183   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
- 184   1          return 1;
- 185   1        else
- 186   1          return 0;
- 187   1      }
- 188          
- 189          /*
- 190          parameter: 
- 191            none
- 192          return :
- 193            none
- 194          */
- 195          uint8_t wifi_open_reply_get(void)
- 196          {
- 197   1        uint8_t wifi_data[2];
- 198   1        uint8_t data_2[2] = {0};
- 199   1        wifi_data[0] = WIFI_CMD_WF_OPEN_REPLY;
- 200   1        wifi_data[1] = 100;
- 201   1        UH010_Write_Byte(wifi_data, 2);
- 202   1        delay_ms(10);
- 203   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
- 204   1        if (data_2[0] == 'K' && data_2[1] == 'O')
- 205   1          return 1;
- 206   1        else if (data_2[0] == 'K' && data_2[1] == 'E')
- 207   1          return 2;
- 208   1        else if (data_2[0] == 'K' && data_2[1] == 'K')
- 209   1          return 3;
- 210   1        else
- 211   1          return 0;
- 212   1      }
- 213          
- 214          /*
- 215          parameter: 
- 216            none
- 217          return :
- 218            none
- 219          */
- 220          void wifi_close_over_time(void)
- 221          {
- 222   1        uint8_t wifi_data[2];
- 223   1        wifi_data[0] = WIFI_CMD_CLOSE_OVER_TIME;
- 224   1        wifi_data[1] = 100;
- 225   1        UH010_Write_Byte(wifi_data, 2);
- 226   1      }
- 227          
- 228          /*
- 229          parameter: 
- 230            none
- 231          return :
- 232            none
- 233          */
- 234          unsigned char wifi_wake_up(void)
- 235          {
- 236   1      
- 237   1        uint8_t wifi_data[2];
- 238   1        wifi_data[0] = WIFI_CMD_WAKEUP;
- 239   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 5   
+                }
+              
+                for (i = 0; i < send_len; i++)
+                {
+                  if (iic_sendbyte_and_getnack(send[i]))
+                  {
+                    iic_master_stop();
+                    EA = 1;
+                    return 1;
+                  }
+                }
+                EA = 1;
+                iic_master_stop();
+              
+                return 0;
+              #else
+ 194   1        uint8_t i;
+ 195   1      
+ 196   1        EA = 0;
+ 197   1        uart_getbuflen = 0;
+ 198   1      
+ 199   1        for (i = 0; i < send_len; i++)
+ 200   1          uart_tx_byte(UART0, send[i]);
+ 201   1      
+ 202   1        EA = 1;
+ 203   1      
+ 204   1        return 0;
+ 205   1      #endif
+ 206   1      }
+ 207          
+ 208          /*
+ 209          parameter: 
+ 210            none
+ 211          return :
+ 212            none
+ 213          */
+ 214          void wifi_uh316_init(void)
+ 215          {
+ 216   1      }
+ 217          
+ 218          /**
+ 219            * @brief  智能配网（发送）
+ 220            * @param  none
+ 221            * @return none
+ 222            * @note   none
+ 223            * @see    none
+ 224            */
+ 225          uint8_t wifi_net_connect_send(void)
+ 226          {
+ 227   1        uint8_t wifi_data[2];
+ 228   1        wifi_data[0] = WIFI_CMD_NET_CON;
+ 229   1        wifi_data[1] = 100;
+ 230   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 231   1          return 1;
+ 232   1        else
+ 233   1          return 0;
+ 234   1      }
+ 235          
+ 236          /**
+ 237            * @brief  Airkiss配网（发送）
+ 238            * @param  none
+ 239            * @return none
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 5   
 
- 240   1        return UH010_Write_Byte(wifi_data, 2);
- 241   1      }
- 242          
- 243          /*
- 244          parameter: 
- 245            none
- 246          return :
- 247            none
- 248          */
- 249          void wifi_sleep_mode(void)
- 250          {
- 251   1        uint8_t wifi_data[2];
- 252   1        wifi_data[0] = WIFI_CMD_SLEEP;
- 253   1        wifi_data[1] = 100;
- 254   1        UH010_Write_Byte(wifi_data, 2);
- 255   1      }
- 256          
- 257          /*
- 258          parameter: 
- 259            none
- 260          return :
- 261            none
- 262          */
- 263          void wifi_add_password(void)
- 264          {
- 265   1        uint8_t wifi_data[2];
- 266   1        wifi_data[0] = WIFI_CMD_ADD_PW;
- 267   1        wifi_data[1] = 100;
- 268   1        UH010_Write_Byte(wifi_data, 2);
- 269   1      }
- 270          
- 271          /*
- 272          parameter: 
- 273            none
- 274          return :
- 275            none
- 276          */
- 277          void wifi_del_password(void)
- 278          {
- 279   1        uint8_t wifi_data[2];
- 280   1        wifi_data[0] = WIFI_CMD_DEL_PW;
- 281   1        wifi_data[1] = 100;
- 282   1        UH010_Write_Byte(wifi_data, 2);
- 283   1      }
- 284          
- 285          /*
- 286          parameter: 
- 287            none
- 288          return :
- 289            none
- 290          */
- 291          void wifi_add_fp(void)
- 292          {
- 293   1        uint8_t wifi_data[2];
- 294   1        wifi_data[0] = WIFI_CMD_ADD_FP;
- 295   1        wifi_data[1] = 100;
- 296   1        UH010_Write_Byte(wifi_data, 2);
- 297   1      }
- 298          
- 299          /*
- 300          parameter: 
- 301            none
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 6   
+ 240            * @note   none
+ 241            * @see    none
+ 242            */
+ 243          uint8_t wifi_net_airkiss_connect_send(void)
+ 244          {
+ 245   1        uint8_t wifi_data[2];
+ 246   1        wifi_data[0] = WIFI_CMD_AIRKISS_NET_CON;
+ 247   1        wifi_data[1] = 100;
+ 248   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 249   1          return 1;
+ 250   1        else
+ 251   1          return 0;
+ 252   1      }
+ 253          
+ 254          /**
+ 255            * @brief  二维码配网（发送）
+ 256            * @param  none
+ 257            * @return none
+ 258            * @note   none
+ 259            * @see    none
+ 260            */
+ 261          uint8_t wifi_net_code_connect_send(void)
+ 262          {
+ 263   1        uint8_t wifi_data[2];
+ 264   1        wifi_data[0] = WIFI_CMD_CODE_NET_CON;
+ 265   1        wifi_data[1] = 100;
+ 266   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 267   1          return 1;
+ 268   1        else
+ 269   1          return 0;
+ 270   1      }
+ 271          
+ 272          /**
+ 273            * @brief  配网状态（接收）
+ 274            * @param  none
+ 275            * @return none
+ 276            * @note   none
+ 277            * @see    none
+ 278            */
+ 279          uint8_t wifi_net_connect_state(void)
+ 280          {
+ 281   1        uint8_t wifi_data[2];
+ 282   1        uint8_t data_2[2] = {0};
+ 283   1        wifi_data[0] = WIFI_CMD_NET_STATE;
+ 284   1        wifi_data[1] = 100;
+ 285   1        UH010_Write_Byte(wifi_data, 2);
+ 286   1        delay_ms(50);
+ 287   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 288   1        if (data_2[0] == 'I' && data_2[1] == 'O')
+ 289   1          return 1;
+ 290   1        if (data_2[0] == 'I' && data_2[1] == 'E')
+ 291   1          return 2;
+ 292   1        else
+ 293   1          return 0;
+ 294   1      }
+ 295          
+ 296          /**
+ 297            * @brief  查询网络状态
+ 298            * @param  none
+ 299            * @return none
+ 300            * @note   none
+ 301            * @see    none
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 6   
 
- 302          return :
- 303            none
- 304          */
- 305          void wifi_del_fp(void)
- 306          {
- 307   1        uint8_t wifi_data[2];
- 308   1        wifi_data[0] = WIFI_CMD_DEL_FP;
- 309   1        wifi_data[1] = 100;
- 310   1        UH010_Write_Byte(wifi_data, 2);
- 311   1      }
- 312          
- 313          /*
- 314          parameter: 
- 315            none
- 316          return :
- 317            none
- 318          */
- 319          void wifi_open_by_wifi(void)
- 320          {
- 321   1        uint8_t wifi_data[2];
- 322   1        wifi_data[0] = WIFI_CMD_WF_OPEN;
- 323   1        wifi_data[1] = 100;
- 324   1        UH010_Write_Byte(wifi_data, 2);
- 325   1      }
- 326          
- 327          /*
- 328          parameter: 
- 329            none
- 330          return :
- 331            none
- 332          */
- 333          void wifi_open_by_password(void)
- 334          {
- 335   1        uint8_t wifi_data[2];
- 336   1        wifi_data[0] = WIFI_CMD_PW_OPEN;
- 337   1        wifi_data[1] = 100;
- 338   1        UH010_Write_Byte(wifi_data, 2);
- 339   1      }
- 340          
- 341          /*
- 342          parameter: 
- 343            none
- 344          return :
- 345            none
- 346          */
- 347          void wifi_open_by_rfid(void)
- 348          {
- 349   1        uint8_t wifi_data[2];
- 350   1        wifi_data[0] = WIFI_CMD_RF_OPEN;
- 351   1        wifi_data[1] = 100;
- 352   1        UH010_Write_Byte(wifi_data, 2);
- 353   1      }
- 354          
- 355          /*
- 356          parameter: 
- 357            none
- 358          return :
- 359            none
- 360          */
- 361          void wifi_open_by_fp(void)
- 362          {
- 363   1        uint8_t wifi_data[2];
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 7   
+ 302            */
+ 303          uint8_t wifi_check_net(void)
+ 304          {
+ 305   1        uint8_t wifi_data[2];
+ 306   1        uint8_t data_2[2] = {0};
+ 307   1        wifi_data[0] = WIFI_CMD_CHECK_NET;
+ 308   1        wifi_data[1] = 100;
+ 309   1        UH010_Write_Byte(wifi_data, 2);
+ 310   1        delay_ms(50);
+ 311   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 312   1        if (data_2[0] == 'q' && data_2[1] == 'O')
+ 313   1          return 1;
+ 314   1        else
+ 315   1          return 0;
+ 316   1      }
+ 317          
+ 318          /**
+ 319            * @brief  拍照
+ 320            * @param  none
+ 321            * @return none
+ 322            * @note   none
+ 323            * @see    none
+ 324            */
+ 325          uint8_t wifi_take_photos(void)
+ 326          {
+ 327   1        uint8_t wifi_data[2];
+ 328   1        wifi_data[0] = WIFI_CMD_TAKE_PHOTOS;
+ 329   1        wifi_data[1] = 100;
+ 330   1        UH010_Write_Byte(wifi_data, 2);
+ 331   1        return 1;
+ 332   1      }
+ 333          
+ 334          /**
+ 335            * @brief  录像
+ 336            * @param  none
+ 337            * @return none
+ 338            * @note   none
+ 339            * @see    none
+ 340            */
+ 341          uint8_t wifi_take_videos(void)
+ 342          {
+ 343   1        uint8_t wifi_data[2];
+ 344   1        wifi_data[0] = WIFI_CMD_TAKE_VIDEOS;
+ 345   1        wifi_data[1] = 100;
+ 346   1        UH010_Write_Byte(wifi_data, 2);
+ 347   1        return 1;
+ 348   1      }
+ 349          
+ 350          /**
+ 351            * @brief  发送数据包
+ 352            * @param  cmd   命令
+ 353            * @param  pv    电流
+ 354            * @param  index 编号(0xff=null)
+ 355            * @return status
+ 356            * @note   none
+ 357            * @see    none
+ 358            */
+ 359          uint8_t wifi_data_package(uint8_t cmd, uint8_t pv, uint8_t index)
+ 360          {
+ 361   1        uint8_t wifi_data[3];
+ 362   1        wifi_data[0] = cmd;
+ 363   1        wifi_data[1] = pv;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 7   
 
- 364   1        wifi_data[0] = WIFI_CMD_FP_OPEN;
- 365   1        wifi_data[1] = 100;
- 366   1        UH010_Write_Byte(wifi_data, 2);
- 367   1      }
- 368          
- 369          /*
- 370          parameter: 
- 371            none
- 372          return :
- 373            none
- 374          */
- 375          void wifi_open_by_key(void)
- 376          {
- 377   1        uint8_t wifi_data[2];
- 378   1        wifi_data[0] = WIFI_CMD_KEY_OPEN;
- 379   1        wifi_data[1] = 100;
- 380   1        UH010_Write_Byte(wifi_data, 2);
- 381   1      }
- 382          
- 383          /*
- 384          parameter: 
- 385            none
- 386          return :
- 387            none
- 388          */
- 389          void wifi_door_close(void)
- 390          {
- 391   1        uint8_t wifi_data[2];
- 392   1        wifi_data[0] = WIFI_CMD_CLOSE;
- 393   1        wifi_data[1] = 100;
- 394   1        UH010_Write_Byte(wifi_data, 2);
- 395   1      }
- 396          
- 397          /*
- 398          parameter: 
- 399            none
- 400          return :
- 401            none
- 402          */
- 403          void wifi_via_alarm(void)
- 404          {
- 405   1        uint8_t wifi_data[2];
- 406   1        wifi_data[0] = WIFI_CMD_VIA_ALARM;
- 407   1        wifi_data[1] = 100;
- 408   1        UH010_Write_Byte(wifi_data, 2);
- 409   1      }
- 410          
- 411          /*
- 412          parameter: 
- 413            none
- 414          return :
- 415            none
- 416          */
- 417          void wifi_pw_alarm(void)
- 418          {
- 419   1        uint8_t wifi_data[2];
- 420   1        wifi_data[0] = WIFI_CMD_PW_ALARM;
- 421   1        wifi_data[1] = 100;
- 422   1        UH010_Write_Byte(wifi_data, 2);
- 423   1      }
- 424          
- 425          /*
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 8   
+ 364   1        wifi_data[2] = index;
+ 365   1      
+ 366   1        if (index == 0xff)
+ 367   1          UH010_Write_Byte(wifi_data, 2);
+ 368   1        else
+ 369   1          UH010_Write_Byte(wifi_data, 3);
+ 370   1      
+ 371   1        return 1;
+ 372   1      }
+ 373          
+ 374          /**
+ 375            * @brief  远程开门（发送）
+ 376            * @param  none
+ 377            * @return none
+ 378            * @note   none
+ 379            * @see    none
+ 380            */
+ 381          uint8_t wifi_open_ask(void)
+ 382          {
+ 383   1        uint8_t wifi_data[2];
+ 384   1        wifi_data[0] = WIFI_CMD_WF_OPEN_ASK;
+ 385   1        wifi_data[1] = 100;
+ 386   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
+ 387   1          return 1;
+ 388   1        else
+ 389   1          return 0;
+ 390   1      }
+ 391          
+ 392          /**
+ 393            * @brief  远程开门（接收）
+ 394            * @param  none
+ 395            * @return none
+ 396            * @note   none
+ 397            * @see    none
+ 398            */
+ 399          uint8_t wifi_open_reply_get(void)
+ 400          {
+ 401   1        uint8_t wifi_data[2];
+ 402   1        uint8_t data_2[2] = {0};
+ 403   1        wifi_data[0] = WIFI_CMD_WF_OPEN_REPLY;
+ 404   1        wifi_data[1] = 100;
+ 405   1        UH010_Write_Byte(wifi_data, 2);
+ 406   1        delay_ms(300);
+ 407   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 408   1        if (data_2[0] == 'K' && data_2[1] == 'O')
+ 409   1          return 1;
+ 410   1        else if (data_2[0] == 'K' && data_2[1] == 'E')
+ 411   1          return 2;
+ 412   1        else if (data_2[0] == 'K' && data_2[1] == 'K')
+ 413   1          return 3;
+ 414   1        else
+ 415   1          return 0;
+ 416   1      }
+ 417          
+ 418          /**
+ 419            * @brief  添加删除密码/指纹/RF卡
+ 420            * @param  none
+ 421            * @return none
+ 422            * @note   none
+ 423            * @see    none
+ 424            */
+ 425          uint8_t wifi_cmd_add_del(void)
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 8   
 
- 426          parameter: 
- 427            none
- 428          return :
- 429            none
- 430          */
- 431          void wifi_fp_alarm(void)
- 432          {
- 433   1        uint8_t wifi_data[2];
- 434   1        wifi_data[0] = WIFI_CMD_FP_ALARM;
- 435   1        wifi_data[1] = 100;
- 436   1        UH010_Write_Byte(wifi_data, 2);
- 437   1      }
- 438          
- 439          /*
- 440          parameter: 
- 441            none
- 442          return :
- 443            none
- 444          */
- 445          void wifi_rf_alarm(void)
- 446          {
- 447   1        uint8_t wifi_data[2];
- 448   1        wifi_data[0] = WIFI_CMD_RF_ALARM;
- 449   1        wifi_data[1] = 100;
- 450   1        UH010_Write_Byte(wifi_data, 2);
- 451   1      }
- 452          
- 453          /*
- 454          parameter: 
- 455            none
- 456          return :
- 457            none
- 458          */
- 459          void wifi_lowpower_alarm(void)
- 460          {
- 461   1        uint8_t wifi_data[2];
- 462   1        wifi_data[0] = WIFI_CMD_LOWPOWER_ALARM;
- 463   1        wifi_data[1] = 100;
- 464   1        UH010_Write_Byte(wifi_data, 2);
- 465   1      }
- 466          
- 467          void wifi_send_fp_110(void)
- 468          {
- 469   1        uint8_t wifi_data[2];
- 470   1        wifi_data[0] = WIFI_CMD_WF_OPEN_FP_110;
- 471   1        wifi_data[1] = 100;
- 472   1        UH010_Write_Byte(wifi_data, 2);
- 473   1      }
- 474          
- 475          void wifi_send_pwd_110(void)
- 476          {
- 477   1        uint8_t wifi_data[2];
- 478   1        wifi_data[0] = WIFI_CMD_WF_OPEN_PSW_110;
- 479   1        wifi_data[1] = 100;
- 480   1        UH010_Write_Byte(wifi_data, 2);
- 481   1      }
- 482          
- 483          void wifi_set_110(void)
- 484          {
- 485   1        uint8_t wifi_data[2];
- 486   1        wifi_data[0] = WIFI_CMD_WF_SET_110;
- 487   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    03/20/2021 15:44:10 PAGE 9   
+ 426          {
+ 427   1        RET_VAL retval = 0;
+ 428   1        uint8_t wifi_data[2];
+ 429   1        uint8_t data_2[2] = {0};
+ 430   1        wifi_data[0] = WIFI_CMD_ADD_DEL;
+ 431   1        wifi_data[1] = 100;
+ 432   1        UH010_Write_Byte(wifi_data, 2);
+ 433   1        delay_ms(300);
+ 434   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 435   1      
+ 436   1        if (data_2[0] == 'B' && data_2[1] == 'E')
+ 437   1        {
+ 438   2          mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+ 439   2          return 0xff;
+ 440   2        }
+ 441   1        else if (data_2[0] == 'M')
+ 442   1        {
+ 443   2          retval = mmi_dq_fs_del_pwd(data_2[1], FDS_USE_TYPE_USER);
+ 444   2          if (retval == RET_SUCESS)
+ 445   2          {
+ 446   3            mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+ 447   3            mmi_dq_wifi_del_password(data_2[1]);
+ 448   3          }
+ 449   2          else
+ 450   2            mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+ 451   2        }
+ 452   1        else if (data_2[0] == 'F')
+ 453   1        {
+ 454   2          retval = mmi_dq_fs_del_fp((unsigned char)data_2[1], FDS_USE_TYPE_USER);
+ 455   2          if (retval == RET_SUCESS)
+ 456   2          {
+ 457   3            retval = mmi_dq_fp_delete(data_2[1]);
+ 458   3          }
+ 459   2          if (retval == 0)
+ 460   2          {
+ 461   3            mmi_dq_fp_light(FP_GREEN);
+ 462   3            mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
+ 463   3            mmi_dq_wifi_del_fp(data_2[1]);
+ 464   3          }
+ 465   2          else
+ 466   2          {
+ 467   3            mmi_dq_fp_light(FP_RED);
+ 468   3            mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+ 469   3          }
+ 470   2        }
+ 471   1        else if (data_2[0] == 'R')
+ 472   1        {
+ 473   2          retval = mmi_dq_fs_del_rfid(data_2[1]);
+ 474   2          if (retval == RET_SUCESS)
+ 475   2          {
+ 476   3            mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
+ 477   3            mmi_dq_wifi_del_rfid_suc(data_2[1]);
+ 478   3          }
+ 479   2          else
+ 480   2            mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+ 481   2        }
+ 482   1        else if (data_2[0] == 'B' && data_2[1] == 'M')
+ 483   1        {
+ 484   2          wifi_add_flag = 1;
+ 485   2          mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+ 486   2          mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
+ 487   2        }
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 9   
 
- 488   1        UH010_Write_Byte(wifi_data, 2);
- 489   1      }
- 490          
- 491          #endif
+ 488   1        else if (data_2[0] == 'B' && data_2[1] == 'F')
+ 489   1        {
+ 490   2          wifi_add_flag = 1;
+ 491   2          mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+ 492   2          mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
+ 493   2        }
+ 494   1        else if (data_2[0] == 'B' && data_2[1] == 'R')
+ 495   1        {
+ 496   2          wifi_add_flag = 1;
+ 497   2          mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+ 498   2          mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
+ 499   2        }
+ 500   1        else if (data_2[0] == 'B' && data_2[1] == 'L')
+ 501   1          return 0;
+ 502   1      
+ 503   1        return 1;
+ 504   1      }
+ 505          
+ 506          /**
+ 507            * @brief  门未关
+ 508            * @param  none
+ 509            * @return none
+ 510            * @note   none
+ 511            * @see    none
+ 512            */
+ 513          void wifi_close_over_time(void)
+ 514          {
+ 515   1        uint8_t wifi_data[2];
+ 516   1        wifi_data[0] = WIFI_CMD_CLOSE_OVER_TIME;
+ 517   1        wifi_data[1] = 100;
+ 518   1        UH010_Write_Byte(wifi_data, 2);
+ 519   1      }
+ 520          
+ 521          /**
+ 522            * @brief  唤醒
+ 523            * @param  none
+ 524            * @return none
+ 525            * @note   none
+ 526            * @see    none
+ 527            */
+ 528          unsigned char wifi_wake_up(void)
+ 529          {
+ 530   1      
+ 531   1        uint8_t wifi_data[2];
+ 532   1        wifi_data[0] = WIFI_CMD_WAKEUP;
+ 533   1        wifi_data[1] = 100;
+ 534   1        return UH010_Write_Byte(wifi_data, 2);
+ 535   1      }
+ 536          
+ 537          /**
+ 538            * @brief  睡眠
+ 539            * @param  none
+ 540            * @return none
+ 541            * @note   none
+ 542            * @see    none
+ 543            */
+ 544          void wifi_sleep_mode(void)
+ 545          {
+ 546   1        uint8_t wifi_data[2];
+ 547   1        wifi_data[0] = WIFI_CMD_SLEEP;
+ 548   1        wifi_data[1] = 100;
+ 549   1        UH010_Write_Byte(wifi_data, 2);
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 10  
+
+ 550   1      }
+ 551          
+ 552          /**
+ 553            * @brief  添加密码
+ 554            * @param  index
+ 555            * @return none
+ 556            * @note   none
+ 557            * @see    none
+ 558            */
+ 559          void wifi_add_password(uint8_t index)
+ 560          {
+ 561   1        uint8_t wifi_data[2];
+ 562   1        wifi_data[0] = WIFI_CMD_ADD_PW;
+ 563   1        wifi_data[1] = 100;
+ 564   1        wifi_data[2] = index;
+ 565   1        UH010_Write_Byte(wifi_data, 3);
+ 566   1      }
+ 567          
+ 568          /**
+ 569            * @brief  删除密码
+ 570            * @param  index
+ 571            * @return none
+ 572            * @note   none
+ 573            * @see    none
+ 574            */
+ 575          void wifi_del_password(uint8_t index)
+ 576          {
+ 577   1        uint8_t wifi_data[2];
+ 578   1        wifi_data[0] = WIFI_CMD_DEL_PW;
+ 579   1        wifi_data[1] = 100;
+ 580   1        wifi_data[2] = index;
+ 581   1        UH010_Write_Byte(wifi_data, 3);
+ 582   1      }
+ 583          
+ 584          /**
+ 585            * @brief  添加指纹
+ 586            * @param  index
+ 587            * @return none
+ 588            * @note   none
+ 589            * @see    none
+ 590            */
+ 591          void wifi_add_fp(uint8_t index)
+ 592          {
+ 593   1        uint8_t wifi_data[2];
+ 594   1        wifi_data[0] = WIFI_CMD_ADD_FP;
+ 595   1        wifi_data[1] = 100;
+ 596   1        wifi_data[2] = index;
+ 597   1        UH010_Write_Byte(wifi_data, 3);
+ 598   1      }
+ 599          
+ 600          /**
+ 601            * @brief  删除指纹
+ 602            * @param  index
+ 603            * @return none
+ 604            * @note   none
+ 605            * @see    none
+ 606            */
+ 607          void wifi_del_fp(uint8_t index)
+ 608          {
+ 609   1        uint8_t wifi_data[2];
+ 610   1        wifi_data[0] = WIFI_CMD_DEL_FP;
+ 611   1        wifi_data[1] = 100;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 11  
+
+ 612   1        wifi_data[2] = index;
+ 613   1        UH010_Write_Byte(wifi_data, 3);
+ 614   1      }
+ 615          
+ 616          /**
+ 617            * @brief  添加RF卡
+ 618            * @param  index
+ 619            * @return none
+ 620            * @note   none
+ 621            * @see    none
+ 622            */
+ 623          void wifi_add_rf(uint8_t index)
+ 624          {
+ 625   1        uint8_t wifi_data[2];
+ 626   1        wifi_data[0] = WIFI_CMD_ADD_RF;
+ 627   1        wifi_data[1] = 100;
+ 628   1        wifi_data[2] = index;
+ 629   1        UH010_Write_Byte(wifi_data, 3);
+ 630   1      }
+ 631          
+ 632          /**
+ 633            * @brief  删除RF卡
+ 634            * @param  index
+ 635            * @return none
+ 636            * @note   none
+ 637            * @see    none
+ 638            */
+ 639          void wifi_del_rf(uint8_t index)
+ 640          {
+ 641   1        uint8_t wifi_data[2];
+ 642   1        wifi_data[0] = WIFI_CMD_DEL_RF;
+ 643   1        wifi_data[1] = 100;
+ 644   1        wifi_data[2] = index;
+ 645   1        UH010_Write_Byte(wifi_data, 3);
+ 646   1      }
+ 647          
+ 648          /**
+ 649            * @brief  密码全部清除
+ 650            * @param  none
+ 651            * @return none
+ 652            * @note   none
+ 653            * @see    none
+ 654            */
+ 655          void wifi_clr_pwd(void)
+ 656          {
+ 657   1        uint8_t wifi_data[2];
+ 658   1        wifi_data[0] = WIFI_CMD_CLR_PW;
+ 659   1        wifi_data[1] = 100;
+ 660   1        UH010_Write_Byte(wifi_data, 2);
+ 661   1      }
+ 662          
+ 663          /**
+ 664            * @brief  指纹全部清除
+ 665            * @param  none
+ 666            * @return none
+ 667            * @note   none
+ 668            * @see    none
+ 669            */
+ 670          void wifi_clr_fp(void)
+ 671          {
+ 672   1        uint8_t wifi_data[2];
+ 673   1        wifi_data[0] = WIFI_CMD_CLR_FP;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 12  
+
+ 674   1        wifi_data[1] = 100;
+ 675   1        UH010_Write_Byte(wifi_data, 2);
+ 676   1      }
+ 677          
+ 678          /**
+ 679            * @brief  RF卡全部清除
+ 680            * @param  none
+ 681            * @return none
+ 682            * @note   none
+ 683            * @see    none
+ 684            */
+ 685          void wifi_clr_rf(void)
+ 686          {
+ 687   1        uint8_t wifi_data[2];
+ 688   1        wifi_data[0] = WIFI_CMD_CLR_RF;
+ 689   1        wifi_data[1] = 100;
+ 690   1        UH010_Write_Byte(wifi_data, 2);
+ 691   1      }
+ 692          
+ 693          /**
+ 694            * @brief  远程开门
+ 695            * @param  none
+ 696            * @return none
+ 697            * @note   none
+ 698            * @see    none
+ 699            */
+ 700          void wifi_open_by_wifi(void)
+ 701          {
+ 702   1        uint8_t wifi_data[2];
+ 703   1        wifi_data[0] = WIFI_CMD_WF_OPEN;
+ 704   1        wifi_data[1] = 100;
+ 705   1        UH010_Write_Byte(wifi_data, 2);
+ 706   1      }
+ 707          
+ 708          /**
+ 709            * @brief  密码开门
+ 710            * @param  index
+ 711            * @return none
+ 712            * @note   none
+ 713            * @see    none
+ 714            */
+ 715          void wifi_open_by_password(uint8_t index)
+ 716          {
+ 717   1        uint8_t wifi_data[3];
+ 718   1        wifi_data[0] = WIFI_CMD_PW_OPEN;
+ 719   1        wifi_data[1] = 100;
+ 720   1        wifi_data[2] = index;
+ 721   1        UH010_Write_Byte(wifi_data, 3);
+ 722   1      }
+ 723          
+ 724          /**
+ 725            * @brief  指纹开门
+ 726            * @param  index
+ 727            * @return none
+ 728            * @note   none
+ 729            * @see    none
+ 730            */
+ 731          void wifi_open_by_fp(uint8_t index)
+ 732          {
+ 733   1        uint8_t wifi_data[2];
+ 734   1        wifi_data[0] = WIFI_CMD_FP_OPEN;
+ 735   1        wifi_data[1] = 100;
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 13  
+
+ 736   1        wifi_data[2] = index;
+ 737   1        UH010_Write_Byte(wifi_data, 3);
+ 738   1      }
+ 739          
+ 740          /**
+ 741            * @brief  RF卡指纹
+ 742            * @param  index
+ 743            * @return none
+ 744            * @note   none
+ 745            * @see    none
+ 746            */
+ 747          void wifi_open_by_rfid(uint8_t index)
+ 748          {
+ 749   1        uint8_t wifi_data[2];
+ 750   1        wifi_data[0] = WIFI_CMD_RF_OPEN;
+ 751   1        wifi_data[1] = 100;
+ 752   1        wifi_data[2] = index;
+ 753   1        UH010_Write_Byte(wifi_data, 3);
+ 754   1      }
+ 755          
+ 756          /**
+ 757            * @brief  应急钥匙开门
+ 758            * @param  none
+ 759            * @return none
+ 760            * @note   none
+ 761            * @see    none
+ 762            */
+ 763          void wifi_open_by_key(void)
+ 764          {
+ 765   1        uint8_t wifi_data[2];
+ 766   1        wifi_data[0] = WIFI_CMD_KEY_OPEN;
+ 767   1        wifi_data[1] = 100;
+ 768   1        UH010_Write_Byte(wifi_data, 2);
+ 769   1      }
+ 770          
+ 771          /*
+ 772          parameter: 
+ 773            none
+ 774          return :
+ 775            none
+ 776          */
+ 777          void wifi_door_close(void)
+ 778          {
+ 779   1        uint8_t wifi_data[2];
+ 780   1        wifi_data[0] = WIFI_CMD_CLOSE;
+ 781   1        wifi_data[1] = 100;
+ 782   1        UH010_Write_Byte(wifi_data, 2);
+ 783   1      }
+ 784          
+ 785          /**
+ 786            * @brief  震动报警
+ 787            * @param  none
+ 788            * @return none
+ 789            * @note   none
+ 790            * @see    none
+ 791            */
+ 792          void wifi_via_alarm(void)
+ 793          {
+ 794   1        uint8_t wifi_data[2];
+ 795   1        wifi_data[0] = WIFI_CMD_VIA_ALARM;
+ 796   1        wifi_data[1] = 100;
+ 797   1        UH010_Write_Byte(wifi_data, 2);
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 14  
+
+ 798   1      }
+ 799          
+ 800          /**
+ 801            * @brief  多次密码错误
+ 802            * @param  none
+ 803            * @return none
+ 804            * @note   none
+ 805            * @see    none
+ 806            */
+ 807          void wifi_pw_alarm(void)
+ 808          {
+ 809   1        uint8_t wifi_data[2];
+ 810   1        wifi_data[0] = WIFI_CMD_PW_ALARM;
+ 811   1        wifi_data[1] = 100;
+ 812   1        UH010_Write_Byte(wifi_data, 2);
+ 813   1      }
+ 814          
+ 815          /**
+ 816            * @brief  多次指纹错误
+ 817            * @param  none
+ 818            * @return none
+ 819            * @note   none
+ 820            * @see    none
+ 821            */
+ 822          void wifi_fp_alarm(void)
+ 823          {
+ 824   1        uint8_t wifi_data[2];
+ 825   1        wifi_data[0] = WIFI_CMD_FP_ALARM;
+ 826   1        wifi_data[1] = 100;
+ 827   1        UH010_Write_Byte(wifi_data, 2);
+ 828   1      }
+ 829          
+ 830          /**
+ 831            * @brief  多次RF卡错误
+ 832            * @param  none
+ 833            * @return none
+ 834            * @note   none
+ 835            * @see    none
+ 836            */
+ 837          void wifi_rf_alarm(void)
+ 838          {
+ 839   1        uint8_t wifi_data[2];
+ 840   1        wifi_data[0] = WIFI_CMD_RF_ALARM;
+ 841   1        wifi_data[1] = 100;
+ 842   1        UH010_Write_Byte(wifi_data, 2);
+ 843   1      }
+ 844          
+ 845          /**
+ 846            * @brief  低电量
+ 847            * @param  none
+ 848            * @return none
+ 849            * @note   none
+ 850            * @see    none
+ 851            */
+ 852          void wifi_lowpower_alarm(void)
+ 853          {
+ 854   1        uint8_t wifi_data[2];
+ 855   1        wifi_data[0] = WIFI_CMD_LOWPOWER_ALARM;
+ 856   1        wifi_data[1] = 100;
+ 857   1        UH010_Write_Byte(wifi_data, 2);
+ 858   1      }
+ 859          
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 15  
+
+ 860          /**
+ 861            * @brief  拍照录像开关（发送）
+ 862            * @param  none
+ 863            * @return none
+ 864            * @note   none
+ 865            * @see    none
+ 866            */
+ 867          void wifi_pv_switch_send(void)
+ 868          {
+ 869   1        uint8_t wifi_data[2];
+ 870   1        wifi_data[0] = WIFI_CMD_PV_SWITCH_SEND;
+ 871   1        wifi_data[1] = 100;
+ 872   1        UH010_Write_Byte(wifi_data, 2);
+ 873   1      }
+ 874          
+ 875          /**
+ 876            * @brief  拍照录像开关（接收）
+ 877            * @param  none
+ 878            * @return none
+ 879            * @note   none
+ 880            * @see    none
+ 881            */
+ 882          uint8_t wifi_pv_switch_get(void)
+ 883          {
+ 884   1        uint8_t wifi_data[2];
+ 885   1        uint8_t data_2[2] = {0};
+ 886   1        wifi_data[0] = WIFI_CMD_PV_SWITCH_GET;
+ 887   1        wifi_data[1] = 100;
+ 888   1        UH010_Write_Byte(wifi_data, 2);
+ 889   1        delay_ms(300);
+ 890   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
+ 891   1        if (data_2[0] == 'J' && data_2[1] == 'E') //无响应
+ 892   1          return 0xff;
+ 893   1        else if (data_2[0] == 'J' && data_2[1] == '0') //关闭拍照录像(设备之后开门都不会发送拍�
+             -��和录像命令)
+ 894   1          return 0;
+ 895   1        else if (data_2[0] == 'J' && data_2[1] == '1') //开启拍照关闭录像
+ 896   1          return 1;
+ 897   1        else if (data_2[0] == 'J' && data_2[1] == '2') //关闭拍照开启录像
+ 898   1          return 2;
+ 899   1        else if (data_2[0] == 'J' && data_2[1] == '3') //开启拍照开启录像
+ 900   1          return 3;
+ 901   1        else
+ 902   1          return 0xff;
+ 903   1      }
+ 904          
+ 905          void wifi_send_fp_110(void)
+ 906          {
+ 907   1        uint8_t wifi_data[2];
+ 908   1        wifi_data[0] = WIFI_CMD_WF_OPEN_FP_110;
+ 909   1        wifi_data[1] = 100;
+ 910   1        UH010_Write_Byte(wifi_data, 2);
+ 911   1      }
+ 912          
+ 913          void wifi_send_pwd_110(void)
+ 914          {
+ 915   1        uint8_t wifi_data[2];
+ 916   1        wifi_data[0] = WIFI_CMD_WF_OPEN_PSW_110;
+ 917   1        wifi_data[1] = 100;
+ 918   1        UH010_Write_Byte(wifi_data, 2);
+ 919   1      }
+ 920          
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/07/2021 10:40:47 PAGE 16  
+
+ 921          void wifi_set_110(void)
+ 922          {
+ 923   1        uint8_t wifi_data[2];
+ 924   1        wifi_data[0] = WIFI_CMD_WF_SET_110;
+ 925   1        wifi_data[1] = 100;
+ 926   1        UH010_Write_Byte(wifi_data, 2);
+ 927   1      }
+ 928          
+ 929          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1053    ----
-   CONSTANT SIZE    =      4    ----
-   XDATA SIZE       =      4      68
+   CODE SIZE        =   1987    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =      5     107
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

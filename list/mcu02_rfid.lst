@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_RFID
@@ -62,7 +62,7 @@ line level    source
   50   1      
   51   1      
   52   1          RFID_CMP_DISABLE();//RFID接收比较器不工作
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 2   
 
   53   1      
   54   1      
@@ -126,7 +126,7 @@ line level    source
  112   2              RFID_SEND_ENABLE(); 
  113   2            state = wait_rfid_tx_complete();
  114   2          }
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 3   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 3   
 
  115   1          else 
  116   1          {
@@ -190,7 +190,7 @@ line level    source
  174   2            ucparity = 0;
  175   2            dat=buf[m];
  176   2            
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 4   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 4   
 
  177   2          if(m < allbyte)
  178   2          {
@@ -254,7 +254,7 @@ line level    source
  236   3          {
  237   4            temp_bit = send_z(); 
  238   4            bit_last = 1;
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 5   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 5   
 
  239   4          }
  240   3              else                
@@ -318,7 +318,7 @@ line level    source
  298   2          wait_rfid_tx_complete();
  299   2          }
  300   1                         
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 6   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 6   
 
  301   1        RFID_TXD_STOP_ENABLE();
  302   1        delay_us(10);
@@ -382,7 +382,7 @@ line level    source
  360   1        if(len>31)
  361   1          RFID_TXD_STOP_ENABLE();
  362   1      
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 7   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 7   
 
  363   1        state = wait_rfid_tx_complete();      
  364   1      
@@ -446,7 +446,7 @@ line level    source
  422   1      
  423   1        return len;
  424   1      
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 8   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 8   
 
  425   1      }
  426          
@@ -510,7 +510,7 @@ line level    source
  484          
  485          /*!
  486              \brief      receive data error bit
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 9   
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 9   
 
  487              \param[in]  none
  488              \param[out] none
@@ -574,7 +574,7 @@ line level    source
  546   1          return temp;  
  547   1      }
  548          
-C51 COMPILER V9.59.0.0   MCU02_RFID                                                        03/19/2021 13:50:04 PAGE 10  
+C51 COMPILER V9.59.0.0   MCU02_RFID                                                        04/07/2021 10:03:32 PAGE 10  
 
  549          /*!
  550              \brief      enter_lowpower

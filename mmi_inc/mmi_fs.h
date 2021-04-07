@@ -5,7 +5,7 @@
 #include "mmi_rfid.h"
 #include "mmi_com.h"
 
-
+extern unsigned char get_index;
 typedef enum
 {
 	MID_FDS_FILE_SET = 0x00,

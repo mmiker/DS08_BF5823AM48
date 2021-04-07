@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_AUDIO
@@ -62,7 +62,7 @@ line level    source
   50   1        gpio_init(AUD_BUSY_PORT,AUD_BUSY_PIN,GPIO_MODE_IN_FLOATING);
   51   1        gpio_bit_reset(AUD_BUSY_PORT,AUD_BUSY_PIN);
   52   1        
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 2   
 
   53   1        gpio_init(AUD_DATA_PORT,AUD_DATA_PIN,GPIO_MODE_IN_FLOATING);
   54   1        gpio_bit_reset(AUD_DATA_PORT,AUD_DATA_PIN);
@@ -126,7 +126,7 @@ line level    source
  112          void dqiot_drv_audio_stop(void)
  113          {
  114   1        char i = 0;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 3   
 
  115   1      
  116   1        if( audio_flag == 0&&AUDIO_IN_BUSY == 1)
@@ -190,7 +190,7 @@ line level    source
  174          
  175          /*
  176          parameter: 
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 4   
 
  177            none
  178          return :
@@ -254,7 +254,7 @@ line level    source
  236   2          {
  237   3            AUDIO_OUT_RST_HI;
  238   3          }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 5   
 
  239   2          else if(audio_time_count == 3)
  240   2          {
@@ -318,7 +318,7 @@ line level    source
  298   1        else
  299   1          Audio_Select_Handle_in_Timer();
  300   1      }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   03/20/2021 15:44:08 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_AUDIO                                                   04/07/2021 10:03:29 PAGE 6   
 
  301          
  302          

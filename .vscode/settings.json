@@ -10,6 +10,9 @@
         "mmi_audio.h": "c",
         "mmi_sys.h": "c",
         "mmi_com.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "dqiot_drv_wifi.h": "c",
+        "mmi_fs.h": "c",
+        "mcu02_uart.h": "c"
     }
 }

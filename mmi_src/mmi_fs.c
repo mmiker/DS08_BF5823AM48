@@ -12,6 +12,8 @@
 #include "mmi_ms.h"
 #include "dq_otp.h"
 
+unsigned char get_index = 0;
+
 mmi_fs_setting data g_dq_fs_init_set;
 
 #define MMI_DQ_FS_PWD_MAX_NUM 100
@@ -429,6 +431,7 @@ unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd,unsign
 	if(i<MMI_DQ_FS_PWD_MAX_NUM)
 	{
 		//printf("check input return i: %d",(unsigned int)i);
+		get_index = i;
 		return i;
 	}
 	else
@@ -492,6 +495,9 @@ RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char pwd_size,fds_use_type
 				break;
 		}
 	}
+
+	get_index = i;
+
 	if (i < MMI_DQ_FS_PWD_MAX_NUM)
 	{
 		memset(password, 0xFF, sizeof(password));

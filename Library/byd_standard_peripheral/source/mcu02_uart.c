@@ -68,11 +68,11 @@ uint8_t uart_rx_byte(UART_PORT_enum uart_port)
 	if(uart_port == UART0){
 		while((UART0_STATE & RX_FULL_FLAG) == 0x00);
 		dat = UART0_BUF;
-		CLR_UART0_RX_STATE();	
+		// CLR_UART0_RX_STATE();
 	}else if(uart_port == UART1){
 		while((UART1_STATE & RX_FULL_FLAG) == 0x00);
 		dat = UART1_BUF;
-		CLR_UART1_RX_STATE();	
+		CLR_UART1_RX_STATE();
 	}
 	return dat;
 }		

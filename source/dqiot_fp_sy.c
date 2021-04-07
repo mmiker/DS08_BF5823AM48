@@ -5,7 +5,7 @@
 #include "delay.h"
 #include "dqiot_drv.h"
 #include "mcu02_uart.h"
-// #include <stdio.h>
+#include <stdio.h>
 
 //unsigned long fp_pin_irq_mask;
 
@@ -111,7 +111,7 @@ unsigned char AS608_PackHead(void)
 	//	ps_start_flag = 2;
 	//}
 
-	// dqiot_drv_uart0B_init();
+	dqiot_drv_uart0B_init();
 	uart_getbuflen = 0;
 
 	/*包头*/
@@ -231,10 +231,10 @@ static u8 JudgeStr(u16 waittime, u8 length)
 					j++;
 				}
 
-				// dqiot_drv_uart0A_init();
-				// for (i = 0; i < uart_getbuflen - 1; i++)
-				// 	printf("uart_rec_buff[%d] is %d\n", (int)i, (int)uart_rec_buff[i]);
-				// dqiot_drv_uart0B_init();
+				dqiot_drv_uart0A_init();
+				for (i = 0; i < uart_getbuflen - 1; i++)
+					printf("uart_rec_buff[%d] is %d\n", (int)i, (int)uart_rec_buff[i]);
+				dqiot_drv_uart0B_init();
 
 				/* 清空缓存 */
 				uart_getbuflen = 0;

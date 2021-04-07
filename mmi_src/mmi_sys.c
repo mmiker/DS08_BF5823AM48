@@ -205,23 +205,23 @@ void mmi_dq_sys_door_open(sys_open_type type)
 	{
 #ifdef __LOCK_110_SUPPORT__
 	case SYS_OPEN_BY_110_PASSWORD:
-		mmi_dq_wifi_send_pwd_110();
+		mmi_dq_wifi_send_pwd_110(get_index);
 		break;
 	case SYS_OPEN_BY_110_FP:
-		mmi_dq_wifi_send_fp_110();
+		mmi_dq_wifi_send_fp_110(get_index);
 		break;
 #endif
 	case SYS_OPEN_BY_PASSWORD:
-		mmi_dq_wifi_open_by_password();
+		mmi_dq_wifi_open_by_password(get_index);
 		break;
 #ifdef __LOCK_FP_SUPPORT__
 	case SYS_OPEN_BY_FP:
-		mmi_dq_wifi_open_by_fp();
+		mmi_dq_wifi_open_by_fp(get_index);
 		break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	case SYS_OPEN_BY_RFID:
-		mmi_dq_wifi_open_by_rfid();
+		mmi_dq_wifi_open_by_rfid(get_index);
 		break;
 #endif
 	case SYS_OPEN_BY_WIFI:
@@ -229,6 +229,7 @@ void mmi_dq_sys_door_open(sys_open_type type)
 		break;
 	}
 
+	mmi_dq_wifi_take_photos(); //拍照
 #endif
 }
 
@@ -586,13 +587,13 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	return 0;
 }
 
-/*
-function: 
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  远程开门
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
 void mmi_dq_sys_wifi_open(void)
 {
 	if (mmi_dq_wifi_open_ask() == 0)
@@ -1110,6 +1111,46 @@ static void mmi_dq_sys_wifi_setting(void)
 	}
 }
 
+/*
+parameter: 
+	none
+return :
+	none
+*/
+static void mmi_dq_sys_wifi_airkiss_setting(void)
+{
+	if (0 == mmi_dq_wifi_arikiss_con())
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
+	}
+}
+
+/*
+parameter: 
+	none
+return :
+	none
+*/
+static void mmi_dq_sys_wifi_code_setting(void)
+{
+	if (0 == mmi_dq_wifi_code_con())
+	{
+		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
+	}
+}
+
 typedef struct sys_menu_t
 {
 	unsigned char menu_father_id;
@@ -1136,6 +1177,8 @@ const sys_menu_t sys_menu_tree[] =
 		{STR_ID_SYSTEM, STR_ID_SETTING, 0},
 		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock_con},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
+		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_airkiss_setting},
+		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_code_setting},
 #ifdef __LOCK_110_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_110, 0},
 

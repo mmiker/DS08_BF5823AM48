@@ -13,7 +13,7 @@
 #include "mmi_audio.h"
 #include "mmi_bsp.h"
 #include "mmi_fm.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 void system_init(void)
 {
@@ -106,12 +106,12 @@ int main(void)
 }
 
 // /**
-//   * @brief  输出字符串
+//   * @brief  输出字符串 BaudRate: 57600
 //   * @param  show	说明
 //   * @param  status	状态
 //   * @return none
 //   * @note   none
-//   * @see    none
+//   * @see    printfS("xxx","xxx");
 //   */
 // void printfS(char *show, char *status)
 // {
@@ -121,12 +121,12 @@ int main(void)
 // }
 
 // /**
-//   * @brief  输出值
+//   * @brief  输出值 BaudRate: 57600
 //   * @param  show	说明
 //   * @param  value	值
 //   * @return none
 //   * @note   none
-//   * @see    none
+//   * @see    printfV("xxx",(unsigned char *)xxx)
 //   */
 // void printfV(char *show, char *value)
 // {

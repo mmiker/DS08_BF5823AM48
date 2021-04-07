@@ -1,7 +1,7 @@
 #ifndef __DQIOT_DRV_FP_C__
 #define __DQIOT_DRV_FP_C__
 #include "mmi_feature.h"
-#ifdef __LOCK_FP_SUPPORT__
+// #ifdef __LOCK_FP_SUPPORT__
 #include "dqiot_drv.h"
 #include "dqiot_drv_fp.h"
 #include "delay.h"
@@ -90,6 +90,6 @@ void dqiot_drv_fp_poweroff(void)
 	return;
 }
 
-#endif
+// #endif
 #endif//__DQIOT_DRV_FP_C__
 
