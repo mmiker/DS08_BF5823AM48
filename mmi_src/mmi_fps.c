@@ -6,7 +6,7 @@
 #include "string.h"
 #include "mmi_fps.h"
 #include "dqiot_drv.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 unsigned char FP_oldStatus = 0;
 /*

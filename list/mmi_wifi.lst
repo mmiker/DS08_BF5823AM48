@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_WIFI
@@ -62,7 +62,7 @@ line level    source
   51   1        return ret;
   52   1      }
   53          
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 2   
 
   54          /**
   55            * @brief  Airkiss配网（发送）
@@ -126,7 +126,7 @@ line level    source
  113            * @see    none
  114            */
  115          void mmi_dq_wifi_connected_fail(void)
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 3   
 
  116          {
  117   1        //mmi_dq_fs_set_wifi_setting(0);
@@ -186,11 +186,11 @@ line level    source
  171   2          wifi_check_connect_flag = 0;
  172   2        }
  173   1      
- 174   1        if (wifi_check_times > 60)
+ 174   1        if (wifi_check_times > 60 || retval == 2)
  175   1        {
  176   2          mmi_dq_wifi_connected_fail();
  177   2          wifi_check_times = 0;
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 4   
 
  178   2        }
  179   1        else
@@ -254,7 +254,7 @@ line level    source
  237   3            mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
  238   3          }
  239   2          wifi_check_times = 0;
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 5   
 
  240   2        }
  241   1        else
@@ -318,7 +318,7 @@ line level    source
  299          void mmi_dq_wifi_add_fp(uint8_t index)
  300          {
  301   1        mmi_dq_wifi_wakeup();
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 6   
 
  302   1      
  303   1        wifi_add_fp(index);
@@ -382,7 +382,7 @@ line level    source
  361          
  362          /**
  363            * @brief  指纹全部清除
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 7   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 7   
 
  364            * @param  none
  365            * @return none
@@ -446,7 +446,7 @@ line level    source
  423            * @see    none
  424            */
  425          void mmi_dq_wifi_open_by_rfid(uint8_t index)
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 8   
 
  426          {
  427   1        mmi_dq_wifi_wakeup();
@@ -510,7 +510,7 @@ line level    source
  485            * @param  none
  486            * @return none
  487            * @note   none
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 9   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 9   
 
  488            * @see    none
  489            */
@@ -574,7 +574,7 @@ line level    source
  547          {
  548   1        static uint8_t wifi_lowpower_flag = 0;
  549   1        if (wifi_lowpower_flag == 0)
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 10  
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 10  
 
  550   1        {
  551   2          wifi_lowpower_flag = 1;
@@ -638,7 +638,7 @@ line level    source
  609   1      
  610   1        if (wifi_take_videos() == 1)
  611   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 11  
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 11  
 
  612   1      }
  613          
@@ -702,7 +702,7 @@ line level    source
  671            * @return none
  672            * @note   none
  673            * @see    none
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 10:17:11 PAGE 12  
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/07/2021 17:05:49 PAGE 12  
 
  674            */
  675          void mmi_dq_wifi_send_fp_110(uint8_t index)
@@ -742,9 +742,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1047    ----
+   CODE SIZE        =   1062    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      8      20
+   XDATA SIZE       =      8      21
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

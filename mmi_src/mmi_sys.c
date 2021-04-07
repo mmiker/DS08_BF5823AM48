@@ -14,6 +14,9 @@
 #include "mmi_wifi.h"
 // #include <stdio.h>
 
+// extern void printfS(char *show, char *status);
+// extern void printfV(char *show, int value);
+
 static unsigned char g_sys_door_open_flag = 0;
 
 static unsigned int g_timer2_sleep_count = 0;
@@ -206,22 +209,27 @@ void mmi_dq_sys_door_open(sys_open_type type)
 #ifdef __LOCK_110_SUPPORT__
 	case SYS_OPEN_BY_110_PASSWORD:
 		mmi_dq_wifi_send_pwd_110(get_index);
+		// printfV("get_index",(int)get_index);
 		break;
 	case SYS_OPEN_BY_110_FP:
 		mmi_dq_wifi_send_fp_110(get_index);
+		// printfV("get_index",(int)get_index);
 		break;
 #endif
 	case SYS_OPEN_BY_PASSWORD:
 		mmi_dq_wifi_open_by_password(get_index);
+		// printfV("get_index",(int)get_index);
 		break;
 #ifdef __LOCK_FP_SUPPORT__
 	case SYS_OPEN_BY_FP:
 		mmi_dq_wifi_open_by_fp(get_index);
+		// printfV("get_index",(int)get_index);
 		break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	case SYS_OPEN_BY_RFID:
 		mmi_dq_wifi_open_by_rfid(get_index);
+		// printfV("get_index",(int)get_index);
 		break;
 #endif
 	case SYS_OPEN_BY_WIFI:

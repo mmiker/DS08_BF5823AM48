@@ -171,7 +171,7 @@ void mmi_dq_wifi_check_connect(void)
     wifi_check_connect_flag = 0;
   }
 
-  if (wifi_check_times > 60)
+  if (wifi_check_times > 60 || retval == 2)
   {
     mmi_dq_wifi_connected_fail();
     wifi_check_times = 0;

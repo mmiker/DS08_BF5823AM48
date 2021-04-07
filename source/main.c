@@ -126,9 +126,9 @@ int main(void)
 //   * @param  value	值
 //   * @return none
 //   * @note   none
-//   * @see    printfV("xxx",(unsigned char *)xxx)
+//   * @see    printfV("xxx",(int)xxx)
 //   */
-// void printfV(char *show, char *value)
+// void printfV(char *show, int value)
 // {
 // 	dqiot_drv_uart0A_init();
 // 	printf("%s is %d\n", show, value);

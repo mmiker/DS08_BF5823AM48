@@ -33,8 +33,8 @@ static unsigned char rfid_last_flag = 0;
 static unsigned char admin_check_type = 0;
 #endif
 
-// void printfS(char *show, char *status);
-// void printfV(char *show, char *value);
+// extern void printfS(char *show, char *status);
+// extern void printfV(char *show, int value);
 
 /*
 parameter: 
@@ -431,6 +431,12 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_pv_switch();
 					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_3) //03 远程开门
 						mmi_dq_sys_wifi_open();
+					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
+						mmi_dq_wifi_open_by_key();
+					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
+						mmi_dq_wifi_close_over_time();
+					else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
+						mmi_dq_wifi_via_alarm();
 					else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
 						mmi_dq_wifi_sleep();
 					else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
@@ -441,9 +447,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_take_videos();
 					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
 						mmi_dq_wifi_check_net();
-					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网
+					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
 						mmi_dq_wifi_arikiss_con();
-					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网
+					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
 						mmi_dq_wifi_code_con();
 
 #ifdef __LOCK_BUS_SUPPORT__
@@ -560,8 +566,10 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 								{
 									if (mmi_dq_fs_del_pwd(del_index, FDS_USE_TYPE_USER) == RET_SUCESS)
 									{
+										get_index = del_index;
 										mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
-										mmi_dq_wifi_del_password(del_index);
+										mmi_dq_wifi_del_password(get_index);
+										// printfV("get_index", (int)get_index);
 									}
 									else
 										mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
@@ -580,6 +588,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
 										mmi_dq_wifi_add_password(get_index);
+										// printfV("get_index", (int)get_index);
 									}
 									if (wifi_add_flag == 0)
 										mmi_dq_sys_add_pwd_con();
@@ -597,6 +606,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS);
 										mmi_dq_wifi_add_password(get_index);
+										// printfV("get_index", (int)get_index);
 									}
 #ifdef __LOCK_FP_SUPPORT__
 									mmi_dq_sys_chg_admin_fp_No1();
@@ -611,6 +621,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_CHG_ADMIN_PWD_SUCESS);
 										mmi_dq_wifi_add_password(get_index);
+										// printfV("get_index", (int)get_index);
 									}
 									mmi_dq_sys_show_cur_menu_list();
 								}
@@ -626,6 +637,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 #endif
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
 										mmi_dq_wifi_add_password(get_index);
+										// printfV("get_index", (int)get_index);
 									}
 									mmi_dq_sys_show_cur_menu_list();
 								}
@@ -897,8 +909,8 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 					retval = mmi_dq_fs_check_fp((unsigned char)index, FDS_USE_TYPE_ALL);
 					if (retval == RET_SUCESS)
 					{
-						mmi_dq_fp_light(FP_GREEN);
 						get_index = index;
+						mmi_dq_fp_light(FP_GREEN);
 #ifdef __LOCK_110_SUPPORT__
 						if (mmi_dq_fs_check_fp((unsigned char)index, FDS_USE_TYPE_110) == RET_SUCESS)
 						{
@@ -1030,7 +1042,7 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 								else
 								{
 									// printfS("mmi_dq_fs_get_fp_unuse_index", "ok");
-									// printfV("index", (unsigned char *)index);
+									// printfV("index", (int)index);
 									retval = mmi_dq_fp_store_char(0, index);
 									if (status == SYS_STATUS_ADD_FP)
 									{
@@ -1241,7 +1253,6 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 	{
 		if (status == SYS_STATUS_INPUT_RFID)
 		{
-			get_index = index;
 			mmi_dq_sys_door_open(SYS_OPEN_BY_RFID);
 		}
 		else if (status == SYS_STATUS_ADD_RFID)
@@ -1266,8 +1277,10 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 						retval = mmi_dq_fs_del_rfid(index);
 						if (retval == RET_SUCESS)
 						{
+							get_index = index;
 							mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
-							mmi_dq_wifi_del_rfid_suc(index);
+							mmi_dq_wifi_del_rfid_suc(get_index);
+							// printfV("get_index", (int)get_index);
 						}
 						else
 							mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
@@ -1303,7 +1316,8 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 						if (retval == RET_SUCESS)
 						{
 							mmi_dq_aud_play_with_id(AUD_ID_ADD_RFCARD_SUCESS);
-							mmi_dq_wifi_add_rfid_suc(index);
+							mmi_dq_wifi_add_rfid_suc(get_index);
+							// printfV("get_index", (int)get_index);
 						}
 						else
 							mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
