@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_EXINT                                                       04/09/2021 11:56:17 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_EXINT                                                       04/10/2021 16:21:35 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_EXINT
@@ -62,7 +62,7 @@ line level    source
                   pin = (int_port & 0x07);
                   irq = INT_EXTI_0;
               
-C51 COMPILER V9.59.0.0   MCU02_EXINT                                                       04/09/2021 11:56:17 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_EXINT                                                       04/10/2021 16:21:35 PAGE 2   
 
                 }else if(int_port <= EXTI_INT3){  /* exti_1/exti_2/exti_3 */
                   addr = PERIPH_IO_SEL1;

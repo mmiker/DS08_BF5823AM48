@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/09/2021 11:56:12 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/10/2021 16:21:30 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_FP
@@ -62,7 +62,7 @@ line level    source
   50   1        UART0_RX  PF5 输入
   51   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
   52   1        NRST_CTR  PF7 供电
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/09/2021 11:56:12 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/10/2021 16:21:30 PAGE 2   
 
   53   1        */
   54   1        gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);

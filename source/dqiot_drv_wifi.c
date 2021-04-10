@@ -14,8 +14,8 @@
 unsigned char wifi_add_flag = 0;
 extern unsigned char uart_get_buf[];
 extern unsigned char uart_getbuflen;
-extern void printfS(char *show, char *status);
-extern void printfV(char *show, int value);
+// extern void printfS(char *show, char *status);
+// extern void printfV(char *show, int value);
 
 /**
   * @brief  串口数据接收
@@ -438,8 +438,8 @@ uint8_t wifi_open_reply_get(void)
 	delay_ms(300);
 	UH010_ReadDatas(wifi_data, 0, data_2, 2);
 
-	printfV("data_2[0]", (int)data_2[0]);
-	printfV("data_2[1]", (int)data_2[1]);
+	// printfV("data_2[0]", (int)data_2[0]);
+	// printfV("data_2[1]", (int)data_2[1]);
 
 	if (data_2[0] == 'K' && data_2[1] == 'O')
 		return 1;
@@ -469,9 +469,9 @@ uint8_t wifi_cmd_add_del(void)
 	delay_ms(300);
 	UH010_ReadDatas(wifi_data, 0, data_2, 3);
 
-	printfV("data_2[0]", (int)data_2[0]);
-	printfV("data_2[1]", (int)data_2[1]);
-	printfV("data_2[2]", (int)data_2[2]);
+	// printfV("data_2[0]", (int)data_2[0]);
+	// printfV("data_2[1]", (int)data_2[1]);
+	// printfV("data_2[2]", (int)data_2[2]);
 
 	if (data_2[0] == 'B')
 	{
@@ -505,7 +505,7 @@ uint8_t wifi_cmd_add_del(void)
 			get_index = data_2[1] - '0';
 		else
 			get_index = (data_2[1] - '0') * 10 + (data_2[2] - '0');
-		printfV("get_index", (int)get_index);
+		// printfV("get_index", (int)get_index);
 
 		switch (data_2[0])
 		{
