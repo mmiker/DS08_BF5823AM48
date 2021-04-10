@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV
@@ -62,7 +62,7 @@ line level    source
   51   1        dqiot_drv_uart0B_init();
   52   1        dqiot_drv_motor_gpio_init();
   53   1      
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 2   
 
   54   1        gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
   55   1        gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN);
@@ -126,7 +126,7 @@ line level    source
  113   1        dqiot_drv_fp_gpio_init();
  114   1      
  115   1      #endif
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 3   
 
  116   1        dqiot_drv_uart0B_init();
  117   1      #ifdef __LOCK_MOTOR_SUPPORT__
@@ -190,7 +190,7 @@ line level    source
  175          void dqiot_drv_timer0_isr(void) interrupt 1
  176          {
  177   1        INT_TIMER0_CLR();
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 4   
 
  178   1      
  179   1        Audio_timer_event_handler();
@@ -254,7 +254,7 @@ line level    source
  237          
  238          /*
  239          parameter: 
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 5   
 
  240            none
  241          return :
@@ -318,7 +318,7 @@ line level    source
  299          void dqiot_drv_timer1_init(void)
  300          {
  301   1        uint16_t count;
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 6   
 
  302   1        count = 1000;
  303   1        TIMER1_MODE_SET(TIMER_16BIT);  //TIMER_13BIT,TIMER_8BIT_AUTORELOAD,TIMER_8BIT
@@ -382,7 +382,7 @@ line level    source
  361   1      }
  362          
  363          /*
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 7   
 
  364          parameter: 
  365            none
@@ -446,7 +446,7 @@ line level    source
  423   1        // memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
  424   1        // uart_getbuflen = 0;
  425   1      
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 8   
 
  426   1        UART0_ENABLE(); //使能uart0
  427   1        return;
@@ -510,7 +510,7 @@ line level    source
  485   2      
  486   2          CLR_UART0_RX_STATE(); //清除接收中断标志位
  487   2        }
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 9   
 
  488   1        //if(GET_UART0_TX_STATE())
  489   1        //{
@@ -574,7 +574,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/07/2021 10:03:29 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/09/2021 13:48:04 PAGE 10  
 
    CODE SIZE        =    906    ----
    CONSTANT SIZE    =   ----    ----

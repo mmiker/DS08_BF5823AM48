@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              04/07/2021 17:28:59 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 09:43:33 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -24,7 +24,7 @@ line level    source
   13          #include "mmi_audio.h"
   14          #include "mmi_bsp.h"
   15          #include "mmi_fm.h"
-  16          // #include <stdio.h>
+  16          #include <stdio.h>
   17          
   18          void system_init(void)
   19          {
@@ -62,7 +62,7 @@ line level    source
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              04/07/2021 17:28:59 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 09:43:33 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
@@ -118,43 +118,43 @@ line level    source
  105   2        }
  106   1      }
  107          
- 108          // /**
- 109          //   * @brief  输出字符串 BaudRate: 57600
- 110          //   * @param  show 说明
- 111          //   * @param  status 状态
- 112          //   * @return none
- 113          //   * @note   none
- 114          //   * @see    printfS("xxx","xxx");
- 115          //   */
-C51 COMPILER V9.59.0.0   MAIN                                                              04/07/2021 17:28:59 PAGE 3   
+ 108          /**
+ 109            * @brief  输出字符串 BaudRate: 57600
+ 110            * @param  show  说明
+ 111            * @param  status  状态
+ 112            * @return none
+ 113            * @note   none
+ 114            * @see    printfS("xxx","xxx");
+ 115            */
+C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 09:43:33 PAGE 3   
 
- 116          // void printfS(char *show, char *status)
- 117          // {
- 118          //  dqiot_drv_uart0A_init();
- 119          //  printf("%s is %s\n", show, status);
- 120          //  dqiot_drv_uart0B_init();
- 121          // }
+ 116          void printfS(char *show, char *status)
+ 117          {
+ 118   1        dqiot_drv_uart0A_init();
+ 119   1        printf("%s is %s\n", show, status);
+ 120   1        dqiot_drv_uart0B_init();
+ 121   1      }
  122          
- 123          // /**
- 124          //   * @brief  输出值 BaudRate: 57600
- 125          //   * @param  show 说明
- 126          //   * @param  value  值
- 127          //   * @return none
- 128          //   * @note   none
- 129          //   * @see    printfV("xxx",(int)xxx)
- 130          //   */
- 131          // void printfV(char *show, int value)
- 132          // {
- 133          //  dqiot_drv_uart0A_init();
- 134          //  printf("%s is %d\n", show, value);
- 135          //  dqiot_drv_uart0B_init();
- 136          // }
+ 123          /**
+ 124            * @brief  输出值 BaudRate: 57600
+ 125            * @param  show  说明
+ 126            * @param  value 值
+ 127            * @return none
+ 128            * @note   none
+ 129            * @see    printfV("xxx",(int)xxx)
+ 130            */
+ 131          void printfV(char *show, int value)
+ 132          {
+ 133   1        dqiot_drv_uart0A_init();
+ 134   1        printf("%s is %d\n", show, value);
+ 135   1        dqiot_drv_uart0B_init();
+ 136   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    132    ----
-   CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4    ----
+   CODE SIZE        =    268    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =      4      11
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

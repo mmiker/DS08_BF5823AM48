@@ -251,7 +251,7 @@ void mmi_dq_wifi_check_open(void)
   */
 void mmi_dq_wifi_cmd_add_del(void)
 {
-  uint16_t waittime = 300;
+  uint16_t waittime = 100;
 
   while (--waittime)
   {
@@ -621,7 +621,7 @@ void mmi_dq_wifi_take_videos(void)
 void mmi_dq_wifi_pv_switch(void)
 {
   uint8_t retval;
-  uint16_t waittime = 1000;
+  uint16_t waittime = 100;
 
   mmi_dq_wifi_wakeup();
   wifi_pv_switch_send();

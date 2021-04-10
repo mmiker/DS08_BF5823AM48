@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_SM4                                                         04/07/2021 10:03:33 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_SM4                                                         04/09/2021 11:56:17 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_SM4
@@ -62,7 +62,7 @@ line level    source
   51   1         for(i = 0; i < 16; i++)
   52   1         {
   53   2             REG_ADDR = SM4_DATA0+i;
-C51 COMPILER V9.59.0.0   MCU02_SM4                                                         04/07/2021 10:03:33 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_SM4                                                         04/09/2021 11:56:17 PAGE 2   
 
   54   2           REG_DATA = pbuf[i];
   55   2         }

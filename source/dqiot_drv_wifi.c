@@ -14,13 +14,19 @@
 unsigned char wifi_add_flag = 0;
 extern unsigned char uart_get_buf[];
 extern unsigned char uart_getbuflen;
+extern void printfS(char *show, char *status);
+extern void printfV(char *show, int value);
 
-/*
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  串口数据接收
+  * @param  send		发送数据
+  * @param  send_len	发送数据长度
+  * @param  Buf			接收数据
+  * @param  len			接收数据长度
+  * @return 串口数据
+  * @note   none
+  * @see    none
+  */
 uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t len)
 {
 #if 0
@@ -95,7 +101,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 	return 0;
 #else
-	uint8_t i;
+	uint8_t i = 0, j = 0;
 	uint16_t waittime = 1000;
 
 	if (send_len > 0)
@@ -107,13 +113,25 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
+			delay_ms(1);
+
 			if (uart_getbuflen >= 2)
 			{
-				for (i = 0; i < len; i++)
+				/* 寻找包头 */
+				for (i = 0; i < uart_getbuflen; i++)
 				{
-					Buf[i] = uart_get_buf[i];
-					if (i == (len - 1))
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
+					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
+					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 						break;
+				}
+
+				for (i; i < uart_getbuflen; i++)
+				{
+					Buf[j] = uart_get_buf[i];
+					if (j == (len - 1))
+						break;
+					j++;
 				}
 
 				/* 清空缓存 */
@@ -132,13 +150,25 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
+			delay_ms(1);
+
 			if (uart_getbuflen >= 2)
 			{
-				for (i = 0; i < len; i++)
+				/* 寻找包头 */
+				for (i = 0; i < uart_getbuflen; i++)
 				{
-					Buf[i] = uart_get_buf[i];
-					if (i == (len - 1))
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
+					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
+					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 						break;
+				}
+
+				for (i; i < uart_getbuflen; i++)
+				{
+					Buf[j] = uart_get_buf[i];
+					if (j == (len - 1))
+						break;
+					j++;
 				}
 
 				/* 清空缓存 */
@@ -156,12 +186,14 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 #endif
 }
 
-/*
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  串口数据发生
+  * @param  send		发送数据
+  * @param  send_len	发送数据长度
+  * @return none
+  * @note   none
+  * @see    none
+  */
 uint8_t UH010_Write_Byte(uint8_t *send, uint8_t send_len)
 {
 #if 0
@@ -405,6 +437,10 @@ uint8_t wifi_open_reply_get(void)
 	UH010_Write_Byte(wifi_data, 2);
 	delay_ms(300);
 	UH010_ReadDatas(wifi_data, 0, data_2, 2);
+
+	printfV("data_2[0]", (int)data_2[0]);
+	printfV("data_2[1]", (int)data_2[1]);
+
 	if (data_2[0] == 'K' && data_2[1] == 'O')
 		return 1;
 	else if (data_2[0] == 'K' && data_2[1] == 'E')
@@ -426,78 +462,88 @@ uint8_t wifi_cmd_add_del(void)
 {
 	RET_VAL retval = 0;
 	uint8_t wifi_data[2];
-	uint8_t data_2[2] = {0};
+	uint8_t data_2[3] = {0};
 	wifi_data[0] = WIFI_CMD_ADD_DEL;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
 	delay_ms(300);
-	UH010_ReadDatas(wifi_data, 0, data_2, 2);
+	UH010_ReadDatas(wifi_data, 0, data_2, 3);
 
-	if (data_2[0] == 'B' && data_2[1] == 'E')
+	printfV("data_2[0]", (int)data_2[0]);
+	printfV("data_2[1]", (int)data_2[1]);
+	printfV("data_2[2]", (int)data_2[2]);
+
+	if (data_2[0] == 'B')
 	{
-		mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-		return 0xff;
-	}
-	else if (data_2[0] == 'M')
-	{
-		retval = mmi_dq_fs_del_pwd(data_2[1], FDS_USE_TYPE_USER);
-		if (retval == RET_SUCESS)
+		switch (data_2[1])
 		{
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
-			mmi_dq_wifi_del_password(data_2[1]);
+		case 'L':
+			return 0;
+		case 'E':
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+			return 0xff;
+		case 'M':
+			wifi_add_flag = 1;
+			mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
+			break;
+		case 'F':
+			wifi_add_flag = 1;
+			mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
+			break;
+		case 'R':
+			wifi_add_flag = 1;
+			mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
+			break;
 		}
+	}
+	else if (data_2[0] == 'M' || data_2[0] == 'F' || data_2[0] == 'R')
+	{
+		if (data_2[2] == 0x00) //48 => 0,57 => 9
+			get_index = data_2[1] - '0';
 		else
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
-	}
-	else if (data_2[0] == 'F')
-	{
-		retval = mmi_dq_fs_del_fp((unsigned char)data_2[1], FDS_USE_TYPE_USER);
-		if (retval == RET_SUCESS)
+			get_index = (data_2[1] - '0') * 10 + (data_2[2] - '0');
+		printfV("get_index", (int)get_index);
+
+		switch (data_2[0])
 		{
-			retval = mmi_dq_fp_delete(data_2[1]);
+		case 'M':
+			retval = mmi_dq_fs_del_pwd(get_index, FDS_USE_TYPE_USER);
+			if (retval == RET_SUCESS)
+			{
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+				mmi_dq_wifi_del_password(get_index);
+			}
+			else
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+			break;
+		case 'F':
+			retval = mmi_dq_fs_del_fp(get_index, FDS_USE_TYPE_USER);
+			if (retval == RET_SUCESS)
+				retval = mmi_dq_fp_delete((unsigned short)get_index);
+			if (retval == 0)
+			{
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
+				mmi_dq_wifi_del_fp(get_index);
+			}
+			else
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+			break;
+		case 'R':
+			retval = mmi_dq_fs_del_rfid(get_index);
+			if (retval == RET_SUCESS)
+			{
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
+				mmi_dq_wifi_del_rfid_suc(get_index);
+			}
+			else
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+			break;
 		}
-		if (retval == 0)
-		{
-			mmi_dq_fp_light(FP_GREEN);
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
-			mmi_dq_wifi_del_fp(data_2[1]);
-		}
-		else
-		{
-			mmi_dq_fp_light(FP_RED);
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
-		}
 	}
-	else if (data_2[0] == 'R')
-	{
-		retval = mmi_dq_fs_del_rfid(data_2[1]);
-		if (retval == RET_SUCESS)
-		{
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
-			mmi_dq_wifi_del_rfid_suc(data_2[1]);
-		}
-		else
-			mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
-	}
-	else if (data_2[0] == 'B' && data_2[1] == 'M')
-	{
-		wifi_add_flag = 1;
-		mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
-		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
-	}
-	else if (data_2[0] == 'B' && data_2[1] == 'F')
-	{
-		wifi_add_flag = 1;
-		mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
-		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
-	}
-	else if (data_2[0] == 'B' && data_2[1] == 'R')
-	{
-		wifi_add_flag = 1;
-		mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
-		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
-	}
-	else if (data_2[0] == 'B' && data_2[1] == 'L')
+	else
 		return 0;
 
 	return 1;
