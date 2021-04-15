@@ -97,9 +97,9 @@ void mmi_task_proc(void)
 		mmi_dq_ms_set_msg_que(QUE_EVENT_TIMER_END, QUE_PRO_LOW, 0);
 
 #ifdef __LOCK_FP_SUPPORT__
-	//check fp press
-	if (mmi_dq_fp_work() != 0)
-		mmi_dq_ms_set_msg_que(QUE_EVENT_FP, QUE_PRO_LOW, 0);
+		//check fp press
+		// if (mmi_dq_fp_work() != 0)
+		// 	mmi_dq_ms_set_msg_que(QUE_EVENT_FP, QUE_PRO_LOW, 0);
 #endif
 
 	if (mmi_dq_sys_get_wifi_check_flag() != 0)
@@ -447,10 +447,10 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_take_videos();
 					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
 						mmi_dq_wifi_check_net();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
-					// 	mmi_dq_wifi_arikiss_con();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
-					// 	mmi_dq_wifi_code_con();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
+						// 	mmi_dq_wifi_arikiss_con();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
+						// 	mmi_dq_wifi_code_con();
 
 #ifdef __LOCK_BUS_SUPPORT__
 					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
@@ -610,8 +610,12 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									}
 #ifdef __LOCK_FP_SUPPORT__
 									mmi_dq_sys_chg_admin_fp_No1();
+#else
+									if (0 == mmi_dq_fs_get_admin_status())
+										mmi_dq_sys_lock_add_admin_suc();
+									else
+										mmi_dq_sys_show_cur_menu_list();
 #endif
-									// mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 								}
 								else if (status == SYS_STATUS_CHG_ADMIN_PWD)
 								{

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 16:21:29 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/15/2021 10:13:15 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -55,14 +55,14 @@ line level    source
   44   1      
   45   1        mmi_dq_key_init();
   46   1      #ifdef __LOCK_FP_SUPPORT__
-  47   1        mmi_dq_fp_init();
-  48   1      #endif
+                mmi_dq_fp_init();
+              #endif
   49   1      #ifdef __LOCK_RFID_CARD_SUPPORT__
   50   1        mmi_dq_rfid_init();
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 16:21:29 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/15/2021 10:13:15 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
@@ -114,47 +114,49 @@ line level    source
  101   2          mmi_dq_ms_sys_msg_handle();
  102   2      
  103   2          if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
- 104   2            mmi_wait_sleep_task_proc();
- 105   2        }
- 106   1      }
- 107          
- 108          // /**
- 109          //   * @brief  输出字符串 BaudRate: 57600
- 110          //   * @param  show 说明
- 111          //   * @param  status 状态
- 112          //   * @return none
- 113          //   * @note   none
- 114          //   * @see    printfS("xxx","xxx");
- 115          //   */
-C51 COMPILER V9.59.0.0   MAIN                                                              04/10/2021 16:21:29 PAGE 3   
+ 104   2          {
+ 105   3            mmi_wait_sleep_task_proc();
+ 106   3          }
+ 107   2        }
+ 108   1      }
+ 109          
+ 110          // /**
+ 111          //   * @brief  输出字符串 BaudRate: 57600
+ 112          //   * @param  show 说明
+ 113          //   * @param  status 状态
+ 114          //   * @return none
+ 115          //   * @note   none
+C51 COMPILER V9.59.0.0   MAIN                                                              04/15/2021 10:13:15 PAGE 3   
 
- 116          // void printfS(char *show, char *status)
- 117          // {
- 118          //  dqiot_drv_uart0A_init();
- 119          //  printf("%s is %s\n", show, status);
- 120          //  dqiot_drv_uart0B_init();
- 121          // }
- 122          
- 123          // /**
- 124          //   * @brief  输出值 BaudRate: 57600
- 125          //   * @param  show 说明
- 126          //   * @param  value  值
- 127          //   * @return none
- 128          //   * @note   none
- 129          //   * @see    printfV("xxx",(int)xxx)
- 130          //   */
- 131          // void printfV(char *show, int value)
- 132          // {
- 133          //  dqiot_drv_uart0A_init();
- 134          //  printf("%s is %d\n", show, value);
- 135          //  dqiot_drv_uart0B_init();
- 136          // }
+ 116          //   * @see    printfS("xxx","xxx");
+ 117          //   */
+ 118          // void printfS(char *show, char *status)
+ 119          // {
+ 120          //  dqiot_drv_uart0A_init();
+ 121          //  printf("%s is %s\n", show, status);
+ 122          //  dqiot_drv_uart0B_init();
+ 123          // }
+ 124          
+ 125          // /**
+ 126          //   * @brief  输出值 BaudRate: 57600
+ 127          //   * @param  show 说明
+ 128          //   * @param  value  值
+ 129          //   * @return none
+ 130          //   * @note   none
+ 131          //   * @see    printfV("xxx",(int)xxx)
+ 132          //   */
+ 133          // void printfV(char *show, int value)
+ 134          // {
+ 135          //  dqiot_drv_uart0A_init();
+ 136          //  printf("%s is %d\n", show, value);
+ 137          //  dqiot_drv_uart0B_init();
+ 138          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    132    ----
+   CODE SIZE        =    129    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4    ----
+   XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

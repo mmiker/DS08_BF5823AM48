@@ -101,7 +101,9 @@ int main(void)
 		mmi_dq_ms_sys_msg_handle();
 
 		if (SYS_STATUS_WAIT_FOR_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
+		{
 			mmi_wait_sleep_task_proc();
+		}
 	}
 }
 

@@ -120,9 +120,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
-					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
-					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 						break;
 				}
 
@@ -157,9 +155,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
-					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
-					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 						break;
 				}
 
@@ -487,16 +483,20 @@ uint8_t wifi_cmd_add_del(void)
 			mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
 			break;
+#ifdef __LOCK_FP_SUPPORT__
 		case 'F':
 			wifi_add_flag = 1;
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
 			break;
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 		case 'R':
 			wifi_add_flag = 1;
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
 			break;
+#endif
 		}
 	}
 	else if (data_2[0] == 'M' || data_2[0] == 'F' || data_2[0] == 'R')
@@ -519,6 +519,7 @@ uint8_t wifi_cmd_add_del(void)
 			else
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
 			break;
+#ifdef __LOCK_FP_SUPPORT__
 		case 'F':
 			retval = mmi_dq_fs_del_fp(get_index, FDS_USE_TYPE_USER);
 			if (retval == RET_SUCESS)
@@ -531,6 +532,8 @@ uint8_t wifi_cmd_add_del(void)
 			else
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
 			break;
+#endif
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 		case 'R':
 			retval = mmi_dq_fs_del_rfid(get_index);
 			if (retval == RET_SUCESS)
@@ -541,6 +544,7 @@ uint8_t wifi_cmd_add_del(void)
 			else
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
 			break;
+#endif
 		}
 	}
 	else

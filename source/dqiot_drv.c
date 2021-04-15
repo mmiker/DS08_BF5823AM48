@@ -144,7 +144,7 @@ void dqiot_drv_enter_sleep(void)
 #ifdef __LOCK_AUDIO_SUPPORT__
 	dqiot_drv_audio_gpio_deinit();
 #endif
-#ifdef __LOCK_FP_SUPPORT__
+#if 1//def __LOCK_FP_SUPPORT__
 	dqiot_drv_fp_gpio_deinit();
 
 #endif
@@ -163,6 +163,8 @@ void dqiot_drv_enter_sleep(void)
 	BOR_DISABLE();
 
 	WDT_DISABLE();
+
+	// TIMER2_DISABLE();
 	return;
 }
 

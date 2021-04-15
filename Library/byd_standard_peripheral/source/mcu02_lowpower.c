@@ -17,7 +17,7 @@
 */
 void lowpower_idle(void)
 {
-	PCON |= 0x01;	
+    PCON |= 0x01;
 }
 /*!
     \brief      wait
@@ -27,5 +27,5 @@ void lowpower_idle(void)
 */
 void lowpower_wait(void)
 {
-	SYS_CLK_CFG |= 0x10;	
+    SYS_CLK_CFG |= 0x10;
 }

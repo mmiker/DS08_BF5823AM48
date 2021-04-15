@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_SYS
@@ -62,7 +62,7 @@ line level    source
   51          #define MMI_WIFI_SETTING_DELAY 60000
   52          #define MMI_WIFI_SETTING_DELAY_COUNT (MMI_WIFI_SETTING_DELAY / MMI_TIMER_BASE_TIME)
   53          #define MMI_LOCK_ERROR_DELAY 60000
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 2   
 
   54          #define MMI_LOCK_ERROR_DELAY_COUNT (MMI_LOCK_ERROR_DELAY / MMI_TIMER_BASE_TIME)
   55          /*
@@ -126,7 +126,7 @@ line level    source
  113   1        g_sys_door_open_flag = 0;
  114   1      
  115   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ENTER_SLEEP);
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 3   
 
  116   1      }
  117          
@@ -145,8 +145,8 @@ line level    source
  130   1        {
  131   2          mmi_dq_wifi_wakeup();
  132   2      #ifdef __LOCK_FP_SUPPORT__
- 133   2          mmi_dq_fp_init(); //握手、点灯
- 134   2      #endif
+                  mmi_dq_fp_init(); //握手、点灯
+              #endif
  135   2          mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
  136   2        }
  137   1      }
@@ -190,7 +190,7 @@ line level    source
  174   3          case SYS_OPEN_BY_FP:
  175   3            mmi_dq_wifi_fp_alarm();
  176   3            break;
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 4   
 
  177   3          case SYS_OPEN_BY_RFID:
  178   3            mmi_dq_wifi_rfid_alarm();
@@ -240,11 +240,11 @@ line level    source
  221   2          // printfV("get_index",(int)get_index);
  222   2          break;
  223   2      #ifdef __LOCK_FP_SUPPORT__
- 224   2        case SYS_OPEN_BY_FP:
- 225   2          mmi_dq_wifi_open_by_fp(get_index);
- 226   2          // printfV("get_index",(int)get_index);
- 227   2          break;
- 228   2      #endif
+                case SYS_OPEN_BY_FP:
+                  mmi_dq_wifi_open_by_fp(get_index);
+                  // printfV("get_index",(int)get_index);
+                  break;
+              #endif
  229   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
  230   2        case SYS_OPEN_BY_RFID:
  231   2          mmi_dq_wifi_open_by_rfid(get_index);
@@ -254,7 +254,7 @@ line level    source
  235   2        case SYS_OPEN_BY_WIFI:
  236   2          mmi_dq_wifi_open_by_wifi();
  237   2          break;
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 5   
 
  238   2        }
  239   1      
@@ -283,14 +283,14 @@ line level    source
  262   2      #endif
  263   2          break;
  264   2      #ifdef __LOCK_FP_SUPPORT__
- 265   2        case SYS_OPEN_BY_FP:
- 266   2          mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
- 267   2      #ifdef __LOCK_WIFI_SUPPORT__
- 268   2          if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
- 269   2            mmi_dq_wifi_fp_alarm();
- 270   2      #endif
- 271   2          break;
- 272   2      #endif
+                case SYS_OPEN_BY_FP:
+                  mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
+              #ifdef __LOCK_WIFI_SUPPORT__
+                  if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
+                    mmi_dq_wifi_fp_alarm();
+              #endif
+                  break;
+              #endif
  273   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
  274   2        case SYS_OPEN_BY_RFID:
  275   2          mmi_dq_aud_play_with_id(AUD_ID_RFCARD_WRONG_TRY);
@@ -318,7 +318,7 @@ line level    source
  297   1      }
  298          
  299          /*
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 6   
 
  300          function: 
  301          parameter: 
@@ -379,19 +379,19 @@ line level    source
  355   2          mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
  356   2        }
  357   1      #ifdef __LOCK_FP_SUPPORT__
- 358   1        else if (state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2)
- 359   1        {
- 360   2          if (mmi_dq_fs_get_admin_status() == 0)
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 7   
+                else if (state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2)
+                {
+                  if (mmi_dq_fs_get_admin_status() == 0)
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 7   
 
- 361   2            g_timer2_sleep_count = 0;
- 362   2          else
- 363   2          {
- 364   3            mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
- 365   3            mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
- 366   3          }
- 367   2        }
- 368   1      #endif
+                    g_timer2_sleep_count = 0;
+                  else
+                  {
+                    mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+                    mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
+                  }
+                }
+              #endif
  369   1        else if (state == SYS_STATUS_ADD_ADMIN_PWD)
  370   1        {
  371   2          g_timer2_sleep_count = 0;
@@ -446,14 +446,14 @@ line level    source
              -P != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 0) && (mmi_dq_wifi_get_running_flag() == 0))
  420   1        {
  421   2          unsigned char flag = 0;
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 8   
 
  422   2          g_timer2_sleep_count++;
  423   2          if (state == SYS_STATUS_ADD_PWD || state == SYS_STATUS_DEL_PWD || state == SYS_STATUS_ADD_ADMIN_PWD
  424   2      #ifdef __LOCK_FP_SUPPORT__
- 425   2            || state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2 || state == SYS_STATUS_ADD_FP
+                    || state == SYS_STATUS_ADD_ADMIN_FP1 || state == SYS_STATUS_ADD_ADMIN_FP2 || state == SYS_STATUS_ADD_FP
              - || state == SYS_STATUS_DEL_FP
- 426   2      #endif
+              #endif
  427   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
  428   2            || state == SYS_STATUS_ADD_RFID || state == SYS_STATUS_DEL_RFID
  429   2      #endif
@@ -510,7 +510,7 @@ line level    source
  480   2          return 1;
  481   2        }
  482   1        return 0;
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 9   
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 9   
 
  483   1      }
  484          
@@ -574,7 +574,7 @@ line level    source
  542          function: 
  543          parameter: 
  544            none
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 10  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 10  
 
  545          return :
  546            none
@@ -621,8 +621,8 @@ line level    source
  587   2          mmi_dq_wifi_lowpower_alarm();
  588   2          if (state == 2)
  589   2          {
- 590   3            // mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
- 591   3            // return 1;
+ 590   3            mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
+ 591   3            return 1;
  592   3          }
  593   2        }
  594   1      
@@ -638,7 +638,7 @@ line level    source
  604            */
  605          void mmi_dq_sys_wifi_open(void)
  606          {
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 11  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 11  
 
  607   1        if (mmi_dq_wifi_open_ask() == 0)
  608   1          mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
@@ -702,7 +702,7 @@ line level    source
  660   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD_CON);
  661   1        return;
  662   1      }
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 12  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 12  
 
  663          
  664          #ifdef __LOCK_110_SUPPORT__
@@ -766,7 +766,7 @@ line level    source
  722          return :
  723            none
  724          */
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 13  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 13  
 
  725          static void mmi_dq_sys_clear_pwd(void)
  726          {
@@ -776,134 +776,134 @@ line level    source
  730   1      }
  731          
  732          #if defined(__LOCK_FP_SUPPORT__)
- 733          /*
- 734          parameter: 
- 735            none
- 736          return :
- 737            none
- 738          */
- 739          void mmi_dq_sys_add_fp(void)
- 740          {
- 741   1        if (mmi_dq_fs_get_fp_unuse_index() == 0xFF)
- 742   1        {
- 743   2          mmi_dq_aud_play_with_id(AUD_ID_FP_FULL);
- 744   2          mmi_dq_sys_show_cur_menu_list();
- 745   2        }
- 746   1        else
- 747   1        {
- 748   2          mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
- 749   2          mmi_dq_fp_light(FP_BLUE);
- 750   2          mmi_ms_opt_time_init();
- 751   2          mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
- 752   2        }
- 753   1        return;
- 754   1      }
- 755          
- 756          void mmi_dq_sys_add_fp_con(void)
- 757          {
- 758   1        mmi_dq_aud_play_with_id(AUD_ID_CONTINUE_ADD_PWD);
- 759   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP_CON);
- 760   1        return;
- 761   1      }
- 762          
- 763          #ifdef __LOCK_110_SUPPORT__
- 764          /*
- 765          parameter: 
- 766            none
- 767          return :
- 768            none
- 769          */
- 770          void mmi_dq_sys_add_110_fp(void)
- 771          {
- 772   1        mmi_dq_wifi_wakeup();
- 773   1        if (mmi_dq_wifi_check() == 1)
- 774   1        {
- 775   2          mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
- 776   2          mmi_dq_sys_show_cur_menu_list();
- 777   2          return;
- 778   2        }
- 779   1        mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
- 780   1        mmi_dq_fp_light(FP_BLUE);
- 781   1        mmi_ms_opt_time_init();
- 782   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_FP);
- 783   1        return;
- 784   1      }
- 785          
- 786          /*
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 14  
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_add_fp(void)
+              {
+                if (mmi_dq_fs_get_fp_unuse_index() == 0xFF)
+                {
+                  mmi_dq_aud_play_with_id(AUD_ID_FP_FULL);
+                  mmi_dq_sys_show_cur_menu_list();
+                }
+                else
+                {
+                  mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+                  mmi_dq_fp_light(FP_BLUE);
+                  mmi_ms_opt_time_init();
+                  mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
+                }
+                return;
+              }
+              
+              void mmi_dq_sys_add_fp_con(void)
+              {
+                mmi_dq_aud_play_with_id(AUD_ID_CONTINUE_ADD_PWD);
+                mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP_CON);
+                return;
+              }
+              
+              #ifdef __LOCK_110_SUPPORT__
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_add_110_fp(void)
+              {
+                mmi_dq_wifi_wakeup();
+                if (mmi_dq_wifi_check() == 1)
+                {
+                  mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+                  mmi_dq_sys_show_cur_menu_list();
+                  return;
+                }
+                mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+                mmi_dq_fp_light(FP_BLUE);
+                mmi_ms_opt_time_init();
+                mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_FP);
+                return;
+              }
+              
+              /*
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 14  
 
- 787          parameter: 
- 788            none
- 789          return :
- 790            none
- 791          */
- 792          void mmi_dq_sys_del_110_fp(void)
- 793          {
- 794   1        mmi_dq_wifi_wakeup();
- 795   1        if (mmi_dq_wifi_check() == 1)
- 796   1        {
- 797   2          mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
- 798   2          mmi_dq_sys_show_cur_menu_list();
- 799   2          return;
- 800   2        }
- 801   1        mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
- 802   1        mmi_dq_fp_light(FP_BLUE);
- 803   1        mmi_ms_opt_time_init();
- 804   1        mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_110_FP);
- 805   1        return;
- 806   1      }
- 807          
- 808          #endif
- 809          
- 810          /*
- 811          parameter: 
- 812            none
- 813          return :
- 814            none
- 815          */
- 816          static void mmi_dq_sys_chg_fp(void)
- 817          {
- 818   1        //mmi_dq_ms_set_sys_state(SYS_STATUS_CHG_FP);
- 819   1        return;
- 820   1      }
- 821          
- 822          /*
- 823          parameter: 
- 824            none
- 825          return :
- 826            none
- 827          */
- 828          void mmi_dq_sys_del_fp(void)
- 829          {
- 830   1        mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_FP_NUM);
- 831   1        mmi_dq_fp_light(FP_BLUE);
- 832   1        mmi_ms_opt_time_init();
- 833   1        mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP);
- 834   1        return;
- 835   1      }
- 836          
- 837          void mmi_dq_sys_del_fp_con(void)
- 838          {
- 839   1        mmi_dq_aud_play_with_id(AUD_ID_DEL_CONFIRM);
- 840   1        mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP_CON);
- 841   1        return;
- 842   1      }
- 843          
- 844          /*
- 845          parameter: 
- 846            none
- 847          return :
- 848            none
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 15  
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_del_110_fp(void)
+              {
+                mmi_dq_wifi_wakeup();
+                if (mmi_dq_wifi_check() == 1)
+                {
+                  mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+                  mmi_dq_sys_show_cur_menu_list();
+                  return;
+                }
+                mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+                mmi_dq_fp_light(FP_BLUE);
+                mmi_ms_opt_time_init();
+                mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_110_FP);
+                return;
+              }
+              
+              #endif
+              
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              static void mmi_dq_sys_chg_fp(void)
+              {
+                //mmi_dq_ms_set_sys_state(SYS_STATUS_CHG_FP);
+                return;
+              }
+              
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_del_fp(void)
+              {
+                mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_FP_NUM);
+                mmi_dq_fp_light(FP_BLUE);
+                mmi_ms_opt_time_init();
+                mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP);
+                return;
+              }
+              
+              void mmi_dq_sys_del_fp_con(void)
+              {
+                mmi_dq_aud_play_with_id(AUD_ID_DEL_CONFIRM);
+                mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP_CON);
+                return;
+              }
+              
+              /*
+              parameter: 
+                none
+              return :
+                none
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 15  
 
- 849          */
- 850          static void mmi_dq_sys_clear_fp(void)
- 851          {
- 852   1        mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_CONFIRM);
- 853   1        mmi_dq_ms_set_sys_state(SYS_STATUS_CLR_FP);
- 854   1        return;
- 855   1      }
- 856          #endif
+              */
+              static void mmi_dq_sys_clear_fp(void)
+              {
+                mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_CONFIRM);
+                mmi_dq_ms_set_sys_state(SYS_STATUS_CLR_FP);
+                return;
+              }
+              #endif
  857          #ifdef __LOCK_RFID_CARD_SUPPORT__
  858          /*
  859          parameter: 
@@ -958,7 +958,7 @@ line level    source
  908   1        mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_RFCARD_NUM);
  909   1        mmi_ms_opt_time_init();
  910   1        mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_RFID);
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 16  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 16  
 
  911   1        return;
  912   1      }
@@ -1022,7 +1022,7 @@ line level    source
  970   1        return;
  971   1      }
  972          
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 17  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 17  
 
  973          /*
  974          parameter: 
@@ -1063,38 +1063,38 @@ line level    source
 1009   1      }
 1010          
 1011          #if defined(__LOCK_FP_SUPPORT__)
-1012          /*
-1013          parameter: 
-1014            none
-1015          return :
-1016            none
-1017          */
-1018          void mmi_dq_sys_chg_admin_fp_No1(void)
-1019          {
-1020   1        mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
-1021   1        mmi_dq_fp_light(FP_BLUE);
-1022   1        mmi_ms_opt_time_init();
-1023   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP1);
-1024   1        return;
-1025   1      }
-1026          
-1027          /*
-1028          parameter: 
-1029            none
-1030          return :
-1031            none
-1032          */
-1033          void mmi_dq_sys_chg_admin_fp_No2(void)
-1034          {
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 18  
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_chg_admin_fp_No1(void)
+              {
+                mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+                mmi_dq_fp_light(FP_BLUE);
+                mmi_ms_opt_time_init();
+                mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP1);
+                return;
+              }
+              
+              /*
+              parameter: 
+                none
+              return :
+                none
+              */
+              void mmi_dq_sys_chg_admin_fp_No2(void)
+              {
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 18  
 
-1035   1        mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
-1036   1        mmi_dq_fp_light(FP_BLUE);
-1037   1        mmi_ms_opt_time_init();
-1038   1        mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP2);
-1039   1        return;
-1040   1      }
-1041          #endif
+                mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+                mmi_dq_fp_light(FP_BLUE);
+                mmi_ms_opt_time_init();
+                mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP2);
+                return;
+              }
+              #endif
 1042          
 1043          /*
 1044          parameter: 
@@ -1126,9 +1126,9 @@ line level    source
 1070   1        if (RET_SUCESS != mmi_dq_fs_clr_pwd())
 1071   1          retval = 1;
 1072   1      #ifdef __LOCK_FP_SUPPORT__
-1073   1        if (RET_SUCESS != mmi_dq_fs_clr_fp())
-1074   1          retval = 1;
-1075   1      #endif
+                if (RET_SUCESS != mmi_dq_fs_clr_fp())
+                  retval = 1;
+              #endif
 1076   1      #ifdef __LOCK_RFID_CARD_SUPPORT__
 1077   1        if (RET_SUCESS != mmi_dq_fs_clr_rfid())
 1078   1          retval = 1;
@@ -1150,7 +1150,7 @@ line level    source
 1094            none
 1095          */
 1096          static void mmi_dq_sys_restore_lock_con(void)
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 19  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 19  
 
 1097          {
 1098   1        mmi_dq_aud_play_with_id(AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM);
@@ -1214,7 +1214,7 @@ line level    source
 1156   1        {
 1157   2          mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
 1158   2          mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 20  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 20  
 
 1159   2        }
 1160   1      }
@@ -1236,8 +1236,8 @@ line level    source
 1176            {
 1177              {STR_ID_SYSTEM, STR_ID_PASSWORD, 0},
 1178          #if defined(__LOCK_FP_SUPPORT__)
-1179              {STR_ID_SYSTEM, STR_ID_FINGERPRINT, 0},
-1180          #endif
+                  {STR_ID_SYSTEM, STR_ID_FINGERPRINT, 0},
+              #endif
 1181          #ifdef __LOCK_RFID_CARD_SUPPORT__
 1182              {STR_ID_SYSTEM, STR_ID_RF_CARD, 0},
 1183          #endif
@@ -1252,8 +1252,8 @@ line level    source
 1192          
 1193              {STR_ID_110, STR_ID_PASSWORD_110, mmi_dq_sys_add_110_pwd},
 1194          #if defined(__LOCK_FP_SUPPORT__)
-1195              {STR_ID_110, STR_ID_FINGERPRINT_110, 0},
-1196          #endif
+                  {STR_ID_110, STR_ID_FINGERPRINT_110, 0},
+              #endif
 1197          #endif
 1198          
 1199              {STR_ID_SYSTEM2, STR_ID_ADMIN, 0},
@@ -1267,18 +1267,18 @@ line level    source
 1207              {STR_ID_PASSWORD, STR_ID_CLR_PWD, mmi_dq_sys_clear_pwd},
 1208          //FP
 1209          #if defined(__LOCK_FP_SUPPORT__)
-1210              {STR_ID_FINGERPRINT, STR_ID_ADD_FP, mmi_dq_sys_add_fp},
-1211              //{STR_ID_FINGERPRINT,STR_ID_CHG_FP,mmi_dq_sys_chg_fp},
-1212              {STR_ID_FINGERPRINT, STR_ID_DEL_FP, mmi_dq_sys_del_fp},
-1213              {STR_ID_FINGERPRINT, STR_ID_CLR_FP, mmi_dq_sys_clear_fp},
-1214          #ifdef __LOCK_110_SUPPORT__
-1215              {STR_ID_FINGERPRINT_110, STR_ID_ADD_FP, mmi_dq_sys_add_110_fp},
-1216              {STR_ID_FINGERPRINT_110, STR_ID_DEL_FP, mmi_dq_sys_del_110_fp},
-1217          #endif
-1218          #endif
+                  {STR_ID_FINGERPRINT, STR_ID_ADD_FP, mmi_dq_sys_add_fp},
+                  //{STR_ID_FINGERPRINT,STR_ID_CHG_FP,mmi_dq_sys_chg_fp},
+                  {STR_ID_FINGERPRINT, STR_ID_DEL_FP, mmi_dq_sys_del_fp},
+                  {STR_ID_FINGERPRINT, STR_ID_CLR_FP, mmi_dq_sys_clear_fp},
+              #ifdef __LOCK_110_SUPPORT__
+                  {STR_ID_FINGERPRINT_110, STR_ID_ADD_FP, mmi_dq_sys_add_110_fp},
+                  {STR_ID_FINGERPRINT_110, STR_ID_DEL_FP, mmi_dq_sys_del_110_fp},
+              #endif
+              #endif
 1219          #ifdef __LOCK_RFID_CARD_SUPPORT__
 1220              //RF
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 21  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 21  
 
 1221              {STR_ID_RF_CARD, STR_ID_ADD_RFCARD, mmi_dq_sys_add_rf},
 1222              //{STR_ID_RF_CARD,STR_ID_CHG_RFCARD,mmi_dq_sys_chg_rf},
@@ -1288,10 +1288,10 @@ line level    source
 1226              //admin
 1227              {STR_ID_ADMIN, STR_ID_CHG_ADMIN_PWD, mmi_dq_sys_chg_admin_pwd},
 1228          #if defined(__LOCK_FP_SUPPORT__)
-1229              {STR_ID_ADMIN, STR_ID_CHG_ADMIN_FP, 0},
-1230              {STR_ID_CHG_ADMIN_FP, STR_ID_NO1_ADMIN_FP, mmi_dq_sys_chg_admin_fp_No1},
-1231              {STR_ID_CHG_ADMIN_FP, STR_ID_NO2_ADMIN_FP, mmi_dq_sys_chg_admin_fp_No2},
-1232          #endif
+                  {STR_ID_ADMIN, STR_ID_CHG_ADMIN_FP, 0},
+                  {STR_ID_CHG_ADMIN_FP, STR_ID_NO1_ADMIN_FP, mmi_dq_sys_chg_admin_fp_No1},
+                  {STR_ID_CHG_ADMIN_FP, STR_ID_NO2_ADMIN_FP, mmi_dq_sys_chg_admin_fp_No2},
+              #endif
 1233              //setting
 1234              {STR_ID_SETTING, STR_ID_PRO_AUDIO, 0},
 1235              {STR_ID_SETTING, STR_ID_OPEN_MODE, 0},
@@ -1342,7 +1342,7 @@ line level    source
 1280   1      
 1281   1        g_dq_menu_father_id = father_id;
 1282   1      
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 22  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 22  
 
 1283   1        memset(&g_dq_menu_list_id, 0x00, sizeof(g_dq_menu_list_id));
 1284   1        g_dq_menu_count = 0;
@@ -1374,8 +1374,8 @@ line level    source
 1310   1        mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
 1311   1      #endif
 1312   1      #ifdef __LOCK_FP_SUPPORT__
-1313   1        mmi_dq_fp_light(FP_NONE_COLOR);
-1314   1      #endif
+                mmi_dq_fp_light(FP_NONE_COLOR);
+              #endif
 1315   1        mmi_dq_ms_set_sys_state(SYS_STATUS_SYS_MENU);
 1316   1        return;
 1317   1      }
@@ -1406,7 +1406,7 @@ line level    source
 1342   4            }
 1343   3          }
 1344   2          mmi_dq_sys_get_menu_list(g_dq_menu_father_id);
-C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/10/2021 16:21:37 PAGE 23  
+C51 COMPILER V9.59.0.0   MMI_SYS                                                           04/15/2021 10:13:26 PAGE 23  
 
 1345   2      #ifdef __LOCK_AUDIO_SUPPORT__
 1346   2          mmi_dq_aud_play_with_id(mmi_dq_aud_get_audio_id(g_dq_menu_father_id));
@@ -1448,9 +1448,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2157    ----
+   CODE SIZE        =   1866    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =    224      19
+   XDATA SIZE       =    170      20
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

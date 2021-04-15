@@ -587,8 +587,8 @@ unsigned char mmi_dq_sys_check_vbat(void)
 		mmi_dq_wifi_lowpower_alarm();
 		if (state == 2)
 		{
-			// mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
-			// return 1;
+			mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
+			return 1;
 		}
 	}
 

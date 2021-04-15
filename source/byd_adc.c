@@ -148,20 +148,20 @@ static uint16_t Get_Adc_Average(uint8_t adc_channel_addr, uint8_t times)
   */
 unsigned char adc_VolT(void)
 {
-	unsigned int adcx;
-	float temp;
-	ADC_ENABLE();
-	gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //开启
-	delay_ms(5);
-	adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //获取10ms平均值
-	gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //关闭
-	ADC_DISABLE();
-	temp = (float)adcx * (3.3 / 4095); //计算电压
+	// unsigned int adcx;
+	// float temp;
+	// ADC_ENABLE();
+	// gpio_bit_set(VBAT_TEST_PORT, VBAT_TEST_PIN); //开启
+	// delay_ms(5);
+	// adcx = Get_Adc_Average(ADC_CHANNEL_6, 10); //获取10ms平均值
+	// gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN); //关闭
+	// ADC_DISABLE();
+	// temp = (float)adcx * (3.3 / 4095); //计算电压
 
-	if (temp < 1.25)
-		return 2;
-	else if (temp < 1.5625) //<5v
-		return 1;			//mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+	// if (temp < 1.25)
+	// 	return 2;
+	// else if (temp < 1.5625) //<5v
+	// 	return 1;			//mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
 
 	return 0;
 }
