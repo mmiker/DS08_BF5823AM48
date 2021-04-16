@@ -13,6 +13,9 @@
         "main.h": "c",
         "dqiot_drv_wifi.h": "c",
         "mmi_fs.h": "c",
-        "mcu02_uart.h": "c"
+        "mcu02_uart.h": "c",
+        "mmi_feature.h": "c",
+        "dqiot_drv_fp.h": "c",
+        "mmi_queue.h": "c"
     }
 }

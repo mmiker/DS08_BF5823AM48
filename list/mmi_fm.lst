@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_FM                                                            04/15/2021 10:13:27 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_FM                                                            04/16/2021 17:36:26 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FM
@@ -37,8 +37,8 @@ line level    source
                                 STR_ID_OLED,
                         #endif
   28                    #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
-                                STR_ID_FINGERPRINT,
-                        #endif
+  29                            STR_ID_FINGERPRINT,
+  30                    #endif
   31                    #ifdef __LOCK_RFID_CARD_SUPPORT__
   32                            STR_ID_RF_CARD,
   33                    #endif
@@ -62,7 +62,7 @@ line level    source
   51          {
   52   1        switch(g_fm_result_name[item_num])
   53   1        {
-C51 COMPILER V9.59.0.0   MMI_FM                                                            04/15/2021 10:13:27 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_FM                                                            04/16/2021 17:36:26 PAGE 2   
 
   54   2          case STR_ID_KEY:
   55   2            mmi_dq_aud_play_with_id(AUD_ID_FM_KEY_INPUT);
@@ -77,13 +77,13 @@ line level    source
                     break;
               #endif
   66   2      #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
-                  case STR_ID_FINGERPRINT:
-                    mmi_ms_opt_time_init();
-                    mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
-                    if(mmi_dq_fs_get_factory_flag()!=0)
-                      mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
-                    break;
-              #endif
+  67   2          case STR_ID_FINGERPRINT:
+  68   2            mmi_ms_opt_time_init();
+  69   2            mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+  70   2            if(mmi_dq_fs_get_factory_flag()!=0)
+  71   2              mmi_dq_aud_play_with_id(AUD_ID_INPUT_BACK);
+  72   2            break;
+  73   2      #endif
   74   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
   75   2          case STR_ID_RF_CARD:
   76   2            mmi_ms_opt_time_init();
@@ -126,7 +126,7 @@ line level    source
  113   1        for(i=0;i<max;i++)
  114   1        {
  115   2          if(g_fm_result_name[i]==item_name)
-C51 COMPILER V9.59.0.0   MMI_FM                                                            04/15/2021 10:13:27 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_FM                                                            04/16/2021 17:36:26 PAGE 3   
 
  116   2            break;
  117   2        }
@@ -190,7 +190,7 @@ line level    source
  175          
  176          /*
  177          parameter: 
-C51 COMPILER V9.59.0.0   MMI_FM                                                            04/15/2021 10:13:27 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_FM                                                            04/16/2021 17:36:26 PAGE 4   
 
  178            none
  179          return :
@@ -254,7 +254,7 @@ line level    source
  237          void mmi_dq_factory_mode_motor_test(void)
  238          {
  239   1        mmi_dq_motor_turn_right();
-C51 COMPILER V9.59.0.0   MMI_FM                                                            04/15/2021 10:13:27 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_FM                                                            04/16/2021 17:36:26 PAGE 5   
 
  240   1        delay_ms(300);
  241   1        mmi_dq_motor_stop();
@@ -288,9 +288,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    373    ----
+   CODE SIZE        =    393    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      9       2
+   XDATA SIZE       =     14       2
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

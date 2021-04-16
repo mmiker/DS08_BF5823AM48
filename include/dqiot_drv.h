@@ -14,6 +14,7 @@
 #include "dqiot_drv_audio.h"
 #include "dqiot_drv_fp.h"
 #include "dqiot_fp_sy.h"
+#include "dqiot_drv_wifi.h"
 #include "dqiot_drv_motor.h"
 #include "dqiot_drv_led.h"
 #include "dqiot_drv_reset.h"

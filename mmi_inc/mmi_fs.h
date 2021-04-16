@@ -69,7 +69,9 @@ typedef struct mmi_fs_rfid
 {
 	unsigned char	index;
 	fds_use_type  	flag;//0 for admin;1 for user
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 	unsigned char 	sec_data[RFID_SEC_DATA_LEN];
+#endif
 }mmi_fs_rfid;
 
 

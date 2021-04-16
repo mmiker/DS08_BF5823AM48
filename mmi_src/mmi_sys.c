@@ -128,7 +128,9 @@ void mmi_dq_sys_wake_up(void)
 	mmi_dq_bsp_wake_up();
 	if (mmi_dq_sys_check_vbat() == 0)
 	{
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_wakeup();
+#endif
 #ifdef __LOCK_FP_SUPPORT__
 		mmi_dq_fp_init(); //握手、点灯
 #endif
@@ -416,7 +418,11 @@ void System_timer_event_handler(void)
 			g_lock_error_flag = 0;
 	}
 
-	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 0) && (mmi_dq_wifi_get_running_flag() == 0))
+	if ((mmi_dq_rst_timer_event() != 0) && (SYS_STATUS_ENTER_SLEEP != state && SYS_STATUS_WAIT_FOR_ENTER_SLEEP != state) && (g_timer2_flag != 1) && (mmi_dq_ms_get_run_flag() == 0)
+#ifdef __LOCK_WIFI_SUPPORT__
+		&& (mmi_dq_wifi_get_running_flag() == 0)
+#endif
+	)
 	{
 		unsigned char flag = 0;
 		g_timer2_sleep_count++;
@@ -584,7 +590,9 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	if (state > 0)
 	{
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_lowpower_alarm();
+#endif
 		if (state == 2)
 		{
 			mmi_dq_ms_set_sys_state(SYS_STATUS_LOW_POWER);
@@ -595,6 +603,7 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	return 0;
 }
 
+#ifdef __LOCK_WIFI_SUPPORT__
 /**
   * @brief  远程开门
   * @param  none
@@ -607,6 +616,7 @@ void mmi_dq_sys_wifi_open(void)
 	if (mmi_dq_wifi_open_ask() == 0)
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
 }
+#endif
 
 /*
 parameter: 
@@ -1099,6 +1109,7 @@ static void mmi_dq_sys_restore_lock_con(void)
 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK_CON);
 }
 
+#ifdef __LOCK_WIFI_SUPPORT__
 /*
 parameter: 
 	none
@@ -1158,6 +1169,7 @@ static void mmi_dq_sys_wifi_code_setting(void)
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
 	}
 }
+#endif
 
 typedef struct sys_menu_t
 {
@@ -1184,9 +1196,11 @@ const sys_menu_t sys_menu_tree[] =
 		{STR_ID_SYSTEM, STR_ID_ADMIN, 0},
 		{STR_ID_SYSTEM, STR_ID_SETTING, 0},
 		{STR_ID_SYSTEM, STR_ID_RESTORE, mmi_dq_sys_restore_lock_con},
+#ifdef __LOCK_WIFI_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_airkiss_setting},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_code_setting},
+#endif
 #ifdef __LOCK_110_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_110, 0},
 

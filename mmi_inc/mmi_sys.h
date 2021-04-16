@@ -2,7 +2,7 @@
 #define __MMI_SYS_H__
 
 #include "mmi_com.h"
-
+#include "mmi_audio.h"
 
 typedef enum
 {

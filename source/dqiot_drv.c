@@ -7,7 +7,6 @@
     Copyright (C) 2018 BYD
 */
 #ifndef __DQIOT_DRV_C__
-
 #define __DQIOT_DRV_C__
 #include "mmi_feature.h"
 
@@ -47,8 +46,16 @@ void dqiot_drv_init(void)
 	dqiot_drv_rgb_led_gpio_init();
 
 	dqiot_drv_audio_gpio_init();
+
+#ifdef __LOCK_FP_SUPPORT__
 	dqiot_drv_fp_gpio_init();
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+	dqiot_drv_wifi_gpio_init();
+#endif
+#if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
 	dqiot_drv_uart0B_init();
+#endif
 	dqiot_drv_motor_gpio_init();
 
 	gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
@@ -111,9 +118,13 @@ void dqiot_drv_wake_up(void)
 #endif
 #ifdef __LOCK_FP_SUPPORT__
 	dqiot_drv_fp_gpio_init();
-
 #endif
+#ifdef __LOCK_WIFI_SUPPORT__
+	dqiot_drv_wifi_gpio_init();
+#endif
+#if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
 	dqiot_drv_uart0B_init();
+#endif
 #ifdef __LOCK_MOTOR_SUPPORT__
 	dqiot_drv_motor_gpio_init();
 #endif
@@ -144,9 +155,11 @@ void dqiot_drv_enter_sleep(void)
 #ifdef __LOCK_AUDIO_SUPPORT__
 	dqiot_drv_audio_gpio_deinit();
 #endif
-#if 1//def __LOCK_FP_SUPPORT__
+#ifdef __LOCK_FP_SUPPORT__
 	dqiot_drv_fp_gpio_deinit();
-
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+	dqiot_drv_wifi_gpio_deinit();
 #endif
 #ifdef __LOCK_MOTOR_SUPPORT__
 	dqiot_drv_motor_gpio_deinit();

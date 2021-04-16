@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/15/2021 10:13:27 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/16/2021 17:36:25 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_RFID
@@ -62,7 +62,7 @@ line level    source
   51          return :
   52            none
   53          */
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/15/2021 10:13:27 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/16/2021 17:36:25 PAGE 2   
 
   54          RET_VAL mmi_dq_rfid_gen_char(unsigned char index)
   55          {
@@ -126,7 +126,7 @@ line level    source
  113          /*
  114          parameter: 
  115            none
-C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/15/2021 10:13:27 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_RFID                                                          04/16/2021 17:36:25 PAGE 3   
 
  116          return :
  117            none
@@ -155,7 +155,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    305    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     36       6
+   XDATA SIZE       =     40       6
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

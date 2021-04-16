@@ -705,4 +705,4 @@ unsigned char mmi_dq_wifi_get_running_flag(void)
   return 0;
 }
 #endif
-#endif
+#endif //__MMI_WIFI_C__

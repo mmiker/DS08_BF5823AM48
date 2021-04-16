@@ -1,7 +1,8 @@
-#ifndef __DQIOT_DRV_WIFI_H__
-#define __DQIOT_DRV_WIFI_H__
-#include "dqiot_drv_wifi.h"
+#ifndef __DQIOT_DRV_WIFI_C__
+#define __DQIOT_DRV_WIFI_C__
 #include "mmi_feature.h"
+#ifdef __LOCK_WIFI_SUPPORT__
+#include "dqiot_drv_wifi.h"
 #include "iic_master.h"
 #include "delay.h"
 #include "mmi_fs.h"
@@ -16,6 +17,58 @@ extern unsigned char uart_get_buf[];
 extern unsigned char uart_getbuflen;
 // extern void printfS(char *show, char *status);
 // extern void printfV(char *show, int value);
+
+/**
+  * @brief  GPIO初始化
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
+void dqiot_drv_wifi_gpio_init(void)
+{
+	/*wifi
+	UART0_TX	PF4	输出
+	UART0_RX	PF5	输入
+	NRST_CTR	PF7	供电
+	*/
+	gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_OUT);
+	gpio_bit_set(FP_TX_PORT, FP_TX_PIN);
+
+	gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IPU);
+	gpio_bit_set(FP_RX_PORT, FP_RX_PIN);
+
+	gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_OUT);
+	gpio_bit_set(FP_PWR_PORT, FP_PWR_PIN);
+
+	return;
+}
+
+/**
+  * @brief  GPIO取消初始化
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
+void dqiot_drv_wifi_gpio_deinit(void)
+{
+	/*wifi
+	UART0_TX	PF4	输出
+	UART0_RX	PF5	输入
+	NRST_CTR	PF7	供电
+	*/
+	gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_TX_PORT,FP_TX_PIN);
+	
+	gpio_init(FP_RX_PORT,FP_RX_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_RX_PORT,FP_RX_PIN);
+	
+	gpio_init(FP_PWR_PORT,FP_PWR_PIN,GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
+
+	return;
+}
 
 /**
   * @brief  串口数据接收
@@ -113,7 +166,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
-			delay_ms(1);
+			// delay_ms(1);
 
 			if (uart_getbuflen >= 2)
 			{
@@ -148,7 +201,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
-			delay_ms(1);
+			// delay_ms(1);
 
 			if (uart_getbuflen >= 2)
 			{
@@ -977,3 +1030,4 @@ void wifi_set_110(void)
 }
 
 #endif
+#endif //__DQIOT_DRV_WIFI_C__

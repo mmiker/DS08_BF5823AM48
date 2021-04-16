@@ -1,6 +1,7 @@
 #ifndef __MMI_WIFI_H__
 #define __MMI_WIFI_H__
-
+#include "mmi_feature.h"
+#ifdef __LOCK_WIFI_SUPPORT__
 /*
 parameter: 
 	none
@@ -349,3 +350,4 @@ return :
 unsigned char mmi_dq_wifi_get_running_flag(void);
 
 #endif
+#endif //__MMI_WIFI_H__

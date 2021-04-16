@@ -63,6 +63,7 @@ const msg_aud_id_list msg_aud_list[] =
 			0xff
 #endif
 		}, //设置
+#if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
 		{
 			STR_ID_110,
 			AUD_ID_SYS_110
@@ -71,20 +72,25 @@ const msg_aud_id_list msg_aud_list[] =
 			0xff
 #endif
 		}, //RF鍗?
+#endif
+#if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
 		{
 			STR_ID_FINGERPRINT_110,
 			AUD_ID_SYS_FP_110
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-		,0xff
+			,
+			0xff
 #endif
-	},//管理�?
-	{
-		STR_ID_PRO_AUDIO,
-		AUD_ID_SYS_PRO_AUDIO
+		}, //管理�?
+#endif
+		{
+			STR_ID_PRO_AUDIO,
+			AUD_ID_SYS_PRO_AUDIO
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-			,0xff
+			,
+			0xff
 #endif
-	}, //绠＄悊鍛?
+		}, //绠＄悊鍛?
 #if 0
 	{
 		STR_ID_INPUT_68_PWD,

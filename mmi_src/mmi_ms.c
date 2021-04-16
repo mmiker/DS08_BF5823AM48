@@ -102,8 +102,10 @@ void mmi_task_proc(void)
 		// 	mmi_dq_ms_set_msg_que(QUE_EVENT_FP, QUE_PRO_LOW, 0);
 #endif
 
+#ifdef __LOCK_WIFI_SUPPORT__
 	if (mmi_dq_sys_get_wifi_check_flag() != 0)
 		mmi_dq_ms_set_msg_que(QUE_EVENT_WIFI_CHECK, QUE_PRO_LOW, 0);
+#endif
 
 	return;
 }
@@ -142,8 +144,11 @@ void mmi_sleep_task_proc(void)
 		mmi_dq_sys_wake_up();
 	}
 
+#ifdef __LOCK_WIFI_SUPPORT__
 	//if(mmi_dq_sys_get_wifi_check_flag() != 0)
 	//	mmi_dq_ms_set_msg_que(QUE_EVENT_WIFI_CHECK,QUE_PRO_LOW,0);
+#endif
+
 	return;
 }
 
@@ -155,11 +160,14 @@ return :
 */
 void mmi_wait_sleep_task_proc(void)
 {
-	//unsigned int timer1_count = 0;
+//unsigned int timer1_count = 0;
+#ifdef __LOCK_WIFI_SUPPORT__
 	if (mmi_dq_wifi_get_running_flag() == 1)
 		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	//if((mmi_dq_rfid_check() == RET_SUCESS) || (mmi_dq_key_check() != 0) || (mmi_dq_rst_get_pin() == 0))
-	else if (mmi_dq_ms_get_run_flag() == 0)
+	else
+#endif
+		if (mmi_dq_ms_get_run_flag() == 0)
 	{
 		mmi_dq_sys_enter_sleep();
 	}
@@ -224,9 +232,11 @@ void mmi_dq_ms_sys_msg_handle(void)
 		case QUE_EVENT_TIMER_END:
 			mmi_dq_sys_delay_event_pro();
 			break;
+#ifdef __LOCK_WIFI_SUPPORT__
 		case QUE_EVENT_WIFI_CHECK:
 			mmi_ms_wifi_opt_fun();
 			break;
+#endif
 		default:
 			break;
 		}
@@ -326,7 +336,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 		{
 			mmi_dq_aud_stop();
 			mmi_dq_aud_play_with_id(AUD_ID_RONG_TIMES_EXCEED);
+#ifdef __LOCK_WIFI_SUPPORT__
 			mmi_dq_wifi_pw_alarm();
+#endif
 			return;
 		}
 		if (key_len == 0)
@@ -341,12 +353,14 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 					else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
 						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+#ifdef __LOCK_WIFI_SUPPORT__
 					else if (wifi_add_flag != 0)
 					{
 						wifi_add_flag = 0;
 						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 					}
 					else
+#endif
 						mmi_dq_sys_show_cur_menu_list();
 				}
 				break;
@@ -425,6 +439,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			{
 				if (status == SYS_STATUS_INPUT_PWD)
 				{
+#ifdef __LOCK_WIFI_SUPPORT__
 					if (key_len == 1 && input_key_1[0] == KEY_5) //5 添加删除密码/指纹/RF卡
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
@@ -447,13 +462,16 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_take_videos();
 					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
 						mmi_dq_wifi_check_net();
-						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
-						// 	mmi_dq_wifi_arikiss_con();
-						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
-						// 	mmi_dq_wifi_code_con();
+					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
+					// mmi_dq_wifi_arikiss_con();
+					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
+					// 	mmi_dq_wifi_code_con();
+
+					else
+#endif
 
 #ifdef __LOCK_BUS_SUPPORT__
-					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
+						if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
 					{
 						if (mmi_dq_fs_get_business_flag() == 1)
 						{
@@ -568,7 +586,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									{
 										get_index = del_index;
 										mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 										mmi_dq_wifi_del_password(get_index);
+#endif
 										// printfV("get_index", (int)get_index);
 									}
 									else
@@ -587,16 +607,20 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									else
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 										mmi_dq_wifi_add_password(get_index);
+#endif
 										// printfV("get_index", (int)get_index);
 									}
-									if (wifi_add_flag == 0)
-										mmi_dq_sys_add_pwd_con();
-									else
+#ifdef __LOCK_WIFI_SUPPORT__
+									if (wifi_add_flag != 0)
 									{
 										wifi_add_flag = 0;
 										mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 									}
+									else
+#endif
+										mmi_dq_sys_add_pwd_con();
 								}
 								else if (status == SYS_STATUS_ADD_ADMIN_PWD)
 								{
@@ -605,7 +629,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									else
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 										mmi_dq_wifi_add_password(get_index);
+#endif
 										// printfV("get_index", (int)get_index);
 									}
 #ifdef __LOCK_FP_SUPPORT__
@@ -624,7 +650,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 									else
 									{
 										mmi_dq_aud_play_with_id(AUD_ID_CHG_ADMIN_PWD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 										mmi_dq_wifi_add_password(get_index);
+#endif
 										// printfV("get_index", (int)get_index);
 									}
 									mmi_dq_sys_show_cur_menu_list();
@@ -640,7 +668,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 										mmi_dq_wifi_set_110();
 #endif
 										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 										mmi_dq_wifi_add_password(get_index);
+#endif
 										// printfV("get_index", (int)get_index);
 									}
 									mmi_dq_sys_show_cur_menu_list();
@@ -674,12 +704,14 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 		if (key_val == KEY_S)
 		{
 			mmi_dq_aud_play_key_tone();
+#ifdef __LOCK_WIFI_SUPPORT__
 			if (wifi_add_flag != 0)
 			{
 				wifi_add_flag = 0;
 				mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 			}
 			else
+#endif
 				mmi_dq_sys_show_cur_menu_list();
 		}
 		break;
@@ -719,7 +751,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				if (RET_SUCESS == mmi_dq_fs_clr_pwd())
 				{
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_PWD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 					mmi_dq_wifi_clr_pwd_suc();
+#endif
 				}
 				else
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_PWD_FAIL);
@@ -730,7 +764,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				if (RET_SUCESS == mmi_dq_fs_clr_fp())
 				{
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 					mmi_dq_wifi_clr_fps_suc();
+#endif
 				}
 				else
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_FAIL);
@@ -742,7 +778,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				if (RET_SUCESS == mmi_dq_fs_clr_rfid())
 				{
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_RFCARD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 					mmi_dq_wifi_clr_rfid_suc();
+#endif
 				}
 				else
 					mmi_dq_aud_play_with_id(AUD_ID_CLR_RFCARD_FAIL);
@@ -833,6 +871,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 	}
 	break;
 #endif
+#ifdef __LOCK_WIFI_SUPPORT__
 	case SYS_STATUS_WIFI_MODE:
 		//if(key_val == KEY_S)
 		//{
@@ -841,10 +880,13 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 		//	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 		//}
 		break;
+#endif
 	case SYS_STATUS_LOW_POWER:
 		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_lowpower_alarm();
+#endif
 		break;
 	default:
 		break;
@@ -868,7 +910,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 	{
 		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_lowpower_alarm();
+#endif
 		return;
 	}
 	else if (status == SYS_STATUS_WAIT_FOR_ENTER_SLEEP)
@@ -888,7 +932,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 	{
 		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_RONG_TIMES_EXCEED);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_fp_alarm();
+#endif
 		return;
 	}
 
@@ -980,7 +1026,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 								{
 									mmi_dq_fp_light(FP_GREEN);
 									mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 									mmi_dq_wifi_del_fp(index);
+#endif
 								}
 								else
 								{
@@ -1062,7 +1110,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 											// printfS("mmi_dq_fs_set_fp", "ok");
 											mmi_dq_fp_light(FP_GREEN);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FP_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 											mmi_dq_wifi_add_fp(index);
+#endif
 										}
 										else
 										{
@@ -1070,13 +1120,15 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 											mmi_dq_fp_light(FP_RED);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
 										}
-										if (wifi_add_flag == 0)
-											mmi_dq_sys_add_fp_con();
-										else
+#ifdef __LOCK_WIFI_SUPPORT__
+										if (wifi_add_flag != 0)
 										{
 											wifi_add_flag = 0;
 											mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 										}
+										else
+#endif
+											mmi_dq_sys_add_fp_con();
 									}
 #ifdef __LOCK_110_SUPPORT__
 									else if (status == SYS_STATUS_ADD_110_FP)
@@ -1091,8 +1143,10 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 										{
 											mmi_dq_fp_light(FP_GREEN);
 											mmi_dq_aud_play_with_id(AUD_ID_ADD_FP_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 											mmi_dq_wifi_set_110();
 											mmi_dq_wifi_add_fp(index);
+#endif
 										}
 										else
 										{
@@ -1138,7 +1192,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 								{
 									mmi_dq_fp_light(FP_GREEN);
 									mmi_dq_aud_play_with_id(AUD_ID_ADD_FP_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 									mmi_dq_wifi_add_fp(index);
+#endif
 								}
 								else
 								{
@@ -1204,7 +1260,9 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 	{
 		mmi_dq_aud_stop();
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_lowpower_alarm();
+#endif
 		return;
 	}
 	else if (status == SYS_STATUS_WAIT_FOR_ENTER_SLEEP)
@@ -1224,7 +1282,9 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 	if (mmi_dq_sys_door_state_check() == 1)
 	{
 		mmi_dq_aud_play_with_id(AUD_ID_RONG_TIMES_EXCEED);
+#ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_rfid_alarm();
+#endif
 		return;
 	}
 #ifdef __FACTORY_TEST_SUPPORT__
@@ -1283,7 +1343,9 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 						{
 							get_index = index;
 							mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 							mmi_dq_wifi_del_rfid_suc(get_index);
+#endif
 							// printfV("get_index", (int)get_index);
 						}
 						else
@@ -1320,18 +1382,22 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 						if (retval == RET_SUCESS)
 						{
 							mmi_dq_aud_play_with_id(AUD_ID_ADD_RFCARD_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 							mmi_dq_wifi_add_rfid_suc(get_index);
+#endif
 							// printfV("get_index", (int)get_index);
 						}
 						else
 							mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL);
+#ifdef __LOCK_WIFI_SUPPORT__
 						if (wifi_add_flag == 0)
-							mmi_dq_sys_add_rf_con();
-						else
 						{
 							wifi_add_flag = 0;
 							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
+						else
+#endif
+							mmi_dq_sys_add_rf_con();
 					}
 					else
 						mmi_dq_aud_play_with_id(AUD_ID_RFCARD_TWICE_NOT_SAME_RETRY);
@@ -1371,9 +1437,11 @@ void mmi_ms_reset_opt_fun(void)
 		if (RET_SUCESS == mmi_dq_fs_reset())
 		{
 			mmi_dq_aud_play_with_id(AUD_ID_RESTORE_SUCESS);
+#ifdef __LOCK_WIFI_SUPPORT__
 			mmi_dq_wifi_clr_pwd_suc();
 			mmi_dq_wifi_clr_fps_suc();
 			mmi_dq_wifi_clr_rfid_suc();
+#endif
 		}
 		else
 			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
@@ -1382,6 +1450,7 @@ void mmi_ms_reset_opt_fun(void)
 	}
 }
 
+#ifdef __LOCK_WIFI_SUPPORT__
 /*
 parameter: 
 	none
@@ -1396,5 +1465,5 @@ void mmi_ms_wifi_opt_fun(void)
 	else if (type == 1)
 		mmi_dq_wifi_check_open();
 }
-
 #endif
+#endif //__MMI_MS_C__

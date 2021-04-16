@@ -1,6 +1,7 @@
 #ifndef __DQIOT_WIFI_H__
 #define __DQIOT_WIFI_H__
-
+#include "mmi_feature.h"
+#ifdef __LOCK_WIFI_SUPPORT__
 //#define __I2C_SW__
 #include "dqiot_drv.h"
 
@@ -55,6 +56,8 @@
 
 extern unsigned char wifi_add_flag;
 
+void dqiot_drv_wifi_gpio_init(void);
+void dqiot_drv_wifi_gpio_deinit(void);
 uint8_t wifi_net_connect_send(void);
 uint8_t wifi_net_airkiss_connect_send(void);
 uint8_t wifi_net_code_connect_send(void);
@@ -126,4 +129,5 @@ void wifi_send_pwd_110(void);
 void wifi_set_110(void);
 
 #endif
+#endif //__DQIOT_WIFI_H__
 

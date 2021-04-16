@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/15/2021 10:13:16 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/16/2021 17:36:21 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_FP
@@ -12,7 +12,7 @@ line level    source
    1          #ifndef __DQIOT_DRV_FP_C__
    2          #define __DQIOT_DRV_FP_C__
    3          #include "mmi_feature.h"
-   4          // #ifdef __LOCK_FP_SUPPORT__
+   4          #ifdef __LOCK_FP_SUPPORT__
    5          #include "dqiot_drv.h"
    6          #include "dqiot_drv_fp.h"
    7          #include "delay.h"
@@ -62,7 +62,7 @@ line level    source
   50   1        UART0_RX  PF5 输入
   51   1        FPS_INT   PF6 感应(默认上拉,感应到触摸下拉)
   52   1        NRST_CTR  PF7 供电
-C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/15/2021 10:13:16 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_FP                                                      04/16/2021 17:36:21 PAGE 2   
 
   53   1        */
   54   1        gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
@@ -104,7 +104,7 @@ line level    source
   90   1        return;
   91   1      }
   92          
-  93          // #endif
+  93          #endif
   94          #endif//__DQIOT_DRV_FP_C__
   95          
 
@@ -112,7 +112,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    119    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     16    ----
+   XDATA SIZE       =     20    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
