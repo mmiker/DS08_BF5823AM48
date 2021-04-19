@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_FP_SY
@@ -62,7 +62,7 @@ line level    source
   51          //static void UART_Callback(unsigned char send_data)
   52          //{
   53          //  send_data = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 2   
 
   54          //}
   55          
@@ -126,7 +126,7 @@ line level    source
  113   1      
  114   1        dqiot_drv_uart0B_init();
  115   1        uart_getbuflen = 0;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 3   
 
  116   1      
  117   1        /*包头*/
@@ -190,7 +190,7 @@ line level    source
  175   1      }
  176          
  177          /**
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 4   
 
  178            * @brief  发送校验和
  179            * @param  check:检查位
@@ -254,7 +254,7 @@ line level    source
  236   4              //  printf("uart_rec_buff[%d] is %d\n", (int)i, (int)uart_rec_buff[i]);
  237   4              // dqiot_drv_uart0B_init();
  238   4      
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 5   
 
  239   4              /* 清空缓存 */
  240   4              uart_getbuflen = 0;
@@ -318,7 +318,7 @@ line level    source
  298   1        AS608_PackHead2();
  299   1        SendFlag(0x01);
  300   1        SendLength(0x03);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 6   
 
  301   1        Sendcmd(0x53); /*生成特征指令*/
  302   1        SendCheck(0x57);
@@ -382,7 +382,7 @@ line level    source
  360   1      
  361   1        // sure = ReturnFlag(&p);
  362   1        return JudgeStr(1000, 0x03);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 7   
 
  363   1      }
  364          
@@ -446,7 +446,7 @@ line level    source
  419          //合并特征（生成模板）PS_RegModel
  420          //功能:将CharBuffer1与CharBuffer2中的特征文件合并生成 模板,结果存于CharBuffer1与CharB
              -uffer2
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 8   
 
  421          //说明:  模块返回确认字
  422          unsigned char PS_RegModel(void)
@@ -510,7 +510,7 @@ line level    source
  480          //功能：以 CharBuffer1或CharBuffer2中的特征文件高速搜索整个或部分指纹库。
  481          //      若搜索到，则返回页码,该指令对于的确存在于指纹库中 ，且登录时质量
  482          //      很好的指纹，会很快给出搜索结果。
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 9   
 
  483          //参数:  BufferID， StartPage(起始页)，PageNum（页数）
  484          //说明:  模块返回确认字+页码（相配指纹模板）
@@ -574,7 +574,7 @@ line level    source
                 return 1;   
               }
               
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 10  
 
               //写系统寄存器 PS_WriteReg
               //功能:  写模块寄存器
@@ -638,7 +638,7 @@ line level    source
                 unsigned char  ensure;
               
                 if(AS608_PackHead()==1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 11  
 
                   return 0xFF;
                 SendFlag(0x01);//命令包标识
@@ -702,7 +702,7 @@ line level    source
                 temp = 0x01+0x04+0x19+NotePageNum;
                 SendCheck(temp);
               
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 12  
 
                 return ensure;
               }
@@ -766,7 +766,7 @@ line level    source
  725   1        AS608_SendData(id >> 8);
  726   1        AS608_SendData(id & 0xFF);
  727   1        AS608_SendData(param >> 8);
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 13  
 
  728   1        AS608_SendData(param & 0xFF);
  729   1        SendCheck(0x01 + 0x08 + 0x32 + (id >> 8) + (id & 0xFF) + level + (param >> 8) + (param & 0xFF));
@@ -830,7 +830,7 @@ line level    source
  787   1          return;
  788   1      
  789   1        if (AS608_PackHead() == 1)
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 14  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 14  
 
  790   1          return;
  791   1        SendFlag(0x01);
@@ -894,7 +894,7 @@ line level    source
  849   3            {
  850   4              uart_getbuflen = 0;
  851   4              return 1;
-C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/16/2021 17:36:22 PAGE 15  
+C51 COMPILER V9.59.0.0   DQIOT_FP_SY                                                       04/19/2021 10:41:13 PAGE 15  
 
  852   4            }
  853   3          }

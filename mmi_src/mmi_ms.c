@@ -370,7 +370,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				if (status == SYS_STATUS_INPUT_PWD)
 				{
 					mmi_dq_aud_play_key_tone();
+#ifdef __LOCK_BUS_SUPPORT__
 					admin_check_type = 0;
+#endif
 					mmi_dq_aud_play_with_id(AUD_ID_INPUT_ADMIN_PWD);
 					mmi_dq_ms_set_sys_state(SYS_STATUS_INPUT_ADMIN_PWD);
 				}
@@ -439,13 +441,13 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			{
 				if (status == SYS_STATUS_INPUT_PWD)
 				{
+					if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_0) //00 远程开门
+						mmi_dq_sys_wifi_open();
 #ifdef __LOCK_WIFI_SUPPORT__
-					if (key_len == 1 && input_key_1[0] == KEY_5) //5 添加删除密码/指纹/RF卡
+					else if (key_len == 1 && input_key_1[0] == KEY_5) //5 添加删除密码/指纹/RF卡
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
 						mmi_dq_wifi_pv_switch();
-					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_0) //00 远程开门
-						mmi_dq_sys_wifi_open();
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 						mmi_dq_wifi_open_by_key();
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
@@ -462,17 +464,15 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_take_videos();
 					else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
 						mmi_dq_wifi_check_net();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
-					// mmi_dq_wifi_arikiss_con();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
-					// 	mmi_dq_wifi_code_con();
-
-					else
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
+						// mmi_dq_wifi_arikiss_con();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
+						// 	mmi_dq_wifi_code_con();
 #endif
-
 #ifdef __LOCK_BUS_SUPPORT__
-						if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
+					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
 					{
+
 						if (mmi_dq_fs_get_business_flag() == 1)
 						{
 							admin_check_type = 1;
@@ -847,19 +847,25 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			if (key_val == KEY_S)
 			{
 				mmi_dq_aud_play_key_tone();
+#ifdef __LOCK_MOTOR_SUPPORT__
 				mmi_dq_factory_mode_motor_test_back();
+#endif
 				if (mmi_dq_fs_get_factory_flag() != 0)
 					mmi_dq_factory_mode_test_stop();
 				else
 				{
+#ifdef __LOCK_MOTOR_SUPPORT__
 					delay_ms(600);
 					mmi_dq_factory_mode_motor_test();
+#endif
 				}
 			}
 			else if (key_val == KEY_H)
 			{
 				mmi_dq_aud_play_key_tone();
+#ifdef __LOCK_MOTOR_SUPPORT__
 				mmi_dq_factory_mode_motor_test_back();
+#endif
 				mmi_dq_factory_mode_test_item_result(STR_ID_MOTO, 1);
 			}
 		}
@@ -1427,9 +1433,15 @@ void mmi_ms_reset_opt_fun(void)
 {
 	SYS_BASE_STATUS status = mmi_dq_ms_get_sys_state();
 
-	if (status == SYS_STATUS_FM_MODE && STR_ID_RESET == mmi_dq_factory_mode_get_test_project())
+	if (status == SYS_STATUS_FM_MODE
+#ifdef __FACTORY_TEST_SUPPORT__
+		&& STR_ID_RESET == mmi_dq_factory_mode_get_test_project()
+#endif
+	)
 	{
+#ifdef __FACTORY_TEST_SUPPORT__
 		mmi_dq_factory_mode_reset_test();
+#endif
 		return;
 	}
 	else

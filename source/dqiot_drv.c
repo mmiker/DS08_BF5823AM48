@@ -56,7 +56,9 @@ void dqiot_drv_init(void)
 #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
 	dqiot_drv_uart0B_init();
 #endif
+#ifdef __LOCK_MOTOR_SUPPORT__
 	dqiot_drv_motor_gpio_init();
+#endif
 
 	gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
 	gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN);

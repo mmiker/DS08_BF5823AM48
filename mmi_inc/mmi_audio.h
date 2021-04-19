@@ -4,6 +4,7 @@
 #include "string.h"
 #include "mmi_feature.h"
 
+#ifdef __LOCK_AUDIO_SUPPORT__
 #define __AUD_PLAY_BY_ARR__
 
 typedef enum 
@@ -337,5 +338,6 @@ return :
 */
 unsigned char mmi_dq_aud_get_end_flag(void);
 
+#endif
 #endif //__MMI_AUDIO_H__
 

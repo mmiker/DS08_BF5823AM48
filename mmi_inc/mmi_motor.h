@@ -29,4 +29,4 @@ return :
 void mmi_dq_motor_stop(void);
 
 #endif
-#endif
+#endif //__MMI_MOTOR_H__

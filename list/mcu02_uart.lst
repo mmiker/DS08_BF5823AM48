@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_UART                                                        04/16/2021 17:22:15 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_UART                                                        04/19/2021 10:19:33 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_UART
@@ -62,7 +62,7 @@ line level    source
   50   2          while((UART0_STATE & TX_EMPTY_FLAG) == 0x00);
   51   2          CLR_UART0_TX_STATE();
   52   2        }else if(uart_port == UART1){
-C51 COMPILER V9.59.0.0   MCU02_UART                                                        04/16/2021 17:22:15 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_UART                                                        04/19/2021 10:19:33 PAGE 2   
 
   53   2          UART1_BUF = dat;
   54   2          while((UART1_STATE & TX_EMPTY_FLAG) == 0x00);

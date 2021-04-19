@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/16/2021 17:22:14 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/19/2021 10:19:32 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_CSD
@@ -62,7 +62,7 @@ line level    source
   51   2        }
   52   1      }
   53          
-C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/16/2021 17:22:14 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/19/2021 10:19:32 PAGE 2   
 
   54          /*!
   55              \brief      enable csd sensor
@@ -126,7 +126,7 @@ line level    source
  113   1          uint32_t sensor_en;
  114   1      
  115   1        if(sensor_addr<32)
-C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/16/2021 17:22:14 PAGE 3   
+C51 COMPILER V9.59.0.0   MCU02_CSD                                                         04/19/2021 10:19:32 PAGE 3   
 
  116   1          sensor_en = ((uint32_t)0x01<<sensor_addr);
  117   1        else

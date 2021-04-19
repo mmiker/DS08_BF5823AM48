@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MCU02_SPI                                                         04/16/2021 17:22:15 PAGE 1   
+C51 COMPILER V9.59.0.0   MCU02_SPI                                                         04/19/2021 10:19:33 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MCU02_SPI
@@ -62,7 +62,7 @@ line level    source
   50   2          SPI1_CFG2 |= HALF_DUPLEX;
   51   2          SPI1_CFG2 &= ~SPI_HALF_DUPLEX_TX;
   52   2        }
-C51 COMPILER V9.59.0.0   MCU02_SPI                                                         04/16/2021 17:22:15 PAGE 2   
+C51 COMPILER V9.59.0.0   MCU02_SPI                                                         04/19/2021 10:19:33 PAGE 2   
 
   53   1        SPI1_CFG1 &= ~SPI_CS_N;
   54   1        SPI1_CFG2 |= SPI_HIGH_SPEED;

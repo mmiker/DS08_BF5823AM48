@@ -60,6 +60,7 @@ return :
 */
 void mmi_dq_factory_mode_rfid_test(void);
 
+#ifdef __LOCK_MOTOR_SUPPORT__
 /*
 parameter: 
 	none
@@ -67,7 +68,9 @@ return :
 	none
 */
 void mmi_dq_factory_mode_motor_test(void);
+#endif
 
+#ifdef __LOCK_MOTOR_SUPPORT__
 /*
 parameter: 
 	none
@@ -75,6 +78,7 @@ return :
 	none
 */
 void mmi_dq_factory_mode_motor_test_back(void);
+#endif
 
 /*
 parameter: 

@@ -201,7 +201,9 @@ void mmi_dq_sys_door_open(sys_open_type type)
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DOOR_OPEN);
 
+#ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_turn_right();
+#endif
 	//mmi_dq_wifi_open_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_open_cb);
 
@@ -323,7 +325,9 @@ return :
 */
 void mmi_dq_sys_door_close(void)
 {
+#ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_turn_back();
+#endif
 	//mmi_dq_wifi_close_door();
 	mmi_dq_sys_set_delay_event(MMI_TIMER_MOTOR_COUNT, mmi_dq_sys_door_close_cb);
 }
@@ -603,7 +607,6 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	return 0;
 }
 
-#ifdef __LOCK_WIFI_SUPPORT__
 /**
   * @brief  远程开门
   * @param  none
@@ -613,10 +616,11 @@ unsigned char mmi_dq_sys_check_vbat(void)
   */
 void mmi_dq_sys_wifi_open(void)
 {
+#ifdef __LOCK_WIFI_SUPPORT__
 	if (mmi_dq_wifi_open_ask() == 0)
+#endif
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
 }
-#endif
 
 /*
 parameter: 

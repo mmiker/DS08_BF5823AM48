@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV
@@ -62,532 +62,534 @@ line level    source
   51   1        dqiot_drv_fp_gpio_init();
   52   1      #endif
   53   1      #ifdef __LOCK_WIFI_SUPPORT__
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 2   
 
   54   1        dqiot_drv_wifi_gpio_init();
   55   1      #endif
   56   1      #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
   57   1        dqiot_drv_uart0B_init();
   58   1      #endif
-  59   1        dqiot_drv_motor_gpio_init();
-  60   1      
-  61   1        gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
-  62   1        gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN);
-  63   1      
-  64   1        gpio_init(VBAT_ADC_PORT, VBAT_ADC_PIN, GPIO_MODE_IN_FLOATING);
-  65   1        //gpio_bit_reset(VBAT_ADC_PORT,VBAT_ADC_PIN);
-  66   1      
-  67   1        gpio_init(WIFI_SDA_PORT, WIFI_SDA_PIN, GPIO_MODE_OUT);
-  68   1        gpio_bit_set(WIFI_SDA_PORT, WIFI_SDA_PIN);
-  69   1      
-  70   1        gpio_init(WIFI_SCL_PORT, WIFI_SCL_PIN, GPIO_MODE_OUT);
-  71   1        gpio_bit_set(WIFI_SCL_PORT, WIFI_SCL_PIN);
-  72   1      
-  73   1        gpio_init(SW_PORT, SW_PIN, GPIO_MODE_IN_FLOATING);
-  74   1        //gpio_bit_reset(SW_PORT,SW_PIN);
-  75   1      
-  76   1        gpio_init(GPIOE, GPIO_PIN_4, GPIO_MODE_IN_FLOATING);
-  77   1        //gpio_bit_reset(GPIOE,GPIO_PIN_4);
-  78   1        gpio_init(GPIOE, GPIO_PIN_5, GPIO_MODE_IN_FLOATING);
-  79   1        //gpio_bit_reset(GPIOE,GPIO_PIN_5);
-  80   1        gpio_init(GPIOE, GPIO_PIN_6, GPIO_MODE_IN_FLOATING);
-  81   1        //gpio_bit_reset(GPIOE,GPIO_PIN_6);
-  82   1        gpio_init(GPIOE, GPIO_PIN_7, GPIO_MODE_IN_FLOATING);
-  83   1        //gpio_bit_reset(GPIOE,GPIO_PIN_7);
-  84   1      
-  85   1        dqiot_drv_ext_ldo_on();
+  59   1      #ifdef __LOCK_MOTOR_SUPPORT__
+  60   1        dqiot_drv_motor_gpio_init();
+  61   1      #endif
+  62   1      
+  63   1        gpio_init(VBAT_TEST_PORT, VBAT_TEST_PIN, GPIO_MODE_OUT);
+  64   1        gpio_bit_reset(VBAT_TEST_PORT, VBAT_TEST_PIN);
+  65   1      
+  66   1        gpio_init(VBAT_ADC_PORT, VBAT_ADC_PIN, GPIO_MODE_IN_FLOATING);
+  67   1        //gpio_bit_reset(VBAT_ADC_PORT,VBAT_ADC_PIN);
+  68   1      
+  69   1        gpio_init(WIFI_SDA_PORT, WIFI_SDA_PIN, GPIO_MODE_OUT);
+  70   1        gpio_bit_set(WIFI_SDA_PORT, WIFI_SDA_PIN);
+  71   1      
+  72   1        gpio_init(WIFI_SCL_PORT, WIFI_SCL_PIN, GPIO_MODE_OUT);
+  73   1        gpio_bit_set(WIFI_SCL_PORT, WIFI_SCL_PIN);
+  74   1      
+  75   1        gpio_init(SW_PORT, SW_PIN, GPIO_MODE_IN_FLOATING);
+  76   1        //gpio_bit_reset(SW_PORT,SW_PIN);
+  77   1      
+  78   1        gpio_init(GPIOE, GPIO_PIN_4, GPIO_MODE_IN_FLOATING);
+  79   1        //gpio_bit_reset(GPIOE,GPIO_PIN_4);
+  80   1        gpio_init(GPIOE, GPIO_PIN_5, GPIO_MODE_IN_FLOATING);
+  81   1        //gpio_bit_reset(GPIOE,GPIO_PIN_5);
+  82   1        gpio_init(GPIOE, GPIO_PIN_6, GPIO_MODE_IN_FLOATING);
+  83   1        //gpio_bit_reset(GPIOE,GPIO_PIN_6);
+  84   1        gpio_init(GPIOE, GPIO_PIN_7, GPIO_MODE_IN_FLOATING);
+  85   1        //gpio_bit_reset(GPIOE,GPIO_PIN_7);
   86   1      
-  87   1        dqiot_drv_key_led_on();
+  87   1        dqiot_drv_ext_ldo_on();
   88   1      
-  89   1        dqiot_drv_timer2_init();
+  89   1        dqiot_drv_key_led_on();
   90   1      
-  91   1        dqiot_drv_timer2_start();
-  92   1        return;
-  93   1      }
-  94          
-  95          /*
-  96          parameter: 
-  97            none
-  98          return :
+  91   1        dqiot_drv_timer2_init();
+  92   1      
+  93   1        dqiot_drv_timer2_start();
+  94   1        return;
+  95   1      }
+  96          
+  97          /*
+  98          parameter: 
   99            none
- 100          */
- 101          void dqiot_drv_wake_up(void)
- 102          {
- 103   1      
- 104   1        //WDT_ENABLE();
+ 100          return :
+ 101            none
+ 102          */
+ 103          void dqiot_drv_wake_up(void)
+ 104          {
  105   1      
- 106   1        BOR_ENABLE();
+ 106   1        //WDT_ENABLE();
  107   1      
- 108   1        CSD_ENABLE();
+ 108   1        BOR_ENABLE();
  109   1      
- 110   1        //RFID_ENABLE();
+ 110   1        CSD_ENABLE();
  111   1      
- 112   1        //dqiot_drv_reset_gpio_init();
+ 112   1        //RFID_ENABLE();
  113   1      
- 114   1        dqiot_drv_key_led_gpio_init();
- 115   1        dqiot_drv_rgb_led_gpio_init();
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 3   
+ 114   1        //dqiot_drv_reset_gpio_init();
+ 115   1      
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 3   
 
- 116   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 117   1        dqiot_drv_audio_gpio_init();
- 118   1      #endif
- 119   1      #ifdef __LOCK_FP_SUPPORT__
- 120   1        dqiot_drv_fp_gpio_init();
- 121   1      #endif
- 122   1      #ifdef __LOCK_WIFI_SUPPORT__
- 123   1        dqiot_drv_wifi_gpio_init();
- 124   1      #endif
- 125   1      #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
- 126   1        dqiot_drv_uart0B_init();
- 127   1      #endif
- 128   1      #ifdef __LOCK_MOTOR_SUPPORT__
- 129   1        dqiot_drv_motor_gpio_init();
- 130   1      #endif
- 131   1      
- 132   1        dqiot_drv_ext_ldo_on();
+ 116   1        dqiot_drv_key_led_gpio_init();
+ 117   1        dqiot_drv_rgb_led_gpio_init();
+ 118   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 119   1        dqiot_drv_audio_gpio_init();
+ 120   1      #endif
+ 121   1      #ifdef __LOCK_FP_SUPPORT__
+ 122   1        dqiot_drv_fp_gpio_init();
+ 123   1      #endif
+ 124   1      #ifdef __LOCK_WIFI_SUPPORT__
+ 125   1        dqiot_drv_wifi_gpio_init();
+ 126   1      #endif
+ 127   1      #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_WIFI_SUPPORT__)
+ 128   1        dqiot_drv_uart0B_init();
+ 129   1      #endif
+ 130   1      #ifdef __LOCK_MOTOR_SUPPORT__
+ 131   1        dqiot_drv_motor_gpio_init();
+ 132   1      #endif
  133   1      
- 134   1        dqiot_drv_key_led_on();
+ 134   1        dqiot_drv_ext_ldo_on();
  135   1      
- 136   1        //byd_setbaseline(0);//按键基线复位
- 137   1        //delay_ms(200);
- 138   1        return;
- 139   1      }
- 140          
- 141          /*
- 142          parameter: 
- 143            none
- 144          return :
+ 136   1        dqiot_drv_key_led_on();
+ 137   1      
+ 138   1        //byd_setbaseline(0);//按键基线复位
+ 139   1        //delay_ms(200);
+ 140   1        return;
+ 141   1      }
+ 142          
+ 143          /*
+ 144          parameter: 
  145            none
- 146          */
- 147          void dqiot_drv_enter_sleep(void)
- 148          {
- 149   1      
- 150   1        //dqiot_drv_reset_gpio_init();
- 151   1        UART0_DISABLE();
- 152   1      
- 153   1        dqiot_drv_ext_ldo_off();
+ 146          return :
+ 147            none
+ 148          */
+ 149          void dqiot_drv_enter_sleep(void)
+ 150          {
+ 151   1      
+ 152   1        //dqiot_drv_reset_gpio_init();
+ 153   1        UART0_DISABLE();
  154   1      
- 155   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 156   1        dqiot_drv_audio_gpio_deinit();
- 157   1      #endif
- 158   1      #ifdef __LOCK_FP_SUPPORT__
- 159   1        dqiot_drv_fp_gpio_deinit();
- 160   1      #endif
- 161   1      #ifdef __LOCK_WIFI_SUPPORT__
- 162   1        dqiot_drv_wifi_gpio_deinit();
- 163   1      #endif
- 164   1      #ifdef __LOCK_MOTOR_SUPPORT__
- 165   1        dqiot_drv_motor_gpio_deinit();
- 166   1      #endif
- 167   1        dqiot_drv_key_led_gpio_deinit();
- 168   1        dqiot_drv_rgb_led_gpio_deinit();
- 169   1      
- 170   1        //  rfid_enter_lowpower_config();
+ 155   1        dqiot_drv_ext_ldo_off();
+ 156   1      
+ 157   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 158   1        dqiot_drv_audio_gpio_deinit();
+ 159   1      #endif
+ 160   1      #ifdef __LOCK_FP_SUPPORT__
+ 161   1        dqiot_drv_fp_gpio_deinit();
+ 162   1      #endif
+ 163   1      #ifdef __LOCK_WIFI_SUPPORT__
+ 164   1        dqiot_drv_wifi_gpio_deinit();
+ 165   1      #endif
+ 166   1      #ifdef __LOCK_MOTOR_SUPPORT__
+ 167   1        dqiot_drv_motor_gpio_deinit();
+ 168   1      #endif
+ 169   1        dqiot_drv_key_led_gpio_deinit();
+ 170   1        dqiot_drv_rgb_led_gpio_deinit();
  171   1      
- 172   1        CSD_DISABLE();
+ 172   1        //  rfid_enter_lowpower_config();
  173   1      
- 174   1        //RFID_DISABLE();
+ 174   1        CSD_DISABLE();
  175   1      
- 176   1        BOR_DISABLE();
+ 176   1        //RFID_DISABLE();
  177   1      
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 4   
 
- 178   1        WDT_DISABLE();
+ 178   1        BOR_DISABLE();
  179   1      
- 180   1        // TIMER2_DISABLE();
- 181   1        return;
- 182   1      }
- 183          
- 184          /*!
- 185              \brief      timer0 isr
- 186              \param[in]  none
- 187              \param[out] none
- 188              \retval     none
- 189          */
- 190          void dqiot_drv_timer0_isr(void) interrupt 1
- 191          {
- 192   1        INT_TIMER0_CLR();
- 193   1      
- 194   1        Audio_timer_event_handler();
+ 180   1        WDT_DISABLE();
+ 181   1      
+ 182   1        // TIMER2_DISABLE();
+ 183   1        return;
+ 184   1      }
+ 185          
+ 186          /*!
+ 187              \brief      timer0 isr
+ 188              \param[in]  none
+ 189              \param[out] none
+ 190              \retval     none
+ 191          */
+ 192          void dqiot_drv_timer0_isr(void) interrupt 1
+ 193          {
+ 194   1        INT_TIMER0_CLR();
  195   1      
- 196   1        //if(GET_TIMER0_MODE() != TIMER_8BIT_AUTORELOAD)
- 197   1        //{
- 198   1        //  TH0 = TH0_reload;
- 199   1        //  TL0 = TL0_reload;
- 200   1        //}
- 201   1      }
- 202          
- 203          /*!
- 204              \brief      timer1 isr
- 205              \param[in]  none
- 206              \param[out] none
- 207              \retval     none
- 208          */
- 209          void dqiot_drv_timer1_isr(void) interrupt 3
- 210          {
- 211   1        INT_TIMER1_CLR();
- 212   1      
- 213   1        if (GET_TIMER1_MODE() != TIMER_8BIT_AUTORELOAD)
- 214   1        {
- 215   2          TH1 = TH1_reload;
- 216   2          TL1 = TL1_reload;
- 217   2        }
- 218   1        timer1_count_flag++;
- 219   1      }
- 220          
- 221          /*!
- 222              \brief      timer2 isr
- 223              \param[in]  none
- 224              \param[out] none
- 225              \retval     none
- 226          */
- 227          void timer2_wdt_isr(void) interrupt 14
- 228          {
- 229   1      
- 230   1        INT_WDT_TIMER2_CLR();
- 231   1        if (GET_INT_TIMER2_FLAG_STATE())
- 232   1        {
- 233   2          //timer2
- 234   2          System_timer_event_handler();
- 235   2        }
- 236   1        else if (GET_INT_WDT_FLAG_STATE())
- 237   1        {
- 238   2          //wdt
- 239   2        }
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 5   
+ 196   1        Audio_timer_event_handler();
+ 197   1      
+ 198   1        //if(GET_TIMER0_MODE() != TIMER_8BIT_AUTORELOAD)
+ 199   1        //{
+ 200   1        //  TH0 = TH0_reload;
+ 201   1        //  TL0 = TL0_reload;
+ 202   1        //}
+ 203   1      }
+ 204          
+ 205          /*!
+ 206              \brief      timer1 isr
+ 207              \param[in]  none
+ 208              \param[out] none
+ 209              \retval     none
+ 210          */
+ 211          void dqiot_drv_timer1_isr(void) interrupt 3
+ 212          {
+ 213   1        INT_TIMER1_CLR();
+ 214   1      
+ 215   1        if (GET_TIMER1_MODE() != TIMER_8BIT_AUTORELOAD)
+ 216   1        {
+ 217   2          TH1 = TH1_reload;
+ 218   2          TL1 = TL1_reload;
+ 219   2        }
+ 220   1        timer1_count_flag++;
+ 221   1      }
+ 222          
+ 223          /*!
+ 224              \brief      timer2 isr
+ 225              \param[in]  none
+ 226              \param[out] none
+ 227              \retval     none
+ 228          */
+ 229          void timer2_wdt_isr(void) interrupt 14
+ 230          {
+ 231   1      
+ 232   1        INT_WDT_TIMER2_CLR();
+ 233   1        if (GET_INT_TIMER2_FLAG_STATE())
+ 234   1        {
+ 235   2          //timer2
+ 236   2          System_timer_event_handler();
+ 237   2        }
+ 238   1        else if (GET_INT_WDT_FLAG_STATE())
+ 239   1        {
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 5   
 
- 240   1      }
- 241          
- 242          /*
- 243          parameter: 
- 244            none
- 245          return :
+ 240   2          //wdt
+ 241   2        }
+ 242   1      }
+ 243          
+ 244          /*
+ 245          parameter: 
  246            none
- 247          */
- 248          uint16_t dqiot_drv_get_timer1_count(void)
- 249          {
- 250   1        return timer1_count_flag;
- 251   1      }
- 252          
- 253          /*
- 254          parameter: 
- 255            none
- 256          return :
+ 247          return :
+ 248            none
+ 249          */
+ 250          uint16_t dqiot_drv_get_timer1_count(void)
+ 251          {
+ 252   1        return timer1_count_flag;
+ 253   1      }
+ 254          
+ 255          /*
+ 256          parameter: 
  257            none
- 258          */
- 259          void dqiot_drv_set_timer1_count(uint16_t count)
- 260          {
- 261   1        timer1_count_flag = count;
- 262   1        return;
- 263   1      }
- 264          
- 265          /*
- 266          parameter: 
- 267            none
- 268          return :
+ 258          return :
+ 259            none
+ 260          */
+ 261          void dqiot_drv_set_timer1_count(uint16_t count)
+ 262          {
+ 263   1        timer1_count_flag = count;
+ 264   1        return;
+ 265   1      }
+ 266          
+ 267          /*
+ 268          parameter: 
  269            none
- 270          */
- 271          void dqiot_drv_timer0_init(uint16_t us)
- 272          {
- 273   1        uint16_t count;
- 274   1        count = us;
- 275   1        TIMER0_MODE_SET(TIMER_8BIT_AUTORELOAD); //TIMER_13BIT,TIMER_8BIT_AUTORELOAD,TIMER_8BIT
- 276   1        TIMER0_CT_MODE_SET(TIME_SELECT);    //COUNT_SELECT
- 277   1        TIMER0_COUNT_8BIT(count);       //TIMER_16BIT
- 278   1        timer0_1_init(TIMER0);
- 279   1        return;
- 280   1      }
- 281          
- 282          /*
- 283          parameter: 
- 284            none
- 285          return :
+ 270          return :
+ 271            none
+ 272          */
+ 273          void dqiot_drv_timer0_init(uint16_t us)
+ 274          {
+ 275   1        uint16_t count;
+ 276   1        count = us;
+ 277   1        TIMER0_MODE_SET(TIMER_8BIT_AUTORELOAD); //TIMER_13BIT,TIMER_8BIT_AUTORELOAD,TIMER_8BIT
+ 278   1        TIMER0_CT_MODE_SET(TIME_SELECT);    //COUNT_SELECT
+ 279   1        TIMER0_COUNT_8BIT(count);       //TIMER_16BIT
+ 280   1        timer0_1_init(TIMER0);
+ 281   1        return;
+ 282   1      }
+ 283          
+ 284          /*
+ 285          parameter: 
  286            none
- 287          */
- 288          void dqiot_drv_timer0_start(void)
- 289          {
- 290   1        INT_TIMER0_CLR();
- 291   1        TIMER0_IPL_SET(HIGH);
- 292   1        TIMER0_INT_ENABLE();
- 293   1        TIMER0_ENABLE();
- 294   1      }
- 295          
- 296          /*
- 297          parameter: 
- 298            none
- 299          return :
+ 287          return :
+ 288            none
+ 289          */
+ 290          void dqiot_drv_timer0_start(void)
+ 291          {
+ 292   1        INT_TIMER0_CLR();
+ 293   1        TIMER0_IPL_SET(HIGH);
+ 294   1        TIMER0_INT_ENABLE();
+ 295   1        TIMER0_ENABLE();
+ 296   1      }
+ 297          
+ 298          /*
+ 299          parameter: 
  300            none
- 301          */
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 6   
+ 301          return :
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 6   
 
- 302          void dqiot_drv_timer0_stop(void)
- 303          {
- 304   1        INT_TIMER0_CLR();
- 305   1        TIMER0_DISABLE();
- 306   1      }
- 307          
- 308          /*
- 309          parameter: 
- 310            none
- 311          return :
+ 302            none
+ 303          */
+ 304          void dqiot_drv_timer0_stop(void)
+ 305          {
+ 306   1        INT_TIMER0_CLR();
+ 307   1        TIMER0_DISABLE();
+ 308   1      }
+ 309          
+ 310          /*
+ 311          parameter: 
  312            none
- 313          */
- 314          void dqiot_drv_timer1_init(void)
- 315          {
- 316   1        uint16_t count;
- 317   1        count = 1000;
- 318   1        TIMER1_MODE_SET(TIMER_16BIT);  //TIMER_13BIT,TIMER_8BIT_AUTORELOAD,TIMER_8BIT
- 319   1        TIMER1_CT_MODE_SET(TIME_SELECT); //COUNT_SELECT
- 320   1        TIMER1_COUNT_16BIT(count);     //TIMER_16BIT
- 321   1        timer0_1_init(TIMER1);
- 322   1        return;
- 323   1      }
- 324          
- 325          /*
- 326          parameter: 
- 327            none
- 328          return :
+ 313          return :
+ 314            none
+ 315          */
+ 316          void dqiot_drv_timer1_init(void)
+ 317          {
+ 318   1        uint16_t count;
+ 319   1        count = 1000;
+ 320   1        TIMER1_MODE_SET(TIMER_16BIT);  //TIMER_13BIT,TIMER_8BIT_AUTORELOAD,TIMER_8BIT
+ 321   1        TIMER1_CT_MODE_SET(TIME_SELECT); //COUNT_SELECT
+ 322   1        TIMER1_COUNT_16BIT(count);     //TIMER_16BIT
+ 323   1        timer0_1_init(TIMER1);
+ 324   1        return;
+ 325   1      }
+ 326          
+ 327          /*
+ 328          parameter: 
  329            none
- 330          */
- 331          void dqiot_drv_timer1_start(void)
- 332          {
- 333   1        INT_TIMER1_CLR();
- 334   1        TIMER1_IPL_SET(LOW);
- 335   1        TIMER1_INT_ENABLE();
- 336   1        TIMER1_ENABLE();
- 337   1      }
- 338          
- 339          /*
- 340          parameter: 
- 341            none
- 342          return :
+ 330          return :
+ 331            none
+ 332          */
+ 333          void dqiot_drv_timer1_start(void)
+ 334          {
+ 335   1        INT_TIMER1_CLR();
+ 336   1        TIMER1_IPL_SET(LOW);
+ 337   1        TIMER1_INT_ENABLE();
+ 338   1        TIMER1_ENABLE();
+ 339   1      }
+ 340          
+ 341          /*
+ 342          parameter: 
  343            none
- 344          */
- 345          void dqiot_drv_timer1_stop(void)
- 346          {
- 347   1        INT_TIMER0_CLR();
- 348   1        TIMER0_DISABLE();
- 349   1        dqiot_drv_set_timer1_count(0);
- 350   1        return;
- 351   1      }
- 352          
- 353          /*
- 354          parameter: 
- 355            none
- 356          return :
+ 344          return :
+ 345            none
+ 346          */
+ 347          void dqiot_drv_timer1_stop(void)
+ 348          {
+ 349   1        INT_TIMER0_CLR();
+ 350   1        TIMER0_DISABLE();
+ 351   1        dqiot_drv_set_timer1_count(0);
+ 352   1        return;
+ 353   1      }
+ 354          
+ 355          /*
+ 356          parameter: 
  357            none
- 358          */
- 359          void dqiot_drv_timer2_init(void)
- 360          {
- 361   1        /*
- 362   1           t = prescale*(1000000/32768)*(count+1) us 
- 363   1           prescale = 1,65536 
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 7   
+ 358          return :
+ 359            none
+ 360          */
+ 361          void dqiot_drv_timer2_init(void)
+ 362          {
+ 363   1        /*
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 7   
 
- 364   1        */
- 365   1        uint16_t count;
- 366   1        count = 3276;
- 367   1        TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL); //TIMER2_CLOCK_XTAL选择外部晶振要使能XTAL_32K_ENABLE()
- 368   1        TIMER2_AUTO_RELOAD(ENABLE);       //ENABLE
- 369   1        TIMER2_PRESCALE(TIMER2_PRESCALE_1);   //TIMER2_PRESCALE_65536
- 370   1        TIMER2_COUNT_SET(count);
- 371   1      
- 372   1        INT_WDT_TIMER2_CLR(); //清除中断标志
- 373   1        TIMER2_IPL_SET(LOW);  //中断优先级为低
- 374   1        TIMER2_INT_DISABLE(); //关闭中断
- 375   1        return;
- 376   1      }
- 377          
- 378          /*
- 379          parameter: 
- 380            none
- 381          return :
+ 364   1           t = prescale*(1000000/32768)*(count+1) us 
+ 365   1           prescale = 1,65536 
+ 366   1        */
+ 367   1        uint16_t count;
+ 368   1        count = 3276;
+ 369   1        TIMER2_CLOCK_SELECT(TIMER2_CLOCK_XTAL); //TIMER2_CLOCK_XTAL选择外部晶振要使能XTAL_32K_ENABLE()
+ 370   1        TIMER2_AUTO_RELOAD(ENABLE);       //ENABLE
+ 371   1        TIMER2_PRESCALE(TIMER2_PRESCALE_1);   //TIMER2_PRESCALE_65536
+ 372   1        TIMER2_COUNT_SET(count);
+ 373   1      
+ 374   1        INT_WDT_TIMER2_CLR(); //清除中断标志
+ 375   1        TIMER2_IPL_SET(LOW);  //中断优先级为低
+ 376   1        TIMER2_INT_DISABLE(); //关闭中断
+ 377   1        return;
+ 378   1      }
+ 379          
+ 380          /*
+ 381          parameter: 
  382            none
- 383          */
- 384          void dqiot_drv_timer2_start(void)
- 385          {
- 386   1        //INT_WDT_TIMER2_CLR();
- 387   1        TIMER2_IPL_SET(LOW);
- 388   1        TIMER2_INT_ENABLE();
- 389   1        TIMER2_ENABLE();
- 390   1        return;
- 391   1      }
- 392          
- 393          /*
- 394          parameter: 
- 395            none
- 396          return :
+ 383          return :
+ 384            none
+ 385          */
+ 386          void dqiot_drv_timer2_start(void)
+ 387          {
+ 388   1        //INT_WDT_TIMER2_CLR();
+ 389   1        TIMER2_IPL_SET(LOW);
+ 390   1        TIMER2_INT_ENABLE();
+ 391   1        TIMER2_ENABLE();
+ 392   1        return;
+ 393   1      }
+ 394          
+ 395          /*
+ 396          parameter: 
  397            none
- 398          */
- 399          void dqiot_drv_timer2_stop(void)
- 400          {
- 401   1        //INT_WDT_TIMER2_CLR();
- 402   1        TIMER2_DISABLE();
- 403   1        return;
- 404   1      }
- 405          
- 406          /*
- 407          parameter: 
- 408            none
- 409          return :
+ 398          return :
+ 399            none
+ 400          */
+ 401          void dqiot_drv_timer2_stop(void)
+ 402          {
+ 403   1        //INT_WDT_TIMER2_CLR();
+ 404   1        TIMER2_DISABLE();
+ 405   1        return;
+ 406   1      }
+ 407          
+ 408          /*
+ 409          parameter: 
  410            none
- 411          */
- 412          void dqiot_drv_uart0A_init(void)
- 413          {
- 414   1        GPIOE_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //避免有毛刺
- 415   1      
- 416   1        UART0_PORT_SET(UART0_PE4_PE5);
- 417   1        UART0_CON2 = 0;
- 418   1        UART0_STATE = 0;
- 419   1        uart_baudrate_config(UART0, UART_BAUDRATE_57600); //波特率
- 420   1        UART0_STOP_MODE(STOP_WIDTH_1BIT);         //停止位
- 421   1        UART0_DATA_MODE(DATA_MODE_8BIT);          //数据位
- 422   1        UART0_PARITY_SET(DISABLE);              //奇偶校验使能
- 423   1        UART0_PARITY_SEL(ODD_PARITY);           //奇偶校验选择
- 424   1        UART0_MULTI_MODE(DISABLE);              //多处理器通信模式
- 425   1      
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 8   
+ 411          return :
+ 412            none
+ 413          */
+ 414          void dqiot_drv_uart0A_init(void)
+ 415          {
+ 416   1        GPIOE_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //避免有毛刺
+ 417   1      
+ 418   1        UART0_PORT_SET(UART0_PE4_PE5);
+ 419   1        UART0_CON2 = 0;
+ 420   1        UART0_STATE = 0;
+ 421   1        uart_baudrate_config(UART0, UART_BAUDRATE_57600); //波特率
+ 422   1        UART0_STOP_MODE(STOP_WIDTH_1BIT);         //停止位
+ 423   1        UART0_DATA_MODE(DATA_MODE_8BIT);          //数据位
+ 424   1        UART0_PARITY_SET(DISABLE);              //奇偶校验使能
+ 425   1        UART0_PARITY_SEL(ODD_PARITY);           //奇偶校验选择
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 8   
 
- 426   1        UART0_RX_ENABLE(); //接收使能
- 427   1      #ifdef __DRV_UART0A_INT_SUPPORT__
- 428   1        UART0_TX_INT_ENABLE(); //发送中断使能
- 429   1        UART0_RX_INT_ENABLE(); //接收中断使能
- 430   1        INT_UART0_CLR();     //清除中断源标志
- 431   1        UART0_IPL_SET(LOW);    //中断优先级设置
- 432   1        UART0_INT_ENABLE();    //中断源
- 433   1      #else
+ 426   1        UART0_MULTI_MODE(DISABLE);              //多处理器通信模式
+ 427   1      
+ 428   1        UART0_RX_ENABLE(); //接收使能
+ 429   1      #ifdef __DRV_UART0A_INT_SUPPORT__
+ 430   1        UART0_TX_INT_ENABLE(); //发送中断使能
+ 431   1        UART0_RX_INT_ENABLE(); //接收中断使能
+ 432   1        INT_UART0_CLR();     //清除中断源标志
+ 433   1        UART0_IPL_SET(LOW);    //中断优先级设置
+ 434   1        UART0_INT_ENABLE();    //中断源
+ 435   1      #else
                 UART0_TX_INT_DISABLE(); //发送中断关闭
                 UART0_RX_INT_DISABLE(); //接收中断关闭
               #endif
- 437   1      
- 438   1        // memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
- 439   1        // uart_getbuflen = 0;
- 440   1      
- 441   1        UART0_ENABLE(); //使能uart0
- 442   1        return;
- 443   1      }
- 444          
- 445          /*
- 446          parameter: 
- 447            none
- 448          return :
+ 439   1      
+ 440   1        // memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
+ 441   1        // uart_getbuflen = 0;
+ 442   1      
+ 443   1        UART0_ENABLE(); //使能uart0
+ 444   1        return;
+ 445   1      }
+ 446          
+ 447          /*
+ 448          parameter: 
  449            none
- 450          */
- 451          void dqiot_drv_uart0B_init(void)
- 452          {
- 453   1        GPIOF_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //避免有毛刺
- 454   1      
- 455   1        UART0_PORT_SET(UART0_PF4_PF5);
- 456   1        UART0_CON2 = 0;
- 457   1        UART0_STATE = 0;
- 458   1        // uart_baudrate_config(UART0, UART_BAUDRATE_57600); //波特率 指纹头
- 459   1        uart_baudrate_config(UART0, UART_BAUDRATE_115200); //波特率 wifi
- 460   1        UART0_STOP_MODE(STOP_WIDTH_1BIT);          //停止位
- 461   1        UART0_DATA_MODE(DATA_MODE_8BIT);           //数据位
- 462   1        UART0_PARITY_SET(DISABLE);               //奇偶校验使能
- 463   1        UART0_PARITY_SEL(ODD_PARITY);            //奇偶校验选择
- 464   1        UART0_MULTI_MODE(DISABLE);               //多处理器通信模式
- 465   1      
- 466   1        UART0_RX_ENABLE(); //接收使能
- 467   1      #ifdef __DRV_UART0B_INT_SUPPORT__
- 468   1        //UART0_TX_INT_ENABLE();//发送中断使能
- 469   1        UART0_TX_INT_ENABLE(); //发送中断关闭
- 470   1        UART0_RX_INT_ENABLE(); //接收中断使能
- 471   1        INT_UART0_CLR();     //清除中断源标志
- 472   1        UART0_IPL_SET(HIGH);   //中断优先级设置
- 473   1        UART0_INT_ENABLE();    //中断源
- 474   1      #else
+ 450          return :
+ 451            none
+ 452          */
+ 453          void dqiot_drv_uart0B_init(void)
+ 454          {
+ 455   1        GPIOF_BIT_SET(GPIO_PIN_4 | GPIO_PIN_5); //避免有毛刺
+ 456   1      
+ 457   1        UART0_PORT_SET(UART0_PF4_PF5);
+ 458   1        UART0_CON2 = 0;
+ 459   1        UART0_STATE = 0;
+ 460   1        // uart_baudrate_config(UART0, UART_BAUDRATE_57600); //波特率 指纹头
+ 461   1        uart_baudrate_config(UART0, UART_BAUDRATE_115200); //波特率 wifi
+ 462   1        UART0_STOP_MODE(STOP_WIDTH_1BIT);          //停止位
+ 463   1        UART0_DATA_MODE(DATA_MODE_8BIT);           //数据位
+ 464   1        UART0_PARITY_SET(DISABLE);               //奇偶校验使能
+ 465   1        UART0_PARITY_SEL(ODD_PARITY);            //奇偶校验选择
+ 466   1        UART0_MULTI_MODE(DISABLE);               //多处理器通信模式
+ 467   1      
+ 468   1        UART0_RX_ENABLE(); //接收使能
+ 469   1      #ifdef __DRV_UART0B_INT_SUPPORT__
+ 470   1        //UART0_TX_INT_ENABLE();//发送中断使能
+ 471   1        UART0_TX_INT_ENABLE(); //发送中断关闭
+ 472   1        UART0_RX_INT_ENABLE(); //接收中断使能
+ 473   1        INT_UART0_CLR();     //清除中断源标志
+ 474   1        UART0_IPL_SET(HIGH);   //中断优先级设置
+ 475   1        UART0_INT_ENABLE();    //中断源
+ 476   1      #else
                 UART0_TX_INT_DISABLE(); //发送中断关闭
                 UART0_RX_INT_DISABLE(); //接收中断关闭
               #endif
- 478   1      
- 479   1        // memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
- 480   1        // uart_getbuflen = 0;
- 481   1      
- 482   1        UART0_ENABLE(); //使能uart0
- 483   1        return;
- 484   1      }
- 485          
- 486          /*
- 487          parameter: 
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 9   
+ 480   1      
+ 481   1        // memset(uart_get_buf, 0x00, sizeof(uart_get_buf));
+ 482   1        // uart_getbuflen = 0;
+ 483   1      
+ 484   1        UART0_ENABLE(); //使能uart0
+ 485   1        return;
+ 486   1      }
+ 487          
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 9   
 
- 488            none
- 489          return :
+ 488          /*
+ 489          parameter: 
  490            none
- 491          */
- 492          void dqiot_drv_uart0_isr(void) interrupt 17
- 493          {
- 494   1        if (GET_UART0_RX_STATE())
- 495   1        {
- 496   2          if (uart_getbuflen >= UART0_GET_DATA_LEN)
- 497   2            return;
- 498   2          else
- 499   2            uart_get_buf[uart_getbuflen++] = UART0_BUF;
- 500   2      
- 501   2          CLR_UART0_RX_STATE(); //清除接收中断标志位
- 502   2        }
- 503   1        //if(GET_UART0_TX_STATE())
- 504   1        //{
- 505   1        //  CLR_UART0_TX_STATE();//清除发送中断标志位
- 506   1        //  UART0_TX_INT_DISABLE();
- 507   1        //}
- 508   1      }
- 509          
- 510          /*
- 511          parameter: 
- 512            none
- 513          return :
+ 491          return :
+ 492            none
+ 493          */
+ 494          void dqiot_drv_uart0_isr(void) interrupt 17
+ 495          {
+ 496   1        if (GET_UART0_RX_STATE())
+ 497   1        {
+ 498   2          if (uart_getbuflen >= UART0_GET_DATA_LEN)
+ 499   2            return;
+ 500   2          else
+ 501   2            uart_get_buf[uart_getbuflen++] = UART0_BUF;
+ 502   2      
+ 503   2          CLR_UART0_RX_STATE(); //清除接收中断标志位
+ 504   2        }
+ 505   1        //if(GET_UART0_TX_STATE())
+ 506   1        //{
+ 507   1        //  CLR_UART0_TX_STATE();//清除发送中断标志位
+ 508   1        //  UART0_TX_INT_DISABLE();
+ 509   1        //}
+ 510   1      }
+ 511          
+ 512          /*
+ 513          parameter: 
  514            none
- 515          */
- 516          unsigned char dqiot_drv_get_uart0_data(unsigned char len)
- 517          {
- 518   1        return uart_get_buf[len];
- 519   1      }
- 520          
- 521          /*
- 522          parameter: 
- 523            none
- 524          return :
+ 515          return :
+ 516            none
+ 517          */
+ 518          unsigned char dqiot_drv_get_uart0_data(unsigned char len)
+ 519          {
+ 520   1        return uart_get_buf[len];
+ 521   1      }
+ 522          
+ 523          /*
+ 524          parameter: 
  525            none
- 526          */
- 527          void dqiot_drv_clr_uart0_data(void)
- 528          {
- 529   1        memset(uart_get_buf, 0, sizeof(uart_get_buf));
- 530   1        uart_getbuflen = 0;
- 531   1      }
- 532          
- 533          /*
- 534          parameter: 
- 535            none
- 536          return :
+ 526          return :
+ 527            none
+ 528          */
+ 529          void dqiot_drv_clr_uart0_data(void)
+ 530          {
+ 531   1        memset(uart_get_buf, 0, sizeof(uart_get_buf));
+ 532   1        uart_getbuflen = 0;
+ 533   1      }
+ 534          
+ 535          /*
+ 536          parameter: 
  537            none
- 538          */
- 539          void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length)
- 540          {
- 541   1      #if 1
- 542   1        unsigned char i = 0;
- 543   1        //dqiot_drv_uart0B_init();
- 544   1        //memset(uart_send_buf,0x00,sizeof(uart_send_buf));
- 545   1        //memcpy(uart_send_buf,p_data,length);
- 546   1        //uart_sendbuflen = length;
- 547   1      
- 548   1        for (i = 0; i < length; i++)
- 549   1        {
-C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/16/2021 17:36:21 PAGE 10  
+ 538          return :
+ 539            none
+ 540          */
+ 541          void dqiot_drv_uart0_sendData(unsigned char *p_data, unsigned char length)
+ 542          {
+ 543   1      #if 1
+ 544   1        unsigned char i = 0;
+ 545   1        //dqiot_drv_uart0B_init();
+ 546   1        //memset(uart_send_buf,0x00,sizeof(uart_send_buf));
+ 547   1        //memcpy(uart_send_buf,p_data,length);
+ 548   1        //uart_sendbuflen = length;
+ 549   1      
+C51 COMPILER V9.59.0.0   DQIOT_DRV                                                         04/19/2021 10:41:12 PAGE 10  
 
- 550   2          uart_tx_byte(UART0, p_data[i]);
- 551   2        }
- 552   1      #endif
- 553   1      }
- 554          
- 555          char putchar(char c)
- 556          {
- 557   1        uart_tx_byte(UART0, c);
- 558   1        return c;
- 559   1      }
- 560          
- 561          #endif //__DQIOT_DRV_C__
+ 550   1        for (i = 0; i < length; i++)
+ 551   1        {
+ 552   2          uart_tx_byte(UART0, p_data[i]);
+ 553   2        }
+ 554   1      #endif
+ 555   1      }
+ 556          
+ 557          char putchar(char c)
+ 558          {
+ 559   1        uart_tx_byte(UART0, c);
+ 560   1        return c;
+ 561   1      }
+ 562          
+ 563          #endif //__DQIOT_DRV_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
