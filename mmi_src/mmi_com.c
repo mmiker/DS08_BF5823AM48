@@ -8,8 +8,11 @@ const msg_aud_id_list msg_aud_list[] =
 	{
 		//系统
 		{
-			STR_ID_SYSTEM,
+			STR_ID_SYSTEM
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYSTEM
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -17,47 +20,65 @@ const msg_aud_id_list msg_aud_list[] =
 		},
 		//系统
 		{
-			STR_ID_SYSTEM2,
+			STR_ID_SYSTEM2
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYSTEM2
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
 #endif
 		},
-		{STR_ID_PASSWORD,
+		{STR_ID_PASSWORD
+#ifdef __LOCK_AUDIO_SUPPORT__
+		 ,
 		 AUD_ID_SYS_PASSWORD
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 		 ,
 		 0xff
 #endif
 		}, //密码
 		{
-			STR_ID_FINGERPRINT,
+			STR_ID_FINGERPRINT
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_FP
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
 #endif
 		}, //指纹
 		{
-			STR_ID_RF_CARD,
+			STR_ID_RF_CARD
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_RFCARD
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
 #endif
 		}, //RF卡
 		{
-			STR_ID_ADMIN,
+			STR_ID_ADMIN
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_ADMIN
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
 #endif
 		}, //管理员
 		{
-			STR_ID_SETTING,
+			STR_ID_SETTING
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_SETTING
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -65,8 +86,11 @@ const msg_aud_id_list msg_aud_list[] =
 		}, //设置
 #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
 		{
-			STR_ID_110,
+			STR_ID_110
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_110
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -75,8 +99,11 @@ const msg_aud_id_list msg_aud_list[] =
 #endif
 #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
 		{
-			STR_ID_FINGERPRINT_110,
+			STR_ID_FINGERPRINT_110
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_FP_110
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -84,8 +111,11 @@ const msg_aud_id_list msg_aud_list[] =
 		}, //管理�?
 #endif
 		{
-			STR_ID_PRO_AUDIO,
+			STR_ID_PRO_AUDIO
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_PRO_AUDIO
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -629,8 +659,11 @@ const msg_aud_id_list msg_aud_list[] =
 	},//2号管理指纹添加成功
 #endif
 		{
-			STR_ID_PRO_AUDIO,
+			STR_ID_PRO_AUDIO
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_PRO_AUDIO
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
@@ -823,16 +856,22 @@ const msg_aud_id_list msg_aud_list[] =
 		}, //修改管理员密码
 #endif
 		{
-			STR_ID_CHG_ADMIN_FP,
+			STR_ID_CHG_ADMIN_FP
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_CHG_ADMIN_FP
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff
 #endif
 		}, //修改管理员指纹
 		{
-			STR_ID_OPEN_MODE,
+			STR_ID_OPEN_MODE
+#ifdef __LOCK_AUDIO_SUPPORT__
+			,
 			AUD_ID_SYS_OPEN_MODE
+#endif
 #ifdef __AUDIO_BUSY_NOT_SUPPOT__
 			,
 			0xff

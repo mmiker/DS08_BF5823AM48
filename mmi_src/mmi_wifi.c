@@ -119,7 +119,9 @@ void mmi_dq_wifi_connected_fail(void)
     mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
   else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
     mmi_dq_sys_wake_up();
+#ifdef __LOCK_AUDIO_SUPPORT__
   mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
   mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
   return;
 }
@@ -138,7 +140,9 @@ void mmi_dq_wifi_connected_suc(void)
     mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
   else if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
     mmi_dq_sys_wake_up();
+#ifdef __LOCK_AUDIO_SUPPORT__
   mmi_dq_aud_play_with_id(AUD_ID_SET_SUCESS);
+#endif
   return;
 }
 
@@ -230,10 +234,15 @@ void mmi_dq_wifi_check_open(void)
     if (SYS_STATUS_ENTER_SLEEP == mmi_dq_ms_get_sys_state())
       mmi_dq_sys_wake_up();
     if (state == 2)
-      mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+      mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL)
+#endif
+          ;
     else if (mmi_dq_ms_get_sys_state() == SYS_STATUS_IDLE)
     {
+#ifdef __LOCK_AUDIO_SUPPORT__
       mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
       mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
     }
     wifi_check_times = 0;
@@ -593,7 +602,10 @@ void mmi_dq_wifi_take_photos(void)
   mmi_dq_wifi_wakeup();
 
   if (wifi_take_photos() == 1)
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+#endif
+        ;
 }
 
 /**
@@ -608,7 +620,10 @@ void mmi_dq_wifi_take_videos(void)
   mmi_dq_wifi_wakeup();
 
   if (wifi_take_videos() == 1)
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+#endif
+        ;
 }
 
 /**
@@ -645,9 +660,15 @@ void mmi_dq_wifi_pv_switch(void)
 void mmi_dq_wifi_check_net(void)
 {
   if (wifi_check_net() == 1)
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+#endif
+        ;
   else
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL)
+#endif
+        ;
 }
 
 /**

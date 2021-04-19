@@ -78,9 +78,7 @@ void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_m
 
 #ifdef __LOCK_AUDIO_SUPPORT__
 	audio_id = mmi_dq_aud_get_audio_id(text_id);
-
 	mmi_dq_aud_play_with_id(audio_id);
-
 #endif
 	return;
 }
@@ -150,7 +148,9 @@ void mmi_dq_sys_door_open_cb(void)
 #ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_stop();
 #endif
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_DOOR_OPEN);
+#endif
 	mmi_dq_sys_set_delay_event(MMI_TIMER_DOOR_OPEN_COUNT, mmi_dq_sys_door_close);
 }
 
@@ -166,7 +166,9 @@ void mmi_dq_sys_door_open(sys_open_type type)
 #ifdef __LOCK_BUS_SUPPORT__
 	if ((mmi_dq_fs_get_business_flag() == 1) && ((type & SYS_OPEN_BY_110) == 0) && (SYS_OPEN_BY_WIFI != type))
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_IS_BUSINESS);
+#endif
 #ifdef __LOCK_WIFI_SUPPORT__
 		switch (type)
 		{
@@ -194,7 +196,9 @@ void mmi_dq_sys_door_open(sys_open_type type)
 		else
 		{
 			g_sys_door_open_flag |= type;
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_SYS_DBL_OPEN_MODE);
+#endif
 			return;
 		}
 	}
@@ -259,7 +263,9 @@ void mmi_dq_sys_door_open_fail(sys_open_type type)
 	switch (type)
 	{
 	case SYS_OPEN_BY_PASSWORD:
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY);
+#endif
 #ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_pw_alarm();
@@ -267,7 +273,9 @@ void mmi_dq_sys_door_open_fail(sys_open_type type)
 		break;
 #ifdef __LOCK_FP_SUPPORT__
 	case SYS_OPEN_BY_FP:
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_FP_WRONG_TRY);
+#endif
 #ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_fp_alarm();
@@ -276,7 +284,9 @@ void mmi_dq_sys_door_open_fail(sys_open_type type)
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 	case SYS_OPEN_BY_RFID:
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_WRONG_TRY);
+#endif
 #ifdef __LOCK_WIFI_SUPPORT__
 		if (g_lock_error_flag >= LOCK_MAX_EEROR_TIMES)
 			mmi_dq_wifi_rfid_alarm();
@@ -312,7 +322,9 @@ void mmi_dq_sys_door_close_cb(void)
 #ifdef __LOCK_MOTOR_SUPPORT__
 	mmi_dq_motor_stop();
 #endif
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_DOOR_CLOSE);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 }
 
@@ -357,7 +369,9 @@ void mmi_dq_sys_time_out_handle(void)
 
 	if ((state >= SYS_STATUS_ADD_PWD && state < SYS_STATUS_ADD_ADMIN_PWD) || (state == SYS_STATUS_SYS_MENU) || (state == SYS_STATUS_CHG_ADMIN_PWD))
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 	}
 #ifdef __LOCK_FP_SUPPORT__
@@ -367,7 +381,9 @@ void mmi_dq_sys_time_out_handle(void)
 			g_timer2_sleep_count = 0;
 		else
 		{
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
 		}
 	}
@@ -375,7 +391,9 @@ void mmi_dq_sys_time_out_handle(void)
 	else if (state == SYS_STATUS_ADD_ADMIN_PWD)
 	{
 		g_timer2_sleep_count = 0;
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_FIRST);
+#endif
 	}
 	else
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
@@ -593,7 +611,9 @@ unsigned char mmi_dq_sys_check_vbat(void)
 	unsigned char state = adc_VolT();
 	if (state > 0)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_LOW_BATTERY);
+#endif
 #ifdef __LOCK_WIFI_SUPPORT__
 		mmi_dq_wifi_lowpower_alarm();
 #endif
@@ -618,8 +638,12 @@ void mmi_dq_sys_wifi_open(void)
 {
 #ifdef __LOCK_WIFI_SUPPORT__
 	if (mmi_dq_wifi_open_ask() == 0)
-#endif
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+#else
+		;
+#endif
+#endif
 }
 
 /*
@@ -630,7 +654,9 @@ return :
 */
 void mmi_dq_sys_add_admin_pwd(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_FIRST);
+#endif
 	mmi_ms_pwd_init_var();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_PWD);
 	return;
@@ -656,12 +682,16 @@ void mmi_dq_sys_add_pwd(void)
 {
 	if (mmi_dq_fs_get_pwd_unuse_index() == 0xFF)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_PWD_FULL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+#endif
 		mmi_ms_pwd_init_var();
 		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
 	}
@@ -670,7 +700,9 @@ void mmi_dq_sys_add_pwd(void)
 
 void mmi_dq_sys_add_pwd_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CONTINUE_ADD_PWD);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD_CON);
 	return;
 }
@@ -687,11 +719,15 @@ void mmi_dq_sys_add_110_pwd(void)
 	mmi_dq_wifi_wakeup();
 	if (mmi_dq_wifi_check() == 1)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 		return;
 	}
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+#endif
 	mmi_ms_pwd_init_var();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_PWD);
 	return;
@@ -717,7 +753,9 @@ return :
 */
 void mmi_dq_sys_del_pwd(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_NUM);
+#endif
 	mmi_ms_pwd_init_var();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_PWD);
 	return;
@@ -725,7 +763,9 @@ void mmi_dq_sys_del_pwd(void)
 
 void mmi_dq_sys_del_pwd_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_DEL_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_PWD_CON);
 	return;
 }
@@ -738,7 +778,9 @@ return :
 */
 static void mmi_dq_sys_clear_pwd(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CLR_PWD_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_CLR_PWD);
 	return;
 }
@@ -754,12 +796,16 @@ void mmi_dq_sys_add_fp(void)
 {
 	if (mmi_dq_fs_get_fp_unuse_index() == 0xFF)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_FP_FULL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+#endif
 		mmi_dq_fp_light(FP_BLUE);
 		mmi_ms_opt_time_init();
 		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
@@ -769,7 +815,9 @@ void mmi_dq_sys_add_fp(void)
 
 void mmi_dq_sys_add_fp_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CONTINUE_ADD_PWD);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP_CON);
 	return;
 }
@@ -786,11 +834,15 @@ void mmi_dq_sys_add_110_fp(void)
 	mmi_dq_wifi_wakeup();
 	if (mmi_dq_wifi_check() == 1)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 		return;
 	}
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+#endif
 	mmi_dq_fp_light(FP_BLUE);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_110_FP);
@@ -808,11 +860,15 @@ void mmi_dq_sys_del_110_fp(void)
 	mmi_dq_wifi_wakeup();
 	if (mmi_dq_wifi_check() == 1)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_UNFINDE);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 		return;
 	}
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+#endif
 	mmi_dq_fp_light(FP_BLUE);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_110_FP);
@@ -841,7 +897,9 @@ return :
 */
 void mmi_dq_sys_del_fp(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_FP_NUM);
+#endif
 	mmi_dq_fp_light(FP_BLUE);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP);
@@ -850,7 +908,9 @@ void mmi_dq_sys_del_fp(void)
 
 void mmi_dq_sys_del_fp_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_DEL_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_FP_CON);
 	return;
 }
@@ -863,7 +923,9 @@ return :
 */
 static void mmi_dq_sys_clear_fp(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CLR_FP_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_CLR_FP);
 	return;
 }
@@ -880,12 +942,16 @@ void mmi_dq_sys_add_rf(void)
 
 	if (mmi_dq_fs_get_rfid_unuse_index() == 0xFF)
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_RFCARD_FULL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+#endif
 		mmi_ms_opt_time_init();
 		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
 	}
@@ -894,7 +960,9 @@ void mmi_dq_sys_add_rf(void)
 
 void mmi_dq_sys_add_rf_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CONTINUE_ADD_PWD);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID_CON);
 	return;
 }
@@ -919,7 +987,9 @@ return :
 */
 void mmi_dq_sys_del_rf(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_RFCARD_NUM);
+#endif
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_RFID);
 	return;
@@ -927,7 +997,9 @@ void mmi_dq_sys_del_rf(void)
 
 void mmi_dq_sys_del_rf_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_DEL_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_DEL_RFID_CON);
 	return;
 }
@@ -940,7 +1012,9 @@ return :
 */
 static void mmi_dq_sys_clear_rf(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_CLR_RFCARD_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_CLR_RFID);
 	return;
 }
@@ -957,9 +1031,15 @@ static void mmi_dq_sys_open_pro_sound(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_pro_sound(1) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_SUCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_SUCESS)
+#endif
+			;
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_OPEN_PRO_AUDIO_FAIL)
+#endif
+			;
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;
@@ -976,9 +1056,15 @@ static void mmi_dq_sys_close_pro_sound(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_pro_sound(0) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_SUCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_SUCESS)
+#endif
+			;
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_CLOSE_PRO_AUDIO_FAIL)
+#endif
+			;
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;
@@ -995,9 +1081,15 @@ static void mmi_dq_sys_sin_open_mode(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_open_mode(SYS_OPEN_MODE_SIN) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_SUCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_SUCESS)
+#endif
+			;
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_SIN_OPEN_MODE_FAIL)
+#endif
+			;
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;
@@ -1014,9 +1106,15 @@ static void mmi_dq_sys_dbl_open_mode(void)
 	mmi_dq_sys_set_menu_father_id(STR_ID_SETTING);
 
 	if (mmi_dq_fs_set_open_mode(SYS_OPEN_MODE_DBL) == RET_SUCESS)
-		mmi_dq_aud_play_with_id(AUD_ID_DBL_OPEN_MODE_SUCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_DBL_OPEN_MODE_SUCESS)
+#endif
+			;
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_DBL_OPEN_MODE_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_DBL_OPEN_MODE_FAIL)
+#endif
+			;
 
 	mmi_dq_sys_show_cur_menu_list();
 	return;
@@ -1031,7 +1129,9 @@ return :
 */
 void mmi_dq_sys_chg_admin_fp_No1(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+#endif
 	mmi_dq_fp_light(FP_BLUE);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP1);
@@ -1046,7 +1146,9 @@ return :
 */
 void mmi_dq_sys_chg_admin_fp_No2(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_NEW_ADMIN_FP);
+#endif
 	mmi_dq_fp_light(FP_BLUE);
 	mmi_ms_opt_time_init();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_ADMIN_FP2);
@@ -1062,7 +1164,9 @@ return :
 */
 void mmi_dq_sys_chg_admin_pwd(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD);
+#endif
 	mmi_ms_pwd_init_var();
 	mmi_dq_ms_set_sys_state(SYS_STATUS_CHG_ADMIN_PWD);
 	return;
@@ -1093,9 +1197,15 @@ void mmi_dq_sys_restore_lock(void)
 #endif
 
 	if (retval == 0)
-		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_SUCESS);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_SUCESS)
+#endif
+			;
 	else
-		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL);
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL)
+#endif
+			;
 
 	mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 	return;
@@ -1109,7 +1219,9 @@ return :
 */
 static void mmi_dq_sys_restore_lock_con(void)
 {
+#ifdef __LOCK_AUDIO_SUPPORT__
 	mmi_dq_aud_play_with_id(AUD_ID_RESTORE_LOCK_CONTINUE_CONFIRM);
+#endif
 	mmi_dq_ms_set_sys_state(SYS_STATUS_RESTORE_LOCK_CON);
 }
 
@@ -1124,13 +1236,17 @@ static void mmi_dq_sys_wifi_setting(void)
 {
 	if (0 == mmi_dq_wifi_setting())
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
+#endif
 	}
 }
 
@@ -1144,13 +1260,17 @@ static void mmi_dq_sys_wifi_airkiss_setting(void)
 {
 	if (0 == mmi_dq_wifi_arikiss_con())
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
+#endif
 	}
 }
 
@@ -1164,13 +1284,17 @@ static void mmi_dq_sys_wifi_code_setting(void)
 {
 	if (0 == mmi_dq_wifi_code_con())
 	{
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_SET_FAIL);
+#endif
 		mmi_dq_sys_show_cur_menu_list();
 	}
 	else
 	{
 		mmi_dq_ms_set_sys_state(SYS_STATUS_WIFI_MODE);
+#ifdef __LOCK_AUDIO_SUPPORT__
 		mmi_dq_aud_play_with_id(AUD_ID_WIFI_CONNECTING);
+#endif
 	}
 }
 #endif

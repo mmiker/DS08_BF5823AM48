@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_COM
@@ -19,92 +19,124 @@ line level    source
    8            {
    9              //系统
   10              {
-  11                STR_ID_SYSTEM,
-  12                AUD_ID_SYSTEM
-  13          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  11                STR_ID_SYSTEM
+  12          #ifdef __LOCK_AUDIO_SUPPORT__
+  13                ,
+  14                AUD_ID_SYSTEM
+  15          #endif
+  16          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  17              },
-  18              //系统
-  19              {
-  20                STR_ID_SYSTEM2,
-  21                AUD_ID_SYSTEM2
-  22          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  20              },
+  21              //系统
+  22              {
+  23                STR_ID_SYSTEM2
+  24          #ifdef __LOCK_AUDIO_SUPPORT__
+  25                ,
+  26                AUD_ID_SYSTEM2
+  27          #endif
+  28          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  26              },
-  27              {STR_ID_PASSWORD,
-  28               AUD_ID_SYS_PASSWORD
-  29          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  32              },
+  33              {STR_ID_PASSWORD
+  34          #ifdef __LOCK_AUDIO_SUPPORT__
+  35               ,
+  36               AUD_ID_SYS_PASSWORD
+  37          #endif
+  38          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                    ,
                    0xff
               #endif
-  33              }, //密码
-  34              {
-  35                STR_ID_FINGERPRINT,
-  36                AUD_ID_SYS_FP
-  37          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  42              }, //密码
+  43              {
+  44                STR_ID_FINGERPRINT
+  45          #ifdef __LOCK_AUDIO_SUPPORT__
+  46                ,
+  47                AUD_ID_SYS_FP
+  48          #endif
+  49          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  41              }, //指纹
-  42              {
-  43                STR_ID_RF_CARD,
-  44                AUD_ID_SYS_RFCARD
-  45          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-                    ,
-                    0xff
-              #endif
-  49              }, //RF卡
-  50              {
-  51                STR_ID_ADMIN,
-  52                AUD_ID_SYS_ADMIN
-  53          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 2   
+  53              }, //指纹
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 2   
 
+  54              {
+  55                STR_ID_RF_CARD
+  56          #ifdef __LOCK_AUDIO_SUPPORT__
+  57                ,
+  58                AUD_ID_SYS_RFCARD
+  59          #endif
+  60          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  57              }, //管理员
-  58              {
-  59                STR_ID_SETTING,
-  60                AUD_ID_SYS_SETTING
-  61          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  64              }, //RF卡
+  65              {
+  66                STR_ID_ADMIN
+  67          #ifdef __LOCK_AUDIO_SUPPORT__
+  68                ,
+  69                AUD_ID_SYS_ADMIN
+  70          #endif
+  71          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  65              }, //设置
-  66          #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
-  67              {
-  68                STR_ID_110,
-  69                AUD_ID_SYS_110
-  70          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  75              }, //管理员
+  76              {
+  77                STR_ID_SETTING
+  78          #ifdef __LOCK_AUDIO_SUPPORT__
+  79                ,
+  80                AUD_ID_SYS_SETTING
+  81          #endif
+  82          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  74              }, //RF鍗?
-  75          #endif
-  76          #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
-  77              {
-  78                STR_ID_FINGERPRINT_110,
-  79                AUD_ID_SYS_FP_110
-  80          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  86              }, //设置
+  87          #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
+  88              {
+  89                STR_ID_110
+  90          #ifdef __LOCK_AUDIO_SUPPORT__
+  91                ,
+  92                AUD_ID_SYS_110
+  93          #endif
+  94          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  84              }, //管理�?
-  85          #endif
-  86              {
-  87                STR_ID_PRO_AUDIO,
-  88                AUD_ID_SYS_PRO_AUDIO
-  89          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+  98              }, //RF鍗?
+  99          #endif
+ 100          #if defined(__LOCK_WIFI_SUPPORT__) && defined(__LOCK_110_SUPPORT__)
+ 101              {
+ 102                STR_ID_FINGERPRINT_110
+ 103          #ifdef __LOCK_AUDIO_SUPPORT__
+ 104                ,
+ 105                AUD_ID_SYS_FP_110
+ 106          #endif
+ 107          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
-  93              }, //绠＄悊鍛?
-  94          #if 0
+ 111              }, //管理�?
+ 112          #endif
+ 113              {
+ 114                STR_ID_PRO_AUDIO
+ 115          #ifdef __LOCK_AUDIO_SUPPORT__
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 3   
+
+ 116                ,
+ 117                AUD_ID_SYS_PRO_AUDIO
+ 118          #endif
+ 119          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+                    ,
+                    0xff
+              #endif
+ 123              }, //绠＄悊鍛?
+ 124          #if 0
                 {
                   STR_ID_INPUT_68_PWD,
                   AUD_ID_INPUT_68_PWD
@@ -126,8 +158,6 @@ line level    source
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 3   
-
                 },//密码应为6-8位
                 {
                   STR_ID_INPUT_PWD_AGAIN,
@@ -160,6 +190,8 @@ line level    source
                 {
                   STR_ID_ADD_CONINUE_CONFIRM,
                   AUD_ID_CONTINUE_ADD_PWD
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 4   
+
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
@@ -190,8 +222,6 @@ line level    source
                   AUD_ID_PWD_NOT_EXIST
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 4   
-
               #endif
                 },//密码不存在，请重新输入
                 {
@@ -224,6 +254,8 @@ line level    source
                 },//修改失败，请联系管理员
                 {
                   STR_ID_PWD_NOT_SAME,
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 5   
+
                   AUD_ID_PWD_OLD_NEW_NOT_SAME
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
@@ -254,8 +286,6 @@ line level    source
                   STR_ID_DEL_PWD_CONFIRM,
                   AUD_ID_DEL_PWD_CONFIRM
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 5   
-
                   ,0xff
               #endif
                 },//号密码按#确认删除，取消请按*
@@ -288,6 +318,8 @@ line level    source
               #endif
                 },//继续删除请按#，返回请按*
                 {
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 6   
+
                   STR_ID_CLR_PWD_CONFIRM,
                   AUD_ID_CLR_PWD_CONFIRM
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -318,8 +350,6 @@ line level    source
                 {
                   STR_ID_PRESS_FP_AGAIN,
                   AUD_ID_PRESS_FP_AGAIN
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 6   
-
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
@@ -352,6 +382,8 @@ line level    source
                 {
                   STR_ID_FP_FULL,
                   AUD_ID_FP_FULL
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 7   
+
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
@@ -382,8 +414,6 @@ line level    source
               #endif
                 },//两次输入的指纹不一致
                 {
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 7   
-
                   STR_ID_CHG_FP_SUCESS,
                   AUD_ID_CHG_FP_SUCESS
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -416,6 +446,8 @@ line level    source
                   AUD_ID_DEL_FP_CONFIRM
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 8   
+
               #endif
                 },//号指纹按#确认删除，取消请按*
                 {
@@ -446,8 +478,6 @@ line level    source
                   ,0xff
               #endif
                 },//按#确认删除所有指纹，取消请按*
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 8   
-
                 {
                   STR_ID_CLR_FP_SUCESS,
                   AUD_ID_CLR_FP_SUCESS
@@ -480,6 +510,8 @@ line level    source
                   STR_ID_ADD_RFCARD_SUCESS,
                   AUD_ID_ADD_RFCARD_SUCESS
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 9   
+
                   ,0xff
               #endif
                 },//号RF卡添加成功
@@ -510,8 +542,6 @@ line level    source
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 9   
-
                 },//请刷新卡
                 {
                   STR_ID_PRESS_NEW_RFCARD_AGAIN,
@@ -544,6 +574,8 @@ line level    source
                 {
                   STR_ID_RFCARD_NOT_EXIST,
                   AUD_ID_RFCARD_NOT_EXIST
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 10  
+
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
@@ -574,8 +606,6 @@ line level    source
                   AUD_ID_CLR_RFCARD_CONFIRM
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 10  
-
               #endif
                 },//按#确认删除所有RF卡，取消请按*
                 {
@@ -608,6 +638,8 @@ line level    source
               #endif
                 },//请输入新管理员密码
                 {
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 11  
+
                   STR_ID_INPUT_NEW_ADMIN_PWD_AGAIN,
                   AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -638,8 +670,6 @@ line level    source
                 {
                   STR_ID_PRESS_NEW_ADMIN_FP_AGAIN,
                   AUD_ID_PRESS_FP_AGAIN
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 11  
-
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                   ,0xff
               #endif
@@ -659,16 +689,21 @@ line level    source
               #endif
                 },//2号管理指纹添加成功
               #endif
- 631              {
- 632                STR_ID_PRO_AUDIO,
- 633                AUD_ID_SYS_PRO_AUDIO
- 634          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+ 661              {
+ 662                STR_ID_PRO_AUDIO
+ 663          #ifdef __LOCK_AUDIO_SUPPORT__
+ 664                ,
+ 665                AUD_ID_SYS_PRO_AUDIO
+ 666          #endif
+ 667          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
- 638              }, //提示音
- 639          #if 0
+ 671              }, //提示音
+ 672          #if 0
                   {
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 12  
+
                     STR_ID_CLOSE_PRO_AUDIO_SUCESS,
                     AUD_ID_CLOSE_PRO_AUDIO_SUCESS
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -702,8 +737,6 @@ line level    source
                   }, //开启提示音失败
                   {
                     STR_ID_DBL_OPEN_MODE,
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 12  
-
                     AUD_ID_SYS_DBL_OPEN_MODE
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
@@ -733,6 +766,8 @@ line level    source
                     ,
                     0xff
               #endif
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 13  
+
                   }, //双开门方式设置成功
                   {
                     STR_ID_DBL_OPEN_MODE_FAIL,
@@ -766,8 +801,6 @@ line level    source
                     0xff
               #endif
                   }, //请添加管理员密码
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 13  
-
                   {
                     STR_ID_ADD_ADMIN_PWD_SUCESS,
                     AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS
@@ -797,6 +830,8 @@ line level    source
                     AUD_ID_DOOR_OPEN
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 14  
+
                     0xff
               #endif
                   }, //已开锁
@@ -830,8 +865,6 @@ line level    source
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 14  
-
               #endif
                   }, //RF卡错误，请重试
                   {
@@ -859,23 +892,31 @@ line level    source
               #endif
                   }, //修改管理员密码
               #endif
- 825              {
- 826                STR_ID_CHG_ADMIN_FP,
- 827                AUD_ID_SYS_CHG_ADMIN_FP
- 828          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+ 858              {
+ 859                STR_ID_CHG_ADMIN_FP
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 15  
+
+ 860          #ifdef __LOCK_AUDIO_SUPPORT__
+ 861                ,
+ 862                AUD_ID_SYS_CHG_ADMIN_FP
+ 863          #endif
+ 864          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
- 832              }, //修改管理员指纹
- 833              {
- 834                STR_ID_OPEN_MODE,
- 835                AUD_ID_SYS_OPEN_MODE
- 836          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+ 868              }, //修改管理员指纹
+ 869              {
+ 870                STR_ID_OPEN_MODE
+ 871          #ifdef __LOCK_AUDIO_SUPPORT__
+ 872                ,
+ 873                AUD_ID_SYS_OPEN_MODE
+ 874          #endif
+ 875          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
                     0xff
               #endif
- 840              }, //开门方式
- 841          #if 0
+ 879              }, //开门方式
+ 880          #if 0
                   {
                     STR_ID_ADD_ADMIN_PWD_FIRST,
                     AUD_ID_ADD_ADMIN_PWD_FIRST
@@ -894,8 +935,6 @@ line level    source
                   }, //按#恢复出厂设置，取消请按*
                   {
                     STR_ID_FM_KEY_INPUT,
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 15  
-
                     AUD_ID_FM_KEY_INPUT
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                     ,
@@ -919,6 +958,8 @@ line level    source
               #endif
                   }, //复位键测试，请按复位键
                   {
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 16  
+
                     STR_ID_FM_TEST_PASS,
                     AUD_ID_FM_TEST_PASS
               #ifdef __AUDIO_BUSY_NOT_SUPPOT__
@@ -958,8 +999,6 @@ line level    source
                     0xff
               #endif
                   }, //app添加成功
-C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 10:41:15 PAGE 16  
-
                   {
                     STR_ID_SET_SUCESS,
                     AUD_ID_SET_SUCESS
@@ -969,22 +1008,24 @@ line level    source
               #endif
                   },
               #endif
- 931          
- 932              {STR_ID_MAX_COUNT,
- 933               0xFF
- 934          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+ 970          
+ 971              {STR_ID_MAX_COUNT,
+ 972               0xFF
+ 973          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                    ,
                    0xff
               #endif
- 938              },
- 939              {STR_ID_INVALID_ID,
- 940               0xFF
- 941          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
+ 977              },
+ 978              {STR_ID_INVALID_ID,
+ 979               0xFF
+ 980          #ifdef __AUDIO_BUSY_NOT_SUPPOT__
                    ,
                    0xff
               #endif
- 945              }};
- 946          #endif //__MMI_COM_C__
+C51 COMPILER V9.59.0.0   MMI_COM                                                           04/19/2021 17:37:54 PAGE 17  
+
+ 984              }};
+ 985          #endif //__MMI_COM_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

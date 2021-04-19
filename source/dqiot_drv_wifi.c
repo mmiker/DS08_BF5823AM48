@@ -58,14 +58,14 @@ void dqiot_drv_wifi_gpio_deinit(void)
 	UART0_RX	PF5	输入
 	NRST_CTR	PF7	供电
 	*/
-	gpio_init(FP_TX_PORT,FP_TX_PIN,GPIO_MODE_IN_FLOATING);
-	gpio_bit_reset(FP_TX_PORT,FP_TX_PIN);
-	
-	gpio_init(FP_RX_PORT,FP_RX_PIN,GPIO_MODE_IN_FLOATING);
-	gpio_bit_reset(FP_RX_PORT,FP_RX_PIN);
-	
-	gpio_init(FP_PWR_PORT,FP_PWR_PIN,GPIO_MODE_IN_FLOATING);
-	gpio_bit_reset(FP_PWR_PORT,FP_PWR_PIN);
+	gpio_init(FP_TX_PORT, FP_TX_PIN, GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_TX_PORT, FP_TX_PIN);
+
+	gpio_init(FP_RX_PORT, FP_RX_PIN, GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_RX_PORT, FP_RX_PIN);
+
+	gpio_init(FP_PWR_PORT, FP_PWR_PIN, GPIO_MODE_IN_FLOATING);
+	gpio_bit_reset(FP_PWR_PORT, FP_PWR_PIN);
 
 	return;
 }
@@ -529,24 +529,32 @@ uint8_t wifi_cmd_add_del(void)
 		case 'L':
 			return 0;
 		case 'E':
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+#endif
 			return 0xff;
 		case 'M':
 			wifi_add_flag = 1;
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+#endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
 			break;
 #ifdef __LOCK_FP_SUPPORT__
 		case 'F':
 			wifi_add_flag = 1;
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
+#endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
 			break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 		case 'R':
 			wifi_add_flag = 1;
+#ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
+#endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
 			break;
 #endif
@@ -566,11 +574,15 @@ uint8_t wifi_cmd_add_del(void)
 			retval = mmi_dq_fs_del_pwd(get_index, FDS_USE_TYPE_USER);
 			if (retval == RET_SUCESS)
 			{
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+#endif
 				mmi_dq_wifi_del_password(get_index);
 			}
 			else
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+#endif
 			break;
 #ifdef __LOCK_FP_SUPPORT__
 		case 'F':
@@ -579,11 +591,15 @@ uint8_t wifi_cmd_add_del(void)
 				retval = mmi_dq_fp_delete((unsigned short)get_index);
 			if (retval == 0)
 			{
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
+#endif
 				mmi_dq_wifi_del_fp(get_index);
 			}
 			else
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+#endif
 			break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
@@ -591,11 +607,15 @@ uint8_t wifi_cmd_add_del(void)
 			retval = mmi_dq_fs_del_rfid(get_index);
 			if (retval == RET_SUCESS)
 			{
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_RFCARD_SUCESS);
+#endif
 				mmi_dq_wifi_del_rfid_suc(get_index);
 			}
 			else
+#ifdef __LOCK_AUDIO_SUPPORT__
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+#endif
 			break;
 #endif
 		}
