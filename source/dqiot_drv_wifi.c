@@ -166,7 +166,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
-			// delay_ms(1);
+			delay_ms(1);
 
 			if (uart_getbuflen >= 2)
 			{
@@ -185,9 +185,9 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 					j++;
 				}
 
+				EA = 1;
 				/* 清空缓存 */
 				uart_getbuflen = 0;
-				EA = 1;
 
 				return 0;
 			}
@@ -201,7 +201,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 		while (--waittime)
 		{
-			// delay_ms(1);
+			delay_ms(1);
 
 			if (uart_getbuflen >= 2)
 			{
@@ -220,9 +220,9 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 					j++;
 				}
 
+				EA = 1;
 				/* 清空缓存 */
 				uart_getbuflen = 0;
-				EA = 1;
 
 				return 0;
 			}
@@ -274,8 +274,8 @@ uint8_t UH010_Write_Byte(uint8_t *send, uint8_t send_len)
 #else
 	uint8_t i;
 
-	EA = 0;
 	uart_getbuflen = 0;
+	EA = 0;
 
 	for (i = 0; i < send_len; i++)
 		uart_tx_byte(UART0, send[i]);
@@ -509,25 +509,21 @@ uint8_t wifi_open_reply_get(void)
   */
 uint8_t wifi_cmd_add_del(void)
 {
-	RET_VAL retval = 0;
+	RET_VAL retval = 0xff;
 	uint8_t wifi_data[2];
 	uint8_t data_2[3] = {0};
 	wifi_data[0] = WIFI_CMD_ADD_DEL;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
-	delay_ms(300);
+	delay_ms(400);
 	UH010_ReadDatas(wifi_data, 0, data_2, 3);
-
-	// printfV("data_2[0]", (int)data_2[0]);
-	// printfV("data_2[1]", (int)data_2[1]);
-	// printfV("data_2[2]", (int)data_2[2]);
 
 	if (data_2[0] == 'B')
 	{
 		switch (data_2[1])
 		{
 		case 'L':
-			return 0;
+			return 0xff;
 		case 'E':
 #ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
@@ -558,6 +554,8 @@ uint8_t wifi_cmd_add_del(void)
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
 			break;
 #endif
+		default:
+			return 0xff;
 		}
 	}
 	else if (data_2[0] == 'M' || data_2[0] == 'F' || data_2[0] == 'R')
@@ -566,7 +564,6 @@ uint8_t wifi_cmd_add_del(void)
 			get_index = data_2[1] - '0';
 		else
 			get_index = (data_2[1] - '0') * 10 + (data_2[2] - '0');
-		// printfV("get_index", (int)get_index);
 
 		switch (data_2[0])
 		{
@@ -581,8 +578,9 @@ uint8_t wifi_cmd_add_del(void)
 			}
 			else
 #ifdef __LOCK_AUDIO_SUPPORT__
-				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
 #endif
+					;
 			break;
 #ifdef __LOCK_FP_SUPPORT__
 		case 'F':
@@ -598,8 +596,9 @@ uint8_t wifi_cmd_add_del(void)
 			}
 			else
 #ifdef __LOCK_AUDIO_SUPPORT__
-				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
 #endif
+					;
 			break;
 #endif
 #ifdef __LOCK_RFID_CARD_SUPPORT__
@@ -614,16 +613,19 @@ uint8_t wifi_cmd_add_del(void)
 			}
 			else
 #ifdef __LOCK_AUDIO_SUPPORT__
-				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL);
+				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
 #endif
+					;
 			break;
 #endif
+		default:
+			return 0xff;
 		}
 	}
 	else
-		return 0;
+		return 1;
 
-	return 1;
+	return 0;
 }
 
 /**
@@ -681,7 +683,7 @@ void wifi_sleep_mode(void)
   */
 void wifi_add_password(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_ADD_PW;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -697,7 +699,7 @@ void wifi_add_password(uint8_t index)
   */
 void wifi_del_password(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_DEL_PW;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -713,7 +715,7 @@ void wifi_del_password(uint8_t index)
   */
 void wifi_add_fp(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_ADD_FP;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -729,7 +731,7 @@ void wifi_add_fp(uint8_t index)
   */
 void wifi_del_fp(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_DEL_FP;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -745,7 +747,7 @@ void wifi_del_fp(uint8_t index)
   */
 void wifi_add_rf(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_ADD_RF;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -761,7 +763,7 @@ void wifi_add_rf(uint8_t index)
   */
 void wifi_del_rf(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_DEL_RF;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -853,7 +855,7 @@ void wifi_open_by_password(uint8_t index)
   */
 void wifi_open_by_fp(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_FP_OPEN;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -869,7 +871,7 @@ void wifi_open_by_fp(uint8_t index)
   */
 void wifi_open_by_rfid(uint8_t index)
 {
-	uint8_t wifi_data[2];
+	uint8_t wifi_data[3];
 	wifi_data[0] = WIFI_CMD_RF_OPEN;
 	wifi_data[1] = 100;
 	wifi_data[2] = index;
@@ -1009,7 +1011,7 @@ uint8_t wifi_pv_switch_get(void)
 	wifi_data[0] = WIFI_CMD_PV_SWITCH_GET;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
-	delay_ms(300);
+	delay_ms(400);
 	UH010_ReadDatas(wifi_data, 0, data_2, 2);
 	if (data_2[0] == 'J' && data_2[1] == 'E') //无响应
 		return 0xff;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_WIFI
@@ -62,7 +62,7 @@ line level    source
   51   1        return ret;
   52   1      }
   53          
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 2   
 
   54          /**
   55            * @brief  Airkiss配网（发送）
@@ -126,7 +126,7 @@ line level    source
  113            * @see    none
  114            */
  115          void mmi_dq_wifi_connected_fail(void)
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 3   
 
  116          {
  117   1        //mmi_dq_fs_set_wifi_setting(0);
@@ -190,7 +190,7 @@ line level    source
  175   2          wifi_check_connect_flag = 0;
  176   2        }
  177   1      
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 4   
 
  178   1        if (wifi_check_times > 60 || retval == 2)
  179   1        {
@@ -254,7 +254,7 @@ line level    source
  237   2      #ifdef __LOCK_AUDIO_SUPPORT__
  238   2            mmi_dq_aud_play_with_id(AUD_ID_RESTORE_FAIL)
  239   2      #endif
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 5   
 
  240   2                ;
  241   2          else if (mmi_dq_ms_get_sys_state() == SYS_STATUS_IDLE)
@@ -279,495 +279,518 @@ line level    source
  260            */
  261          void mmi_dq_wifi_cmd_add_del(void)
  262          {
- 263   1        uint16_t waittime = 100;
- 264   1      
- 265   1        while (--waittime)
- 266   1        {
- 267   2          delay_ms(1);
- 268   2          if (wifi_cmd_add_del() != 0)
- 269   2            break;
- 270   2        }
- 271   1      }
- 272          
- 273          /**
- 274            * @brief  密码添加成功
- 275            * @param  index
- 276            * @return none
- 277            * @note   none
- 278            * @see    none
- 279            */
- 280          void mmi_dq_wifi_add_password(uint8_t index)
- 281          {
- 282   1        mmi_dq_wifi_wakeup();
- 283   1      
- 284   1        wifi_add_password(index);
- 285   1      }
- 286          
- 287          /**
- 288            * @brief  密码删除成功
- 289            * @param  index
- 290            * @return none
- 291            * @note   none
- 292            * @see    none
- 293            */
- 294          void mmi_dq_wifi_del_password(uint8_t index)
- 295          {
- 296   1        mmi_dq_wifi_wakeup();
- 297   1      
- 298   1        wifi_del_password(index);
- 299   1      }
- 300          
- 301          /**
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 6   
+ 263   1        uint8_t retval = 0xff;
+ 264   1        uint16_t waittime = 75;
+ 265   1      
+ 266   1        while (--waittime)
+ 267   1        {
+ 268   2          delay_ms(1);
+ 269   2          retval = wifi_cmd_add_del();
+ 270   2          if (retval == 0)
+ 271   2            break;
+ 272   2          if (retval == 1)
+ 273   2            mmi_dq_aud_play_with_id(AUD_BASE_ID_PRO_AUDIO);
+ 274   2        }
+ 275   1      
+ 276   1        if (retval == 0xff)
+ 277   1        {
+ 278   2      #ifdef __LOCK_AUDIO_SUPPORT__
+ 279   2          mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+ 280   2      #endif
+ 281   2        }
+ 282   1      }
+ 283          
+ 284          /**
+ 285            * @brief  密码添加成功
+ 286            * @param  index
+ 287            * @return none
+ 288            * @note   none
+ 289            * @see    none
+ 290            */
+ 291          void mmi_dq_wifi_add_password(uint8_t index)
+ 292          {
+ 293   1        mmi_dq_wifi_wakeup();
+ 294   1      
+ 295   1        wifi_add_password(index);
+ 296   1      }
+ 297          
+ 298          /**
+ 299            * @brief  密码删除成功
+ 300            * @param  index
+ 301            * @return none
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 6   
 
- 302            * @brief  指纹添加成功
- 303            * @param  index
- 304            * @return none
- 305            * @note   none
- 306            * @see    none
- 307            */
- 308          void mmi_dq_wifi_add_fp(uint8_t index)
- 309          {
- 310   1        mmi_dq_wifi_wakeup();
- 311   1      
- 312   1        wifi_add_fp(index);
- 313   1      }
- 314          
- 315          /**
- 316            * @brief  指纹删除成功
- 317            * @param  none
- 318            * @return none
- 319            * @note   none
- 320            * @see    none
- 321            */
- 322          void mmi_dq_wifi_del_fp(uint8_t index)
- 323          {
- 324   1        mmi_dq_wifi_wakeup();
- 325   1      
- 326   1        wifi_del_fp(index);
- 327   1      }
- 328          
- 329          /**
- 330            * @brief  RF卡添加成功
- 331            * @param  index
- 332            * @return none
- 333            * @note   none
- 334            * @see    none
- 335            */
- 336          void mmi_dq_wifi_add_rfid_suc(uint8_t index)
- 337          {
- 338   1        mmi_dq_wifi_wakeup();
- 339   1      
- 340   1        wifi_add_rf(index);
- 341   1      }
- 342          
- 343          /**
- 344            * @brief  RF卡删除成功
- 345            * @param  index
- 346            * @return none
- 347            * @note   none
- 348            * @see    none
- 349            */
- 350          void mmi_dq_wifi_del_rfid_suc(uint8_t index)
- 351          {
- 352   1        mmi_dq_wifi_wakeup();
- 353   1      
- 354   1        wifi_del_rf(index);
- 355   1      }
- 356          
- 357          /**
- 358            * @brief  密码全部清除
- 359            * @param  none
- 360            * @return none
- 361            * @note   none
- 362            * @see    none
- 363            */
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 7   
+ 302            * @note   none
+ 303            * @see    none
+ 304            */
+ 305          void mmi_dq_wifi_del_password(uint8_t index)
+ 306          {
+ 307   1        mmi_dq_wifi_wakeup();
+ 308   1      
+ 309   1        wifi_del_password(index);
+ 310   1      }
+ 311          
+ 312          /**
+ 313            * @brief  指纹添加成功
+ 314            * @param  index
+ 315            * @return none
+ 316            * @note   none
+ 317            * @see    none
+ 318            */
+ 319          void mmi_dq_wifi_add_fp(uint8_t index)
+ 320          {
+ 321   1        mmi_dq_wifi_wakeup();
+ 322   1      
+ 323   1        wifi_add_fp(index);
+ 324   1      }
+ 325          
+ 326          /**
+ 327            * @brief  指纹删除成功
+ 328            * @param  none
+ 329            * @return none
+ 330            * @note   none
+ 331            * @see    none
+ 332            */
+ 333          void mmi_dq_wifi_del_fp(uint8_t index)
+ 334          {
+ 335   1        mmi_dq_wifi_wakeup();
+ 336   1      
+ 337   1        wifi_del_fp(index);
+ 338   1      }
+ 339          
+ 340          /**
+ 341            * @brief  RF卡添加成功
+ 342            * @param  index
+ 343            * @return none
+ 344            * @note   none
+ 345            * @see    none
+ 346            */
+ 347          void mmi_dq_wifi_add_rfid_suc(uint8_t index)
+ 348          {
+ 349   1        mmi_dq_wifi_wakeup();
+ 350   1      
+ 351   1        wifi_add_rf(index);
+ 352   1      }
+ 353          
+ 354          /**
+ 355            * @brief  RF卡删除成功
+ 356            * @param  index
+ 357            * @return none
+ 358            * @note   none
+ 359            * @see    none
+ 360            */
+ 361          void mmi_dq_wifi_del_rfid_suc(uint8_t index)
+ 362          {
+ 363   1        mmi_dq_wifi_wakeup();
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 7   
 
- 364          void mmi_dq_wifi_clr_pwd_suc(void)
- 365          {
- 366   1        mmi_dq_wifi_wakeup();
- 367   1      
- 368   1        wifi_clr_pwd();
- 369   1      }
- 370          
- 371          /**
- 372            * @brief  指纹全部清除
- 373            * @param  none
- 374            * @return none
- 375            * @note   none
- 376            * @see    none
- 377            */
- 378          void mmi_dq_wifi_clr_fps_suc(void)
- 379          {
- 380   1        mmi_dq_wifi_wakeup();
- 381   1      
- 382   1        wifi_clr_fp();
- 383   1      }
- 384          
- 385          /**
- 386            * @brief  RF卡全部清除
- 387            * @param  none
- 388            * @return none
- 389            * @note   none
- 390            * @see    none
- 391            */
- 392          void mmi_dq_wifi_clr_rfid_suc(void)
- 393          {
- 394   1        mmi_dq_wifi_wakeup();
- 395   1      
- 396   1        wifi_clr_rf();
- 397   1      }
- 398          
- 399          /**
- 400            * @brief  密码开门
- 401            * @param  index
- 402            * @return none
- 403            * @note   none
- 404            * @see    none
- 405            */
- 406          void mmi_dq_wifi_open_by_password(uint8_t index)
- 407          {
- 408   1        mmi_dq_wifi_wakeup();
- 409   1      
- 410   1        wifi_open_by_password(index);
- 411   1      }
- 412          
- 413          /**
- 414            * @brief  指纹开门
- 415            * @param  index
- 416            * @return none
- 417            * @note   none
- 418            * @see    none
- 419            */
- 420          void mmi_dq_wifi_open_by_fp(uint8_t index)
- 421          {
- 422   1        mmi_dq_wifi_wakeup();
- 423   1      
- 424   1        wifi_open_by_fp(index);
- 425   1      }
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 8   
+ 364   1      
+ 365   1        wifi_del_rf(index);
+ 366   1      }
+ 367          
+ 368          /**
+ 369            * @brief  密码全部清除
+ 370            * @param  none
+ 371            * @return none
+ 372            * @note   none
+ 373            * @see    none
+ 374            */
+ 375          void mmi_dq_wifi_clr_pwd_suc(void)
+ 376          {
+ 377   1        mmi_dq_wifi_wakeup();
+ 378   1      
+ 379   1        wifi_clr_pwd();
+ 380   1      }
+ 381          
+ 382          /**
+ 383            * @brief  指纹全部清除
+ 384            * @param  none
+ 385            * @return none
+ 386            * @note   none
+ 387            * @see    none
+ 388            */
+ 389          void mmi_dq_wifi_clr_fps_suc(void)
+ 390          {
+ 391   1        mmi_dq_wifi_wakeup();
+ 392   1      
+ 393   1        wifi_clr_fp();
+ 394   1      }
+ 395          
+ 396          /**
+ 397            * @brief  RF卡全部清除
+ 398            * @param  none
+ 399            * @return none
+ 400            * @note   none
+ 401            * @see    none
+ 402            */
+ 403          void mmi_dq_wifi_clr_rfid_suc(void)
+ 404          {
+ 405   1        mmi_dq_wifi_wakeup();
+ 406   1      
+ 407   1        wifi_clr_rf();
+ 408   1      }
+ 409          
+ 410          /**
+ 411            * @brief  密码开门
+ 412            * @param  index
+ 413            * @return none
+ 414            * @note   none
+ 415            * @see    none
+ 416            */
+ 417          void mmi_dq_wifi_open_by_password(uint8_t index)
+ 418          {
+ 419   1        mmi_dq_wifi_wakeup();
+ 420   1      
+ 421   1        wifi_open_by_password(index);
+ 422   1      }
+ 423          
+ 424          /**
+ 425            * @brief  指纹开门
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 8   
 
- 426          
- 427          /**
- 428            * @brief  RF卡开门
- 429            * @param  index
- 430            * @return none
- 431            * @note   none
- 432            * @see    none
- 433            */
- 434          void mmi_dq_wifi_open_by_rfid(uint8_t index)
- 435          {
- 436   1        mmi_dq_wifi_wakeup();
- 437   1      
- 438   1        wifi_open_by_rfid(index);
- 439   1      }
- 440          
- 441          /**
- 442            * @brief  远程开门成功
- 443            * @param  none
- 444            * @return none
- 445            * @note   none
- 446            * @see    none
- 447            */
- 448          void mmi_dq_wifi_open_by_wifi(void)
- 449          {
- 450   1        mmi_dq_wifi_wakeup();
- 451   1      
- 452   1        wifi_open_by_wifi();
- 453   1      }
- 454          
- 455          /**
- 456            * @brief  应急钥匙开门成功
- 457            * @param  none
- 458            * @return none
- 459            * @note   none
- 460            * @see    none
- 461            */
- 462          void mmi_dq_wifi_open_by_key(void)
- 463          {
- 464   1        mmi_dq_wifi_wakeup();
- 465   1      
- 466   1        wifi_open_by_key();
- 467   1      }
- 468          
- 469          /**
- 470            * @brief  门未关
- 471            * @param  none
- 472            * @return none
- 473            * @note   none
- 474            * @see    none
- 475            */
- 476          void mmi_dq_wifi_close_over_time(void)
- 477          {
- 478   1        wifi_close_over_time();
- 479   1      }
- 480          
- 481          /*
- 482          parameter: 
- 483            none
- 484          return :
- 485            none
- 486          */
- 487          void mmi_dq_wifi_door_close(void)
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 9   
+ 426            * @param  index
+ 427            * @return none
+ 428            * @note   none
+ 429            * @see    none
+ 430            */
+ 431          void mmi_dq_wifi_open_by_fp(uint8_t index)
+ 432          {
+ 433   1        mmi_dq_wifi_wakeup();
+ 434   1      
+ 435   1        wifi_open_by_fp(index);
+ 436   1      }
+ 437          
+ 438          /**
+ 439            * @brief  RF卡开门
+ 440            * @param  index
+ 441            * @return none
+ 442            * @note   none
+ 443            * @see    none
+ 444            */
+ 445          void mmi_dq_wifi_open_by_rfid(uint8_t index)
+ 446          {
+ 447   1        mmi_dq_wifi_wakeup();
+ 448   1      
+ 449   1        wifi_open_by_rfid(index);
+ 450   1      }
+ 451          
+ 452          /**
+ 453            * @brief  远程开门成功
+ 454            * @param  none
+ 455            * @return none
+ 456            * @note   none
+ 457            * @see    none
+ 458            */
+ 459          void mmi_dq_wifi_open_by_wifi(void)
+ 460          {
+ 461   1        mmi_dq_wifi_wakeup();
+ 462   1      
+ 463   1        wifi_open_by_wifi();
+ 464   1      }
+ 465          
+ 466          /**
+ 467            * @brief  应急钥匙开门成功
+ 468            * @param  none
+ 469            * @return none
+ 470            * @note   none
+ 471            * @see    none
+ 472            */
+ 473          void mmi_dq_wifi_open_by_key(void)
+ 474          {
+ 475   1        mmi_dq_wifi_wakeup();
+ 476   1      
+ 477   1        wifi_open_by_key();
+ 478   1      }
+ 479          
+ 480          /**
+ 481            * @brief  门未关
+ 482            * @param  none
+ 483            * @return none
+ 484            * @note   none
+ 485            * @see    none
+ 486            */
+ 487          void mmi_dq_wifi_close_over_time(void)
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 9   
 
  488          {
- 489   1        wifi_door_close();
+ 489   1        wifi_close_over_time();
  490   1      }
  491          
- 492          /**
- 493            * @brief  震动报警
- 494            * @param  none
- 495            * @return none
- 496            * @note   none
- 497            * @see    none
- 498            */
- 499          void mmi_dq_wifi_via_alarm(void)
- 500          {
- 501   1        mmi_dq_wifi_wakeup();
- 502   1      
- 503   1        wifi_via_alarm();
- 504   1      }
- 505          
- 506          /**
- 507            * @brief  多次密码错误
- 508            * @param  none
- 509            * @return none
- 510            * @note   none
- 511            * @see    none
- 512            */
- 513          void mmi_dq_wifi_pw_alarm(void)
- 514          {
- 515   1        mmi_dq_wifi_wakeup();
- 516   1      
- 517   1        wifi_pw_alarm();
- 518   1      }
- 519          
- 520          /**
- 521            * @brief  多次指纹错误
- 522            * @param  none
- 523            * @return none
- 524            * @note   none
- 525            * @see    none
- 526            */
- 527          void mmi_dq_wifi_fp_alarm(void)
- 528          {
- 529   1        mmi_dq_wifi_wakeup();
- 530   1      
- 531   1        wifi_fp_alarm();
- 532   1      }
- 533          
- 534          /**
- 535            * @brief  多次RF卡错误
- 536            * @param  none
- 537            * @return none
- 538            * @note   none
- 539            * @see    none
- 540            */
- 541          void mmi_dq_wifi_rfid_alarm(void)
- 542          {
- 543   1        mmi_dq_wifi_wakeup();
- 544   1      
- 545   1        wifi_rf_alarm();
- 546   1      }
- 547          
- 548          /**
- 549            * @brief  低电量
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 10  
+ 492          /*
+ 493          parameter: 
+ 494            none
+ 495          return :
+ 496            none
+ 497          */
+ 498          void mmi_dq_wifi_door_close(void)
+ 499          {
+ 500   1        wifi_door_close();
+ 501   1      }
+ 502          
+ 503          /**
+ 504            * @brief  震动报警
+ 505            * @param  none
+ 506            * @return none
+ 507            * @note   none
+ 508            * @see    none
+ 509            */
+ 510          void mmi_dq_wifi_via_alarm(void)
+ 511          {
+ 512   1        mmi_dq_wifi_wakeup();
+ 513   1      
+ 514   1        wifi_via_alarm();
+ 515   1      }
+ 516          
+ 517          /**
+ 518            * @brief  多次密码错误
+ 519            * @param  none
+ 520            * @return none
+ 521            * @note   none
+ 522            * @see    none
+ 523            */
+ 524          void mmi_dq_wifi_pw_alarm(void)
+ 525          {
+ 526   1        mmi_dq_wifi_wakeup();
+ 527   1      
+ 528   1        wifi_pw_alarm();
+ 529   1      }
+ 530          
+ 531          /**
+ 532            * @brief  多次指纹错误
+ 533            * @param  none
+ 534            * @return none
+ 535            * @note   none
+ 536            * @see    none
+ 537            */
+ 538          void mmi_dq_wifi_fp_alarm(void)
+ 539          {
+ 540   1        mmi_dq_wifi_wakeup();
+ 541   1      
+ 542   1        wifi_fp_alarm();
+ 543   1      }
+ 544          
+ 545          /**
+ 546            * @brief  多次RF卡错误
+ 547            * @param  none
+ 548            * @return none
+ 549            * @note   none
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 10  
 
- 550            * @param  none
- 551            * @return none
- 552            * @note   none
- 553            * @see    none
- 554            */
- 555          void mmi_dq_wifi_lowpower_alarm(void)
- 556          {
- 557   1        static uint8_t wifi_lowpower_flag = 0;
- 558   1        if (wifi_lowpower_flag == 0)
- 559   1        {
- 560   2          wifi_lowpower_flag = 1;
- 561   2          mmi_dq_wifi_wakeup();
- 562   2      
- 563   2          wifi_lowpower_alarm();
- 564   2        }
- 565   1      }
- 566          
- 567          /**
- 568            * @brief  睡眠
- 569            * @param  none
- 570            * @return none
- 571            * @note   none
- 572            * @see    none
- 573            */
- 574          void mmi_dq_wifi_sleep(void)
- 575          {
- 576   1        wifi_sleep_mode();
- 577   1      }
- 578          
- 579          /**
- 580            * @brief  唤醒
- 581            * @param  none
- 582            * @return none
- 583            * @note   none
- 584            * @see    none
- 585            */
- 586          void mmi_dq_wifi_wakeup(void)
- 587          {
- 588   1        wifi_wake_up();
- 589   1      
- 590   1        delay_ms(150);
- 591   1      }
- 592          
- 593          /**
- 594            * @brief  拍照
- 595            * @param  none
- 596            * @return none
- 597            * @note   none
- 598            * @see    none
- 599            */
- 600          void mmi_dq_wifi_take_photos(void)
- 601          {
- 602   1        mmi_dq_wifi_wakeup();
- 603   1      
- 604   1        if (wifi_take_photos() == 1)
- 605   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 606   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
- 607   1      #endif
- 608   1              ;
- 609   1      }
- 610          
- 611          /**
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 11  
+ 550            * @see    none
+ 551            */
+ 552          void mmi_dq_wifi_rfid_alarm(void)
+ 553          {
+ 554   1        mmi_dq_wifi_wakeup();
+ 555   1      
+ 556   1        wifi_rf_alarm();
+ 557   1      }
+ 558          
+ 559          /**
+ 560            * @brief  低电量
+ 561            * @param  none
+ 562            * @return none
+ 563            * @note   none
+ 564            * @see    none
+ 565            */
+ 566          void mmi_dq_wifi_lowpower_alarm(void)
+ 567          {
+ 568   1        static uint8_t wifi_lowpower_flag = 0;
+ 569   1        if (wifi_lowpower_flag == 0)
+ 570   1        {
+ 571   2          wifi_lowpower_flag = 1;
+ 572   2          mmi_dq_wifi_wakeup();
+ 573   2      
+ 574   2          wifi_lowpower_alarm();
+ 575   2        }
+ 576   1      }
+ 577          
+ 578          /**
+ 579            * @brief  睡眠
+ 580            * @param  none
+ 581            * @return none
+ 582            * @note   none
+ 583            * @see    none
+ 584            */
+ 585          void mmi_dq_wifi_sleep(void)
+ 586          {
+ 587   1        wifi_sleep_mode();
+ 588   1      }
+ 589          
+ 590          /**
+ 591            * @brief  唤醒
+ 592            * @param  none
+ 593            * @return none
+ 594            * @note   none
+ 595            * @see    none
+ 596            */
+ 597          void mmi_dq_wifi_wakeup(void)
+ 598          {
+ 599   1        wifi_wake_up();
+ 600   1      
+ 601   1        delay_ms(150);
+ 602   1      }
+ 603          
+ 604          /**
+ 605            * @brief  拍照
+ 606            * @param  none
+ 607            * @return none
+ 608            * @note   none
+ 609            * @see    none
+ 610            */
+ 611          void mmi_dq_wifi_take_photos(void)
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 11  
 
- 612            * @brief  录像
- 613            * @param  none
- 614            * @return none
- 615            * @note   none
- 616            * @see    none
- 617            */
- 618          void mmi_dq_wifi_take_videos(void)
- 619          {
- 620   1        mmi_dq_wifi_wakeup();
- 621   1      
- 622   1        if (wifi_take_videos() == 1)
- 623   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 624   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
- 625   1      #endif
- 626   1              ;
- 627   1      }
- 628          
- 629          /**
- 630            * @brief  拍照录像开关
- 631            * @param  none
- 632            * @return none
- 633            * @note   none
- 634            * @see    none
- 635            */
- 636          void mmi_dq_wifi_pv_switch(void)
- 637          {
- 638   1        uint8_t retval;
- 639   1        uint16_t waittime = 100;
- 640   1      
- 641   1        mmi_dq_wifi_wakeup();
- 642   1        wifi_pv_switch_send();
- 643   1      
- 644   1        while (--waittime)
- 645   1        {
- 646   2          delay_ms(1);
- 647   2          retval = wifi_pv_switch_get();
- 648   2          if (retval != 0xff)
- 649   2            break;
- 650   2        }
- 651   1      }
- 652          
- 653          /**
- 654            * @brief  检查网络状态
- 655            * @param  none
- 656            * @return none
- 657            * @note   none
- 658            * @see    none
- 659            */
- 660          void mmi_dq_wifi_check_net(void)
- 661          {
- 662   1        if (wifi_check_net() == 1)
- 663   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 664   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
- 665   1      #endif
- 666   1              ;
- 667   1        else
- 668   1      #ifdef __LOCK_AUDIO_SUPPORT__
- 669   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL)
- 670   1      #endif
- 671   1              ;
- 672   1      }
- 673          
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 12  
+ 612          {
+ 613   1        mmi_dq_wifi_wakeup();
+ 614   1      
+ 615   1        if (wifi_take_photos() == 1)
+ 616   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 617   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+ 618   1      #endif
+ 619   1              ;
+ 620   1      }
+ 621          
+ 622          /**
+ 623            * @brief  录像
+ 624            * @param  none
+ 625            * @return none
+ 626            * @note   none
+ 627            * @see    none
+ 628            */
+ 629          void mmi_dq_wifi_take_videos(void)
+ 630          {
+ 631   1        mmi_dq_wifi_wakeup();
+ 632   1      
+ 633   1        if (wifi_take_videos() == 1)
+ 634   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 635   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+ 636   1      #endif
+ 637   1              ;
+ 638   1      }
+ 639          
+ 640          /**
+ 641            * @brief  拍照录像开关
+ 642            * @param  none
+ 643            * @return none
+ 644            * @note   none
+ 645            * @see    none
+ 646            */
+ 647          void mmi_dq_wifi_pv_switch(void)
+ 648          {
+ 649   1        uint8_t retval = 0xff;
+ 650   1        uint16_t waittime = 75;
+ 651   1      
+ 652   1        mmi_dq_wifi_wakeup();
+ 653   1        wifi_pv_switch_send();
+ 654   1      
+ 655   1        while (--waittime)
+ 656   1        {
+ 657   2          delay_ms(1);
+ 658   2          retval = wifi_pv_switch_get();
+ 659   2          if (retval != 0xff)
+ 660   2          {
+ 661   3      #ifdef __LOCK_AUDIO_SUPPORT__
+ 662   3            mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+ 663   3      #endif
+ 664   3            break;
+ 665   3          }
+ 666   2        }
+ 667   1      
+ 668   1        if (retval == 0xff)
+ 669   1        {
+ 670   2      #ifdef __LOCK_AUDIO_SUPPORT__
+ 671   2          mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+ 672   2      #endif
+ 673   2        }
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 12  
 
- 674          /**
- 675            * @brief  协迫密码开门
- 676            * @param  index
- 677            * @return none
- 678            * @note   none
- 679            * @see    none
- 680            */
- 681          void mmi_dq_wifi_send_pwd_110(uint8_t index)
- 682          {
- 683   1        mmi_dq_wifi_wakeup();
- 684   1        wifi_send_pwd_110();
- 685   1        delay_ms(20);
- 686   1        wifi_open_by_password(index);
- 687   1      }
- 688          
- 689          /**
- 690            * @brief  协迫密码开门
- 691            * @param  index
- 692            * @return none
- 693            * @note   none
- 694            * @see    none
- 695            */
- 696          void mmi_dq_wifi_send_fp_110(uint8_t index)
- 697          {
- 698   1        mmi_dq_wifi_wakeup();
- 699   1        wifi_send_fp_110();
- 700   1        delay_ms(20);
- 701   1        wifi_open_by_fp(index);
- 702   1      }
- 703          
- 704          /*
- 705          parameter: 
- 706            none
- 707          return :
- 708            none
- 709          */
- 710          void mmi_dq_wifi_set_110(void)
- 711          {
- 712   1        mmi_dq_wifi_wakeup();
- 713   1        wifi_set_110();
- 714   1      }
- 715          
- 716          /*
- 717          parameter: 
- 718            none
- 719          return :
- 720            none
- 721          */
- 722          unsigned char mmi_dq_wifi_get_running_flag(void)
- 723          {
- 724   1        if (wifi_check_times > 0)
- 725   1          return 1;
- 726   1        return 0;
- 727   1      }
- 728          #endif
- 729          #endif //__MMI_WIFI_C__
+ 674   1      }
+ 675          
+ 676          /**
+ 677            * @brief  检查网络状态
+ 678            * @param  none
+ 679            * @return none
+ 680            * @note   none
+ 681            * @see    none
+ 682            */
+ 683          void mmi_dq_wifi_check_net(void)
+ 684          {
+ 685   1        if (wifi_check_net() == 1)
+ 686   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 687   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+ 688   1      #endif
+ 689   1              ;
+ 690   1        else
+ 691   1      #ifdef __LOCK_AUDIO_SUPPORT__
+ 692   1          mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL)
+ 693   1      #endif
+ 694   1              ;
+ 695   1      }
+ 696          
+ 697          /**
+ 698            * @brief  协迫密码开门
+ 699            * @param  index
+ 700            * @return none
+ 701            * @note   none
+ 702            * @see    none
+ 703            */
+ 704          void mmi_dq_wifi_send_pwd_110(uint8_t index)
+ 705          {
+ 706   1        mmi_dq_wifi_wakeup();
+ 707   1        wifi_send_pwd_110();
+ 708   1        delay_ms(20);
+ 709   1        wifi_open_by_password(index);
+ 710   1      }
+ 711          
+ 712          /**
+ 713            * @brief  协迫密码开门
+ 714            * @param  index
+ 715            * @return none
+ 716            * @note   none
+ 717            * @see    none
+ 718            */
+ 719          void mmi_dq_wifi_send_fp_110(uint8_t index)
+ 720          {
+ 721   1        mmi_dq_wifi_wakeup();
+ 722   1        wifi_send_fp_110();
+ 723   1        delay_ms(20);
+ 724   1        wifi_open_by_fp(index);
+ 725   1      }
+ 726          
+ 727          /*
+ 728          parameter: 
+ 729            none
+ 730          return :
+ 731            none
+ 732          */
+ 733          void mmi_dq_wifi_set_110(void)
+ 734          {
+ 735   1        mmi_dq_wifi_wakeup();
+C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/20/2021 14:52:51 PAGE 13  
+
+ 736   1        wifi_set_110();
+ 737   1      }
+ 738          
+ 739          /*
+ 740          parameter: 
+ 741            none
+ 742          return :
+ 743            none
+ 744          */
+ 745          unsigned char mmi_dq_wifi_get_running_flag(void)
+ 746          {
+ 747   1        if (wifi_check_times > 0)
+ 748   1          return 1;
+ 749   1        return 0;
+ 750   1      }
+ 751          #endif
+ 752          #endif //__MMI_WIFI_C__
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1060    ----
+   CODE SIZE        =   1116    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      8      21
-C51 COMPILER V9.59.0.0   MMI_WIFI                                                          04/19/2021 17:37:56 PAGE 13  
-
+   XDATA SIZE       =      8      23
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

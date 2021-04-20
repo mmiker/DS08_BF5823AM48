@@ -260,13 +260,24 @@ void mmi_dq_wifi_check_open(void)
   */
 void mmi_dq_wifi_cmd_add_del(void)
 {
-  uint16_t waittime = 100;
+  uint8_t retval = 0xff;
+  uint16_t waittime = 75;
 
   while (--waittime)
   {
     delay_ms(1);
-    if (wifi_cmd_add_del() != 0)
+    retval = wifi_cmd_add_del();
+    if (retval == 0)
       break;
+    if (retval == 1)
+      mmi_dq_aud_play_with_id(AUD_BASE_ID_PRO_AUDIO);
+  }
+
+  if (retval == 0xff)
+  {
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
   }
 }
 
@@ -635,8 +646,8 @@ void mmi_dq_wifi_take_videos(void)
   */
 void mmi_dq_wifi_pv_switch(void)
 {
-  uint8_t retval;
-  uint16_t waittime = 100;
+  uint8_t retval = 0xff;
+  uint16_t waittime = 75;
 
   mmi_dq_wifi_wakeup();
   wifi_pv_switch_send();
@@ -646,7 +657,19 @@ void mmi_dq_wifi_pv_switch(void)
     delay_ms(1);
     retval = wifi_pv_switch_get();
     if (retval != 0xff)
+    {
+#ifdef __LOCK_AUDIO_SUPPORT__
+      mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#endif
       break;
+    }
+  }
+
+  if (retval == 0xff)
+  {
+#ifdef __LOCK_AUDIO_SUPPORT__
+    mmi_dq_aud_play_with_id(AUD_ID_TIME_OUT);
+#endif
   }
 }
 
