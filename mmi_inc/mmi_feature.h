@@ -7,7 +7,7 @@
 	#define __LOCK_RFID_CARD_SUPPORT__
 	#define __LOCK_AUDIO_SUPPORT__
 	#define __LOCK_KEY_SUPPORT__
-	#define __LOCK_FP_SUPPORT__
+	// #define __LOCK_FP_SUPPORT__
 #ifdef __LOCK_FP_SUPPORT__
 	#define __LOCK_FP_SY_SUPPORT__
 #endif

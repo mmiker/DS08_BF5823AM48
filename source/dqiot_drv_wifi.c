@@ -524,11 +524,13 @@ uint8_t wifi_cmd_add_del(void)
 		{
 		case 'L':
 			return 0xff;
+
 		case 'E':
 #ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 #endif
 			return 0xff;
+
 		case 'M':
 			wifi_add_flag = 1;
 #ifdef __LOCK_AUDIO_SUPPORT__
@@ -536,26 +538,30 @@ uint8_t wifi_cmd_add_del(void)
 #endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_PWD);
 			break;
-#ifdef __LOCK_FP_SUPPORT__
+
 		case 'F':
+#ifdef __LOCK_FP_SUPPORT__
 			wifi_add_flag = 1;
 #ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP);
 #endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_FP);
-			break;
+#else
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 #endif
-#ifdef __LOCK_RFID_CARD_SUPPORT__
+			break;
+
 		case 'R':
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 			wifi_add_flag = 1;
 #ifdef __LOCK_AUDIO_SUPPORT__
 			mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD);
 #endif
 			mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_RFID);
-			break;
+#else
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 #endif
-		default:
-			return 0xff;
+			break;
 		}
 	}
 	else if (data_2[0] == 'M' || data_2[0] == 'F' || data_2[0] == 'R')
@@ -582,8 +588,9 @@ uint8_t wifi_cmd_add_del(void)
 #endif
 					;
 			break;
-#ifdef __LOCK_FP_SUPPORT__
+
 		case 'F':
+#ifdef __LOCK_FP_SUPPORT__
 			retval = mmi_dq_fs_del_fp(get_index, FDS_USE_TYPE_USER);
 			if (retval == RET_SUCESS)
 				retval = mmi_dq_fp_delete((unsigned short)get_index);
@@ -599,10 +606,13 @@ uint8_t wifi_cmd_add_del(void)
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
 #endif
 					;
-			break;
+#else
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 #endif
-#ifdef __LOCK_RFID_CARD_SUPPORT__
+			break;
+
 		case 'R':
+#ifdef __LOCK_RFID_CARD_SUPPORT__
 			retval = mmi_dq_fs_del_rfid(get_index);
 			if (retval == RET_SUCESS)
 			{
@@ -616,14 +626,14 @@ uint8_t wifi_cmd_add_del(void)
 				mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
 #endif
 					;
-			break;
+#else
+			mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
 #endif
-		default:
-			return 0xff;
+			break;
 		}
 	}
 	else
-		return 1;
+		return 1; //空值
 
 	return 0;
 }

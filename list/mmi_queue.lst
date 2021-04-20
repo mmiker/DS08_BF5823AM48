@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 13:39:17 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 16:21:04 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_QUEUE
@@ -62,7 +62,7 @@ line level    source
   51          
   52          /*
   53          parameter: 
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 13:39:17 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 16:21:04 PAGE 2   
 
   54            none
   55          return :
@@ -126,7 +126,7 @@ line level    source
  113            none
  114          return :
  115            none
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 13:39:17 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/20/2021 16:21:04 PAGE 3   
 
  116          */
  117          unsigned char mmi_InQueue(Sys_MSG_Queue_M que)
@@ -176,7 +176,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    440    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     39       7
+   XDATA SIZE       =     35       7
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

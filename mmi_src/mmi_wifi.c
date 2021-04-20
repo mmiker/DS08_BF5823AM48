@@ -269,8 +269,8 @@ void mmi_dq_wifi_cmd_add_del(void)
     retval = wifi_cmd_add_del();
     if (retval == 0)
       break;
-    if (retval == 1)
-      mmi_dq_aud_play_with_id(AUD_BASE_ID_PRO_AUDIO);
+    // if (retval == 1)
+    //   mmi_dq_aud_play_with_id(AUD_BASE_ID_PRO_AUDIO);
   }
 
   if (retval == 0xff)

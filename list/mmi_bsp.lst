@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_BSP                                                           04/20/2021 13:39:18 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_BSP                                                           04/20/2021 16:21:05 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_BSP
@@ -50,8 +50,8 @@ line level    source
   39          void mmi_dq_bsp_enter_sleep(void)
   40          {
   41   1      #ifdef __LOCK_FP_SY_SUPPORT__
-  42   1        FP_Light(FP_NONE_COLOR);
-  43   1      #endif
+                FP_Light(FP_NONE_COLOR);
+              #endif
   44   1      #ifdef __LOCK_WIFI_SUPPORT__
   45   1        mmi_dq_wifi_sleep();
   46   1      #endif
@@ -61,11 +61,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     17    ----
-C51 COMPILER V9.59.0.0   MMI_BSP                                                           04/20/2021 13:39:18 PAGE 2   
+   CODE SIZE        =     12    ----
+C51 COMPILER V9.59.0.0   MMI_BSP                                                           04/20/2021 16:21:05 PAGE 2   
 
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4    ----
+   XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

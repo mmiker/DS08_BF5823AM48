@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 13:39:15 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 16:21:02 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -55,14 +55,14 @@ line level    source
   44   1      
   45   1        mmi_dq_key_init();
   46   1      #ifdef __LOCK_FP_SUPPORT__
-  47   1        mmi_dq_fp_init();
-  48   1      #endif
+                mmi_dq_fp_init();
+              #endif
   49   1      #ifdef __LOCK_RFID_CARD_SUPPORT__
   50   1        mmi_dq_rfid_init();
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 13:39:15 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 16:21:02 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
@@ -126,7 +126,7 @@ line level    source
  113          //   * @param  status 状态
  114          //   * @return none
  115          //   * @note   none
-C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 13:39:15 PAGE 3   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/20/2021 16:21:02 PAGE 3   
 
  116          //   * @see    printfS("xxx","xxx");
  117          //   */
@@ -154,9 +154,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    132    ----
+   CODE SIZE        =    129    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      4    ----
+   XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
