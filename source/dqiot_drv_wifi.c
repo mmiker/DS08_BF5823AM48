@@ -12,7 +12,8 @@
 #include "mmi_ms.h"
 // #include <stdio.h>
 
-unsigned char wifi_add_flag = 0;
+unsigned char wifi_add_flag = 0xff;
+unsigned char pv_add_switch = 3;
 extern unsigned char uart_get_buf[];
 extern unsigned char uart_getbuflen;
 // extern void printfS(char *show, char *status);
@@ -173,9 +174,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
-					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
-					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 					{
 						if (uart_get_buf[i] == 'J') //取第一个命令
 						{
@@ -226,9 +225,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
-					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
-					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
 					{
 						if (uart_get_buf[i] == 'J') //取第一个命令
 						{
@@ -1057,18 +1054,30 @@ uint8_t wifi_pv_switch_get(void)
 	wifi_data[0] = WIFI_CMD_PV_SWITCH_GET;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
-	delay_ms(300);
+	delay_ms(500);
 	UH010_ReadDatas(wifi_data, 0, data_2, 2);
 	if (data_2[0] == 'J' && data_2[1] == 'E') //无响应
 		return 0xff;
 	else if (data_2[0] == 'J' && data_2[1] == '0') //关闭拍照录像(设备之后开门都不会发送拍照和录像命令)
+	{
+		pv_add_switch = 0;
 		return 0;
+	}
 	else if (data_2[0] == 'J' && data_2[1] == '1') //开启拍照关闭录像
+	{
+		pv_add_switch = 1;
 		return 1;
+	}
 	else if (data_2[0] == 'J' && data_2[1] == '2') //关闭拍照开启录像
+	{
+		pv_add_switch = 2;
 		return 2;
+	}
 	else if (data_2[0] == 'J' && data_2[1] == '3') //开启拍照开启录像
+	{
+		pv_add_switch = 3;
 		return 3;
+	}
 	else
 		return 0xff;
 }

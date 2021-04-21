@@ -245,7 +245,18 @@ void mmi_dq_sys_door_open(sys_open_type type)
 		break;
 	}
 
-	mmi_dq_wifi_take_photos(); //拍照
+	if (pv_add_switch == 0)
+		;
+	else if (pv_add_switch == 1)
+		mmi_dq_wifi_take_photos(); //拍照
+	else if (pv_add_switch == 2)
+		mmi_dq_wifi_take_videos(); //录像
+	else if (pv_add_switch == 3)
+	{
+		mmi_dq_wifi_take_photos(); //拍照
+		mmi_dq_wifi_take_videos(); //录像
+	}
+
 #endif
 }
 

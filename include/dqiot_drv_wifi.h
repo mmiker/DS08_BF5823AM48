@@ -55,6 +55,7 @@
 #define WIFI_CMD_PV_SWITCH_GET          'J' //拍照录像开关(接收)
 
 extern unsigned char wifi_add_flag;
+extern unsigned char pv_add_switch;
 
 void dqiot_drv_wifi_gpio_init(void);
 void dqiot_drv_wifi_gpio_deinit(void);

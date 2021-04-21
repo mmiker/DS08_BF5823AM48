@@ -647,7 +647,7 @@ void mmi_dq_wifi_take_videos(void)
 void mmi_dq_wifi_pv_switch(void)
 {
   uint8_t retval = 0xff;
-  uint16_t waittime = 100;
+  uint16_t waittime = 60;
 
   mmi_dq_wifi_wakeup();
   wifi_pv_switch_send();

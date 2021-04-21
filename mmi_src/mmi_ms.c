@@ -364,9 +364,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 					else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
 						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 #ifdef __LOCK_WIFI_SUPPORT__
-					else if (wifi_add_flag != 0)
+					else if (wifi_add_flag == 1)
 					{
-						wifi_add_flag = 0;
+						wifi_add_flag = 0xff;
 						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 					}
 					else
@@ -667,9 +667,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 										// printfV("get_index", (int)get_index);
 									}
 #ifdef __LOCK_WIFI_SUPPORT__
-									if (wifi_add_flag != 0)
+									if (wifi_add_flag == 1)
 									{
-										wifi_add_flag = 0;
+										wifi_add_flag = 0xff;
 										mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 									}
 									else
@@ -778,9 +778,9 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			mmi_dq_aud_play_key_tone();
 #endif
 #ifdef __LOCK_WIFI_SUPPORT__
-			if (wifi_add_flag != 0)
+			if (wifi_add_flag == 1)
 			{
-				wifi_add_flag = 0;
+				wifi_add_flag = 0xff;
 				mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 			}
 			else
@@ -1270,9 +1270,9 @@ void mmi_ms_fps_opt_fun(unsigned char fps_val)
 #endif
 										}
 #ifdef __LOCK_WIFI_SUPPORT__
-										if (wifi_add_flag != 0)
+										if (wifi_add_flag == 1)
 										{
-											wifi_add_flag = 0;
+											wifi_add_flag = 0xff;
 											mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 										}
 										else
@@ -1588,9 +1588,9 @@ void mmi_ms_rfid_opt_fun(unsigned char rfid_val)
 #endif
 								;
 #ifdef __LOCK_WIFI_SUPPORT__
-						if (wifi_add_flag == 0)
+						if (wifi_add_flag == 1)
 						{
-							wifi_add_flag = 0;
+							wifi_add_flag = 0xff;
 							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
 						else

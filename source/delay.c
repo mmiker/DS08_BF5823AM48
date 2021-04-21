@@ -52,7 +52,6 @@ void delay_us(unsigned int us)
 */
 void delay_ms(unsigned int ms)
 {
-
 	unsigned int a = DELAY_COUNT,b = ms;  
 	for (b = ms; b > 0; b--)
 	{

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/20/2021 16:21:04 PAGE 1   
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/21/2021 14:09:43 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_MIFARE
@@ -62,7 +62,7 @@ line level    source
   51          u8 M1_Example(u8 *uid)
   52          {
   53   1          u8 ret = RETURN_NO;
-C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/20/2021 16:21:04 PAGE 2   
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/21/2021 14:09:43 PAGE 2   
 
   54   1        u8 aucPswA[6] = {0xff,0xff,0xff,0xff,0xff,0xff};//默认密钥A
   55   1        u8 aucBlkBuf[18];
@@ -126,7 +126,7 @@ line level    source
  113   3          }
  114   2          if(RETURN_OK == MifareOperations( 'r', 11, 11, aucBlkBuf))//读第10块数据 16byte
  115   2          {   
-C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/20/2021 16:21:04 PAGE 3   
+C51 COMPILER V9.59.0.0   BYD_MIFARE                                                        04/21/2021 14:09:43 PAGE 3   
 
  116   3            num = 11;
  117   3             dqiot_drv_uart0_sendData(&num,1);
