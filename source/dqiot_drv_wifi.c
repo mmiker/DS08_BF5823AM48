@@ -154,7 +154,7 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 
 	return 0;
 #else
-	uint8_t i = 0, j = 0;
+	uint8_t i = 0, j = 0, index = 0;
 	uint16_t waittime = 1000;
 
 	if (send_len > 0)
@@ -173,11 +173,21 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
-						break;
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
+					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
+					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					{
+						if (uart_get_buf[i] == 'J') //取第一个命令
+						{
+							index = i;
+							break;
+						}
+						if (uart_getbuflen - i >= 2) //取最后一个命令
+							index = i;
+					}
 				}
 
-				for (i; i < uart_getbuflen; i++)
+				for (i = index; i < uart_getbuflen; i++)
 				{
 					Buf[j] = uart_get_buf[i];
 					if (j == (len - 1))
@@ -185,9 +195,17 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 					j++;
 				}
 
-				EA = 1;
+				// /* log */
+				// dqiot_drv_uart0A_init();
+				// for (i = 0; i < uart_getbuflen; i++)
+				// 	printf("uart_get_buf[%d] is %d\n", (int)i, (int)uart_get_buf[i]);
+				// for (i = 0; i < len; i++)
+				// 	printf("buf[%d] is %d\n", (int)i, (int)Buf[i]);
+				// dqiot_drv_uart0B_init();
+
 				/* 清空缓存 */
 				uart_getbuflen = 0;
+				EA = 1;
 
 				return 0;
 			}
@@ -208,11 +226,21 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 				/* 寻找包头 */
 				for (i = 0; i < uart_getbuflen; i++)
 				{
-					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
-						break;
+					if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' \
+					|| uart_get_buf[i] == 'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' \
+					|| uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
+					{
+						if (uart_get_buf[i] == 'J') //取第一个命令
+						{
+							index = i;
+							break;
+						}
+						if (uart_getbuflen - i >= 2) //取最后一个命令
+							index = i;
+					}
 				}
 
-				for (i; i < uart_getbuflen; i++)
+				for (i = index; i < uart_getbuflen; i++)
 				{
 					Buf[j] = uart_get_buf[i];
 					if (j == (len - 1))
@@ -220,9 +248,17 @@ uint8_t UH010_ReadDatas(uint8_t *send, uint8_t send_len, uint8_t *Buf, uint8_t l
 					j++;
 				}
 
-				EA = 1;
+				// /* log */
+				// dqiot_drv_uart0A_init();
+				// for (i = 0; i < uart_getbuflen; i++)
+				// 	printf("uart_get_buf[%d] is %d\n", (int)i, (int)uart_get_buf[i]);
+				// for (i = 0; i < len; i++)
+				// 	printf("buf[%d] is %d\n", (int)i, (int)Buf[i]);
+				// dqiot_drv_uart0B_init();
+
 				/* 清空缓存 */
 				uart_getbuflen = 0;
+				EA = 1;
 
 				return 0;
 			}
@@ -515,7 +551,7 @@ uint8_t wifi_cmd_add_del(void)
 	wifi_data[0] = WIFI_CMD_ADD_DEL;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
-	delay_ms(400);
+	delay_ms(300);
 	UH010_ReadDatas(wifi_data, 0, data_2, 3);
 
 	if (data_2[0] == 'B')
@@ -1021,7 +1057,7 @@ uint8_t wifi_pv_switch_get(void)
 	wifi_data[0] = WIFI_CMD_PV_SWITCH_GET;
 	wifi_data[1] = 100;
 	UH010_Write_Byte(wifi_data, 2);
-	delay_ms(400);
+	delay_ms(300);
 	UH010_ReadDatas(wifi_data, 0, data_2, 2);
 	if (data_2[0] == 'J' && data_2[1] == 'E') //无响应
 		return 0xff;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_MS
@@ -62,7 +62,7 @@ line level    source
   51   1        if (mmi_dq_sys_get_rfid_flag() == 1)
   52   1        {
   53   2          //check rfid press
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 2   
 
   54   2          if (mmi_dq_rfid_check() == RET_SUCESS)
   55   2          {
@@ -126,7 +126,7 @@ line level    source
  113   1      }
  114          
  115          /*
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 3   
 
  116          parameter: 
  117            none
@@ -190,7 +190,7 @@ line level    source
  175   2        }
  176   1      
  177   1        return;
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 4   
 
  178   1      }
  179          
@@ -254,7 +254,7 @@ line level    source
  237   3            break;
  238   3          case QUE_EVENT_TIMER_END:
  239   3            mmi_dq_sys_delay_event_pro();
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 5   
 
  240   3            break;
  241   3      #ifdef __LOCK_WIFI_SUPPORT__
@@ -318,7 +318,7 @@ line level    source
  299          {
  300   1        key_len = 0;
  301   1        opt_time = OPT_ONE_TIME;
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 6   
 
  302   1        memset(input_key_1, 0xFF, sizeof(input_key_1));
  303   1        memset(input_key_2, 0xFF, sizeof(input_key_2));
@@ -382,7 +382,7 @@ line level    source
  361   5                if (status == SYS_STATUS_INPUT_PWD)
  362   5                  //mmi_dq_sys_enter_sleep();
  363   5                  mmi_dq_ms_set_sys_state(SYS_STATUS_WAIT_FOR_ENTER_SLEEP);
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 7   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 7   
 
  364   5                else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
  365   5                  mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
@@ -446,7 +446,7 @@ line level    source
  422   3              input_key_1[key_len--] = 0xFF;
  423   3            else if (opt_time == OPT_TWO_TIME)
  424   3              input_key_2[key_len--] = 0xFF;
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 8   
 
  425   3      
  426   3            if (key_len == 0)
@@ -497,32 +497,32 @@ line level    source
  471   5                  mmi_dq_wifi_cmd_add_del();
  472   5                else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
  473   5                  mmi_dq_wifi_pv_switch();
- 474   5                  // else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开
-             -门成功
- 475   5                  //  mmi_dq_wifi_open_by_key();
- 476   5                  // else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
- 477   5                  //  mmi_dq_wifi_close_over_time();
- 478   5                  // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
- 479   5                  //  mmi_dq_wifi_via_alarm();
- 480   5                  // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
- 481   5                  //  mmi_dq_wifi_sleep();
- 482   5                  // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
- 483   5                  //  mmi_dq_wifi_wakeup();
- 484   5                  // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
- 485   5                  //  mmi_dq_wifi_take_photos();
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 9   
+ 474   5                // else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开�
+             -��成功
+ 475   5                //  mmi_dq_wifi_open_by_key();
+ 476   5                // else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
+ 477   5                //  mmi_dq_wifi_close_over_time();
+ 478   5                // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
+ 479   5                //  mmi_dq_wifi_via_alarm();
+ 480   5                // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
+ 481   5                //  mmi_dq_wifi_sleep();
+ 482   5                // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
+ 483   5                //  mmi_dq_wifi_wakeup();
+ 484   5                // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
+ 485   5                //  mmi_dq_wifi_take_photos();
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 9   
 
- 486   5                  // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
- 487   5                  //  mmi_dq_wifi_take_videos();
- 488   5                  // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状
-             -态
- 489   5                  //  mmi_dq_wifi_check_net();
- 490   5                  // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(a
-             -dmin 8)
- 491   5                  // mmi_dq_wifi_arikiss_con();
- 492   5                  // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网
-             -(admin 9)
- 493   5                  //  mmi_dq_wifi_code_con();
+ 486   5                // else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
+ 487   5                //  mmi_dq_wifi_take_videos();
+ 488   5                // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状�
+             -��
+ 489   5                //  mmi_dq_wifi_check_net();
+ 490   5                // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(ad
+             -min 8)
+ 491   5                //  mmi_dq_wifi_arikiss_con();
+ 492   5                // else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(
+             -admin 9)
+ 493   5                //  mmi_dq_wifi_code_con();
  494   5      #endif
  495   5      #ifdef __LOCK_BUS_SUPPORT__
  496   5                else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
@@ -574,7 +574,7 @@ line level    source
  542   5                ret = mmi_dq_fs_check_input_pwd_for_open(input_key_1, key_len);
  543   5                //printf("check input ret: %d",(unsigned int)ret);
  544   5                if (ret == 0xFF)
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 10  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 10  
 
  545   5                  mmi_dq_sys_door_open_fail(SYS_OPEN_BY_PASSWORD);
  546   5      #ifdef __LOCK_BUS_SUPPORT__
@@ -638,7 +638,7 @@ line level    source
  603   6                    mmi_dq_aud_play_with_id(AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN);
  604   6                  else if (status == SYS_STATUS_CHG_ADMIN_PWD)
  605   6                    mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN);
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 11  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 11  
 
  606   6      #endif
  607   6      
@@ -702,7 +702,7 @@ line level    source
  665  10                          mmi_dq_wifi_add_password(get_index);
  666  10      #endif
  667  10                          // printfV("get_index", (int)get_index);
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 12  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 12  
 
  668  10                        }
  669   9      #ifdef __LOCK_WIFI_SUPPORT__
@@ -766,7 +766,7 @@ line level    source
  727   9                        if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_110) == RET_FAIL)
  728   9      #ifdef __LOCK_AUDIO_SUPPORT__
  729   9                          mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 13  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 13  
 
  730   9      #endif
  731   9                            ;
@@ -830,7 +830,7 @@ line level    source
  789   3          }
  790   2          break;
  791   2      #ifdef __LOCK_FP_SUPPORT__
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 14  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 14  
 
                 case SYS_STATUS_ADD_ADMIN_FP1:
                 case SYS_STATUS_ADD_ADMIN_FP2:
@@ -894,7 +894,7 @@ line level    source
               #endif
               #ifdef __LOCK_WIFI_SUPPORT__
                         mmi_dq_wifi_clr_fps_suc();
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 15  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 15  
 
               #endif
                       }
@@ -958,7 +958,7 @@ line level    source
  913   3            mmi_dq_aud_play_key_tone();
  914   3      #endif
  915   3            mmi_dq_sys_show_cur_menu_list();
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 16  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 16  
 
  916   3          }
  917   2          break;
@@ -1022,7 +1022,7 @@ line level    source
  975   5            }
  976   4          }
  977   3          else if (mmi_dq_fs_get_factory_flag() != 0)
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 17  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 17  
 
  978   3          {
  979   4      #ifdef __LOCK_AUDIO_SUPPORT__
@@ -1086,7 +1086,7 @@ line level    source
               #endif
               #ifdef __LOCK_WIFI_SUPPORT__
                   mmi_dq_wifi_lowpower_alarm();
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 18  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 18  
 
               #endif
                   return;
@@ -1150,7 +1150,7 @@ line level    source
                           }
                           else
               #endif
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 19  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 19  
 
                             mmi_dq_sys_door_open(SYS_OPEN_BY_FP);
                         }
@@ -1214,7 +1214,7 @@ line level    source
                               if (retval == 0)
                               {
                                 mmi_dq_fp_light(FP_GREEN);
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 20  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 20  
 
               #ifdef __LOCK_AUDIO_SUPPORT__
                                 mmi_dq_aud_play_with_id(AUD_ID_DEL_FP_SUCESS);
@@ -1278,7 +1278,7 @@ line level    source
                           if (retval == 0)
                           {
                             // printfS("mmi_dq_fp_reg_module", "ok");
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 21  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 21  
 
                             if (status == SYS_STATUS_ADD_FP || status == SYS_STATUS_ADD_110_FP || status == SYS_STATUS_FM_MODE)
                             {
@@ -1342,7 +1342,7 @@ line level    source
                                 }
               #ifdef __LOCK_110_SUPPORT__
                                 else if (status == SYS_STATUS_ADD_110_FP)
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 22  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 22  
 
                                 {
                                   if (retval == 0)
@@ -1406,7 +1406,7 @@ line level    source
                                 retval = mmi_dq_fs_set_fp((unsigned char)index, FDS_USE_TYPE_ADMIN);
                               if (retval == 0)
                               {
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 23  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 23  
 
                                 mmi_dq_fp_light(FP_GREEN);
               #ifdef __LOCK_AUDIO_SUPPORT__
@@ -1470,7 +1470,7 @@ line level    source
                 mmi_dq_aud_play_with_id(AUD_ID_PRESS_FP_AGAIN);
               #endif
                 return;
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 24  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 24  
 
               }
               #endif
@@ -1534,7 +1534,7 @@ line level    source
 1467   3            if (opt_time == OPT_ONE_TIME)
 1468   3            {
 1469   4      #ifdef __LOCK_AUDIO_SUPPORT__
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 25  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 25  
 
 1470   4              mmi_dq_aud_play_with_id(AUD_ID_PRESS_RFCARD_AGAIN);
 1471   4      #endif
@@ -1598,7 +1598,7 @@ line level    source
 1529   7                    mmi_dq_wifi_del_rfid_suc(get_index);
 1530   7      #endif
 1531   7                    // printfV("get_index", (int)get_index);
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 26  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 26  
 
 1532   7                  }
 1533   6                  else
@@ -1662,7 +1662,7 @@ line level    source
 1591   6                  if (wifi_add_flag == 0)
 1592   6                  {
 1593   7                    wifi_add_flag = 0;
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 27  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 27  
 
 1594   7                    mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 1595   7                  }
@@ -1726,7 +1726,7 @@ line level    source
 1652   3      #ifdef __LOCK_AUDIO_SUPPORT__
 1653   3            mmi_dq_aud_play_with_id(AUD_ID_RESTORE_SUCESS);
 1654   3      #endif
-C51 COMPILER V9.59.0.0   MMI_MS                                                            04/20/2021 16:21:05 PAGE 28  
+C51 COMPILER V9.59.0.0   MMI_MS                                                            04/21/2021 09:41:48 PAGE 28  
 
 1655   3      
 1656   3      #ifdef __LOCK_WIFI_SUPPORT__

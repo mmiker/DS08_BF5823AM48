@@ -1226,12 +1226,14 @@ static void mmi_dq_sys_restore_lock_con(void)
 }
 
 #ifdef __LOCK_WIFI_SUPPORT__
-/*
-parameter: 
-	none
-return :
-	none
-*/
+
+/**
+  * @brief  智能能配网
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
 static void mmi_dq_sys_wifi_setting(void)
 {
 	if (0 == mmi_dq_wifi_setting())
@@ -1250,12 +1252,13 @@ static void mmi_dq_sys_wifi_setting(void)
 	}
 }
 
-/*
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  AirKiss配网
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
 static void mmi_dq_sys_wifi_airkiss_setting(void)
 {
 	if (0 == mmi_dq_wifi_arikiss_con())
@@ -1274,12 +1277,13 @@ static void mmi_dq_sys_wifi_airkiss_setting(void)
 	}
 }
 
-/*
-parameter: 
-	none
-return :
-	none
-*/
+/**
+  * @brief  二维码配网
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
 static void mmi_dq_sys_wifi_code_setting(void)
 {
 	if (0 == mmi_dq_wifi_code_con())

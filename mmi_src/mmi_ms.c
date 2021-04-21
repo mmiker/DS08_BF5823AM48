@@ -471,26 +471,26 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
 						mmi_dq_wifi_pv_switch();
-						// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
-						// 	mmi_dq_wifi_open_by_key();
-						// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
-						// 	mmi_dq_wifi_close_over_time();
-						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
-						// 	mmi_dq_wifi_via_alarm();
-						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
-						// 	mmi_dq_wifi_sleep();
-						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
-						// 	mmi_dq_wifi_wakeup();
-						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
-						// 	mmi_dq_wifi_take_photos();
-						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
-						// 	mmi_dq_wifi_take_videos();
-						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
-						// 	mmi_dq_wifi_check_net();
-						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
-						// mmi_dq_wifi_arikiss_con();
-						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
-						// 	mmi_dq_wifi_code_con();
+					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
+					// 	mmi_dq_wifi_open_by_key();
+					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
+					// 	mmi_dq_wifi_close_over_time();
+					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
+					// 	mmi_dq_wifi_via_alarm();
+					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
+					// 	mmi_dq_wifi_sleep();
+					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
+					// 	mmi_dq_wifi_wakeup();
+					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
+					// 	mmi_dq_wifi_take_photos();
+					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
+					// 	mmi_dq_wifi_take_videos();
+					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
+					// 	mmi_dq_wifi_check_net();
+					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
+					// 	mmi_dq_wifi_arikiss_con();
+					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
+					// 	mmi_dq_wifi_code_con();
 #endif
 #ifdef __LOCK_BUS_SUPPORT__
 					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
