@@ -18,6 +18,13 @@
 #include "mmi_wifi.h"
 #include "dqiot_drv_wifi.h"
 #include <stdio.h>
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+#include "dq_sdk_main.h"
+#include "mmi_ms.h"
+#endif
+#ifdef __LOCK_DECODE_SUPPORT__
+#include "mmi_decode.h"
+#endif
 
 unsigned char input_key_1[KEY_INPUT_MAX_LEN];
 unsigned char input_key_2[KEY_INPUT_MAX_LEN];
@@ -32,6 +39,10 @@ static unsigned char rfid_last_flag = 0;
 #ifdef __LOCK_BUS_SUPPORT__
 static unsigned char admin_check_type = 0;
 #endif
+
+static unsigned char g_dbl_open_mode_pwd_flag = 0;
+static unsigned char g_dbl_open_mode_fp_flag = 0;
+static unsigned char g_dbl_open_mode_rf_flag = 0;
 
 // extern void printfS(char *show, char *status);
 // extern void printfV(char *show, int value);
@@ -471,7 +482,13 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
 						mmi_dq_wifi_pv_switch();
-					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
+					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
+					{
+						unsigned char i;
+						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
+						mmi_dq_decode_app_random_code(&random_code);
+					}
+
 					// 	mmi_dq_wifi_open_by_key();
 					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
 					// 	mmi_dq_wifi_close_over_time();
@@ -535,7 +552,17 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			}
 			else
 			{
-				if (status == SYS_STATUS_INPUT_PWD)
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+				if (1) //测试与APP是否连接成功
+				{
+
+					mmi_dq_fs_check_input_pwd_from_app(input_key_1, key_len);
+					key_len = 0;
+					// return SUCESS;
+				}
+				else
+#endif //__LOCK_VIRTUAL_PASSWORD__
+					if (status == SYS_STATUS_INPUT_PWD)
 				{
 					//if(mmi_dq_fs_check_input_pwd(input_key_1,key_len,FDS_USE_TYPE_ALL) == 0xFF)
 					unsigned char ret = 0;
@@ -1684,5 +1711,77 @@ void mmi_ms_wifi_opt_fun(void)
 	else if (type == 1)
 		mmi_dq_wifi_check_open();
 }
+
+/************************************************************************************
+ * 							     	 Own function							        *
+ ************************************************************************************/
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_code)
+{
+	unsigned char open_mode = 0;
+
+	if (ret_code == 0xFF || ret_code == 4)
+	{
+		if (mmi_dq_sys_lock_error() == 1)
+			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
+		else
+			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+	}
+	else if (ret_code == 2)
+	{
+		mmi_dq_sys_lock_correct();
+		//dq_otp_add_open_log_by_temp(0);
+		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_CLR_PWD_SUCESS, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
+	}
+	else if (ret_code == 5)
+	{
+		mmi_dq_sys_lock_correct();
+		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_FULL, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+	}
+	else if (ret_code == 6)
+	{
+		//mmi_dq_sys_lock_correct();
+		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_APP_SYN, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+	}
+	//else if(ret_code == 3)
+	//{
+	//	mmi_dq_sys_lock_correct();
+	//dq_otp_add_open_log_by_temp(0);
+	//	mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD,LOCK_ADMIN,STR_ID_RESET_TIME_SUCESS,SHOW_MESSAGE_DELAY_TIME,BASE_STATUS_M_SAVE_LOG);
+	//}
+	else
+	{
+		mmi_dq_sys_lock_correct();
+		open_mode = mmi_dq_fs_get_open_mode();
+		if (open_mode == MS_OPEN_MODE_DBL)
+		{
+			if (g_dbl_open_mode_fp_flag == 1 || g_dbl_open_mode_rf_flag == 1)
+			{
+				g_dbl_open_mode_fp_flag = 0;
+				g_dbl_open_mode_rf_flag = 0;
+				dq_otp_add_open_log_by_temp(1);
+				mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
+			}
+			else
+			{
+				g_dbl_open_mode_pwd_flag = 1;
+				if (mmi_dq_fs_app_init_sucess())
+					dq_otp_add_exchange_temp_open_log(0, 1);
+				mmi_dq_sys_show_message_with_id(STR_ID_SYSTEM, LOCK_ADMIN, STR_ID_DBL_OPEN_MODE, SHOW_MESSAGE_DELAY_TIME / 2, BASE_STATUS_M_IDLE);
+			}
+		}
+		else
+		{
+			dq_otp_add_open_log_by_temp(0);
+			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
+		}
+	}
+}
+
+#endif //__LOCK_VIRTUAL_PASSWORD__
+/************************************************************************************
+ * 							     	 End function							        *
+ ************************************************************************************/
+
 #endif
 #endif //__MMI_MS_C__

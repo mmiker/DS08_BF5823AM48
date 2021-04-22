@@ -1,0 +1,119 @@
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:15:36 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_DECODE
+OBJECT MODULE PLACED IN .\output\mmi_decode.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\mmi_decode.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\includ
+                    -e;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd
+                    -_rfid;.\mmi_inc) DEBUG PRINT(.\list\mmi_decode.lst) TABS(2) OBJECT(.\output\mmi_decode.obj)
+
+line level    source
+
+   1          #ifndef __MMI_DECODE_C__
+   2          #define __MMI_DECODE_C__
+   3          #include "mmi_feature.h"
+   4          #ifdef __LOCK_DECODE_SUPPORT__
+   5          #include "mmi_decode.h"
+   6          
+   7          #include <stdio.h>
+   8          #include "dqiot_drv.h"
+   9          
+  10          struct decode_data get_decode;
+  11          
+  12          unsigned char mmi_dq_decode_app_random_code(unsigned char *random_code)
+  13          {
+  14   1          unsigned char i = 0, j = 0;
+  15   1          unsigned int temp1 = 0, temp2 = 0;
+  16   1          get_decode.top_three = 0; //前三位
+  17   1          get_decode.rev_three = 0; //翻转
+  18   1      
+  19   1          for (i = 0; i < 3; i++)
+  20   1          {
+  21   2              temp1 = random_code[i];
+  22   2              if (i == 0)
+  23   2              {
+  24   3                  get_decode.top_three += temp1 * 100;
+  25   3                  get_decode.rev_three += temp1;
+  26   3              }
+  27   2              else if (i == 1)
+  28   2              {
+  29   3                  get_decode.top_three += temp1 * 10;
+  30   3                  get_decode.rev_three += temp1 * 10;
+  31   3              }
+  32   2              else if (i == 2)
+  33   2              {
+  34   3                  get_decode.top_three += temp1;
+  35   3                  get_decode.rev_three += temp1 * 100;
+  36   3              }
+  37   2          }
+  38   1      
+  39   1          for (i = 0; i < 10; i++)
+  40   1          {
+  41   2              temp1 = get_decode.top_three % (10 - i);
+  42   2              temp2 = get_decode.rev_three % (10 - i);
+  43   2      
+  44   2              if (i < 10)
+  45   2              {
+  46   3                  get_decode.exg_key_10[i] = temp1;
+  47   3                  get_decode.sec_key_10[i] = temp2;
+  48   3              }
+  49   2              if (i < 9)
+  50   2              {
+  51   3                  get_decode.exg_key_9[i] = temp1;
+  52   3                  get_decode.sec_key_9[i] = temp2;
+  53   3              }
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:15:36 PAGE 2   
+
+  54   2              if (i > 0 && i < 9)
+  55   2              {
+  56   3                  get_decode.exg_key_8[j] = temp1;
+  57   3                  j++;
+  58   3              }
+  59   2              if (i < 8)
+  60   2              {
+  61   3                  get_decode.sec_key_8[i] = temp2;
+  62   3              }
+  63   2          }
+  64   1      
+  65   1          // dqiot_drv_uart0A_init();
+  66   1          // printf("top_three is %d\n", get_decode.top_three);
+  67   1          // for (i = 0; i < 10; i++)
+  68   1          //     printf("exg_code10[%d] is %d\n", (int)i, get_decode.exg_key_10[i]);
+  69   1          // for (i = 0; i < 9; i++)
+  70   1          //     printf("exg_code9[%d] is %d\n", (int)i, get_decode.exg_key_9[i]);
+  71   1          // for (i = 0; i < 8; i++)
+  72   1          //     printf("exg_code8[%d] is %d\n", (int)i, get_decode.exg_key_8[i]);
+  73   1      
+  74   1          // printf("rev_three is %d\n", get_decode.rev_three);
+  75   1          // for (i = 0; i < 10; i++)
+  76   1          //     printf("sec_code10[%d] is %d\n", (int)i, get_decode.sec_key_10[i]);
+  77   1          // for (i = 0; i < 9; i++)
+  78   1          //     printf("sec_code9[%d] is %d\n", (int)i, get_decode.sec_key_9[i]);
+  79   1          // for (i = 0; i < 8; i++)
+  80   1          //     printf("sec_code8[%d] is %d\n", (int)i, get_decode.sec_key_8[i]);
+  81   1          // dqiot_drv_uart0B_init();
+  82   1      }
+*** WARNING C173 IN LINE 82 OF mmi_src\mmi_decode.c: missing return-expression
+  83          
+  84          
+  85          #endif //__LOCK_DECODE_SUPPORT__
+  86          #endif //__MMI_DECODE_C__
+*** WARNING C290 IN LINE 82 OF mmi_src\mmi_decode.c: missing return value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    481    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    112       7
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

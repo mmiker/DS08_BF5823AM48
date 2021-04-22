@@ -360,4 +360,23 @@ return :
 	none
 */
 unsigned char mmi_dq_fs_get_business_flag(void);
+
+/************************************************************************************
+ * 							     	 Own function							        *
+ ************************************************************************************/
+void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val);
+unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len);
+
+
+
+
+
+
+
+
+/************************************************************************************
+ * 							     	 End function							        *
+ ************************************************************************************/
+
+
 #endif

@@ -14,6 +14,22 @@
 #include "mmi_wifi.h"
 // #include <stdio.h>
 
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+#include "mmi_rtc.h"
+#define MMI_MAX_ERROR_TIMES 5
+#define MMI_ERROR_LOCK_TIME 60
+// #define MMI_TIMER_BASE_TIME 4
+#define MMI_TIMER_ENTER_SLEEP 10000
+#define MMI_TIMER_ENTER_SLEEP_COUNT (MMI_TIMER_ENTER_SLEEP / MMI_TIMER_BASE_TIME)
+#define MMI_TIMER_ENTER_SLEEP_DELAY	20000
+#define MMI_TIMER_ENTER_SLEEP_DELAY_COUNT	(MMI_TIMER_ENTER_SLEEP_DELAY/MMI_TIMER_BASE_TIME)
+static uint32_t g_last_error_time = 0;
+static unsigned char g_multiple_error_times = 0;
+static uint8_t lock_easy_open_mode = 0;
+static uint8_t lock_inside_lock = 0;
+static unsigned int g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_COUNT;
+#endif //__LOCK_VIRTUAL_PASSWORD__
+
 // extern void printfS(char *show, char *status);
 // extern void printfV(char *show, int value);
 
@@ -70,6 +86,7 @@ parameter:
 return :
 	none
 */
+#ifndef __LOCK_VIRTUAL_PASSWORD__
 void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_msec)
 {
 	unsigned char audio_id = 0;
@@ -82,6 +99,7 @@ void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_m
 #endif
 	return;
 }
+#endif
 
 /*
 parameter: 
@@ -1534,5 +1552,142 @@ RET_VAL mmi_dq_sys_exe_menu_fun(unsigned char menu_id)
 
 	return RET_SUCESS;
 }
+
+/************************************************************************************
+ * 							     	 Own function							        *
+ ************************************************************************************/
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, uint32_t time_msec, BASE_STATUS_MACHINE status)
+{
+	unsigned char i = 0;
+#ifdef __LOCK_OLED_SUPPORT__
+	mmi_dq_oled_show_input_dialog(tile_id, bmp_id, text_id);
+#endif
+
+#ifdef __NBDQIOT_PROJECT_B06_SUPPORT__
+	if (text_id == STR_ID_OPEN_DOOR)
+	{
+		//power_off();
+		lock_inside_lock = 0;
+		lock_easy_open_mode = 0;
+		mmi_dq_aud_play_with_id(AUD_ID_DOOR_OPEN, 0);
+		// mmi_dq_entry_sleep_delay_time();
+		mmi_dq_show_msg_timer_start(10000);
+		timer_ms_status = status;
+		mmi_dq_ms_set_machine_status(BASE_STATUS_M_LOCK_OPEN);
+		mmi_dq_moto_lock_open();
+	}
+	else
+	{
+#ifdef __LOCK_AUDIO_SUPPORT__
+		for (i = 0; msg_aud_list[i].msg_id < STR_ID_MAX_COUNT; i++)
+		{
+			if (msg_aud_list[i].msg_id == text_id)
+			{
+				break;
+			}
+		}
+		if (msg_aud_list[i].aud_id != 0xFF)
+		{
+			mmi_dq_aud_play_with_id(msg_aud_list[i].aud_id, 0);
+		}
+#endif
+		if (time_msec > 0)
+		{
+			mmi_dq_show_msg_timer_start(time_msec);
+			timer_ms_status = status;
+			mmi_dq_ms_set_machine_status(BASE_STATUS_M_INVALID);
+		}
+		else
+			mmi_dq_ms_set_machine_status(status);
+	}
+#else
+
+#ifdef __LOCK_AUDIO_SUPPORT__
+	for (i = 0; msg_aud_list[i].msg_id < STR_ID_MAX_COUNT; i++)
+	{
+		if (msg_aud_list[i].msg_id == text_id)
+		{
+			break;
+		}
+	}
+	if (msg_aud_list[i].aud_id != 0xFF)
+	{
+		mmi_dq_aud_play_with_id(msg_aud_list[i].aud_id, 0);
+	}
+#endif
+
+	if (time_msec > 0)
+	{
+		mmi_dq_show_msg_timer_start(time_msec);
+		timer_ms_status = status;
+		mmi_dq_ms_set_machine_status(BASE_STATUS_M_INVALID);
+	}
+	else
+		mmi_dq_ms_set_machine_status(status);
+
+	if (text_id == STR_ID_OPEN_DOOR)
+	{
+		mmi_dq_moto_lock_open();
+	}
+#endif
+	return;
+}
+
+uint8_t mmi_dq_sys_lock_error(void)
+{
+	uint32_t time = mmi_dq_rtc_get_sys_sec_info();
+	if (time - g_last_error_time > MMI_ERROR_LOCK_TIME)
+	{
+		g_multiple_error_times = 1;
+		g_last_error_time = time;
+	}
+	else
+	{
+		g_last_error_time = time;
+		g_multiple_error_times++;
+		if (g_multiple_error_times >= MMI_MAX_ERROR_TIMES)
+		{
+			//multiple error
+#ifdef __LOCK_APP_COMM_SUPPORT__
+			if (mmi_dq_fs_app_init_sucess() == 1)
+			{
+				dq_otp_add_alarm_log(DQ_ALART_LOG_MULTIPLE_ERROR);
+			}
+#endif
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void mmi_dq_sys_lock_correct(void)
+{
+	g_last_error_time = 0;
+	g_multiple_error_times = 0;
+}
+
+void mmi_dq_entry_sleep_delay_time(void)
+{
+	g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_DELAY_COUNT;
+}
+
+void mmi_dq_show_msg_timer_start (uint32_t time_msec)
+{
+	uint32_t time_ms = MMI_TIMER_BASE_TIME;
+	uint32_t time_ticks;
+	
+	g_show_msg_time_voval_count = time_msec/MMI_TIMER_BASE_TIME;
+	g_show_msg_time_count = 0;
+	time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER2_MMI_TIMER, time_ms);
+	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
+	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
+	return;
+}
+
+#endif //__LOCK_VIRTUAL_PASSWORD__
+/************************************************************************************
+ * 							     	 End function							        *
+ ************************************************************************************/
 
 #endif //__MMI_SYS_C__

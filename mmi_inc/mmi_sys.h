@@ -3,6 +3,8 @@
 
 #include "mmi_com.h"
 #include "mmi_audio.h"
+#include "mmi_feature.h"
+#include "mmi_ms.h"
 
 typedef enum
 {
@@ -15,18 +17,16 @@ typedef enum
 	SYS_OPEN_BY_110 = 0x10,
 	SYS_OPEN_BY_110_PASSWORD = 0x11,
 	SYS_OPEN_BY_110_FP = 0x12,
-}sys_open_type;
+} sys_open_type;
 
 typedef enum
 {
 	SYS_OPEN_MODE_SIN = 0,
 	SYS_OPEN_MODE_DBL = 1,
 	SYS_OPEN_MODE_INVALID = 0xFF
-}sys_open_mode;
-
+} sys_open_mode;
 
 typedef void (*timer2_delay_pro)(void);
-
 
 /*
 function: system enter sleep
@@ -99,15 +99,17 @@ return :
 */
 void mmi_dq_sys_door_close(void);
 
-
 /*
 parameter: 
 	none
 return :
 	none
 */
-void mmi_dq_sys_show_message_with_id(unsigned char text_id,unsigned long time_msec);
-
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, unsigned int time_msec, BASE_STATUS_MACHINE status);
+#else
+void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_msec);
+#endif
 /*
 parameter: 
 	none
@@ -151,7 +153,6 @@ return :
 	none
 */
 void mmi_dq_sys_sleep_timer_reset(void);
-
 
 /*
 function: 
@@ -278,4 +279,3 @@ void mmi_dq_sys_chg_admin_pwd(void);
 void mmi_dq_sys_restore_lock(void);
 
 #endif //__MMI_SYS_H__
-

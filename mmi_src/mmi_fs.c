@@ -11,6 +11,11 @@
 #include "mmi_fps.h"
 #include "mmi_ms.h"
 #include "dq_otp.h"
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+#include "dq_sdk_main.h"
+#endif
+
+extern void printfS(char *show, char *status);
 
 unsigned char get_index = 0xff;
 
@@ -966,5 +971,152 @@ unsigned char mmi_dq_fs_get_business_flag(void)
 {
 	return g_dq_fs_init_set.business_flag;
 }
+
+/************************************************************************************
+ * 							     	 Own function							        *
+ ************************************************************************************/
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+uint8_t input_empty_pwd_len = 0;
+unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
+{
+	unsigned char ret_val = 0xFF;
+	unsigned char admin_pwd[4];
+	unsigned char admin_password[8];
+	uint8_t admin_len = 0;
+	uint8_t i, k;
+
+#ifdef __LOCK_USE_MALLOC__
+	uint8_t ret;
+	g_dq_fs_pwd = (mmi_fs_pwd *)mmi_dq_fs_get_storage(DQ_FS_MEM_PWD, &ret);
+#endif
+
+	memset(admin_password, 0xFF, 8);
+	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+	{
+		if (g_dq_fs_pwd[i].flag != 0xFF && g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
+		{
+			for (k = 0; k < 4; k++)
+			{
+				admin_pwd[k] = g_dq_fs_pwd[i].key_pwd[k];
+			}
+			break;
+		}
+	}
+#ifdef __LOCK_USE_MALLOC__
+	mmi_dq_fs_free_storage(DQ_FS_MEM_PWD, (void **)&g_dq_fs_pwd);
+#endif
+
+	mmi_dq_fs_pwd_byte_to_string(admin_pwd, admin_password);
+	for (i = 0; i < 8; i++)
+	{
+		if (admin_password[i] == 0xFF)
+			break;
+	}
+	admin_len = i;
+	if (len >= admin_len)
+	{
+		for (i = 0; i <= len - admin_len; i++)
+		{
+			for (k = 0; k < admin_len; k++)
+			{
+				if (input_pwd[i + k] != admin_password[k])
+					break;
+			}
+			if (k == admin_len)
+			{
+				dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
+				mmi_dq_fs_check_input_pwd_from_app_cb(1);
+				return 0;
+			}
+		}
+	}
+
+	if (len == 8)
+		input_empty_pwd_len = 1;
+	else
+		input_empty_pwd_len = 0;
+
+	for (i = 9; i >= 6; i--)
+	{
+		if (len < i)
+			continue;
+		for (k = 0; k <= len - i; k++)
+		{
+			unsigned char password[5];
+			memset(password, 0xFF, sizeof(password));
+			mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
+			ret_val = dq_otp_check_password_for_open(password, i);
+			if (ret_val != 0)
+			{
+				return 0;
+			}
+		}
+	}
+
+	mmi_dq_ms_idle_input_with_app_result(0xFF);
+
+	return 0;
+}
+
+#else
+unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
+{
+	unsigned char password[5];
+	unsigned char ret_val = 0xFF;
+
+	memset(password, 0xFF, sizeof(password));
+	mmi_dq_fs_pwd_string_to_byte(input_pwd, len, password);
+
+	if (len <= MMI_KEY_MAX_INPUT_NUM)
+	{
+		ret_val = mmi_dq_fs_check_input_pwd(input_pwd, len, (fds_pwd_type)FDS_USE_TYPE_ADMIN);
+		if (ret_val != 0xFF)
+		{
+			ret_val = 1;
+			dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, password, 5);
+			mmi_dq_fs_check_input_pwd_from_app_cb(ret_val);
+			return 0;
+		}
+	}
+
+	dq_otp_check_password_for_open(password, len);
+
+	return 0;
+}
+#endif
+
+extern void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_val);
+void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
+{
+	if (ret_val != 1 && ret_val != 2 && ret_val != 4 && ret_val != 5 && ret_val != 6)
+		ret_val = 0xFF;
+
+	if (ret_val != 0xFF && ret_val != 4 && ret_val != 6)
+		printfS("mmi_dq_fs_check_input_pwd_from_app", "right");
+	else
+		printfS("mmi_dq_fs_check_input_pwd_from_app", "wrong");
+
+#ifdef __LOCK_VIRTUAL_PASSWORD__
+
+	if (ret_val != 0xFF)
+		mmi_dq_ms_idle_input_with_app_result(ret_val);
+#else
+	mmi_dq_ms_idle_input_with_app_result(ret_val);
+#endif
+}
+
+unsigned char mmi_dq_fs_app_init_sucess(void)
+{
+	if (g_dq_fs_init_set.init_flag == FDS_INIT_APP_SUC)
+		return 1;
+	else
+		return 0;
+}
+
+#endif //__LOCK_VIRTUAL_PASSWORD__
+/************************************************************************************
+ * 							     	 End function							        *
+ ************************************************************************************/
 
 #endif
