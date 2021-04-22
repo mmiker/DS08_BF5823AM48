@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:15:36 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:18:55 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_DECODE
@@ -14,9 +14,9 @@ line level    source
    3          #include "mmi_feature.h"
    4          #ifdef __LOCK_DECODE_SUPPORT__
    5          #include "mmi_decode.h"
-   6          
-   7          #include <stdio.h>
-   8          #include "dqiot_drv.h"
+   6          #include "dqiot_drv.h"
+   7          // #include <stdio.h>
+   8          
    9          
   10          struct decode_data get_decode;
   11          
@@ -62,7 +62,7 @@ line level    source
   51   3                  get_decode.exg_key_9[i] = temp1;
   52   3                  get_decode.sec_key_9[i] = temp2;
   53   3              }
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:15:36 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/22/2021 16:18:55 PAGE 2   
 
   54   2              if (i > 0 && i < 9)
   55   2              {

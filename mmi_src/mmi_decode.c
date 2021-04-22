@@ -3,9 +3,9 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_DECODE_SUPPORT__
 #include "mmi_decode.h"
-
-#include <stdio.h>
 #include "dqiot_drv.h"
+// #include <stdio.h>
+
 
 struct decode_data get_decode;
 

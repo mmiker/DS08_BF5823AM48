@@ -17,7 +17,7 @@
 #include "mmi_fm.h"
 #include "mmi_wifi.h"
 #include "dqiot_drv_wifi.h"
-#include <stdio.h>
+// #include <stdio.h>
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
 #include "mmi_ms.h"
@@ -484,9 +484,11 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_pv_switch();
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 					{
+#ifdef __LOCK_DECODE_SUPPORT__
 						unsigned char i;
 						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
 						mmi_dq_decode_app_random_code(&random_code);
+#endif
 					}
 
 					// 	mmi_dq_wifi_open_by_key();
