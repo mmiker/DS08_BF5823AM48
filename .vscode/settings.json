@@ -19,6 +19,7 @@
         "mmi_queue.h": "c",
         "dq_otp.h": "c",
         "dq_sdk_main.h": "c",
-        "mmi_rtc.h": "c"
+        "mmi_rtc.h": "c",
+        "mmi_decode.h": "c"
     }
 }

@@ -993,6 +993,11 @@
               <FileType>1</FileType>
               <FilePath>.\mmi_src\dq_otp.c</FilePath>
             </File>
+            <File>
+              <FileName>mmi_decode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mmi_src\mmi_decode.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

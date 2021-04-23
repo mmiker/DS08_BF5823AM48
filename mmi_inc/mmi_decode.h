@@ -5,14 +5,12 @@
 
 typedef struct decode_data
 {
-    unsigned int top_three;
-    unsigned int rev_three;
-    unsigned int exg_key_8[8];
-    unsigned int exg_key_9[9];
-    unsigned int exg_key_10[10];
-    unsigned int sec_key_8[8];
-    unsigned int sec_key_9[9];
-    unsigned int sec_key_10[10];
+    unsigned char exg_key_8[8];
+    unsigned char exg_key_9[9];
+    unsigned char exg_key_10[10];
+    unsigned char sec_key_8[8];
+    unsigned char sec_key_9[9];
+    unsigned char sec_key_10[10];
 } decode_data;
 
 unsigned char mmi_dq_decode_app_random_code(unsigned char *random_code);

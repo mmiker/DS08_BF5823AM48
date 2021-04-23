@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FPS
@@ -62,7 +62,7 @@ line level    source
                   }
                 }
               
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 2   
 
                 return;
               }
@@ -126,7 +126,7 @@ line level    source
               parameter: 
                 current status machine
               return :
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 3   
 
                 none
               */
@@ -190,7 +190,7 @@ line level    source
                 if (id == 0)
                   real_buf_id = CHAR_BUFFER1;
                 else if (id == 1)
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 4   
 
                   real_buf_id = CHAR_BUFFER2;
                 else if (id == 2)
@@ -254,7 +254,7 @@ line level    source
               {
                 unsigned char retval = 0;
                 unsigned char real_buf_id;
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 5   
 
               
                 if (Buf_id == 0)
@@ -318,7 +318,7 @@ line level    source
                 retval = FP_Get_Light();
                 return retval;
               }
-C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/22/2021 16:17:59 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_FPS                                                           04/23/2021 10:12:29 PAGE 6   
 
               
               /* 触摸判断 */
