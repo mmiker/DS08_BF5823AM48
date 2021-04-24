@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_AUDIO
@@ -62,7 +62,7 @@ line level    source
                 AUD_BASE_ID_RFCARD_NOT_EXIST,AUD_BASE_ID_REINPUT,0,   //AUD_ID_RFCARD_NOT_EXIST = 42,//RF卡不存在，�
              -�重新输入
                                             //AUD_ID_DEL_RFCARD_CONFIRM = 33,//号RF卡按#确认删除，取消请按*
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 2   
 
                                             //AUD_ID_CLR_RFCARD_CONFIRM = 33,//按#确认删除所有RF卡，取消请按*
                 AUD_BASE_ID_INPUT_ADMIN_PWD,AUD_BASE_ID_INPUT_END,0,  //AUD_ID_INPUT_ADMIN_PWD = 45,//请输入管理员�
@@ -126,7 +126,7 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
                 AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,AUD_BASE_ID_INPUT_BACK,0,   //AUD_ID_SYSTEM = 132,//系统
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 3   
 
               #else 
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
@@ -190,7 +190,7 @@ line level    source
              -�
  141            AUD_BASE_ID_ADD_ADMIN_PWD_FIRST,AUD_BASE_ID_INPUT_END,0,//AUD_ID_ADD_ADMIN_PWD_FIRST = 39,//为了您的�
              -��用安全，请先添加管理员密码，按#键结束
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 4   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 4   
 
  142                                        //AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN = 6,//请再次输入管理员密码，按#键结束
  143            AUD_BASE_ID_PWD_WRONG,AUD_BASE_ID_RETRY,0,        //AUD_ID_PWD_WRONG_TRY = 42,//密码错误,请重试
@@ -254,7 +254,7 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_RFCARD,
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_ADMIN,
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 5   
 
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_SETTING,
                 AUD_BASE_ID_SYS_NUM_6,AUD_BASE_ID_SYS_RESTORE,
@@ -318,7 +318,7 @@ line level    source
                 AUD_BASE_ID_SYS_NUM_1,AUD_BASE_ID_SYS_PASSWORD,
                 AUD_BASE_ID_SYS_NUM_2,AUD_BASE_ID_SYS_FP,
                 AUD_BASE_ID_SYS_NUM_3,AUD_BASE_ID_SYS_ADMIN,
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 6   
 
                 AUD_BASE_ID_SYS_NUM_4,AUD_BASE_ID_SYS_SETTING,
                 AUD_BASE_ID_SYS_NUM_5,AUD_BASE_ID_SYS_RESTORE,
@@ -382,7 +382,7 @@ line level    source
  317            //AUD_BASE_ID_SYS_DBL_OPEN_MODE,AUD_BASE_ID_INPUT_68_PWD,0,//AUD_ID_DBL_OPEN_MODE_PASSWORD = 148
  318          
  319                //AUD_ID_ADD_PWD_FULL = 12,//密码已满，请联系管理员
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 7   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 7   
 
  320                //AUD_ID_FP_ADD_FULL = 12,//指纹已满，请联系管理员
  321                //AUD_ID_RFCARD_FULL = 12,//RF卡已满，请联系管理员
@@ -446,7 +446,7 @@ line level    source
                   num++;
               #if defined(__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__)
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_NUM_0 + num);
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 8   
 
                   dqiot_drv_audio_play(AUD_BASE_ID_SYS_FP);
                   num++;
@@ -510,7 +510,7 @@ line level    source
  441   1      }
  442          
  443          /*
-C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 12:03:58 PAGE 9   
+C51 COMPILER V9.59.0.0   MMI_AUDIO                                                         04/24/2021 14:28:15 PAGE 9   
 
  444          parameter: 
  445            none

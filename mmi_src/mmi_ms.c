@@ -487,12 +487,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 #ifdef __LOCK_DECODE_SUPPORT__
 						extern struct decode_data get_decode;
 						unsigned char i, j;
-						unsigned char dec_pwd_char[15];
-						// unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
-						// unsigned char time_code[8] = {6, 6, 0, 9, 8, 4, 5, 5};
-						// mmi_dq_decode_app_random_code(random_code);
-						//dq_otp_enc_pwd(time_code, 8, get_decode.sec_key_10, get_decode.exg_key_10, dec_pwd_char);
-
+						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
 						unsigned char time_code[5] = {0x80, 0x47, 0x57, 0x79, 0x80};
 						unsigned char sec_code[5] = {0x56, 0x13, 0x40, 0x27, 0x89};
 						unsigned char exg_code[5] = {0x46, 0x57, 0x08, 0x12, 0x39};
@@ -517,7 +512,16 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 							}
 						}
 
-						decode_time_stamp_10num(time_code, 10, sec_code, exg_code, dec_pwd_char);
+						decode_check_code(random_code);
+						if (get_decode.chk_key_2[0] == random_code[13] && get_decode.chk_key_2[1] == random_code[14])
+						{
+							//解码
+							mmi_dq_decode_app_random_code(random_code);
+							decode_time_stamp_10num(time_code, 10, sec_code, exg_code);
+
+							//存储
+							
+						}
 
 #endif
 					}

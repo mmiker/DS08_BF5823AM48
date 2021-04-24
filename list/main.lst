@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 12:03:53 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 14:28:10 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   51   1      #endif
   52   1      #ifdef __LOCK_AUDIO_SUPPORT__
   53   1        mmi_dq_aud_init();
-C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 12:03:53 PAGE 2   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 14:28:10 PAGE 2   
 
   54   1      #endif
   55   1        byd_adc_init();
@@ -126,7 +126,7 @@ line level    source
  113          //   * @param  status 状态
  114          //   * @return none
  115          //   * @note   none
-C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 12:03:53 PAGE 3   
+C51 COMPILER V9.59.0.0   MAIN                                                              04/24/2021 14:28:10 PAGE 3   
 
  116          //   * @see    printfS("xxx","xxx");
  117          //   */
