@@ -998,6 +998,11 @@
               <FileType>1</FileType>
               <FilePath>.\mmi_src\mmi_decode.c</FilePath>
             </File>
+            <File>
+              <FileName>dq_sdk_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mmi_src\dq_sdk_main.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

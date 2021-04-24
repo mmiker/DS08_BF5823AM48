@@ -27,7 +27,7 @@ static uint32_t g_last_error_time = 0;
 static unsigned char g_multiple_error_times = 0;
 static uint8_t lock_easy_open_mode = 0;
 static uint8_t lock_inside_lock = 0;
-static unsigned int g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_COUNT;
+//static unsigned int g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_COUNT;
 #endif //__LOCK_VIRTUAL_PASSWORD__
 
 // extern void printfS(char *show, char *status);
@@ -86,7 +86,7 @@ parameter:
 return :
 	none
 */
-#ifndef __LOCK_VIRTUAL_PASSWORD__
+// #ifndef __LOCK_VIRTUAL_PASSWORD__
 void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_msec)
 {
 	unsigned char audio_id = 0;
@@ -99,7 +99,7 @@ void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_m
 #endif
 	return;
 }
-#endif
+// #endif
 
 /*
 parameter: 
@@ -1556,7 +1556,7 @@ RET_VAL mmi_dq_sys_exe_menu_fun(unsigned char menu_id)
 /************************************************************************************
  * 							     	 Own function							        *
  ************************************************************************************/
-#ifdef __LOCK_VIRTUAL_PASSWORD__
+#if 0//def __LOCK_VIRTUAL_PASSWORD__
 void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, uint32_t time_msec, BASE_STATUS_MACHINE status)
 {
 	unsigned char i = 0;
@@ -1613,18 +1613,18 @@ void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id
 	}
 	if (msg_aud_list[i].aud_id != 0xFF)
 	{
-		mmi_dq_aud_play_with_id(msg_aud_list[i].aud_id, 0);
+//		mmi_dq_aud_play_with_id(msg_aud_list[i].aud_id, 0);
 	}
 #endif
 
-	if (time_msec > 0)
-	{
-		mmi_dq_show_msg_timer_start(time_msec);
-		timer_ms_status = status;
-		mmi_dq_ms_set_machine_status(BASE_STATUS_M_INVALID);
-	}
-	else
-		mmi_dq_ms_set_machine_status(status);
+//	if (time_msec > 0)
+//	{
+//		mmi_dq_show_msg_timer_start(time_msec);
+//		timer_ms_status = status;
+//		mmi_dq_ms_set_machine_status(BASE_STATUS_M_INVALID);
+//	}
+//	else
+//		mmi_dq_ms_set_machine_status(status);
 
 	if (text_id == STR_ID_OPEN_DOOR)
 	{
@@ -1633,7 +1633,8 @@ void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id
 #endif
 	return;
 }
-
+#endif
+#ifdef __LOCK_VIRTUAL_PASSWORD__
 uint8_t mmi_dq_sys_lock_error(void)
 {
 	uint32_t time = mmi_dq_rtc_get_sys_sec_info();
@@ -1669,7 +1670,7 @@ void mmi_dq_sys_lock_correct(void)
 
 void mmi_dq_entry_sleep_delay_time(void)
 {
-	g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_DELAY_COUNT;
+//	g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_DELAY_COUNT;
 }
 
 void mmi_dq_show_msg_timer_start (uint32_t time_msec)
@@ -1677,11 +1678,11 @@ void mmi_dq_show_msg_timer_start (uint32_t time_msec)
 	uint32_t time_ms = MMI_TIMER_BASE_TIME;
 	uint32_t time_ticks;
 	
-	g_show_msg_time_voval_count = time_msec/MMI_TIMER_BASE_TIME;
-	g_show_msg_time_count = 0;
-	time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER2_MMI_TIMER, time_ms);
-	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
-	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
+//	g_show_msg_time_voval_count = time_msec/MMI_TIMER_BASE_TIME;
+//	g_show_msg_time_count = 0;
+//	time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER2_MMI_TIMER, time_ms);
+//	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
+//	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
 	return;
 }
 

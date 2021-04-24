@@ -55,7 +55,8 @@
 ".\output\mmi_fm.obj",
 ".\output\mmi_wifi.obj",
 ".\output\dq_otp.obj",
-".\output\mmi_decode.obj" 
+".\output\mmi_decode.obj",
+".\output\dq_sdk_main.obj" 
 TO ".\output\DS08_HEX" 
 
 PRINT(".\list\DS08_HEX.map") REMOVEUNUSED 

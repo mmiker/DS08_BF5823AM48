@@ -1025,8 +1025,8 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 			}
 			if (k == admin_len)
 			{
-				dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
-				mmi_dq_fs_check_input_pwd_from_app_cb(1);
+				// dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
+				// mmi_dq_fs_check_input_pwd_from_app_cb(1);
 				return 0;
 			}
 		}
@@ -1045,8 +1045,8 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 		{
 			unsigned char password[5];
 			memset(password, 0xFF, sizeof(password));
-			mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
-			ret_val = dq_otp_check_password_for_open(password, i);
+			// mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
+			// ret_val = dq_otp_check_password_for_open(password, i);
 			if (ret_val != 0)
 			{
 				return 0;
@@ -1054,7 +1054,7 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 		}
 	}
 
-	mmi_dq_ms_idle_input_with_app_result(0xFF);
+//	mmi_dq_ms_idle_input_with_app_result(0xFF);
 
 	return 0;
 }
@@ -1086,7 +1086,7 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 }
 #endif
 
-extern void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_val);
+//extern void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_val);
 void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
 {
 	if (ret_val != 1 && ret_val != 2 && ret_val != 4 && ret_val != 5 && ret_val != 6)
@@ -1099,8 +1099,8 @@ void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
 
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 
-	if (ret_val != 0xFF)
-		mmi_dq_ms_idle_input_with_app_result(ret_val);
+	// if (ret_val != 0xFF)
+	// 	mmi_dq_ms_idle_input_with_app_result(ret_val);
 #else
 	mmi_dq_ms_idle_input_with_app_result(ret_val);
 #endif

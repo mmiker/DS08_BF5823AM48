@@ -3,12 +3,12 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
-#include "dq_sdk_cb.h"
-#include "dq_sdk_crc.h"
-#include "dq_sdk_aes.h"
+// #include "dq_sdk_cb.h"
+// #include "dq_sdk_crc.h"
+// #include "dq_sdk_aes.h"
 
 #ifndef __WIN32_ENV_SUPPORT__
-#include "nrf_log.h"
+// #include "nrf_log.h"
 #endif
 
 #include "mmi_feature.h"
@@ -3860,10 +3860,10 @@ return :
 */
 void dq_otp_enc_pwd(unsigned char *pwd, unsigned char len, unsigned char *sec_key, unsigned char *exg_key, unsigned char *sec_pwd)
 {
-	unsigned char sec_key_char[9];
-	unsigned char exg_key_char[9];
-	unsigned char pwd_char[9];
-	unsigned char sec_char[9];
+	unsigned char sec_key_char[10];
+	unsigned char exg_key_char[10];
+	unsigned char pwd_char[10];
+	unsigned char sec_char[10];
 	unsigned int int_sec_key = 0;
 	unsigned int int_pwd = 0;
 	unsigned char i = 0;
@@ -3899,6 +3899,8 @@ void dq_otp_enc_pwd(unsigned char *pwd, unsigned char len, unsigned char *sec_ke
 				int_pwd += 100000000;
 			else if (len == 9)
 				int_pwd += 1000000000;
+			else if (len == 10)
+				int_pwd += 10000000000;
 		}
 		int_pwd -= int_sec_key;
 		memset(sec_char, 0x00, sizeof(sec_char));
@@ -4159,14 +4161,14 @@ unsigned char dq_otp_check_password_for_open(unsigned char *password, unsigned c
 #endif
 			ret = 1;
 		}
-// 		else if (dq_otp_get_lock_sys_time_state() == 0 && mmi_dq_rtc_check_time() == 1)
-// 		{
-// #ifdef __LOCK_USE_MALLOC__
-// 			mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
-// #endif
-// 			g_dq_otp_init.input_pwd_cb(6);
-// 			return 6;
-// 		}
+		// 		else if (dq_otp_get_lock_sys_time_state() == 0 && mmi_dq_rtc_check_time() == 1)
+		// 		{
+		// #ifdef __LOCK_USE_MALLOC__
+		// 			mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
+		// #endif
+		// 			g_dq_otp_init.input_pwd_cb(6);
+		// 			return 6;
+		// 		}
 		else
 		{
 			uint8_t pwd[5] = {0xFF};
@@ -4908,6 +4910,8 @@ uint8_t dq_otp_temp_pwd_check(unsigned char *pwd_in, unsigned char len)
 			dq_otp_enc_pwd(pwd_in, len, otp_set_info.otp_sec_key_8, otp_set_info.otp_exg_key_8, dec_pwd_char);
 		else if (len == 9)
 			dq_otp_enc_pwd(pwd_in, len, otp_set_info.otp_sec_key_9, otp_set_info.otp_exg_key_9, dec_pwd_char);
+		// else if (len == 10)
+		// 	dq_otp_enc_pwd(pwd_in, len, otp_set_info.otp_sec_key_10, otp_set_info.otp_exg_key_10, dec_pwd_char);
 
 		for (i = 0; i < len; i++)
 		{

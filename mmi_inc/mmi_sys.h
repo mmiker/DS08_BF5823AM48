@@ -105,11 +105,11 @@ parameter:
 return :
 	none
 */
-#ifdef __LOCK_VIRTUAL_PASSWORD__
-void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, unsigned int time_msec, BASE_STATUS_MACHINE status);
-#else
+// #ifdef __LOCK_VIRTUAL_PASSWORD__
+// void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, unsigned int time_msec, BASE_STATUS_MACHINE status);
+// #else
 void mmi_dq_sys_show_message_with_id(unsigned char text_id, unsigned long time_msec);
-#endif
+// #endif
 /*
 parameter: 
 	none

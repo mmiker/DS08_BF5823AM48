@@ -82,7 +82,7 @@ parameter:
 return :
 	none
 */
-time_t mmi_dq_rtc_get_sys_sec_info(void);
+//time_t mmi_dq_rtc_get_sys_sec_info(void);
 
 /*
 parameter: 

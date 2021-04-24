@@ -18,10 +18,10 @@
 #include "mmi_wifi.h"
 #include "dqiot_drv_wifi.h"
 // #include <stdio.h>
-#ifdef __LOCK_VIRTUAL_PASSWORD__
+// #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
 #include "mmi_ms.h"
-#endif
+// #endif
 #ifdef __LOCK_DECODE_SUPPORT__
 #include "mmi_decode.h"
 #endif
@@ -485,8 +485,40 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 					{
 #ifdef __LOCK_DECODE_SUPPORT__
-						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
-						mmi_dq_decode_app_random_code(&random_code);
+						extern struct decode_data get_decode;
+						unsigned char i, j;
+						unsigned char dec_pwd_char[15];
+						// unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
+						// unsigned char time_code[8] = {6, 6, 0, 9, 8, 4, 5, 5};
+						// mmi_dq_decode_app_random_code(random_code);
+						//dq_otp_enc_pwd(time_code, 8, get_decode.sec_key_10, get_decode.exg_key_10, dec_pwd_char);
+
+						unsigned char time_code[5] = {0x80, 0x47, 0x57, 0x79, 0x80};
+						unsigned char sec_code[5] = {0x56, 0x13, 0x40, 0x27, 0x89};
+						unsigned char exg_code[5] = {0x46, 0x57, 0x08, 0x12, 0x39};
+						unsigned char a[10][5] = {
+							{0x26, 0x41, 0x53, 0x89, 0x70},
+							{0x43, 0x16, 0x98, 0x25, 0x07},
+							{0x92, 0x35, 0x64, 0x70, 0x81},
+							{0x72, 0x59, 0x03, 0x18, 0x46},
+							{0x02, 0x85, 0x19, 0x63, 0x74},
+							{0x12, 0x05, 0x69, 0x43, 0x87},
+							{0x18, 0x95, 0x42, 0x76, 0x30},
+							{0x09, 0x58, 0x26, 0x17, 0x34},
+							{0x10, 0x63, 0x52, 0x74, 0x89},
+							{0x21, 0x69, 0x50, 0x37, 0x84},
+						};
+
+						for (i = 0; i < 10; i++)
+						{
+							for (j = 0; j < 5; j++)
+							{
+								get_decode.g_pwd_signed_data[i].exchg_num[j] = a[i][j];
+							}
+						}
+
+						decode_time_stamp_10num(time_code, 10, sec_code, exg_code, dec_pwd_char);
+
 #endif
 					}
 					// 	mmi_dq_wifi_open_by_key();
@@ -1723,25 +1755,27 @@ void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_code)
 	if (ret_code == 0xFF || ret_code == 4)
 	{
 		if (mmi_dq_sys_lock_error() == 1)
-			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
+			;
+		// mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
 		else
-			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+			;
+		// 	mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_WRONG_TRY, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
 	}
 	else if (ret_code == 2)
 	{
 		mmi_dq_sys_lock_correct();
 		//dq_otp_add_open_log_by_temp(0);
-		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_CLR_PWD_SUCESS, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
+		//mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_CLR_PWD_SUCESS, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_SAVE_LOG);
 	}
 	else if (ret_code == 5)
 	{
 		mmi_dq_sys_lock_correct();
-		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_FULL, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+		//mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_PWD_FULL, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
 	}
 	else if (ret_code == 6)
 	{
 		//mmi_dq_sys_lock_correct();
-		mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_APP_SYN, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
+		//mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_APP_SYN, SHOW_MESSAGE_DELAY_TIME, BASE_STATUS_M_IDLE);
 	}
 	//else if(ret_code == 3)
 	//{
@@ -1759,21 +1793,22 @@ void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_code)
 			{
 				g_dbl_open_mode_fp_flag = 0;
 				g_dbl_open_mode_rf_flag = 0;
-				dq_otp_add_open_log_by_temp(1);
-				mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
+				//dq_otp_add_open_log_by_temp(1);
+				//mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
 			}
 			else
 			{
 				g_dbl_open_mode_pwd_flag = 1;
 				if (mmi_dq_fs_app_init_sucess())
-					dq_otp_add_exchange_temp_open_log(0, 1);
-				mmi_dq_sys_show_message_with_id(STR_ID_SYSTEM, LOCK_ADMIN, STR_ID_DBL_OPEN_MODE, SHOW_MESSAGE_DELAY_TIME / 2, BASE_STATUS_M_IDLE);
+					;
+				//dq_otp_add_exchange_temp_open_log(0, 1);
+				//mmi_dq_sys_show_message_with_id(STR_ID_SYSTEM, LOCK_ADMIN, STR_ID_DBL_OPEN_MODE, SHOW_MESSAGE_DELAY_TIME / 2, BASE_STATUS_M_IDLE);
 			}
 		}
 		else
 		{
-			dq_otp_add_open_log_by_temp(0);
-			mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
+			//dq_otp_add_open_log_by_temp(0);
+			//mmi_dq_sys_show_message_with_id(STR_ID_PASSWORD, LOCK_ADMIN, STR_ID_OPEN_DOOR, OPEN_LOCK_DELAY_TIME, BASE_STATUS_M_SAVE_LOG_WITH_CLOSE);
 		}
 	}
 }
