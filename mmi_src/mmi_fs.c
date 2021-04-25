@@ -6,7 +6,8 @@
 #include "mcu02_sfr.h"
 #include "mcu02_eeprom.h"
 #include "string.h"
-// #include <stdio.h>
+#include <stdio.h>
+#include "dqiot_drv.h"
 
 #include "mmi_fps.h"
 #include "mmi_ms.h"
@@ -14,8 +15,9 @@
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
 #endif
-
-extern void printfS(char *show, char *status);
+#ifdef __LOCK_DECODE_SUPPORT__
+#include "mmi_decode.h"
+#endif
 
 unsigned char get_index = 0xff;
 
@@ -70,6 +72,15 @@ static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_si
 	case MID_FDS_FILE_RF:
 		eeprom_select(1);
 		eeprom_nvr_read_page(r_data, 1, 0, r_size);
+		break;
+#endif
+#ifdef __LOCK_DECODE_SUPPORT__
+	case MID_FDS_FILE_DECODE:
+		eeprom_select(0);
+		for (i = 0; i < r_size; i++)
+		{
+			r_data[i] = eeprom_read_byte(0, i + 532); //读第一页
+		}
 		break;
 #endif
 	default:
@@ -166,6 +177,44 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		}
 		break;
 #endif
+#ifdef __LOCK_DECODE_SUPPORT__
+	case MID_FDS_FILE_DECODE:
+	{
+		uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
+		uint16_t w_size2 = sizeof(mmi_fs_setting);
+		uint8_t *w_data3 = (uint8_t *)g_dq_fs_pwd;
+		uint16_t w_size3 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
+		eeprom_select(0);
+		eeprom_erase_page(0); //擦除1K
+		for (i = 0; i < w_size2; i++)
+		{
+			ret = eeprom_write_byte(0, i, w_data2[i]); //读第一页
+			if (ret == ERROR)
+			{
+				//printf("mmi_dq_fds_write  error  %d\n",i);
+				return RET_FAIL;
+			}
+		}
+		for (i = 0; i < w_size3; i++)
+		{
+			ret = eeprom_write_byte(0, i + 24, w_data3[i]); //读第一页
+			if (ret == ERROR)
+			{
+				//printf("mmi_dq_fds_write  error  %d\n",i);
+				return RET_FAIL;
+			}
+		}
+		for (i = 0; i < w_size; i++)
+		{
+			ret = eeprom_write_byte(0, i + 532, w_data[i]); //读第一页
+			if (ret == ERROR)
+			{
+				//printf("mmi_dq_fds_write  error  %d\n",i);
+				return RET_FAIL;
+			}
+		}
+	}
+	break;
 	default:
 		return RET_FAIL;
 	}
@@ -555,6 +604,91 @@ RET_VAL mmi_dq_fs_clr_pwd(void)
 	}
 	return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM);
 }
+
+#if defined(__LOCK_DECODE_SUPPORT__)
+/**
+  * @brief  解码记录flash
+  * @param  type 用户类型
+  * @return status
+  * @note   none
+  * @see    none
+  */
+RET_VAL mmi_dq_fs_set_decode(fds_use_type type)
+{
+	if (type == FDS_USE_TYPE_ADMIN)
+		return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)&get_decode, sizeof(get_decode));
+	else
+		return RET_FAIL;
+}
+
+// unsigned char mmi_dq_fs_check_input_decode(unsigned char *input_pwd, unsigned char len, fds_use_type type)
+// {
+// 	unsigned char i = 0;
+// 	unsigned char k = 0;
+// 	unsigned char decode[5];
+// 	unsigned char ret_val = 0xFF;
+
+// 	memset(decode, 0xFF, sizeof(decode));
+// 	mmi_dq_fs_pwd_string_to_byte(input_pwd, len, decode);
+
+// 	for (i = 0; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
+// 	{
+// 		if (g_dq_fs_decode[i].flag != 0xFF)
+// 		{
+// 			for (k = 0; k < 5; k++)
+// 			{
+// 				if (decode[k] != g_dq_fs_decode[i].decode[k])
+// 					break;
+// 			}
+// 			if (k == 5)
+// 			{
+// 				break;
+// 			}
+// 		}
+// 	}
+// 	if (i < MMI_DQ_FS_DECODE_MAX_NUM)
+// 	{
+// 		if ((g_dq_fs_decode[i].flag == type) || (type == FDS_USE_TYPE_ADMIN))
+// 			ret_val = i;
+// 		else
+// 			ret_val = 0xFF;
+// 	}
+// 	else
+// 		ret_val = 0xFF;
+
+// 	return ret_val;
+// }
+
+// RET_VAL mmi_dq_fs_del_decode(unsigned char index, fds_use_type type)
+// {
+// 	if (index < MMI_DQ_FS_DECODE_MAX_NUM && g_dq_fs_decode[index].flag == type)
+// 	{
+// 		g_dq_fs_decode[index].flag = FDS_USE_TYPE_INVALID;
+// 		//g_dq_fs_pwd[index].index = 0xFF;
+// 		memset(g_dq_fs_decode[index].decode, 0xFF, sizeof(g_dq_fs_decode[index].decode));
+// 		return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) * MMI_DQ_FS_DECODE_MAX_NUM);
+// 	}
+// 	return RET_FAIL;
+// }
+
+// RET_VAL mmi_dq_fs_clr_decode(void)
+// {
+// 	unsigned char i = 0;
+
+// 	for (; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
+// 	{
+// 		if (g_dq_fs_decode[i].flag == FDS_USE_TYPE_ADMIN)
+// 		{
+// 			g_dq_fs_decode[i].flag = FDS_USE_TYPE_INVALID;
+// 			// g_dq_fs_pwd[i].index = 0xFF;
+// 			memset(g_dq_fs_decode[i].decode, 0xFF, sizeof(g_dq_fs_decode[i].decode));
+// 		}
+// 	}
+
+// 	return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) * MMI_DQ_FS_DECODE_MAX_NUM);
+// }
+
+#endif
 
 #if defined(__LOCK_FP_SUPPORT__)
 /*
@@ -1054,7 +1188,7 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 		}
 	}
 
-//	mmi_dq_ms_idle_input_with_app_result(0xFF);
+	//	mmi_dq_ms_idle_input_with_app_result(0xFF);
 
 	return 0;
 }
@@ -1099,8 +1233,8 @@ void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
 
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 
-	// if (ret_val != 0xFF)
-	// 	mmi_dq_ms_idle_input_with_app_result(ret_val);
+		// if (ret_val != 0xFF)
+		// 	mmi_dq_ms_idle_input_with_app_result(ret_val);
 #else
 	mmi_dq_ms_idle_input_with_app_result(ret_val);
 #endif

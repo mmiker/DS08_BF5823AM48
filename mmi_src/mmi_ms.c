@@ -17,7 +17,7 @@
 #include "mmi_fm.h"
 #include "mmi_wifi.h"
 #include "dqiot_drv_wifi.h"
-// #include <stdio.h>
+#include <stdio.h>
 // #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
 #include "mmi_ms.h"
@@ -485,7 +485,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 					{
 #ifdef __LOCK_DECODE_SUPPORT__
-						extern struct decode_data get_decode;
+						extern decode_data get_decode;
 						unsigned char i, j;
 						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
 						unsigned char time_code[5] = {0x80, 0x47, 0x57, 0x79, 0x80};
@@ -508,7 +508,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						{
 							for (j = 0; j < 5; j++)
 							{
-								get_decode.g_pwd_signed_data[i].exchg_num[j] = a[i][j];
+								g_pwd_signed_data[i].exchg_num[j] = a[i][j];
 							}
 						}
 
@@ -519,8 +519,30 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 							mmi_dq_decode_app_random_code(random_code);
 							decode_time_stamp_10num(time_code, 10, sec_code, exg_code);
 
+							dqiot_drv_uart0A_init();
+							printf("get_decode sizeof is %d\n", (int)sizeof(get_decode));
+							dqiot_drv_uart0B_init();
+
 							//存储
-							
+							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
+							{
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#endif
+
+								dqiot_drv_uart0A_init();
+								printf("flash is success\n");
+								dqiot_drv_uart0B_init();
+							}
+							else
+							{
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+#endif
+								dqiot_drv_uart0A_init();
+								printf("flash is error\n");
+								dqiot_drv_uart0B_init();
+							}
 						}
 
 #endif

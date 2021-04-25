@@ -19,8 +19,10 @@ typedef struct decode_data
     unsigned char sec_key_10[10];
     unsigned char tim_key_10[10];
     unsigned char chk_key_2[2];
-    otp_exchg_num g_pwd_signed_data[10];
 } decode_data;
+
+extern otp_exchg_num g_pwd_signed_data[10];
+extern decode_data get_decode;
 
 void decode_check_code(unsigned char *random_code);
 void mmi_dq_decode_app_random_code(unsigned char *random_code);

@@ -12,8 +12,9 @@ typedef enum
 	MID_FDS_FILE_PWD = 0x01,
 	MID_FDS_FILE_FP = 0x02,
 	MID_FDS_FILE_RF = 0x03,
+	MID_FDS_FILE_DECODE = 0x04,
 	MID_FDS_FILE_INVALID_ID = 0xFF
-}mid_fds_file_id;
+} mid_fds_file_id;
 
 typedef enum
 {
@@ -22,7 +23,7 @@ typedef enum
 	FDS_USE_TYPE_110 = 0x02,
 	FDS_USE_TYPE_ALL = 0x03,
 	FDS_USE_TYPE_INVALID = 0xFF
-}fds_use_type;
+} fds_use_type;
 
 typedef enum
 {
@@ -30,13 +31,13 @@ typedef enum
 	FDS_INIT_APP_SUC = 0x02,
 	//FDS_INIT_LOCK_RESTART = 0x03,
 	FDS_INIT_INVALID = 0xFF
-}fds_init_type;
+} fds_init_type;
 
 typedef struct opt_file_block_id
 {
-	unsigned char		file_id;
-	unsigned char	 	block_handle_index;
-}opt_file_block_id;
+	unsigned char file_id;
+	unsigned char block_handle_index;
+} opt_file_block_id;
 
 typedef struct mmi_fs_setting
 {
@@ -50,34 +51,29 @@ typedef struct mmi_fs_setting
 	unsigned char check_data[8];
 	//unsigned char touch_sensitivity;
 	//unsigned char unused[3];
-}mmi_fs_setting;
+} mmi_fs_setting;
 
 typedef struct mmi_fs_pwd
 {
 	//unsigned char 	index;
-	unsigned char 	key_pwd[4];
-	fds_use_type 	flag;//0 for admin;1 for user
-}mmi_fs_pwd;
+	unsigned char key_pwd[4];
+	fds_use_type flag; //0 for admin;1 for user
+} mmi_fs_pwd;
 
 typedef struct mmi_fs_fp
 {
-	fds_use_type  flag;//0 for admin;1 for user
+	fds_use_type flag; //0 for admin;1 for user
 	unsigned char fp_index;
-}mmi_fs_fp;
+} mmi_fs_fp;
 
 typedef struct mmi_fs_rfid
 {
-	unsigned char	index;
-	fds_use_type  	flag;//0 for admin;1 for user
+	unsigned char index;
+	fds_use_type flag; //0 for admin;1 for user
 #ifdef __LOCK_RFID_CARD_SUPPORT__
-	unsigned char 	sec_data[RFID_SEC_DATA_LEN];
+	unsigned char sec_data[RFID_SEC_DATA_LEN];
 #endif
-}mmi_fs_rfid;
-
-
-
-
-
+} mmi_fs_rfid;
 
 /*
 parameter: 
@@ -119,7 +115,7 @@ parameter:
 return :
 	none
 */
-unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd,unsigned char len,fds_use_type type);
+unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd, unsigned char len, fds_use_type type);
 
 /*
 parameter: 
@@ -127,7 +123,7 @@ parameter:
 return :
 	none
 */
-unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd,unsigned char len);
+unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd, unsigned char len);
 
 /*
 parameter: 
@@ -135,7 +131,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd,unsigned char size,fds_use_type type);
+RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd, unsigned char size, fds_use_type type);
 
 /*
 parameter: 
@@ -143,7 +139,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_del_pwd(unsigned char index,fds_use_type type);
+RET_VAL mmi_dq_fs_del_pwd(unsigned char index, fds_use_type type);
 
 /*
 parameter: 
@@ -153,8 +149,12 @@ return :
 */
 RET_VAL mmi_dq_fs_clr_pwd(void);
 
+#if defined(__LOCK_DECODE_SUPPORT__)
+RET_VAL mmi_dq_fs_set_decode(fds_use_type type);
+// unsigned char mmi_dq_fs_check_input_decode(unsigned char *input_pwd, unsigned char len, fds_use_type type);
+#endif
 
-#if defined (__LOCK_FP_SUPPORT__)
+#if defined(__LOCK_FP_SUPPORT__)
 /*
 parameter: 
 	none
@@ -187,7 +187,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_set_fp(unsigned char fs_index,fds_use_type type);
+RET_VAL mmi_dq_fs_set_fp(unsigned char fs_index, fds_use_type type);
 
 /*
 parameter: 
@@ -195,7 +195,7 @@ parameter:
 return :
 	none
 */
-RET_VAL mmi_dq_fs_del_fp(unsigned char fp_index,fds_use_type type);
+RET_VAL mmi_dq_fs_del_fp(unsigned char fp_index, fds_use_type type);
 
 /*
 parameter: 
@@ -205,7 +205,6 @@ return :
 */
 RET_VAL mmi_dq_fs_clr_fp(void);
 #endif
-
 
 #ifdef __LOCK_RFID_CARD_SUPPORT__
 /*
@@ -367,16 +366,8 @@ unsigned char mmi_dq_fs_get_business_flag(void);
 void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val);
 unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len);
 
-
-
-
-
-
-
-
 /************************************************************************************
  * 							     	 End function							        *
  ************************************************************************************/
-
 
 #endif

@@ -12,7 +12,8 @@ original_key[0][10] exg_key_10
 original_key[1][10] sec_key_10
 */
 unsigned char original_key[2][10];
-struct decode_data get_decode;
+otp_exchg_num g_pwd_signed_data[10];
+decode_data get_decode;
 
 static unsigned char decode_rondom_code_remainder(unsigned char *random_code);
 static unsigned char decode_rondom_code_plus(unsigned char leng, unsigned char array_column);
@@ -70,25 +71,25 @@ void decode_check_code(unsigned char *random_code)
   */
 void mmi_dq_decode_app_random_code(unsigned char *random_code)
 {
-    unsigned char i;
+    // unsigned char i;
     decode_rondom_code_remainder(random_code); //获取10位解码
     decode_rondom_code_extract();              //获取8/9位解码
 
-    dqiot_drv_uart0A_init();
-    for (i = 0; i < 10; i++)
-        printf("exg_code10[%d] is %d\n", (int)i, (int)get_decode.exg_key_10[i]);
-    for (i = 0; i < 9; i++)
-        printf("exg_code9[%d] is %d\n", (int)i, (int)get_decode.exg_key_9[i]);
-    for (i = 0; i < 8; i++)
-        printf("exg_code8[%d] is %d\n", (int)i, (int)get_decode.exg_key_8[i]);
-    printf("############\n");
-    for (i = 0; i < 10; i++)
-        printf("sec_code10[%d] is %d\n", (int)i, (int)get_decode.sec_key_10[i]);
-    for (i = 0; i < 9; i++)
-        printf("sec_code9[%d] is %d\n", (int)i, (int)get_decode.sec_key_9[i]);
-    for (i = 0; i < 8; i++)
-        printf("sec_code8[%d] is %d\n", (int)i, (int)get_decode.sec_key_8[i]);
-    dqiot_drv_uart0B_init();
+    // dqiot_drv_uart0A_init();
+    // for (i = 0; i < 10; i++)
+    //     printf("exg_code10[%d] is %d\n", (int)i, (int)get_decode.exg_key_10[i]);
+    // for (i = 0; i < 9; i++)
+    //     printf("exg_code9[%d] is %d\n", (int)i, (int)get_decode.exg_key_9[i]);
+    // for (i = 0; i < 8; i++)
+    //     printf("exg_code8[%d] is %d\n", (int)i, (int)get_decode.exg_key_8[i]);
+    // printf("############\n");
+    // for (i = 0; i < 10; i++)
+    //     printf("sec_code10[%d] is %d\n", (int)i, (int)get_decode.sec_key_10[i]);
+    // for (i = 0; i < 9; i++)
+    //     printf("sec_code9[%d] is %d\n", (int)i, (int)get_decode.sec_key_9[i]);
+    // for (i = 0; i < 8; i++)
+    //     printf("sec_code8[%d] is %d\n", (int)i, (int)get_decode.sec_key_8[i]);
+    // dqiot_drv_uart0B_init();
 
     return;
 }
@@ -160,7 +161,7 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     memset(sec_char, 0x00, sizeof(sec_char));
     exchange_id = pwd_char[2];
     memset(exchange_char, 0x00, sizeof(exchange_char));
-    dq_sdk_CharToHexByte((const uint8_t *)get_decode.g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange_char, 5);
+    dq_sdk_CharToHexByte((const uint8_t *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange_char, 5);
 
     for (i = 0; i < len; i++)
     {
@@ -189,7 +190,7 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
 
     dqiot_drv_uart0A_init();
     for (i = 0; i < len; i++)
-        printf("sec_pwd[%d] is %d\n", (int)i, (int)get_decode.tim_key_10[i]);
+        printf("time_decode[%d] is %d\n", (int)i, (int)get_decode.tim_key_10[i]);
     dqiot_drv_uart0B_init();
 
     return;
