@@ -12,6 +12,7 @@
 #include "mmi_bsp.h"
 #include "mmi_motor.h"
 #include "mmi_wifi.h"
+#include "mmi_decode.h"
 // #include <stdio.h>
 
 #ifdef __LOCK_VIRTUAL_PASSWORD__
@@ -21,8 +22,8 @@
 // #define MMI_TIMER_BASE_TIME 4
 #define MMI_TIMER_ENTER_SLEEP 10000
 #define MMI_TIMER_ENTER_SLEEP_COUNT (MMI_TIMER_ENTER_SLEEP / MMI_TIMER_BASE_TIME)
-#define MMI_TIMER_ENTER_SLEEP_DELAY	20000
-#define MMI_TIMER_ENTER_SLEEP_DELAY_COUNT	(MMI_TIMER_ENTER_SLEEP_DELAY/MMI_TIMER_BASE_TIME)
+#define MMI_TIMER_ENTER_SLEEP_DELAY 20000
+#define MMI_TIMER_ENTER_SLEEP_DELAY_COUNT (MMI_TIMER_ENTER_SLEEP_DELAY / MMI_TIMER_BASE_TIME)
 static uint32_t g_last_error_time = 0;
 static unsigned char g_multiple_error_times = 0;
 static uint8_t lock_easy_open_mode = 0;
@@ -1049,6 +1050,35 @@ static void mmi_dq_sys_clear_rf(void)
 }
 #endif
 
+#ifdef __LOCK_DECODE_SUPPORT__
+/**
+  * @brief  add 8key from decode
+  * @param  none
+  * @return none
+  * @note   none
+  * @see    none
+  */
+void mmi_dq_sys_add_decode(void)
+{
+	if (mmi_dq_fs_get_decode_unuse_index() == 0xFF)
+	{
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL_RETRY);
+#endif
+		mmi_dq_sys_show_cur_menu_list();
+	}
+	else
+	{
+#ifdef __LOCK_AUDIO_SUPPORT__
+		mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
+#endif
+		mmi_ms_opt_time_init();
+		mmi_dq_ms_set_sys_state(SYS_STATUS_ADD_DECODE_RANDOM);
+	}
+	return;
+}
+#endif
+
 /*
 parameter: 
 	none
@@ -1332,6 +1362,12 @@ static void mmi_dq_sys_wifi_code_setting(void)
 }
 #endif
 
+#ifdef __LOCK_DECODE_SUPPORT__
+static void mmi_dq_sys_sync_start_time(void)
+{
+}
+#endif
+
 typedef struct sys_menu_t
 {
 	unsigned char menu_father_id;
@@ -1360,7 +1396,8 @@ const sys_menu_t sys_menu_tree[] =
 #ifdef __LOCK_WIFI_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_airkiss_setting},
-		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_code_setting},
+		{STR_ID_SYSTEM, STR_ID_DECODE, mmi_dq_sys_add_decode},
+
 #endif
 #ifdef __LOCK_110_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_110, 0},
@@ -1556,7 +1593,7 @@ RET_VAL mmi_dq_sys_exe_menu_fun(unsigned char menu_id)
 /************************************************************************************
  * 							     	 Own function							        *
  ************************************************************************************/
-#if 0//def __LOCK_VIRTUAL_PASSWORD__
+#if 0 //def __LOCK_VIRTUAL_PASSWORD__
 void mmi_dq_sys_show_message_with_id(unsigned char tile_id, unsigned char bmp_id, unsigned char text_id, uint32_t time_msec, BASE_STATUS_MACHINE status)
 {
 	unsigned char i = 0;
@@ -1670,19 +1707,19 @@ void mmi_dq_sys_lock_correct(void)
 
 void mmi_dq_entry_sleep_delay_time(void)
 {
-//	g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_DELAY_COUNT;
+	//	g_enter_sleep_set_time = MMI_TIMER_ENTER_SLEEP_DELAY_COUNT;
 }
 
-void mmi_dq_show_msg_timer_start (uint32_t time_msec)
+void mmi_dq_show_msg_timer_start(uint32_t time_msec)
 {
 	uint32_t time_ms = MMI_TIMER_BASE_TIME;
 	uint32_t time_ticks;
-	
-//	g_show_msg_time_voval_count = time_msec/MMI_TIMER_BASE_TIME;
-//	g_show_msg_time_count = 0;
-//	time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER2_MMI_TIMER, time_ms);
-//	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
-//	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
+
+	//	g_show_msg_time_voval_count = time_msec/MMI_TIMER_BASE_TIME;
+	//	g_show_msg_time_count = 0;
+	//	time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER2_MMI_TIMER, time_ms);
+	//	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
+	//	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
 	return;
 }
 

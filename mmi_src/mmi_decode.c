@@ -5,6 +5,7 @@
 #include "mmi_decode.h"
 #include "string.h"
 #include <stdio.h>
+#include "dqiot_drv.h"
 
 /*
 original_key[0][10] exg_key_10
@@ -90,7 +91,7 @@ void mmi_dq_decode_app_random_code(unsigned char *random_code)
 
 /**
   * @brief  时间戳解码10位
-  * @param  pwd 字符数组(16进制)
+  * @param  pwd 字符数组
   * @param  len 长度
   * @param  sec_key 安全解码
   * @param  exg_key 交换解码
@@ -100,7 +101,6 @@ void mmi_dq_decode_app_random_code(unsigned char *random_code)
   */
 void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned char *sec_key, unsigned char *exg_key)
 {
-    unsigned char sec_key_char[10];
     unsigned char exg_key_char[10];
     unsigned char pwd_char[10];
     unsigned char sec_char[10];
@@ -112,21 +112,23 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     unsigned long high_sec_key = 0, low_sec_key = 0;
     unsigned long high_pwd = 0, low_pwd = 0;
 
-    memset(sec_key_char, 0x00, sizeof(sec_key_char));
     memset(exg_key_char, 0x00, sizeof(exg_key_char));
     memset(pwd_char, 0x00, sizeof(pwd_char));
 
-    dq_sdk_CharToHexByte((const unsigned char *)exg_key, (char *)exg_key_char, hex_pwd_len);
-    for (j = 0; j < hex_pwd_len; j++)
+    for (i = 0; i < 10; i++)
     {
-        if (exg_key_char[j] == 0)
-            exg_key_char[j] = 10;
+        exg_key_char[i] = exg_key[i];
+        if (exg_key[i] == 0)
+            exg_key_char[i] = 10;
     }
 
-    dq_sdk_CharToHexByte((const unsigned char *)sec_key, (char *)sec_key_char, hex_pwd_len);
-    CharToInt_2long(sec_key_char, &high_sec_key, &low_sec_key);
+    CharToInt_2long(sec_key, &high_sec_key, &low_sec_key);
 
-    dq_sdk_CharToHexByte((const unsigned char *)pwd, (char *)pwd_char, hex_pwd_len);
+    for (j = 0, i = 3; i < 13; i++)
+    {
+        pwd_char[j] = pwd[i];
+        j++;
+    }
 
     for (i = 0; i < 59; i++)
     {
@@ -181,11 +183,6 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     }
     sec_char[len - 1] = exchange_id;
     memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
-
-    // for (i = 0; i < len; i++)
-    //     printf("time_decode[%d] is %d\n", (int)i, (int)get_decode.tim_key_10[i]);
-    // printf("get_decode sizeof is %d\n", (int)sizeof(get_decode));
-    // printf("############\n");
 
     return;
 }

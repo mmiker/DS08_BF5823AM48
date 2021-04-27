@@ -183,6 +183,7 @@ typedef enum sys_str_id
 	STR_ID_RESET,//重启键
 	STR_ID_RESTORE_STARTING,//正在恢复出厂设置
 	STR_ID_SET_SUCESS,//时间设置成功
+	STR_ID_DECODE,//解码随机码
 	STR_ID_MAX_COUNT,
 	STR_ID_INVALID_ID = 0xFF
 }sys_str_id;

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "mmi_time.h"
+#include "dqiot_drv.h"
 
 unsigned char temp_data[10] = {0xff};
 
@@ -139,7 +140,7 @@ void ntp(unsigned char *decode_time, struct tm *t)
     time = CharToInt_long(temp_data, 10);
 
     //取过去多少个四年，每四年有 1461*24 小时
-    Pass4year = ((unsigned int)time / (1461L * 24L));
+    Pass4year = (time / (1461L * 24L));
 
     //计算年份
     t->tm_year = (Pass4year << 2) + 1970;
@@ -253,4 +254,3 @@ time_t mktime(struct tm dt)
 
 #endif //__LOCK_DECODE_SUPPORT__
 #endif
-

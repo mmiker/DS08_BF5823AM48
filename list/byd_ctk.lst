@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 1   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_CTK
@@ -62,7 +62,7 @@ line level    source
   51          uint8_t xdata g_ucSenSorTouchFlag[SENSOR_NUM];
   52          uint8_t xdata g_ucKeyTouchFlag[SENSOR_NUM];/*the touch state of each key,1: touch ;0: no touch*/
   53          #if CTK_FIRST_KEY_EN
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 2   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 2   
 
   54          uint8_t xdata g_ucFirstTouchKeyIndex;//当前第一个被触摸的按键通道下标，0xff代表无效，
              -0~SENSOR_NUM有效
@@ -126,7 +126,7 @@ line level    source
  111             300,300,300,300,300,300,300,300,
  112             300,300,300,300,300,300,300,300,
  113             300,300,300,300,300,300,300,300,
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 3   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 3   
 
  114             300,300,300,300,300,300,300,300
  115            },//uint16_t pull_current[SENSOR_MAX_NUM];/* detect sensor current at normal mode*/
@@ -190,7 +190,7 @@ line level    source
  164            },//int16_t fingerthreshold[SENSOR_MAX_NUM];
  165          
  166          /*
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 4   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 4   
 
  167            {
  168             55,55,55,55,55,55,55,55,
@@ -254,7 +254,7 @@ line level    source
  224   2        }
  225   1      
  226   1      #if TRACEMODE_EN
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 5   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 5   
 
                 g_ulKeyTouchFlag = 0;
               #endif
@@ -318,7 +318,7 @@ line level    source
  286   1      //    byd_adjust_init(0);//normal mode:tk current adjust
  287   1      //    g_bCsdFilterEnable = 1;//open scan filter handle
  288   1      //    byd_adjust_init(0);//normal mode:tk current adjust
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 6   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 6   
 
  289   1      //  }
  290   1      
@@ -382,7 +382,7 @@ line level    source
  347   1        {
  348   2           WDT_CTRL = 7;
  349   2        }
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 7   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 7   
 
  350   1      
  351   1      #else
@@ -446,7 +446,7 @@ line level    source
  409   3      #endif
  410   3      #if CTK_LONG_TOUCH_HANDLE
                     g_uiTouchFrame = 0;
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 8   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 8   
 
               #endif
  413   3            
@@ -510,7 +510,7 @@ line level    source
  471   2          csd_sensor_enable(byd_parameter.sensorindex[i]);     
  472   2         }
  473   1      }
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 9   
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 9   
 
  474          
  475          /*!
@@ -574,7 +574,7 @@ line level    source
                   rawdata[i] = temp_rawdata + rawdata2[i];
               
               #endif
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 10  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 10  
 
  536   2            
  537   2      #if CTK_FRAME_MUL_SELT == 4
@@ -638,7 +638,7 @@ line level    source
                   temp_rawdata = rawdata4[i]+rawdata3[i]+rawdata2[i]; 
                   rawdata4[i] = rawdata3[i];
                   rawdata3[i] = rawdata2[i];
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 11  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 11  
 
                     rawdata2[i]  = get_csd_data(byd_parameter.sensorindex[i],csd_pull_current[i]);    
                   rawdata[i] = temp_rawdata + rawdata2[i];
@@ -702,7 +702,7 @@ line level    source
               #if CTK_LONG_TOUCH_HANDLE
                 else
                 {
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 12  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 12  
 
                   g_uiTouchFrame = 0;
                 }
@@ -766,7 +766,7 @@ line level    source
  719   2        }
  720   1              
  721   1      }
-C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 12:00:41 PAGE 13  
+C51 COMPILER V9.59.0.0   BYD_CTK                                                           04/27/2021 15:57:06 PAGE 13  
 
  722          
  723          uint8_t byd_get_touch_flag(void)

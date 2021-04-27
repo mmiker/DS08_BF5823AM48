@@ -215,6 +215,7 @@ return :
 */
 unsigned char mmi_dq_fs_get_rfid_unuse_index(void);
 
+unsigned char mmi_dq_fs_get_decode_unuse_index(void);
 /*
 parameter: 
 	none
