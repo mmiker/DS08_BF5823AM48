@@ -20,6 +20,13 @@
         "dq_otp.h": "c",
         "dq_sdk_main.h": "c",
         "mmi_rtc.h": "c",
-        "mmi_decode.h": "c"
+        "mmi_decode.h": "c",
+        "time.h": "c",
+        "stdbool.h": "c",
+        "stdint.h": "c",
+        "string.h": "c",
+        "ctype.h": "c",
+        "mcu02_sfr.h": "c",
+        "mmi_time.h": "c"
     }
 }

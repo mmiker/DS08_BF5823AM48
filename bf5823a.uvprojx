@@ -1003,6 +1003,11 @@
               <FileType>1</FileType>
               <FilePath>.\mmi_src\dq_sdk_main.c</FilePath>
             </File>
+            <File>
+              <FileName>mmi_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mmi_src\mmi_time.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -1173,7 +1173,7 @@ return :
 	none
 */
 //0104 5D134A30 FFFF FFFF FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *pdata)
+static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *p_data)
 {
 	uint8_t i = 0;
 	unsigned char start_time[5];
@@ -1181,7 +1181,7 @@ static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *pdata)
 	memset(start_time, 0x00, sizeof(start_time));
 	for (i = 0; i < 5; i++)
 	{
-		start_time[i] = pdata[i + 2];
+		start_time[i] = p_data[i + 2];
 	}
 	if (otp_set_info.otp_start_hour == 0xFFFFFFFF)
 	{

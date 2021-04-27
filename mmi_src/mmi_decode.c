@@ -3,7 +3,6 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_DECODE_SUPPORT__
 #include "mmi_decode.h"
-#include "dqiot_drv.h"
 #include "string.h"
 #include <stdio.h>
 
@@ -19,9 +18,8 @@ static unsigned char decode_rondom_code_remainder(unsigned char *random_code);
 static unsigned char decode_rondom_code_plus(unsigned char leng, unsigned char array_column);
 static unsigned char decode_rondom_code_extract(void);
 static void dq_sdk_CharToHexByte(const unsigned char *source, char *dest, int sourceLen);
-static unsigned char CharToInt_2long(const unsigned char *source, unsigned long *high, unsigned long *low);
-static unsigned char IntToByteStr_2long(unsigned long high, unsigned long low, char *dest, int highLen, int lowhigh);
 static unsigned int n_power(unsigned char value);
+static void dq_sdk_ByteToHexStr(const unsigned char *source, char *dest, int sourceLen);
 
 /**
   * @brief  校验码解码
@@ -52,12 +50,10 @@ void decode_check_code(unsigned char *random_code)
     get_decode.chk_key_2[0] = (char)(value / 10);
     get_decode.chk_key_2[1] = (char)(value % 10);
 
-    // dqiot_drv_uart0A_init();
     // printf("value is %d\n", value);
     // printf("temp is %d\n", temp);
     // for (i = 0; i < 2; i++)
     //     printf("chk_key_2 is %d\n", (int)get_decode.chk_key_2[i]);
-    // dqiot_drv_uart0B_init();
 
     return;
 }
@@ -75,21 +71,19 @@ void mmi_dq_decode_app_random_code(unsigned char *random_code)
     decode_rondom_code_remainder(random_code); //获取10位解码
     decode_rondom_code_extract();              //获取8/9位解码
 
-    // dqiot_drv_uart0A_init();
     // for (i = 0; i < 10; i++)
     //     printf("exg_code10[%d] is %d\n", (int)i, (int)get_decode.exg_key_10[i]);
     // for (i = 0; i < 9; i++)
     //     printf("exg_code9[%d] is %d\n", (int)i, (int)get_decode.exg_key_9[i]);
     // for (i = 0; i < 8; i++)
     //     printf("exg_code8[%d] is %d\n", (int)i, (int)get_decode.exg_key_8[i]);
-    // printf("############\n");
     // for (i = 0; i < 10; i++)
     //     printf("sec_code10[%d] is %d\n", (int)i, (int)get_decode.sec_key_10[i]);
     // for (i = 0; i < 9; i++)
     //     printf("sec_code9[%d] is %d\n", (int)i, (int)get_decode.sec_key_9[i]);
     // for (i = 0; i < 8; i++)
     //     printf("sec_code8[%d] is %d\n", (int)i, (int)get_decode.sec_key_8[i]);
-    // dqiot_drv_uart0B_init();
+    // printf("############\n");
 
     return;
 }
@@ -122,21 +116,21 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     memset(exg_key_char, 0x00, sizeof(exg_key_char));
     memset(pwd_char, 0x00, sizeof(pwd_char));
 
-    dq_sdk_CharToHexByte((const uint8_t *)exg_key, (char *)exg_key_char, hex_pwd_len);
+    dq_sdk_CharToHexByte((const unsigned char *)exg_key, (char *)exg_key_char, hex_pwd_len);
     for (j = 0; j < hex_pwd_len; j++)
     {
         if (exg_key_char[j] == 0)
             exg_key_char[j] = 10;
     }
 
-    dq_sdk_CharToHexByte((const uint8_t *)sec_key, (char *)sec_key_char, hex_pwd_len);
+    dq_sdk_CharToHexByte((const unsigned char *)sec_key, (char *)sec_key_char, hex_pwd_len);
     CharToInt_2long(sec_key_char, &high_sec_key, &low_sec_key);
 
-    dq_sdk_CharToHexByte((const uint8_t *)pwd, (char *)pwd_char, hex_pwd_len);
+    dq_sdk_CharToHexByte((const unsigned char *)pwd, (char *)pwd_char, hex_pwd_len);
 
     for (i = 0; i < 59; i++)
     {
-        CharToInt_2long((const uint8_t *)pwd_char, &high_pwd, &low_pwd);
+        CharToInt_2long((const unsigned char *)pwd_char, &high_pwd, &low_pwd);
 
         if (low_pwd < low_sec_key)
         {
@@ -161,7 +155,7 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     memset(sec_char, 0x00, sizeof(sec_char));
     exchange_id = pwd_char[2];
     memset(exchange_char, 0x00, sizeof(exchange_char));
-    dq_sdk_CharToHexByte((const uint8_t *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange_char, 5);
+    dq_sdk_CharToHexByte((const unsigned char *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange_char, 5);
 
     for (i = 0; i < len; i++)
     {
@@ -188,13 +182,44 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     sec_char[len - 1] = exchange_id;
     memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
 
-    dqiot_drv_uart0A_init();
-    for (i = 0; i < len; i++)
-        printf("time_decode[%d] is %d\n", (int)i, (int)get_decode.tim_key_10[i]);
-    dqiot_drv_uart0B_init();
+    // for (i = 0; i < len; i++)
+    //     printf("time_decode[%d] is %d\n", (int)i, (int)get_decode.tim_key_10[i]);
+    // printf("get_decode sizeof is %d\n", (int)sizeof(get_decode));
+    // printf("############\n");
 
     return;
 }
+
+// /**
+//   * @brief  时间同步
+//   * @param  时间戳解码10位
+//   * @return status
+//   * @note   none
+//   * @see    none
+//   */
+// decode_status dq_otp_syn_start_time(unsigned char *p_data)
+// {
+//     unsigned char i = 0;
+//     unsigned char start_time[5];
+
+//     memset(start_time, 0x00, sizeof(start_time));
+//     for (i = 0; i < 5; i++)
+//     {
+//         start_time[i] = p_data[i + 2];
+//     }
+//     if (get_decode.start_hour == 0xFFFFFFFF)
+//     {
+//         get_decode.start_hour = dq_sdk_HexcharToInt(start_time, 4);
+//         return DECODE_CMD_SUCCESS;
+//     }
+//     else
+//     {
+//         unsigned char ret;
+//         get_decode.start_hour = dq_sdk_HexcharToInt(start_time, 4);
+//         // g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, dq_otp_fds_write_common_cb);
+//         return DECODE_CMD_SUCCESS;
+//     }
+// }
 
 /**
   * @brief  计算n^n次方
@@ -345,6 +370,34 @@ static unsigned char decode_rondom_code_extract(void)
 }
 
 /**
+  * @brief  字符数组转整形
+  * @param  p_data 字符数组
+  * @param  len 字符数组长度
+  * @return 值
+  * @note   none
+  * @see    none
+  */
+unsigned long CharToInt_long(unsigned char *p_data, unsigned char len)
+{
+    unsigned char i, j;
+    unsigned long temp1 = 0;
+
+    for (j = 0, i = 0; i < len; i++)
+    {
+        if (p_data[i] == 0xff)
+        {
+            j = i;
+            break;
+        }
+    }
+
+    for (i = 0; i < j; i++)
+        temp1 = (temp1 * 10 + p_data[i]);
+
+    return temp1;
+}
+
+/**
   * @brief  10位字符数组转整形
   * @param  source 数组
   * @param  sourcelen 长度
@@ -354,7 +407,7 @@ static unsigned char decode_rondom_code_extract(void)
   * @note   none
   * @see    none
   */
-static unsigned char CharToInt_2long(const unsigned char *source, unsigned long *high, unsigned long *low)
+unsigned char CharToInt_2long(const unsigned char *source, unsigned long *high, unsigned long *low)
 {
     short i;
     *high = 0;
@@ -382,7 +435,7 @@ static unsigned char CharToInt_2long(const unsigned char *source, unsigned long 
   * @note   none
   * @see    none
   */
-static unsigned char IntToByteStr_2long(unsigned long high, unsigned long low, char *dest, int highLen, int lowhigh)
+unsigned char IntToByteStr_2long(unsigned long high, unsigned long low, char *dest, int highLen, int lowhigh)
 {
     unsigned char i = 0;
     unsigned long temp_data1 = high;
@@ -410,16 +463,56 @@ static unsigned char IntToByteStr_2long(unsigned long high, unsigned long low, c
   * @note   none
   * @see    none
   */
-static void dq_sdk_CharToHexByte(const uint8_t *source, char *dest, int sourceLen)
+static void dq_sdk_CharToHexByte(const unsigned char *source, char *dest, int sourceLen)
 {
     short i;
-    uint8_t highByte, lowByte;
+    unsigned char highByte, lowByte;
     for (i = 0; i < sourceLen; i++)
     {
         highByte = source[i] >> 4;
         lowByte = source[i] & 0x0f;
         dest[i * 2] = highByte;
         if (lowByte != 0x0F)
+            dest[i * 2 + 1] = lowByte;
+    }
+    return;
+}
+
+int dq_sdk_HexcharToInt(unsigned char *source, int length)
+{
+    int int_data = 0;
+    char dest[20];
+    unsigned char ret = 0;
+    //dest = malloc(length*2*sizeof(unsigned char));
+
+    memset(dest, 0x00, sizeof(dest));
+    dq_sdk_ByteToHexStr(source, dest, length);
+    ret = sscanf((const char *)dest, "%x", &int_data);
+
+    //free(dest);
+    if (ret == 1)
+        return int_data;
+    else
+        return 0;
+}
+
+static void dq_sdk_ByteToHexStr(const unsigned char *source, char *dest, int sourceLen)
+{
+    short i;
+    unsigned char highByte, lowByte;
+    for (i = 0; i < sourceLen; i++)
+    {
+        highByte = source[i] >> 4;
+        lowByte = source[i] & 0x0f;
+        highByte += 0x30;
+        if (highByte > 0x39)
+            dest[i * 2] = highByte + 0x07;
+        else
+            dest[i * 2] = highByte;
+        lowByte += 0x30;
+        if (lowByte > 0x39)
+            dest[i * 2 + 1] = lowByte + 0x07;
+        else
             dest[i * 2 + 1] = lowByte;
     }
     return;

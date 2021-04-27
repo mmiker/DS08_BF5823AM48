@@ -485,7 +485,6 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 					{
 #ifdef __LOCK_DECODE_SUPPORT__
-						extern decode_data get_decode;
 						unsigned char i, j;
 						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
 						unsigned char time_code[5] = {0x80, 0x47, 0x57, 0x79, 0x80};
@@ -515,13 +514,11 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						decode_check_code(random_code);
 						if (get_decode.chk_key_2[0] == random_code[13] && get_decode.chk_key_2[1] == random_code[14])
 						{
+							struct tm t;
+
 							//解码
 							mmi_dq_decode_app_random_code(random_code);
 							decode_time_stamp_10num(time_code, 10, sec_code, exg_code);
-
-							dqiot_drv_uart0A_init();
-							printf("get_decode sizeof is %d\n", (int)sizeof(get_decode));
-							dqiot_drv_uart0B_init();
 
 							//存储
 							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
@@ -543,6 +540,13 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 								printf("flash is error\n");
 								dqiot_drv_uart0B_init();
 							}
+
+							// get_decode.tim_key_10 = 1619063988;
+							//时间戳转时间
+							ntp(get_decode.tim_key_10, &t);
+							dqiot_drv_uart0A_init();
+							printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
+							dqiot_drv_uart0B_init();
 						}
 
 #endif

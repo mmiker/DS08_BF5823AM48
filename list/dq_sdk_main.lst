@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 1   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQ_SDK_MAIN
@@ -62,7 +62,7 @@ line level    source
               typedef struct otp_base_setting_info
               {
                 unsigned char init_suc_flag;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 2   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 2   
 
                 unsigned char reserve;
                 unsigned char otp_dev_key[16];
@@ -126,7 +126,7 @@ line level    source
                 CMD_OTP_SYN_RFID,    //0234
                 CMD_OTP_ADD_RFID_BY_APP, //0235
                              //LOG
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 3   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 3   
 
                 CMD_OTP_UPDATE_LOG,    //0x0F,0301
               
@@ -190,7 +190,7 @@ line level    source
                   {0x01, 0x01, CMD_OTP_SYN_AES_16},
                   {0x01, 0x02, CMD_OTP_SYN_SEC_8},
                   {0x01, 0x03, CMD_OTP_SYN_SEC_9},
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 4   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 4   
 
                   {0x01, 0x04, CMD_OTP_SYN_START_TIME},
                   {0x01, 0x05, CMD_OTP_SYN_PWD_STR},
@@ -254,7 +254,7 @@ line level    source
               static OTP_BASE_RET g_dq_cmd_repleys_status;
               //static uint8_t      g_dq_reset_index = 0;
               static uint16_t g_dq_fp_index = 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 5   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 5   
 
               static uint16_t g_dq_rfid_index = 0;
               static uint32_t g_dq_add_temp_start_time = 0;
@@ -318,7 +318,7 @@ line level    source
              -0x99,0x3,0x81};
                 //0221 5C9A0030 5D134A30 00 60 FFFF FF 99
                 uint8_t test_temp_data[] = {0x02, 0x21, 0x5C, 0x9A, 0x00, 0x30, 0x5D, 0x13, 0x4A, 0x30, 0x43, 0x56, 0xFF,
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 6   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 6   
 
              - 0xFF, 0xFF, 0x99, 0x3, 0x81};
                 dq_sdk_otp_init();
@@ -382,7 +382,7 @@ line level    source
               {
                 short i;
                 uint8_t highByte, lowByte;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 7   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 7   
 
                 for (i = 0; i < sourceLen; i++)
                 {
@@ -446,7 +446,7 @@ line level    source
               void dq_sdk_HexCharToByte(const char *source, uint8_t *dest, int sourceLen)
               {
                 short i;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 8   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 8   
 
                 uint8_t highByte, lowByte;
                 for (i = 0; i < sourceLen; i += 2)
@@ -510,7 +510,7 @@ line level    source
                 else
                   return 0;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 9   
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 9   
 
               /*
               parameter: 
@@ -574,7 +574,7 @@ line level    source
                 current status machine
               return :
                 none
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 10  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 10  
 
               */
               unsigned char dq_otp_get_sys_time_ymd(unsigned char *year, unsigned char *month, unsigned char *day, unsig
@@ -638,7 +638,7 @@ line level    source
                 g_dq_otp_init.clear_lock_rf = dq_otp_clear_lock_rf_cb;
               
                 //g_dq_otp_init.del_lock_fp = dq_otp_get_lock_fp_index_cb;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 11  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 11  
 
                 //g_dq_otp_init.get_lock_pwd_index = dq_otp_get_lock_pwd_index_cb;
                 g_dq_otp_init.del_lock_pwd = dq_otp_del_lock_pwd_cb;
@@ -702,7 +702,7 @@ line level    source
                 g_dq_otp_init.get_admin_status(&admin_state, &ret);
                 if (otp_set_info.init_suc_flag == 1 && admin_state != 0)
                 {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 12  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 12  
 
                   extern uint8_t wdt_flag;
                   dq_dev_key_flag = 1;
@@ -766,7 +766,7 @@ line level    source
                     g_dq_app_rfid_info[i].rfid_end_time = 0xFFFFFFFF;
                   }
               #endif
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 13  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 13  
 
                   g_dq_otp_init.init_sucess(0);
                 }
@@ -830,7 +830,7 @@ line level    source
                 out[1] = 0xff & crc;
                 return;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 14  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 14  
 
               
               /*
@@ -894,7 +894,7 @@ line level    source
               
                 serialId++;
                 return;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 15  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 15  
 
               }
               
@@ -958,7 +958,7 @@ line level    source
                 notify_data[13] = 0xFF;
               
                 //serialId
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 16  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 16  
 
                 dq_otp_setSerialId(notify_data);
                 for (i = 0; i < 16; i++)
@@ -1022,7 +1022,7 @@ line level    source
                 //instruct
                 notify_data[0] = instruct_h;
                 notify_data[1] = instruct_l;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 17  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 17  
 
                 //padding
                 if (data_len > 12)
@@ -1086,7 +1086,7 @@ line level    source
               
                 flag = dq_otp_app_get_operate_lock_flag();
                 if (flag == 1)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 18  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 18  
 
                 {
                   switch (g_dq_otp_type)
@@ -1150,7 +1150,7 @@ line level    source
               #endif
                 return;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 19  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 19  
 
               
               /*
@@ -1214,7 +1214,7 @@ line level    source
                 none
               return :
                 none
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 20  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 20  
 
               */
               //0103 736381504F 358174265F FFFF FF 99
@@ -1243,7 +1243,7 @@ line level    source
                 none
               */
               //0104 5D134A30 FFFF FFFF FFFF FFFF FF 99
-              static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *pdata)
+              static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *p_data)
               {
                 uint8_t i = 0;
                 unsigned char start_time[5];
@@ -1251,7 +1251,7 @@ line level    source
                 memset(start_time, 0x00, sizeof(start_time));
                 for (i = 0; i < 5; i++)
                 {
-                  start_time[i] = pdata[i + 2];
+                  start_time[i] = p_data[i + 2];
                 }
                 if (otp_set_info.otp_start_hour == 0xFFFFFFFF)
                 {
@@ -1278,7 +1278,7 @@ line level    source
               //0105 00 4316982507 01 2641538970 FF 99
               static OTP_BASE_RET dq_otp_syn_exchange_num(unsigned char *pdata)
               {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 21  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 21  
 
                 uint8_t i = 0, j = 0;
                 uint8_t num = 0;
@@ -1342,7 +1342,7 @@ line level    source
               parameter: 
                 none
               return :
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 22  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 22  
 
                 none
               */
@@ -1406,7 +1406,7 @@ line level    source
               }
               #endif
               
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 23  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 23  
 
               /*
               parameter: 
@@ -1470,7 +1470,7 @@ line level    source
                 else if (ekey_type == 0x02) //sin ekey
                 {
                   ret_val = dq_otp_check_sin_ekey_verify(ekey_start_time, ekey_end_time, sys_time_sec);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 24  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 24  
 
                 }
                 else if (ekey_type == 0x03) //lim ekey
@@ -1534,7 +1534,7 @@ line level    source
                 uint8_t pwd_len = 0;
               
                 for (i = 0; i < len; i++)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 25  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 25  
 
                 {
                   pwd_h = (pwd[i] & 0xF0) >> 4;
@@ -1598,7 +1598,7 @@ line level    source
               
                     if (pwd_hour + 6 <= sys_hour)
                     {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 26  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 26  
 
                       memset(g_dq_app_pwd_info[i].app_pwd, 0xFF, sizeof(g_dq_app_pwd_info[i].app_pwd));
                       memset(g_dq_app_pwd_info[i].replace_pwd, 0xFF, sizeof(g_dq_app_pwd_info[i].replace_pwd));
@@ -1662,7 +1662,7 @@ line level    source
                 }
                 return i;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 27  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 27  
 
               
               /*
@@ -1726,7 +1726,7 @@ line level    source
                   for (i = 0; i < 5; i++)
                   {
                     g_dq_app_pwd_info[pwd_index].app_pwd[i] = pdata[i + 2];
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 28  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 28  
 
                   }
                   //memset(pwd_info,0xFF,sizeof(pwd_info));
@@ -1790,7 +1790,7 @@ line level    source
                 //save pwd info
                 g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
                 g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_p
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 29  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 29  
 
              -wd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_fds_write_common_cb);
               #ifdef __LOCK_USE_MALLOC__
@@ -1854,7 +1854,7 @@ line level    source
                 }
               }
               /*
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 30  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 30  
 
               parameter: 
                 none
@@ -1918,7 +1918,7 @@ line level    source
                   {
                     num++;
                     if (num == t)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 31  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 31  
 
                       break;
                   }
@@ -1982,7 +1982,7 @@ line level    source
               
                 for (i = i + 1; i < DQ_OTP_APP_PWD_NUM; i++)
                 {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 32  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 32  
 
                   if (memcmp(g_dq_app_pwd_info[i].app_pwd, g_dq_app_pwd_info[i].replace_pwd, 5) == 0)
                   {
@@ -2046,7 +2046,7 @@ line level    source
                 else if (result_flag == 3)
                   g_dq_cmd_repleys_status = OTP_BASE_HAND_EXIT;
                 else if (result_flag == 5)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 33  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 33  
 
                   g_dq_cmd_repleys_status = OTP_BASE_TYPE_ERROR;
                 else
@@ -2110,7 +2110,7 @@ line level    source
                 {
                   fp_time[i] = pdata[i + 2];
                 }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 34  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 34  
 
                 g_dq_add_temp_start_time = dq_sdk_HexcharToInt(fp_time, 4);
               
@@ -2174,7 +2174,7 @@ line level    source
               void dq_otp_lock_fp_app_fail_result(void)
               {
               
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 35  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 35  
 
                 g_dq_cmd_repleys_status = OTP_BASE_FAIL;
                 dq_otp_fds_write_common_cb();
@@ -2238,7 +2238,7 @@ line level    source
               
                 return OTP_BASE_SUCESS;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 36  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 36  
 
               
               static OTP_BASE_RET dq_otp_syn_lock_fp(uint8_t *pdata)
@@ -2302,7 +2302,7 @@ line level    source
               {
                 uint8_t rfid_index_char[2];
                 uint8_t ret = 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 37  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 37  
 
               
                 memset(rfid_index_char, 0xFF, sizeof(rfid_index_char));
@@ -2366,7 +2366,7 @@ line level    source
               parameter: 
                 none
               return :
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 38  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 38  
 
                 none
               */
@@ -2430,7 +2430,7 @@ line level    source
               #ifdef __LOCK_USE_MALLOC__
                 mmi_dq_fs_free_storage(DQ_FS_MEM_APP_RFID, (void **)&g_dq_app_rfid_info);
               #endif
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 39  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 39  
 
               }
               
@@ -2494,7 +2494,7 @@ line level    source
                 else
                   return OTP_BASE_NOT_FOUND;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 40  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 40  
 
               
               /*
@@ -2558,7 +2558,7 @@ line level    source
                 {
                   memset(rfid_time, 0x00, sizeof(rfid_time));
                   for (i = 0; i < 4; i++)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 41  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 41  
 
                   {
                     rfid_time[i] = pdata[i + 3];
@@ -2622,7 +2622,7 @@ line level    source
               }
               
               #endif
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 42  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 42  
 
               /*
               parameter: 
@@ -2686,7 +2686,7 @@ line level    source
               
                 memset(sys_time, 0xFF, sizeof(sys_time));
               
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 43  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 43  
 
                 for (i = 0; i < 4; i++)
                 {
@@ -2750,7 +2750,7 @@ line level    source
               }
               
               /*
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 44  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 44  
 
               parameter: 
                 none
@@ -2814,7 +2814,7 @@ line level    source
               
               uint8_t dq_otp_get_dfu_permit(void)
               {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 45  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 45  
 
                 return g_dq_dfu_permit;
               }
@@ -2878,7 +2878,7 @@ line level    source
                 }
                 else if (data_ret[15] != serialId)
                 {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 46  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 46  
 
               
                   NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation error serialID= 0x%x data_ret 0x%x \n", serialId, data_re
@@ -2942,7 +2942,7 @@ line level    source
                   if (retval != OTP_BASE_SUCESS)
                   {
                     dq_otp_common_reply(data_ret[0], data_ret[1], retval);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 47  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 47  
 
                   }
                   break;
@@ -3006,7 +3006,7 @@ line level    source
                 case CMD_OTP_SYN_FP:
               #if defined(__LOCK_FP_SUPPORT__) || defined(__LOCK_FP_SUPPORT2__) || defined(__LOCK_FP_SUPPORT1_2__)
                   retval = dq_otp_syn_lock_fp(data_ret);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 48  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 48  
 
               #else
                   retval = OTP_BASE_FAIL;
@@ -3070,7 +3070,7 @@ line level    source
               
                 case CMD_OTP_UPDATE_LOG:
                   dq_otp_send_log();
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 49  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 49  
 
                   break;
                 case CMD_OTP_GET_LOCK_CONFIG:
@@ -3134,7 +3134,7 @@ line level    source
               }
               
               /*
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 50  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 50  
 
               parameter: 
                 current status machine
@@ -3198,7 +3198,7 @@ line level    source
                     dq_otp_send_data_reply(cmd_info[i].cmd_h, cmd_info[i].cmd_l, g_dq_cmd_repleys_status, (uint8_t *)fp_ind
              -ex_char, 2);
                   }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 51  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 51  
 
                 }
                 else if (g_dq_otp_type == CMD_OTP_ADD_RFID)
@@ -3262,7 +3262,7 @@ line level    source
                 g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info)
              -, &ret, write_data_cb);
                 return;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 52  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 52  
 
               }
               /*
@@ -3326,7 +3326,7 @@ line level    source
                         memset(g_dq_app_pwd_info[i].app_pwd, 0xFF, sizeof(g_dq_app_pwd_info[i].app_pwd));
                         memset(g_dq_app_pwd_info[i].replace_pwd, 0xFF, sizeof(g_dq_app_pwd_info[i].replace_pwd));
                         g_dq_app_pwd_info[i].pwd_flag = 0xFF;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 53  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 53  
 
                         g_dq_app_pwd_info[i].pwd_type = 0xFF;
                       }
@@ -3390,7 +3390,7 @@ line level    source
                       unsigned char len = dq_otp_get_pwd_len(g_dq_app_pwd_info[i].app_pwd, 5);
                       memset(dec_pwd_char, 0x00, sizeof(dec_pwd_char));
                       dq_otp_enc_pwd(g_dq_app_pwd_info[i].app_pwd, len, otp_set_info.otp_sec_key_9, otp_set_info.otp_exg_key
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 54  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 54  
 
              -_9, dec_pwd_char);
                       pwd_hour = dq_otp_get_pwd_time_hour(dec_pwd_char, 5, 1);
@@ -3454,7 +3454,7 @@ line level    source
                 unsigned char ret = 0;
               #ifdef __LOCK_USE_MALLOC__
                 g_dq_app_fp_info = (otp_base_app_fp_info *)mmi_dq_fs_get_storage(DQ_FS_MEM_APP_FP, &ret);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 55  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 55  
 
               #endif
                 for (i = 0; i < DQ_OTP_APP_FP_NUM; i++)
@@ -3518,7 +3518,7 @@ line level    source
                 if (index == 0xFF)
                 {
                   otp_log_end = 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 56  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 56  
 
                   otp_log_head = 0;
                 }
@@ -3582,7 +3582,7 @@ line level    source
                     }
                   }
                   if (index < DQ_OTP_LOG_NUM - 1)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 57  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 57  
 
                     otp_log_end = index + 1;
                   else
@@ -3646,7 +3646,7 @@ line level    source
               
                 index = otp_log_head;
               
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 58  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 58  
 
                 if (otp_log_head < DQ_OTP_LOG_NUM - 1)
                   otp_log_head++;
@@ -3710,7 +3710,7 @@ line level    source
              -en)
               {
                 unsigned char j;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 59  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 59  
 
               
                 otp_lock_temp_log[id].sys_time = dq_otp_get_sys_time_sec();
@@ -3774,7 +3774,7 @@ line level    source
               
                 return 0;
               }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 60  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 60  
 
               #if 0
               unsigned char dq_otp_del_open_log(void)
@@ -3838,7 +3838,7 @@ line level    source
                 
                 if(otp_log_end != otp_log_head)
                 {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 61  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 61  
 
                   if(otp_log_end>0&&otp_log_head!=otp_log_end-1)
                     otp_lock_log[otp_log_end-1].flag = 2;
@@ -3902,7 +3902,7 @@ line level    source
                 otp_lock_log[index].sys_time_correct = 0xFF;
                 otp_lock_log[index].flag = 0xFF;
               #endif
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 62  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 62  
 
               }
               
@@ -3966,7 +3966,7 @@ line level    source
                 //g_dq_app_pwd_info[pwd_index].pwd_index = pwd_index;
                 for (i = 0; i < 5; i++)
                 {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 63  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 63  
 
                   g_dq_app_pwd_info[pwd_index].app_pwd[i] = in_pwd[i];
                   g_dq_app_pwd_info[pwd_index].replace_pwd[i] = in_pwd[i];
@@ -4030,7 +4030,7 @@ line level    source
                 switch(g_dq_app_pwd_info[index].pwd_type)
                 {
                   case OTP_PWD_TYPE_LIM:
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 64  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 64  
 
                   {
                     unsigned char len;
@@ -4094,7 +4094,7 @@ line level    source
                 memset(pwd_char, 0x00, sizeof(pwd_char));
               
                 dq_sdk_CharToHexByte((const uint8_t *)exg_key, (char *)exg_key_char, hex_pwd_len);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 65  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 65  
 
                 dq_sdk_CharToInt(exg_key_char, len);
               
@@ -4158,7 +4158,7 @@ line level    source
               }
               /*
               parameter: 
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 66  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 66  
 
                 current status machine
               return :
@@ -4222,7 +4222,7 @@ line level    source
               
                 //for(i=0;i<DQ_OTP_APP_FP_NUM;i++)
                 //{
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 67  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 67  
 
                 //  if(g_dq_app_fp_info[i].fp_index == index)
                 //  {
@@ -4286,7 +4286,7 @@ line level    source
               unsigned char dq_otp_check_replace_password(unsigned char *password)
               {
                 unsigned char i = 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 68  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 68  
 
                 unsigned char k = 0;
               #ifdef __LOCK_USE_MALLOC__
@@ -4350,7 +4350,7 @@ line level    source
                     {
                       if(password[k] != g_dq_app_pwd_info[i].app_pwd[k])
                         break;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 69  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 69  
 
                     }
                     if(k == 5)
@@ -4414,7 +4414,7 @@ line level    source
               #endif
                     if (g_dq_app_pwd_info[i].pwd_flag == 0)
                     {
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 70  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 70  
 
                       g_dq_app_pwd_info[i].pwd_flag = 1;
                       dq_app_pwd_flag = 1;
@@ -4478,7 +4478,7 @@ line level    source
                 unsigned char i = 0;
                 unsigned short odd_val = 0;
                 unsigned short even_val = 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 71  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 71  
 
                 unsigned char ret_val = 0;
                 for (i = 0; i < len; i++)
@@ -4542,7 +4542,7 @@ line level    source
               }
               
               unsigned char dq_otp_get_local_sys_time_hour(unsigned short *sys_hour)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 72  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 72  
 
               {
                 uint32_t sec_time; //= (1552471200-DQ_OTP_START_TIME_SEC);
@@ -4606,7 +4606,7 @@ line level    source
               */
               unsigned char dq_otp_check_per_pwd_verify(unsigned char *dec_pwd, unsigned char *pwd_in, unsigned char len
              -)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 73  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 73  
 
               {
                 unsigned char ret_val = 0;
@@ -4670,7 +4670,7 @@ line level    source
                     extern uint8_t input_empty_pwd_len;
                     if (input_empty_pwd_len == 1)
               #endif
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 74  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 74  
 
                     {
                       //pwd_hour = dq_otp_get_pwd_time_hour(in_pwd,5,1);
@@ -4734,7 +4734,7 @@ line level    source
                   }
                 }
                 return ret_val;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 75  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 75  
 
               }
               
@@ -4798,7 +4798,7 @@ line level    source
               
                 vercode[0] = pwd[4];
                 vercode[1] = pwd[5];
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 76  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 76  
 
                 day = dq_sdk_CharToInt(vercode,2);
               
@@ -4862,7 +4862,7 @@ line level    source
                     delay_time = (delay_time - 500) * 24;
               
                     end_time_sec = pwd_time_sec + delay_time * 3600;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 77  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 77  
 
                   }
                   else if (dec_pwd[5] == 9) //900-999 for month
@@ -4926,7 +4926,7 @@ line level    source
                     return 0;
                   }
                 }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 78  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 78  
 
                 memset(time_buf, 0x00, sizeof(time_buf));
                 if (len == 8)
@@ -4990,7 +4990,7 @@ line level    source
                   {
                     time_buf[i] = dec_pwd[5 + i];
                   }
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 79  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 79  
 
                   delay_time = dq_sdk_CharToInt(time_buf, 4);
                   if ((sys_hour >= hour_time) && (sys_hour <= hour_time + delay_time))
@@ -5054,7 +5054,7 @@ line level    source
                     return 1;
                   else
                     return 0;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 80  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 80  
 
                 }
                 return 1;
@@ -5118,7 +5118,7 @@ line level    source
                 {
                   pwd_sec = (pwd_hour * 3600 + otp_set_info.otp_start_hour);
                   g_dq_otp_init.time_zone_pro(&pwd_sec);
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 81  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 81  
 
                   pwd_hour2 = (pwd_sec / 3600) % 24;
                   dq_otp_get_local_sys_time_hour(&sys_hour2);
@@ -5182,7 +5182,7 @@ line level    source
                     ret_val = dq_otp_check_lim_pwd_verify(dec_pwd_char, pwd_in, len);
                   }
                   else if (dec_pwd_char[0] == 6)
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 82  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 82  
 
                   {
                     ret_val = dq_otp_check_loop_pwd_verify(dec_pwd_char, pwd_in, len);
@@ -5246,7 +5246,7 @@ line level    source
                 unsigned char pwd_ret =0;
                 unsigned short pwd_short_ret = 0;
                 unsigned char pwd_len = 9;
-C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/24/2021 14:28:18 PAGE 83  
+C51 COMPILER V9.59.0.0   DQ_SDK_MAIN                                                       04/27/2021 12:00:50 PAGE 83  
 
                 memset(sec_pwd,0xFF,sizeof(sec_pwd));
                 memset(otp_set_info.otp_exg_key,0x00,sizeof(otp_set_info.otp_exg_key));
