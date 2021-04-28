@@ -1396,7 +1396,9 @@ const sys_menu_t sys_menu_tree[] =
 #ifdef __LOCK_WIFI_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_setting},
 		{STR_ID_SYSTEM, STR_ID_WIFI, mmi_dq_sys_wifi_airkiss_setting},
+#ifdef __LOCK_DECODE_SUPPORT__
 		{STR_ID_SYSTEM, STR_ID_DECODE, mmi_dq_sys_add_decode},
+#endif
 
 #endif
 #ifdef __LOCK_110_SUPPORT__

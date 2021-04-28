@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/27/2021 15:57:13 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/28/2021 10:45:54 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_QUEUE
@@ -62,7 +62,7 @@ line level    source
   51          
   52          /*
   53          parameter: 
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/27/2021 15:57:13 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/28/2021 10:45:54 PAGE 2   
 
   54            none
   55          return :
@@ -126,7 +126,7 @@ line level    source
  113            none
  114          return :
  115            none
-C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/27/2021 15:57:13 PAGE 3   
+C51 COMPILER V9.59.0.0   MMI_QUEUE                                                         04/28/2021 10:45:54 PAGE 3   
 
  116          */
  117          unsigned char mmi_InQueue(Sys_MSG_Queue_M que)

@@ -215,6 +215,7 @@ static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t 
 		}
 	}
 	break;
+#endif
 	default:
 		return RET_FAIL;
 	}
@@ -940,39 +941,25 @@ RET_VAL mmi_dq_fs_clr_rfid(void)
   */
 unsigned char mmi_dq_fs_get_decode_unuse_index(void)
 {
-	unsigned char i, j;
+	unsigned char i;
 	unsigned char getdata[66];
 
 	memset(&getdata, 0xff, sizeof(getdata));
 	mmi_dq_fds_read(MID_FDS_FILE_DECODE, getdata, 66);
 
 	dqiot_drv_uart0A_init();
-	for (i = 0; i < 10; i++)
-	{
-		for (i = 0; i < 66; i++)
-			printf("exg_key_10 is %d\n", (int)get_decode.exg_key_8[i]);
-	}
-	dqiot_drv_uart0B_init();
-	dqiot_drv_uart0A_init();
 	for (i = 0; i < 66; i++)
 		printf("getdata is %d\n", (int)getdata[i]);
 	dqiot_drv_uart0B_init();
 
-	for (j = 0, i = 0; i < 66; i++)
+	for (i = 0; i < 66; i++)
 	{
 		if (getdata[i] == 0xFF)
-		{
-			j = i;
-			break;
-		}
+			return 0;
 	}
 
-	if (j != 0)
-		return 0xFF;
-
-	return 0;
+	return 0xFF;
 }
-
 #endif
 
 /*

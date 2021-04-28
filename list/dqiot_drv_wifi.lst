@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 1   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQIOT_DRV_WIFI
@@ -62,7 +62,7 @@ line level    source
   51            * @return none
   52            * @note   none
   53            * @see    none
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 2   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 2   
 
   54            */
   55          void dqiot_drv_wifi_gpio_deinit(void)
@@ -126,7 +126,7 @@ line level    source
                     //iic_master_stop();
                     //EA = 1;
                     //return 1;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 3   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 3   
 
                   }
               
@@ -190,7 +190,7 @@ line level    source
  175   4              for (i = 0; i < uart_getbuflen; i++)
  176   4              {
  177   5                if (uart_get_buf[i] == 'K' || uart_get_buf[i] == 'I' || uart_get_buf[i] == 'B' || uart_get_buf[i] == 
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 4   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 4   
 
              -'F' || uart_get_buf[i] == 'R' || uart_get_buf[i] == 'M' || uart_get_buf[i] == 'J' || uart_get_buf[i] == 'q')
  178   5                {
@@ -254,7 +254,7 @@ line level    source
  235   6                  if (uart_getbuflen - i >= 2) //取最后一个命令
  236   6                    index = i;
  237   6                }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 5   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 5   
 
  238   5              }
  239   4      
@@ -318,7 +318,7 @@ line level    source
                   {
                     iic_master_stop();
                     EA = 1;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 6   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 6   
 
                     return 1;
                   }
@@ -382,7 +382,7 @@ line level    source
  359   1        uint8_t wifi_data[2];
  360   1        wifi_data[0] = WIFI_CMD_AIRKISS_NET_CON;
  361   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 7   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 7   
 
  362   1        if (UH010_Write_Byte(wifi_data, 2) == 0)
  363   1          return 1;
@@ -446,7 +446,7 @@ line level    source
  421   1        wifi_data[0] = WIFI_CMD_CHECK_NET;
  422   1        wifi_data[1] = 100;
  423   1        UH010_Write_Byte(wifi_data, 2);
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 8   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 8   
 
  424   1        delay_ms(50);
  425   1        UH010_ReadDatas(wifi_data, 0, data_2, 2);
@@ -510,7 +510,7 @@ line level    source
  483   1          UH010_Write_Byte(wifi_data, 3);
  484   1      
  485   1        return 1;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 9   
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 9   
 
  486   1      }
  487          
@@ -574,7 +574,7 @@ line level    source
  545   1        RET_VAL retval = 0xff;
  546   1        uint8_t wifi_data[2];
  547   1        uint8_t data_2[3] = {0};
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 10  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 10  
 
  548   1        wifi_data[0] = WIFI_CMD_ADD_DEL;
  549   1        wifi_data[1] = 100;
@@ -638,7 +638,7 @@ line level    source
  607   2          switch (data_2[0])
  608   2          {
  609   3          case 'M':
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 11  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 11  
 
  610   3            retval = mmi_dq_fs_del_pwd(get_index, FDS_USE_TYPE_USER);
  611   3            if (retval == RET_SUCESS)
@@ -702,7 +702,7 @@ line level    source
  669   1          return 1; //空值
  670   1      
  671   1        return 0;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 12  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 12  
 
  672   1      }
  673          
@@ -766,7 +766,7 @@ line level    source
  731   1        wifi_data[1] = 100;
  732   1        wifi_data[2] = index;
  733   1        UH010_Write_Byte(wifi_data, 3);
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 13  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 13  
 
  734   1      }
  735          
@@ -830,7 +830,7 @@ line level    source
  793   1        uint8_t wifi_data[3];
  794   1        wifi_data[0] = WIFI_CMD_ADD_RF;
  795   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 14  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 14  
 
  796   1        wifi_data[2] = index;
  797   1        UH010_Write_Byte(wifi_data, 3);
@@ -894,7 +894,7 @@ line level    source
  855   1        uint8_t wifi_data[2];
  856   1        wifi_data[0] = WIFI_CMD_CLR_RF;
  857   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 15  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 15  
 
  858   1        UH010_Write_Byte(wifi_data, 2);
  859   1      }
@@ -958,7 +958,7 @@ line level    source
  917   1        uint8_t wifi_data[3];
  918   1        wifi_data[0] = WIFI_CMD_RF_OPEN;
  919   1        wifi_data[1] = 100;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 16  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 16  
 
  920   1        wifi_data[2] = index;
  921   1        UH010_Write_Byte(wifi_data, 3);
@@ -1022,7 +1022,7 @@ line level    source
  979   1        wifi_data[1] = 100;
  980   1        UH010_Write_Byte(wifi_data, 2);
  981   1      }
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 17  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 17  
 
  982          
  983          /**
@@ -1086,7 +1086,7 @@ line level    source
 1041   1      }
 1042          
 1043          /**
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 18  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 18  
 
 1044            * @brief  拍照录像开关（接收）
 1045            * @param  none
@@ -1150,7 +1150,7 @@ line level    source
 1102          {
 1103   1        uint8_t wifi_data[2];
 1104   1        wifi_data[0] = WIFI_CMD_WF_SET_110;
-C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/27/2021 17:28:47 PAGE 19  
+C51 COMPILER V9.59.0.0   DQIOT_DRV_WIFI                                                    04/28/2021 10:45:53 PAGE 19  
 
 1105   1        wifi_data[1] = 100;
 1106   1        UH010_Write_Byte(wifi_data, 2);

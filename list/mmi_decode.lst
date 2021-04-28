@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_DECODE
@@ -62,146 +62,146 @@ line level    source
   51   1          get_decode.chk_key_2[0] = (char)(value / 10);
   52   1          get_decode.chk_key_2[1] = (char)(value % 10);
   53   1      
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 2   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 2   
 
-  54   1          // printf("value is %d\n", value);
-  55   1          // printf("temp is %d\n", temp);
-  56   1          // for (i = 0; i < 2; i++)
-  57   1          //     printf("chk_key_2 is %d\n", (int)get_decode.chk_key_2[i]);
-  58   1      
-  59   1          return;
-  60   1      }
-  61          
-  62          /**
-  63            * @brief  随机码解码
-  64            * @param  随机码数组
-  65            * @return status
-  66            * @note   none
-  67            * @see    none
-  68            */
-  69          void mmi_dq_decode_app_random_code(unsigned char *random_code)
-  70          {
-  71   1          // unsigned char i;
-  72   1          decode_rondom_code_remainder(random_code); //获取10位解码
-  73   1          decode_rondom_code_extract();              //获取8/9位解码
-  74   1      
-  75   1          // for (i = 0; i < 10; i++)
-  76   1          //     printf("exg_code10[%d] is %d\n", (int)i, (int)get_decode.exg_key_10[i]);
-  77   1          // for (i = 0; i < 9; i++)
-  78   1          //     printf("exg_code9[%d] is %d\n", (int)i, (int)get_decode.exg_key_9[i]);
-  79   1          // for (i = 0; i < 8; i++)
-  80   1          //     printf("exg_code8[%d] is %d\n", (int)i, (int)get_decode.exg_key_8[i]);
-  81   1          // for (i = 0; i < 10; i++)
-  82   1          //     printf("sec_code10[%d] is %d\n", (int)i, (int)get_decode.sec_key_10[i]);
-  83   1          // for (i = 0; i < 9; i++)
-  84   1          //     printf("sec_code9[%d] is %d\n", (int)i, (int)get_decode.sec_key_9[i]);
-  85   1          // for (i = 0; i < 8; i++)
-  86   1          //     printf("sec_code8[%d] is %d\n", (int)i, (int)get_decode.sec_key_8[i]);
-  87   1          // printf("############\n");
-  88   1      
-  89   1          return;
-  90   1      }
-  91          
-  92          /**
-  93            * @brief  时间戳解码10位
-  94            * @param  pwd 字符数组
-  95            * @param  len 长度
-  96            * @param  sec_key 安全解码
-  97            * @param  exg_key 交换解码
-  98            * @return status
-  99            * @note   none
- 100            * @see    none
- 101            */
- 102          void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned char *sec_key, unsigned char 
+  54   1          return;
+  55   1      }
+  56          
+  57          /**
+  58            * @brief  随机码解码
+  59            * @param  随机码数组
+  60            * @return status
+  61            * @note   none
+  62            * @see    none
+  63            */
+  64          void mmi_dq_decode_app_random_code(unsigned char *random_code)
+  65          {
+  66   1          // unsigned char i;
+  67   1          decode_rondom_code_remainder(random_code); //获取10位解码
+  68   1          decode_rondom_code_extract();              //获取8/9位解码
+  69   1      
+  70   1          // for (i = 0; i < 10; i++)
+  71   1          //     printf("exg_code10[%d] is %d\n", (int)i, (int)get_decode.exg_key_10[i]);
+  72   1          // for (i = 0; i < 9; i++)
+  73   1          //     printf("exg_code9[%d] is %d\n", (int)i, (int)get_decode.exg_key_9[i]);
+  74   1          // for (i = 0; i < 8; i++)
+  75   1          //     printf("exg_code8[%d] is %d\n", (int)i, (int)get_decode.exg_key_8[i]);
+  76   1          // for (i = 0; i < 10; i++)
+  77   1          //     printf("sec_code10[%d] is %d\n", (int)i, (int)get_decode.sec_key_10[i]);
+  78   1          // for (i = 0; i < 9; i++)
+  79   1          //     printf("sec_code9[%d] is %d\n", (int)i, (int)get_decode.sec_key_9[i]);
+  80   1          // for (i = 0; i < 8; i++)
+  81   1          //     printf("sec_code8[%d] is %d\n", (int)i, (int)get_decode.sec_key_8[i]);
+  82   1          // printf("############\n");
+  83   1      
+  84   1          return;
+  85   1      }
+  86          
+  87          /**
+  88            * @brief  时间戳解码10位
+  89            * @param  pwd 字符数组
+  90            * @param  len 长度
+  91            * @param  sec_key 安全解码
+  92            * @param  exg_key 交换解码
+  93            * @return status
+  94            * @note   none
+  95            * @see    none
+  96            */
+  97          void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned char *sec_key, unsigned char 
              -*exg_key)
- 103          {
- 104   1          unsigned char exg_key_char[10];
- 105   1          unsigned char pwd_char[10];
- 106   1          unsigned char sec_char[10];
- 107   1          unsigned char i = 0;
- 108   1          unsigned char j = 0;
- 109   1          unsigned char hex_pwd_len = 5;
- 110   1          unsigned char exchange_id = 0;
- 111   1          unsigned char exchange_char[10];
- 112   1          unsigned long high_sec_key = 0, low_sec_key = 0;
- 113   1          unsigned long high_pwd = 0, low_pwd = 0;
- 114   1      
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 3   
+  98          {
+  99   1          unsigned char exg_key_char[10];
+ 100   1          unsigned char pwd_char[10];
+ 101   1          unsigned char sec_char[10];
+ 102   1          unsigned char i = 0;
+ 103   1          unsigned char j = 0;
+ 104   1          unsigned char hex_pwd_len = 5;
+ 105   1          unsigned char exchange_id = 0;
+ 106   1          unsigned char exchange_char[10];
+ 107   1          unsigned long high_sec_key = 0, low_sec_key = 0;
+ 108   1          unsigned long high_pwd = 0, low_pwd = 0;
+ 109   1      
+ 110   1          memset(exg_key_char, 0x00, sizeof(exg_key_char));
+ 111   1          memset(pwd_char, 0x00, sizeof(pwd_char));
+ 112   1      
+ 113   1          for (i = 0; i < 10; i++)
+ 114   1          {
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 3   
 
- 115   1          memset(exg_key_char, 0x00, sizeof(exg_key_char));
- 116   1          memset(pwd_char, 0x00, sizeof(pwd_char));
- 117   1      
- 118   1          for (i = 0; i < 10; i++)
- 119   1          {
- 120   2              exg_key_char[i] = exg_key[i];
- 121   2              if (exg_key[i] == 0)
- 122   2                  exg_key_char[i] = 10;
- 123   2          }
- 124   1      
- 125   1          CharToInt_2long(sec_key, &high_sec_key, &low_sec_key);
- 126   1      
- 127   1          for (j = 0, i = 3; i < 13; i++)
- 128   1          {
- 129   2              pwd_char[j] = pwd[i];
- 130   2              j++;
- 131   2          }
- 132   1      
- 133   1          for (i = 0; i < 59; i++)
- 134   1          {
- 135   2              CharToInt_2long((const unsigned char *)pwd_char, &high_pwd, &low_pwd);
- 136   2      
- 137   2              if (low_pwd < low_sec_key)
+ 115   2              exg_key_char[i] = exg_key[i];
+ 116   2              if (exg_key[i] == 0)
+ 117   2                  exg_key_char[i] = 10;
+ 118   2          }
+ 119   1      
+ 120   1          CharToInt_2long(sec_key, &high_sec_key, &low_sec_key);
+ 121   1      
+ 122   1          for (j = 0, i = 3; i < 13; i++)
+ 123   1          {
+ 124   2              pwd_char[j] = pwd[i];
+ 125   2              j++;
+ 126   2          }
+ 127   1      
+ 128   1          for (i = 0; i < 59; i++)
+ 129   1          {
+ 130   2              CharToInt_2long((const unsigned char *)pwd_char, &high_pwd, &low_pwd);
+ 131   2      
+ 132   2              if (low_pwd < low_sec_key)
+ 133   2              {
+ 134   3                  high_pwd -= 1;
+ 135   3                  low_pwd += 100000;
+ 136   3              }
+ 137   2              if (high_pwd < high_sec_key)
  138   2              {
- 139   3                  high_pwd -= 1;
- 140   3                  low_pwd += 100000;
- 141   3              }
- 142   2              if (high_pwd < high_sec_key)
- 143   2              {
- 144   3                  high_pwd += 100000;
- 145   3              }
- 146   2              high_pwd -= high_sec_key;
- 147   2              low_pwd -= low_sec_key;
- 148   2              memset(sec_char, 0x00, sizeof(sec_char));
- 149   2              IntToByteStr_2long(high_pwd, low_pwd, (char *)sec_char, 5, 5);
- 150   2              memset(pwd_char, 0x00, sizeof(pwd_char));
- 151   2              for (j = 0; j < len; j++)
- 152   2              {
- 153   3                  pwd_char[exg_key_char[j] - 1] = sec_char[j];
- 154   3              }
- 155   2          }
- 156   1      
- 157   1          memset(sec_char, 0x00, sizeof(sec_char));
- 158   1          exchange_id = pwd_char[2];
- 159   1          memset(exchange_char, 0x00, sizeof(exchange_char));
- 160   1          dq_sdk_CharToHexByte((const unsigned char *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange
+ 139   3                  high_pwd += 100000;
+ 140   3              }
+ 141   2              high_pwd -= high_sec_key;
+ 142   2              low_pwd -= low_sec_key;
+ 143   2              memset(sec_char, 0x00, sizeof(sec_char));
+ 144   2              IntToByteStr_2long(high_pwd, low_pwd, (char *)sec_char, 5, 5);
+ 145   2              memset(pwd_char, 0x00, sizeof(pwd_char));
+ 146   2              for (j = 0; j < len; j++)
+ 147   2              {
+ 148   3                  pwd_char[exg_key_char[j] - 1] = sec_char[j];
+ 149   3              }
+ 150   2          }
+ 151   1      
+ 152   1          memset(sec_char, 0x00, sizeof(sec_char));
+ 153   1          exchange_id = pwd_char[2];
+ 154   1          memset(exchange_char, 0x00, sizeof(exchange_char));
+ 155   1          dq_sdk_CharToHexByte((const unsigned char *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange
              -_char, 5);
- 161   1      
- 162   1          for (i = 0; i < len; i++)
- 163   1          {
- 164   2              if (i == 2)
- 165   2              {
- 166   3                  sec_char[i] = exchange_id;
- 167   3              }
- 168   2              else
- 169   2              {
- 170   3                  for (j = 0; j < 10; j++)
- 171   3                  {
- 172   4                      if (pwd_char[i] == exchange_char[j])
- 173   4                      {
- 174   5                          sec_char[i] = j;
- 175   5                          break;
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 4   
+ 156   1      
+ 157   1          for (i = 0; i < len; i++)
+ 158   1          {
+ 159   2              if (i == 2)
+ 160   2              {
+ 161   3                  sec_char[i] = exchange_id;
+ 162   3              }
+ 163   2              else
+ 164   2              {
+ 165   3                  for (j = 0; j < 10; j++)
+ 166   3                  {
+ 167   4                      if (pwd_char[i] == exchange_char[j])
+ 168   4                      {
+ 169   5                          sec_char[i] = j;
+ 170   5                          break;
+ 171   5                      }
+ 172   4                  }
+ 173   3              }
+ 174   2          }
+ 175   1          for (i = 2; i < len; i++)
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 4   
 
- 176   5                      }
- 177   4                  }
- 178   3              }
- 179   2          }
- 180   1          for (i = 2; i < len; i++)
- 181   1          {
- 182   2              sec_char[i] = sec_char[i + 1];
- 183   2          }
- 184   1          sec_char[len - 1] = exchange_id;
- 185   1          memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
+ 176   1          {
+ 177   2              sec_char[i] = sec_char[i + 1];
+ 178   2          }
+ 179   1          sec_char[len - 1] = exchange_id;
+ 180   1          memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
+ 181   1      
+ 182   1          dqiot_drv_uart0A_init();
+ 183   1          for (i = 0; i < 10; i++)
+ 184   1              printf("get_decode.tim_key_10 is %d\n", (int)get_decode.tim_key_10[i]);
+ 185   1          dqiot_drv_uart0B_init();
  186   1      
  187   1          return;
  188   1      }
@@ -254,7 +254,7 @@ line level    source
  234   2              num *= (int)value;
  235   2          }
  236   1          return num;
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 5   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 5   
 
  237   1      }
  238          
@@ -318,7 +318,7 @@ line level    source
  296   4                          get_decode.exg_key_10[i] = original_key[array_column][i];
  297   4                      else
  298   4                          get_decode.sec_key_10[i] = original_key[array_column][i];
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 6   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 6   
 
  299   4      
  300   4                      j++;
@@ -382,7 +382,7 @@ line level    source
  358   1          {
  359   2              if (original_key[1][i] != 0)
  360   2              {
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 7   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 7   
 
  361   3                  get_decode.sec_key_9[j] = original_key[1][i];
  362   3                  j++;
@@ -446,7 +446,7 @@ line level    source
  420   1      
  421   1          return 0;
  422   1      }
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 8   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 8   
 
  423          
  424          /**
@@ -510,7 +510,7 @@ line level    source
  481   1          char dest[20];
  482   1          unsigned char ret = 0;
  483   1          //dest = malloc(length*2*sizeof(unsigned char));
-C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/27/2021 16:25:35 PAGE 9   
+C51 COMPILER V9.59.0.0   MMI_DECODE                                                        04/28/2021 10:45:56 PAGE 9   
 
  484   1      
  485   1          memset(dest, 0x00, sizeof(dest));
@@ -551,8 +551,8 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   3379    ----
-   CONSTANT SIZE    =      3    ----
+   CODE SIZE        =   3441    ----
+   CONSTANT SIZE    =     32    ----
    XDATA SIZE       =    146     181
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

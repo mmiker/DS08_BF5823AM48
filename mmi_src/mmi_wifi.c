@@ -613,9 +613,9 @@ void mmi_dq_wifi_take_photos(void)
   mmi_dq_wifi_wakeup();
 
   if (wifi_take_photos() == 1)
-#ifdef __LOCK_AUDIO_SUPPORT__
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
-#endif
+// #ifdef __LOCK_AUDIO_SUPPORT__
+//     mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+// #endif
         ;
 }
 
@@ -631,9 +631,9 @@ void mmi_dq_wifi_take_videos(void)
   mmi_dq_wifi_wakeup();
 
   if (wifi_take_videos() == 1)
-#ifdef __LOCK_AUDIO_SUPPORT__
-    mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
-#endif
+// #ifdef __LOCK_AUDIO_SUPPORT__
+//     mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS)
+// #endif
         ;
 }
 

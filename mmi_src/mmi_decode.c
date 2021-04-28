@@ -51,11 +51,6 @@ void decode_check_code(unsigned char *random_code)
     get_decode.chk_key_2[0] = (char)(value / 10);
     get_decode.chk_key_2[1] = (char)(value % 10);
 
-    // printf("value is %d\n", value);
-    // printf("temp is %d\n", temp);
-    // for (i = 0; i < 2; i++)
-    //     printf("chk_key_2 is %d\n", (int)get_decode.chk_key_2[i]);
-
     return;
 }
 
@@ -183,6 +178,11 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     }
     sec_char[len - 1] = exchange_id;
     memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
+
+    dqiot_drv_uart0A_init();
+    for (i = 0; i < 10; i++)
+        printf("get_decode.tim_key_10 is %d\n", (int)get_decode.tim_key_10[i]);
+    dqiot_drv_uart0B_init();
 
     return;
 }

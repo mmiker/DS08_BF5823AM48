@@ -340,6 +340,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 	case SYS_STATUS_WAIT_FOR_ENTER_SLEEP:
 		mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 		status = SYS_STATUS_IDLE;
+#ifdef __LOCK_DECODE_SUPPORT__
 	case SYS_STATUS_ADD_DECODE_RANDOM:
 		if (key_len == 0)
 		{
@@ -414,50 +415,102 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				key_len = 0;
 				if (opt_time == OPT_ONE_TIME)
 					memset(input_key_1, 0xFF, sizeof(input_key_1));
+				else if (opt_time == OPT_TWO_TIME)
+					memset(input_key_2, 0xFF, sizeof(input_key_2));
 			}
 			else
 			{
-				decode_check_code(input_key_1);
-				if (get_decode.chk_key_2[0] == input_key_1[13] && get_decode.chk_key_2[1] == input_key_1[14])
+				if (opt_time == OPT_ONE_TIME)
 				{
-					unsigned char ret = 0;
-					ret = mmi_dq_fs_get_decode_unuse_index();
-					if (ret == 0)
-					{
-						//解码
-						mmi_dq_decode_app_random_code(input_key_1);
-						decode_time_stamp_10num(input_key_1, 10, get_decode.sec_key_10, get_decode.exg_key_10);
-
-						//写flash
-						if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
-						{
 #ifdef __LOCK_AUDIO_SUPPORT__
-							mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+					mmi_dq_aud_play_with_id(AUD_ID_PWD_INPUT_AGAIN);
 #endif
-							dqiot_drv_uart0A_init();
-							printf("flash is success\n");
-							dqiot_drv_uart0B_init();
+					opt_time = OPT_TWO_TIME;
+					key_len = 0;
+					memset(input_key_2, 0xFF, sizeof(input_key_2));
+				}
+				else if (opt_time == OPT_TWO_TIME)
+				{
+					if (0 == memcmp(input_key_1, input_key_2, PWD_INPUT_DECODE_RANDOM))
+					{
+						decode_check_code(input_key_1);
+						if (get_decode.chk_key_2[0] == input_key_1[13] && get_decode.chk_key_2[1] == input_key_1[14])
+						{
+							unsigned char i, j;
+							unsigned char a[10][5] = {
+								{0x26, 0x41, 0x53, 0x89, 0x70},
+								{0x43, 0x16, 0x98, 0x25, 0x07},
+								{0x92, 0x35, 0x64, 0x70, 0x81},
+								{0x72, 0x59, 0x03, 0x18, 0x46},
+								{0x02, 0x85, 0x19, 0x63, 0x74},
+								{0x12, 0x05, 0x69, 0x43, 0x87},
+								{0x18, 0x95, 0x42, 0x76, 0x30},
+								{0x09, 0x58, 0x26, 0x17, 0x34},
+								{0x10, 0x63, 0x52, 0x74, 0x89},
+								{0x21, 0x69, 0x50, 0x37, 0x84},
+							};
+
+							for (i = 0; i < 10; i++)
+							{
+								for (j = 0; j < 5; j++)
+								{
+									g_pwd_signed_data[i].exchg_num[j] = a[i][j];
+								}
+							}
+
+							//解码
+							mmi_dq_decode_app_random_code(input_key_1);
+							decode_time_stamp_10num(input_key_1, 10, get_decode.sec_key_10, get_decode.exg_key_10);
+
+							//写flash
+							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
+							{
+								struct tm t;
+
+								//时间戳转时间
+								ntp(get_decode.tim_key_10, &t);
+
+								dqiot_drv_uart0A_init();
+								printf("flash is success\n");
+								printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
+								dqiot_drv_uart0B_init();
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#endif
+							}
+							else
+							{
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+#endif
+								dqiot_drv_uart0A_init();
+								printf("flash is error\n");
+								dqiot_drv_uart0B_init();
+							}
+
+							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
 						else
 						{
-#ifdef __LOCK_AUDIO_SUPPORT__
-							mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-#endif
 							dqiot_drv_uart0A_init();
-							printf("flash is error\n");
+							printf("check is error\n");
 							dqiot_drv_uart0B_init();
+							mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
 					}
 					else
-						mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+					{
+#ifdef __LOCK_AUDIO_SUPPORT__
+						mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_SAME_RETRY);
+#endif
+					}
+					mmi_ms_pwd_init_var();
 				}
-				else
-					mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-
-				mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 			}
 		}
 		break;
+#endif
 	case SYS_STATUS_INPUT_PWD:
 	case SYS_STATUS_INPUT_ADMIN_PWD:
 	case SYS_STATUS_ADD_PWD:
@@ -600,75 +653,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
 						mmi_dq_wifi_pv_switch();
-					else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
-					{
-#ifdef __LOCK_DECODE_SUPPORT__
-						unsigned char i, j;
-						unsigned char random_code[15] = {5, 6, 4, 8, 0, 4, 7, 5, 7, 7, 9, 8, 0, 1, 8};
-						// unsigned char time_code[5] = {0x80, 0x47, 0x57, 0x79, 0x80};
-						// unsigned char sec_code[5] = {0x56, 0x13, 0x40, 0x27, 0x89};
-						// unsigned char exg_code[5] = {0x46, 0x57, 0x08, 0x12, 0x39};
-						unsigned char a[10][5] = {
-							{0x26, 0x41, 0x53, 0x89, 0x70},
-							{0x43, 0x16, 0x98, 0x25, 0x07},
-							{0x92, 0x35, 0x64, 0x70, 0x81},
-							{0x72, 0x59, 0x03, 0x18, 0x46},
-							{0x02, 0x85, 0x19, 0x63, 0x74},
-							{0x12, 0x05, 0x69, 0x43, 0x87},
-							{0x18, 0x95, 0x42, 0x76, 0x30},
-							{0x09, 0x58, 0x26, 0x17, 0x34},
-							{0x10, 0x63, 0x52, 0x74, 0x89},
-							{0x21, 0x69, 0x50, 0x37, 0x84},
-						};
-
-						for (i = 0; i < 10; i++)
-						{
-							for (j = 0; j < 5; j++)
-							{
-								g_pwd_signed_data[i].exchg_num[j] = a[i][j];
-							}
-						}
-
-						decode_check_code(random_code);
-						if (get_decode.chk_key_2[0] == random_code[13] && get_decode.chk_key_2[1] == random_code[14])
-						{
-							struct tm t;
-
-							//解码
-							mmi_dq_decode_app_random_code(random_code);
-							decode_time_stamp_10num(random_code, 10, get_decode.sec_key_10, get_decode.exg_key_10);
-
-							//写flash
-							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
-							{
-#ifdef __LOCK_AUDIO_SUPPORT__
-								mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
-#endif
-
-								dqiot_drv_uart0A_init();
-								printf("flash is success\n");
-								dqiot_drv_uart0B_init();
-							}
-							else
-							{
-#ifdef __LOCK_AUDIO_SUPPORT__
-								mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-#endif
-								dqiot_drv_uart0A_init();
-								printf("flash is error\n");
-								dqiot_drv_uart0B_init();
-							}
-
-							// get_decode.tim_key_10 = 1619063988;
-							//时间戳转时间
-							ntp(get_decode.tim_key_10, &t);
-							dqiot_drv_uart0A_init();
-							printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
-							dqiot_drv_uart0B_init();
-						}
-
-#endif
-					}
+					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
 					// 	mmi_dq_wifi_open_by_key();
 					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
 					// 	mmi_dq_wifi_close_over_time();
