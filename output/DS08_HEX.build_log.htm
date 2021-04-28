@@ -35,9 +35,155 @@ linking...
     NAME:    _DQIOT_DRV_AUDIO_PLAY/DQIOT_DRV_AUDIO
     CALLER1: ?C_C51STARTUP
     CALLER2: TIMER2_WDT_ISR/DQIOT_DRV
-Program Size: data=36.6 xdata=1867 const=473 code=39231
-creating hex file from ".\output\DS08_HEX"...
-".\output\DS08_HEX" - 0 Error(s), 2 Warning(s).
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: _XDATA_GROUP_
+    LENGTH:  000120H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?BYD_CTK
+    LENGTH:  0000D2H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_SYS
+    LENGTH:  0000B2H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_DECODE
+    LENGTH:  000092H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_TIME
+    LENGTH:  000052H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_MS
+    LENGTH:  000048H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_RFID
+    LENGTH:  000024H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_QUEUE
+    LENGTH:  000023H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_COM
+    LENGTH:  00001EH   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?DQIOT_DRV_AUDIO
+    LENGTH:  000018H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?DQ_SDK_CB
+    LENGTH:  00000CH   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_FM
+    LENGTH:  000009H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MIFARE
+    LENGTH:  000008H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?BYD_RENOVATE
+    LENGTH:  000004H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_WIFI
+    LENGTH:  000004H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?MMI_RST
+    LENGTH:  000003H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?DQIOT_DRV_RFID
+    LENGTH:  000002H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?DQIOT_DRV_WIFI
+    LENGTH:  000002H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?BYD_CTS
+    LENGTH:  000001H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   XDATA
+    SEGMENT: ?XD?GETCHAR
+    LENGTH:  000001H   
+*** WARNING L25: DATA TYPES DIFFERENT
+    SYMBOL:  mmi_dq_sys_lock_correct
+    MODULE:  .\output\mmi_ms.obj (MMI_MS)
+   DEFINED:  .\output\mmi_sys.obj (MMI_SYS)
+*** WARNING L25: DATA TYPES DIFFERENT
+    SYMBOL:  mmi_dq_sys_lock_error
+    MODULE:  .\output\mmi_ms.obj (MMI_MS)
+   DEFINED:  .\output\mmi_sys.obj (MMI_SYS)
+*** WARNING L25: DATA TYPES DIFFERENT
+    SYMBOL:  mmi_dq_fs_app_init_sucess
+    MODULE:  .\output\mmi_ms.obj (MMI_MS)
+   DEFINED:  .\output\mmi_fs.obj (MMI_FS)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_rtc_get_sys_sec_info
+    MODULE:  .\output\mmi_sys.obj (MMI_SYS)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  VBAT_Last_Value
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_entry_sleep_normal_time
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_ms_get_machine_status
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_enter_sleep_timer_stop
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _mmi_dq_rtc_get_time_by_sec
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_rtc_get_sys_sec_info
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _advertising_init
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_rfid_get_init_state
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_vbat_low_wake_up
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _mmi_dq_rtc_get_time
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_open_lock
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  g_rfid_index
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_get_lock_state
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_app_init_sucess
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_get_vbat_state
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  mmi_dq_sys_timeout_sleep_aud_pro
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+*** WARNING L25: DATA TYPES DIFFERENT
+    SYMBOL:  mmi_dq_sys_is_sleep
+    MODULE:  .\output\dq_sdk_cb.obj (DQ_SDK_CB)
+   DEFINED:  .\output\mmi_sys.obj (MMI_SYS)
+Program Size: data=36.6 xdata=5243 const=618 code=49401
+Target not created.
 </pre>
 </body>
 </html>

@@ -20,7 +20,7 @@ extern tm t;
 
 unsigned char division_int(unsigned char *p_data, unsigned int x, unsigned char len, unsigned char *dest);
 unsigned long division_rem(unsigned char *p_data, unsigned int x, unsigned char len);
-void ntp(unsigned char *decode_time, struct tm *t);
+void localtime(unsigned char *decode_time, struct tm *t);
 time_t mktime(struct tm dt);
 
 #endif //__LOCK_DECODE_SUPPORT__

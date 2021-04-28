@@ -125,7 +125,7 @@ unsigned long division_rem(unsigned char *p_data, unsigned int x, unsigned char 
   * @note   none
   * @see    none
   */
-void ntp(unsigned char *decode_time, struct tm *t)
+void localtime(unsigned char *decode_time, struct tm *t)
 {
     unsigned long time = 0;
     unsigned long Pass4year;

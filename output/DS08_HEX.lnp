@@ -57,7 +57,9 @@
 ".\output\dq_otp.obj",
 ".\output\mmi_decode.obj",
 ".\output\dq_sdk_main.obj",
-".\output\mmi_time.obj" 
+".\output\mmi_time.obj",
+".\output\dq_sdk_cb.obj",
+".\output\dq_sdk_crc.obj" 
 TO ".\output\DS08_HEX" 
 
 PRINT(".\list\DS08_HEX.map") REMOVEUNUSED 

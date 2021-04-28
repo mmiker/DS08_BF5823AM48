@@ -13,7 +13,8 @@
 #endif
 	#define __LOCK_WIFI_SUPPORT__
 	#define __LOCK_MOTOR_SUPPORT__
-	// #define __LOCK_VIRTUAL_PASSWORD__ //临时密码
+	#define __LOCK_VIRTUAL_PASSWORD__ //临时密码
+	// #define __LOCK_VIRTUAL_PASSWORD__1
 	#define __LOCK_DECODE_SUPPORT__ //解码
 #endif
 #ifdef __LOCK_KEY_SUPPORT__

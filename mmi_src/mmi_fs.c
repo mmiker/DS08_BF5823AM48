@@ -19,6 +19,8 @@
 #include "mmi_decode.h"
 #endif
 
+extern void printfS(char *show, char *status);
+
 unsigned char get_index = 0xff;
 
 mmi_fs_setting data g_dq_fs_init_set;
@@ -1169,6 +1171,7 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 			break;
 		}
 	}
+
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_PWD, (void **)&g_dq_fs_pwd);
 #endif
@@ -1189,10 +1192,11 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 				if (input_pwd[i + k] != admin_password[k])
 					break;
 			}
+
 			if (k == admin_len)
 			{
-				// dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
-				// mmi_dq_fs_check_input_pwd_from_app_cb(1);
+				dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
+				mmi_dq_fs_check_input_pwd_from_app_cb(1);
 				return 0;
 			}
 		}
@@ -1211,8 +1215,8 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 		{
 			unsigned char password[5];
 			memset(password, 0xFF, sizeof(password));
-			// mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
-			// ret_val = dq_otp_check_password_for_open(password, i);
+			mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
+			ret_val = dq_otp_check_password_for_open(password, i);
 			if (ret_val != 0)
 			{
 				return 0;
@@ -1224,7 +1228,6 @@ unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsig
 
 	return 0;
 }
-
 #else
 unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
 {
@@ -1263,12 +1266,12 @@ void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
 	else
 		printfS("mmi_dq_fs_check_input_pwd_from_app", "wrong");
 
-#ifdef __LOCK_VIRTUAL_PASSWORD__
+#ifdef __LOCK_VIRTUAL_PASSWORD__1
 
 		// if (ret_val != 0xFF)
 		// 	mmi_dq_ms_idle_input_with_app_result(ret_val);
 #else
-	mmi_dq_ms_idle_input_with_app_result(ret_val);
+	// mmi_dq_ms_idle_input_with_app_result(ret_val);
 #endif
 }
 
@@ -1280,7 +1283,50 @@ unsigned char mmi_dq_fs_app_init_sucess(void)
 		return 0;
 }
 
-#endif //__LOCK_VIRTUAL_PASSWORD__
+uint8_t mmi_dq_fs_check_app_admin_password(unsigned char *password)
+{
+	uint8_t i, k;
+	uint8_t ret_val = 0xFF;
+#ifdef __LOCK_USE_MALLOC__
+	uint8_t ret = 0;
+	g_dq_fs_pwd = (mmi_fs_pwd *)mmi_dq_fs_get_storage(DQ_FS_MEM_PWD, &ret);
+#endif
+	for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+	{
+		if (g_dq_fs_pwd[i].flag != 0xFF)
+		{
+			for (k = 0; k < 4; k++)
+			{
+				if (password[k] != g_dq_fs_pwd[i].key_pwd[k])
+					break;
+			}
+			if (k == 4)
+			{
+				break;
+			}
+		}
+	}
+	if (i < MMI_DQ_FS_PWD_MAX_NUM)
+	{
+		if ((g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN))
+			ret_val = i;
+		else
+			ret_val = 0xFF;
+	}
+	else
+		ret_val = 0xFF;
+#ifdef __LOCK_USE_MALLOC__
+	mmi_dq_fs_free_storage(DQ_FS_MEM_PWD, (void **)&g_dq_fs_pwd);
+#endif
+	return ret_val;
+}
+
+void mmi_dq_fs_time_zone_pro(uint32_t *time)
+{
+	// *time += (g_dq_fs_init_set.e_time_zone - g_dq_fs_init_set.w_time_zone);
+}
+
+#endif //__LOCK_VIRTUAL_PASSWORD__1
 /************************************************************************************
  * 							     	 End function							        *
  ************************************************************************************/

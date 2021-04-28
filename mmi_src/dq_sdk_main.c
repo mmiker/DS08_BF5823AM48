@@ -3,15 +3,17 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "dq_sdk_main.h"
-// #include "dq_sdk_cb.h"
-// #include "dq_sdk_crc.h"
-// #include "dq_sdk_aes.h"
+#include "dq_sdk_cb.h"
+#include "dq_sdk_crc.h"
+//#include "dq_sdk_aes.h"
+#include "mmi_decode.h"
+#include "mcu02_sfr.h"
+#include "mmi_time.h"
 
 #ifndef __WIN32_ENV_SUPPORT__
 // #include "nrf_log.h"
 #endif
 
-#include "mmi_feature.h"
 #ifdef __LOCK_USE_MALLOC__
 typedef enum
 {
@@ -41,11 +43,11 @@ static unsigned char DQ_OTP_SYS_TIME_GET = 0;
 
 static uint8_t g_dq_dfu_permit = 0;
 
-typedef struct otp_exchg_num
-{
-	unsigned char num;
-	unsigned char exchg_num[5];
-} otp_exchg_num;
+// typedef struct otp_exchg_num
+// {
+// 	unsigned char num;
+// 	unsigned char exchg_num[5];
+// } otp_exchg_num;
 
 typedef struct otp_base_setting_info
 {
@@ -254,7 +256,7 @@ const char dq_otp_sdk_ver[] = "sdk v1.0.0";
 #define DQ_OTP_PWD_NOT_USED 0x11
 #define DQ_OTP_PWD_USED 0x10
 //function
-static OTP_BASE_RET dq_otp_syn_aes_16_key(unsigned char *pdata);
+static OTP_BASE_RET dq_otp_syn_aes_16_key(unsigned char *p_data);
 static void dq_otp_cmd_dataOperation(uint8_t *p_data, uint16_t data_len);
 /*
 parameter: 
@@ -327,10 +329,10 @@ parameter:
 return :
 	none
 */
-void dq_sdk_IntToByteStr(unsigned int data, char *dest, int sourceLen)
+void dq_sdk_IntToByteStr(unsigned int p_data, char *dest, int sourceLen)
 {
 	unsigned char i = 0;
-	unsigned int temp_data = data;
+	unsigned int temp_data = p_data;
 	for (i = 0; i < sourceLen; i++)
 	{
 		dest[sourceLen - i - 1] = temp_data % 10;
@@ -456,23 +458,23 @@ parameter:
 return :
 	none
 */
-int dq_sdk_HexcharToInt(uint8_t *source, int length)
-{
-	int int_data = 0;
-	char dest[20];
-	uint8_t ret = 0;
-	//dest = malloc(length*2*sizeof(unsigned char));
+// int dq_sdk_HexcharToInt(uint8_t *source, int length)
+// {
+// 	int int_data = 0;
+// 	char dest[20];
+// 	uint8_t ret = 0;
+// 	//dest = malloc(length*2*sizeof(unsigned char));
 
-	memset(dest, 0x00, sizeof(dest));
-	dq_sdk_ByteToHexStr(source, dest, length);
-	ret = sscanf((const char *)dest, "%x", &int_data);
+// 	memset(dest, 0x00, sizeof(dest));
+// 	dq_sdk_ByteToHexStr(source, dest, length);
+// 	ret = sscanf((const char *)dest, "%x", &int_data);
 
-	//free(dest);
-	if (ret == 1)
-		return int_data;
-	else
-		return 0;
-}
+// 	//free(dest);
+// 	if (ret == 1)
+// 		return int_data;
+// 	else
+// 		return 0;
+// }
 /*
 parameter: 
 	current status machine
@@ -491,7 +493,7 @@ time_t dq_otp_get_pwd_time_sec(unsigned char year, unsigned char month, unsigned
 	tm_now.tm_min = 0;
 	tm_now.tm_sec = 0;
 
-	time_sec = mktime(&tm_now);
+	// time_sec = mktime(&tm_now);
 	return time_sec;
 }
 /*
@@ -506,7 +508,7 @@ time_t dq_otp_get_sys_time_sec(void)
 	struct tm tm_now;
 	g_dq_otp_init.get_lock_time_info(&tm_now);
 
-	now = mktime(&tm_now);
+	// now = mktime(&tm_now);
 	return now;
 }
 
@@ -516,17 +518,17 @@ parameter:
 return :
 	none
 */
-unsigned char dq_otp_get_pwd_time_ymd(unsigned int pwd_hour, unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *hour)
-{
-	time_t now = pwd_hour * 3600 + otp_set_info.otp_start_hour; //DQ_OTP_START_TIME_SEC;
-	struct tm *tm_now;
-	tm_now = localtime(&now);
-	*year = tm_now->tm_year;
-	*month = tm_now->tm_mon;
-	*day = tm_now->tm_mday;
-	*hour = tm_now->tm_hour;
-	return 1;
-}
+// unsigned char dq_otp_get_pwd_time_ymd(unsigned int pwd_hour, unsigned char *year, unsigned char *month, unsigned char *day, unsigned char *hour)
+// {
+// 	time_t now = pwd_hour * 3600 + otp_set_info.otp_start_hour; //DQ_OTP_START_TIME_SEC;
+// 	struct tm *tm_now;
+// 	localtime(&now,tm_now);
+// 	*year = tm_now->tm_year;
+// 	*month = tm_now->tm_mon;
+// 	*day = tm_now->tm_mday;
+// 	*hour = tm_now->tm_hour;
+// 	return 1;
+// }
 
 /*
 parameter: 
@@ -551,16 +553,16 @@ parameter:
 return :
 	none
 */
-unsigned char dq_otp_get_sys_local_time_week(void)
-{
-	time_t now;
-	struct tm tm_sys, *tm_local;
-	g_dq_otp_init.get_lock_time_info(&tm_sys);
-	now = mktime(&tm_sys);
-	g_dq_otp_init.time_zone_pro(&now);
-	tm_local = localtime(&now);
-	return tm_local->tm_wday;
-}
+// unsigned char dq_otp_get_sys_local_time_week(void)
+// {
+// 	time_t now;
+// 	struct tm tm_sys, *tm_local;
+// 	g_dq_otp_init.get_lock_time_info(&tm_sys);
+// 	now = mktime(&tm_sys);
+// 	g_dq_otp_init.time_zone_pro(&now);
+// 	tm_local = localtime(&now);
+// 	return tm_local->tm_wday;
+// }
 
 /*
 parameter: 
@@ -629,7 +631,7 @@ void dq_sdk_otp_init(void)
 	g_dq_dfu_permit = 0;
 
 	memset(&otp_set_info, 0xFF, sizeof(otp_set_info));
-	g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_set_info), &ret);
+	//g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_set_info), &ret);
 #ifdef __WIN32_ENV_SUPPORT__
 	{
 		unsigned char temp_exg_key_9[] = {0x93, 0x42, 0x67, 0x15, 0x8F};
@@ -652,31 +654,32 @@ void dq_sdk_otp_init(void)
 	}
 //NRF_LOG_PRINTF_DEBUG("dq_sdk_otp_init entry otp_set_info.init_suc_flag = %d \n",otp_set_info.init_suc_flag);
 #endif
-	g_dq_otp_init.get_admin_status(&admin_state, &ret);
+	//g_dq_otp_init.get_admin_status(&admin_state, &ret);
 	if (otp_set_info.init_suc_flag == 1 && admin_state != 0)
 	{
-		extern uint8_t wdt_flag;
+		// extern uint8_t wdt_flag;
+		uint8_t wdt_flag;
 		dq_dev_key_flag = 1;
 		//LOG
 		memset(&otp_lock_log, 0xFF, sizeof(otp_lock_log));
-		g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_LOG, (uint8_t *)&otp_lock_log, sizeof(otp_lock_log), &ret);
+		//g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_LOG, (uint8_t *)&otp_lock_log, sizeof(otp_lock_log), &ret);
 		dq_otp_find_log_head_end();
 		//init ekey
 #ifndef __LOCK_USE_MALLOC__
 		memset(&g_dq_app_pwd_info, 0xFF, sizeof(g_dq_app_pwd_info));
-		g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_PWD_APP, (uint8_t *)&g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret);
+		//g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_PWD_APP, (uint8_t *)&g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret);
 
 		memset(&g_dq_app_fp_info, 0xFF, sizeof(g_dq_app_fp_info));
-		g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_FP, (uint8_t *)&g_dq_app_fp_info, sizeof(otp_base_app_fp_info) * DQ_OTP_APP_FP_NUM, &ret);
+		//g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_FP, (uint8_t *)&g_dq_app_fp_info, sizeof(otp_base_app_fp_info) * DQ_OTP_APP_FP_NUM, &ret);
 
 		memset(&g_dq_app_rfid_info, 0xFF, sizeof(g_dq_app_rfid_info));
-		g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_RFID, (uint8_t *)&g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret);
+		//g_dq_otp_init.fds_read(DQ_OTP_FILE_ID_RFID, (uint8_t *)&g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret);
 #endif
 		g_dq_otp_init.init_sucess(1);
 
 		if (wdt_flag == 1)
 		{
-			NRF_LOG_PRINTF_DEBUG("###wdt_flag   1\n");
+			//NRF_LOG_PRINTF_DEBUG("###wdt_flag   1\n");
 			dq_otp_add_alarm_log(DQ_ALART_LOG_ERROR_RESET);
 		}
 	}
@@ -724,13 +727,13 @@ parameter:
 return :
 	none
 */
-OTP_TYPE dq_otp_get_cmd_type(unsigned char *pdata)
+OTP_TYPE dq_otp_get_cmd_type(unsigned char *p_data)
 {
 	unsigned char i = 0;
 
 	for (i = 0; i < CMD_OTP_MAX_NUM; i++)
 	{
-		if ((cmd_info[i].cmd_h == pdata[0]) && (cmd_info[i].cmd_l == pdata[1]))
+		if ((cmd_info[i].cmd_h == p_data[0]) && (cmd_info[i].cmd_l == p_data[1]))
 			break;
 	}
 	if (i < CMD_OTP_MAX_NUM)
@@ -745,7 +748,7 @@ parameter:
 return :
 	none
 */
-void dq_otp_setSerialId(uint8_t *data)
+void dq_otp_setSerialId(uint8_t *p_data)
 {
 	//char serialData[4+1];
 	//uint8_t bytes[2];
@@ -758,8 +761,8 @@ void dq_otp_setSerialId(uint8_t *data)
 	//data[15] = bytes[1];
 
 	//data[14] = (serialId>>8)&0xFF;
-	data[14] = 0xFF;
-	data[15] = serialId & 0xFF;
+	p_data[14] = 0xFF;
+	p_data[15] = serialId & 0xFF;
 	return;
 }
 
@@ -785,10 +788,10 @@ return :
 */
 void dq_otp_getCmdEncryptData(uint8_t *in, uint8_t *out)
 {
-	if (dq_dev_key_flag == 1)
-		DQ_AES128_ECB_encrypt(in, otp_set_info.otp_dev_key, out);
-	else
-		DQ_AES128_ECB_encrypt(in, DQ_OTP_AES_GBL_KEY, out);
+	//if (dq_dev_key_flag == 1)
+		//DQ_AES128_ECB_encrypt(in, otp_set_info.otp_dev_key, out);
+	//else
+		//DQ_AES128_ECB_encrypt(in, DQ_OTP_AES_GBL_KEY, out);
 
 	return;
 }
@@ -804,10 +807,10 @@ void dq_otp_getCmdDecryptData(uint8_t *in, uint8_t *out)
 	static uint8_t encrypt[DQ_OTP_CMD_NO_CRC_LENGTH / 2 + 1];
 	memset(encrypt, 0, DQ_OTP_CMD_NO_CRC_LENGTH / 2 + 1);
 	memcpy(encrypt, in, DQ_OTP_CMD_NO_CRC_LENGTH / 2);
-	if (dq_dev_key_flag == 1)
-		DQ_AES128_ECB_decrypt(encrypt, otp_set_info.otp_dev_key, out);
-	else
-		DQ_AES128_ECB_decrypt(encrypt, DQ_OTP_AES_GBL_KEY, out);
+	//if (dq_dev_key_flag == 1)
+		//DQ_AES128_ECB_decrypt(encrypt, otp_set_info.otp_dev_key, out);
+	//else
+		//DQ_AES128_ECB_decrypt(encrypt, DQ_OTP_AES_GBL_KEY, out);
 	return;
 }
 
@@ -834,7 +837,7 @@ void dq_otp_notify(uint8_t *p_data)
 	notify_data[16] = crc_data[0];
 	notify_data[17] = crc_data[1];
 
-	g_dq_otp_init.data_send_bt(notify_data, DQ_OTP_CMD_NO_CRC_LENGTH / 2 + 2, &ret);
+	//g_dq_otp_init.data_send_bt(notify_data, DQ_OTP_CMD_NO_CRC_LENGTH / 2 + 2, &ret);
 
 	serialId++;
 	return;
@@ -863,10 +866,10 @@ void dq_otp_device_key_unknow(uint8_t instruct_h, uint8_t instruct_l, uint8_t re
 #ifndef __WIN32_ENV_SUPPORT__
 	for (i = 0; i < 16; i++)
 	{
-		NRF_LOG_PRINTF_DEBUG("dq_otp_device_key_unknow notify_data[%d] = 0x%x \n", i, notify_data[i]);
+		//NRF_LOG_PRINTF_DEBUG("dq_otp_device_key_unknow notify_data[%d] = 0x%x \n", i, notify_data[i]);
 	}
 #endif
-	g_dq_otp_init.data_send_bt(notify_data, 4, &ret);
+	//g_dq_otp_init.data_send_bt(notify_data, 4, &ret);
 	return;
 }
 
@@ -903,7 +906,7 @@ void dq_otp_common_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t result_
 	dq_otp_setSerialId(notify_data);
 	for (i = 0; i < 16; i++)
 	{
-		NRF_LOG_PRINTF_DEBUG("dq_otp_common_reply notify_data[%d] = 0x%x \n", i, notify_data[i]);
+		//NRF_LOG_PRINTF_DEBUG("dq_otp_common_reply notify_data[%d] = 0x%x \n", i, notify_data[i]);
 	}
 	dq_otp_notify(notify_data);
 	return;
@@ -915,7 +918,7 @@ parameter:
 return :
 	none
 */
-void dq_otp_send_data_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t result_code, uint8_t *pdata, uint8_t data_len)
+void dq_otp_send_data_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t result_code, uint8_t *p_data, uint8_t data_len)
 {
 	uint8_t notify_data[DQ_OTP_CMD_NO_CRC_LENGTH / 2];
 	uint8_t i = 0;
@@ -930,7 +933,7 @@ void dq_otp_send_data_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t resu
 		return;
 	for (i = 0; i < data_len; i++)
 	{
-		notify_data[3 + i] = *pdata++;
+		notify_data[3 + i] = *p_data++;
 	}
 	for (i = data_len; i < 11; i++)
 	{
@@ -940,7 +943,7 @@ void dq_otp_send_data_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t resu
 
 	for (i = 0; i < 11; i++)
 	{
-		NRF_LOG_PRINTF_DEBUG("dq_otp_send_data_reply notify_data[%d] = 0x%x \n", i, notify_data[i]);
+		//NRF_LOG_PRINTF_DEBUG("dq_otp_send_data_reply notify_data[%d] = 0x%x \n", i, notify_data[i]);
 	}
 	//serialId
 	dq_otp_notify(notify_data);
@@ -952,7 +955,7 @@ parameter:
 return :
 	none
 */
-void dq_otp_send_data_no_result_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t *pdata, uint8_t data_len)
+void dq_otp_send_data_no_result_reply(uint8_t instruct_h, uint8_t instruct_l, uint8_t *p_data, uint8_t data_len)
 {
 	uint8_t notify_data[DQ_OTP_CMD_NO_CRC_LENGTH / 2];
 	uint8_t i = 0;
@@ -965,7 +968,7 @@ void dq_otp_send_data_no_result_reply(uint8_t instruct_h, uint8_t instruct_l, ui
 		return;
 	for (i = 0; i < data_len; i++)
 	{
-		notify_data[2 + i] = *pdata++;
+		notify_data[2 + i] = *p_data++;
 	}
 	for (i = data_len; i < 12; i++)
 	{
@@ -1056,7 +1059,7 @@ void dq_otp_dataCheck(uint8_t *p_data, uint16_t length)
 	uint8_t crc_data[2];
 	bool isPassCRC = false;
 
-	NRF_LOG_PRINTF_DEBUG("dq_otp_dataCheck length\n");
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_dataCheck length\n");
 
 	memset(decrypt_data, 0, DQ_OTP_CMD_NO_CRC_LENGTH / 2 + 1);
 	dq_otp_getCmdDecryptData(p_data, decrypt_data);
@@ -1075,9 +1078,9 @@ void dq_otp_dataCheck(uint8_t *p_data, uint16_t length)
 	}
 	else
 	{
-		uint8_t data[] = "efef0001";
+		uint8_t p_data[] = "efef0001";
 		uint32_t ret = 0;
-		g_dq_otp_init.data_send_bt(data, 8, &ret);
+//		g_dq_otp_init.data_send_bt(p_data, 8, &ret);
 	}
 #else
 	dq_otp_cmd_dataOperation(p_data, length);
@@ -1092,18 +1095,18 @@ return :
 	none
 */
 //0101 84757AEBE3987D3E 00 FFFF FFFF 99
-static OTP_BASE_RET dq_otp_syn_aes_16_key(unsigned char *pdata)
+static OTP_BASE_RET dq_otp_syn_aes_16_key(unsigned char *p_data)
 {
 	unsigned char i = 0;
 	unsigned char c_aes_key[8];
-	int end_flag = pdata[10];
+	int end_flag = p_data[10];
 
 	memset(c_aes_key, 0x00, sizeof(c_aes_key));
 	for (i = 2; i < 10; i++)
 	{
-		c_aes_key[i - 2] = pdata[i];
+		c_aes_key[i - 2] = p_data[i];
 #ifndef __WIN32_ENV_SUPPORT__
-		NRF_LOG_PRINTF_DEBUG("dq_otp_syn_aes_16_key c_aes_key[%d] = 0x%x \n", i - 2, c_aes_key[i - 2]);
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_syn_aes_16_key c_aes_key[%d] = 0x%x \n", i - 2, c_aes_key[i - 2]);
 #endif
 	}
 	if (end_flag == 0)
@@ -1126,18 +1129,18 @@ return :
 	none
 */
 //0102 73638150 35817426 FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_syn_sec_8_key(unsigned char *pdata)
+static OTP_BASE_RET dq_otp_syn_sec_8_key(unsigned char *p_data)
 {
 	uint8_t i = 0;
 	memset(otp_set_info.otp_sec_key_8, 0xFF, sizeof(otp_set_info.otp_sec_key_8));
 	memset(otp_set_info.otp_exg_key_8, 0xFF, sizeof(otp_set_info.otp_exg_key_8));
 	for (i = 0; i < 4; i++)
 	{
-		otp_set_info.otp_sec_key_8[i] = pdata[i + 2];
+		otp_set_info.otp_sec_key_8[i] = p_data[i + 2];
 	}
 	for (i = 0; i < 4; i++)
 	{
-		otp_set_info.otp_exg_key_8[i] = pdata[i + 6];
+		otp_set_info.otp_exg_key_8[i] = p_data[i + 6];
 	}
 	return OTP_BASE_SUCESS;
 }
@@ -1148,20 +1151,20 @@ return :
 	none
 */
 //0103 736381504F 358174265F FFFF FF 99
-static OTP_BASE_RET dq_otp_syn_sec_9_key(unsigned char *pdata)
+static OTP_BASE_RET dq_otp_syn_sec_9_key(unsigned char *p_data)
 {
 	uint8_t i = 0;
 	memset(otp_set_info.otp_sec_key_9, 0xFF, sizeof(otp_set_info.otp_sec_key_9));
 	memset(otp_set_info.otp_exg_key_9, 0xFF, sizeof(otp_set_info.otp_exg_key_9));
 	for (i = 0; i < 5; i++)
 	{
-		otp_set_info.otp_sec_key_9[i] = pdata[i + 2];
+		otp_set_info.otp_sec_key_9[i] = p_data[i + 2];
 	}
 	otp_set_info.otp_sec_key_9[4] |= 0x0F;
 
 	for (i = 0; i < 5; i++)
 	{
-		otp_set_info.otp_exg_key_9[i] = (pdata[i + 6] << 4) + ((pdata[i + 7] >> 4) & 0x0F);
+		otp_set_info.otp_exg_key_9[i] = (p_data[i + 6] << 4) + ((p_data[i + 7] >> 4) & 0x0F);
 	}
 
 	return OTP_BASE_SUCESS;
@@ -1193,7 +1196,7 @@ static OTP_BASE_RET dq_otp_syn_start_time(unsigned char *p_data)
 		uint8_t ret;
 		otp_set_info.otp_start_hour = dq_sdk_HexcharToInt(start_time, 4);
 		g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, dq_otp_fds_write_common_cb);
+//		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, dq_otp_fds_write_common_cb);
 		return OTP_BASE_BUSY;
 	}
 }
@@ -1205,7 +1208,7 @@ return :
 	none
 */
 //0105 00 4316982507 01 2641538970 FF 99
-static OTP_BASE_RET dq_otp_syn_exchange_num(unsigned char *pdata)
+static OTP_BASE_RET dq_otp_syn_exchange_num(unsigned char *p_data)
 {
 	uint8_t i = 0, j = 0;
 	uint8_t num = 0;
@@ -1214,7 +1217,7 @@ static OTP_BASE_RET dq_otp_syn_exchange_num(unsigned char *pdata)
 
 	for (j = 0; j < 2; j++)
 	{
-		num = pdata[2 + 6 * j];
+		num = p_data[2 + 6 * j];
 		if (num > 9)
 		{
 			ret_val = OTP_BASE_FAIL;
@@ -1224,7 +1227,7 @@ static OTP_BASE_RET dq_otp_syn_exchange_num(unsigned char *pdata)
 		memset(exg_num, 0x00, sizeof(exg_num));
 		for (i = 0; i < 5; i++)
 		{
-			otp_set_info.g_pwd_signed_data[num].exchg_num[i] = pdata[3 + i + j * 6];
+			otp_set_info.g_pwd_signed_data[num].exchg_num[i] = p_data[3 + i + j * 6];
 		}
 	}
 	return ret_val;
@@ -1236,13 +1239,13 @@ return :
 	none
 */
 //0404 0060 FFFF FFFF FFFF FFFF FFFF 8899
-static void dq_otp_lock_init_complete(uint8_t *pdata)
+static void dq_otp_lock_init_complete(uint8_t *p_data)
 {
 	uint8_t ret = 0;
 
 	otp_set_info.init_suc_flag = 1;
 	g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, dq_otp_fds_write_common_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, dq_otp_fds_write_common_cb);
 	return;
 }
 #if 0
@@ -1336,7 +1339,7 @@ return :
 	none
 */
 //0201 01 5C89B5B8 5CEA6BB0 7F FF FF FF 99
-static OTP_BASE_RET dq_otp_check_ekey_verify(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_check_ekey_verify(uint8_t *p_data)
 {
 #if 1
 	uint8_t check_byte[2];
@@ -1347,13 +1350,13 @@ static OTP_BASE_RET dq_otp_check_ekey_verify(uint8_t *pdata)
 
 	for (i = 0; i <= 10; i++)
 	{
-		check_sum += pdata[i];
+		check_sum += p_data[i];
 	}
 
 	check_byte[0] = (0xff00 & check_sum) >> 8;
 	check_byte[1] = 0xff & check_sum;
 
-	if (check_byte[0] == pdata[12] && check_byte[1] == pdata[11])
+	if (check_byte[0] == p_data[12] && check_byte[1] == p_data[11])
 		return OTP_BASE_SUCESS;
 	else
 		return OTP_BASE_FAIL;
@@ -1580,7 +1583,7 @@ return :
 	none
 */
 //0211 21 83 13 18 5F  87 68 62 74 FFFF FFFF 99
-static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	uint8_t pwd_index;
@@ -1589,16 +1592,16 @@ static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *pdata)
 	uint8_t pwd_char[10];
 	uint8_t ret = 0;
 
-	if ((g_dq_otp_init.check_admin_pwd(&pdata[i + 7])) != 0xFF)
+	if ((g_dq_otp_init.check_admin_pwd(&p_data[i + 7])) != 0xFF)
 	{
 		return OTP_BASE_EXIST;
 	}
-	if (dq_otp_check_replace_password(&pdata[i + 7]) == 1)
+	if (dq_otp_check_replace_password(&p_data[i + 7]) == 1)
 		return OTP_BASE_EXIST;
 
 	for (i = 0; i < 5; i++)
 	{
-		pwd_info[i] = pdata[i + 2];
+		pwd_info[i] = p_data[i + 2];
 	}
 
 #ifdef __LOCK_USE_MALLOC__
@@ -1617,7 +1620,7 @@ static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *pdata)
 		pwd_index = i;
 		for (i = 0; i < 4; i++)
 		{
-			g_dq_app_pwd_info[pwd_index].replace_pwd[i] = pdata[i + 7];
+			g_dq_app_pwd_info[pwd_index].replace_pwd[i] = p_data[i + 7];
 		}
 		g_dq_app_pwd_info[pwd_index].replace_pwd[4] = 0xFF;
 	}
@@ -1633,12 +1636,12 @@ static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *pdata)
 		//memset(pwd_info,0xFF,sizeof(pwd_info));
 		for (i = 0; i < 5; i++)
 		{
-			g_dq_app_pwd_info[pwd_index].app_pwd[i] = pdata[i + 2];
+			g_dq_app_pwd_info[pwd_index].app_pwd[i] = p_data[i + 2];
 		}
 		//memset(pwd_info,0xFF,sizeof(pwd_info));
 		for (i = 0; i < 4; i++)
 		{
-			g_dq_app_pwd_info[pwd_index].replace_pwd[i] = pdata[i + 7];
+			g_dq_app_pwd_info[pwd_index].replace_pwd[i] = p_data[i + 7];
 		}
 		g_dq_app_pwd_info[pwd_index].replace_pwd[4] = 0xFF;
 		memset(pwd_char, 0xFF, sizeof(pwd_char));
@@ -1691,7 +1694,7 @@ static OTP_BASE_RET dq_otp_add_user_def_pwd(uint8_t *pdata)
 	}
 	//save pwd info
 	g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_fds_write_common_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
@@ -1705,7 +1708,7 @@ return :
 	none
 */
 //0212 8866 7687 3F FFFF FFFF FFFF FFFF 99
-static OTP_BASE_RET dq_otp_del_lock_pwd(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_del_lock_pwd(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	uint8_t lock_pwd[5];
@@ -1716,7 +1719,7 @@ static OTP_BASE_RET dq_otp_del_lock_pwd(uint8_t *pdata)
 	memset(lock_pwd, 0xFF, sizeof(lock_pwd));
 	for (i = 0; i < 5; i++)
 	{
-		lock_pwd[i] = pdata[i + 2];
+		lock_pwd[i] = p_data[i + 2];
 	}
 	for (i = 0; i < DQ_OTP_APP_PWD_NUM; i++)
 	{
@@ -1734,7 +1737,7 @@ static OTP_BASE_RET dq_otp_del_lock_pwd(uint8_t *pdata)
 		//save
 
 		g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_fds_write_common_cb);
+//		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 		mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
@@ -1758,7 +1761,7 @@ return :
 	none
 */
 //0213 5C90 628C FFFF FFFF FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_clr_lock_pwd(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_clr_lock_pwd(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	//uint8_t sys_time[4];
@@ -1790,19 +1793,19 @@ static OTP_BASE_RET dq_otp_clr_lock_pwd(uint8_t *pdata)
 	//g_dq_otp_init.set_system_time(sys_time_int,&ret_val);
 
 	g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret_val, dq_otp_fds_write_common_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret_val, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
 	return OTP_BASE_SUCESS;
 }
 
-static OTP_BASE_RET dq_otp_syn_lock_pwd(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_syn_lock_pwd(uint8_t *p_data)
 {
 	uint8_t i = 0, j = 0;
-	uint8_t t = pdata[2];
+	uint8_t t = p_data[2];
 	uint8_t num = 0;
-	uint8_t data[9];
+	uint8_t _data[9];
 #ifdef __LOCK_USE_MALLOC__
 	uint8_t ret = 0;
 	g_dq_app_pwd_info = (otp_base_app_pwd_info *)mmi_dq_fs_get_storage(DQ_FS_MEM_APP_PWD, &ret);
@@ -1823,30 +1826,30 @@ static OTP_BASE_RET dq_otp_syn_lock_pwd(uint8_t *pdata)
 
 	for (j = 0; j < 5; j++)
 	{
-		data[j] = g_dq_app_pwd_info[i].app_pwd[j];
+		_data[j] = g_dq_app_pwd_info[i].app_pwd[j];
 	}
 	for (j = 0; j < 4; j++)
 	{
-		data[j + 5] = g_dq_app_pwd_info[i].replace_pwd[j];
+		_data[j + 5] = g_dq_app_pwd_info[i].replace_pwd[j];
 	}
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
-	dq_otp_send_data_reply(0x02, 0x14, OTP_BASE_SUCESS, (uint8_t *)data, 9);
+	dq_otp_send_data_reply(0x02, 0x14, OTP_BASE_SUCESS, (uint8_t *)_data, 9);
 	return OTP_BASE_SUCESS;
 }
 
-static OTP_BASE_RET dq_otp_syn_lock_temp_pwd(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_syn_lock_temp_pwd(uint8_t *p_data)
 {
 	uint8_t i = 0, j = 0;
-	uint8_t t = pdata[2];
+	uint8_t t = p_data[2];
 	uint8_t num = 0;
-	uint8_t data[10];
+	uint8_t _data[10];
 #ifdef __LOCK_USE_MALLOC__
 	uint8_t ret = 0;
 	g_dq_app_pwd_info = (otp_base_app_pwd_info *)mmi_dq_fs_get_storage(DQ_FS_MEM_APP_PWD, &ret);
 #endif
-	memset(data, 0xFF, 10);
+	memset(_data, 0xFF, 10);
 	for (i = 0; i < DQ_OTP_APP_PWD_NUM; i++)
 	{
 		if (g_dq_app_pwd_info[i].pwd_type != 0xFF)
@@ -1858,7 +1861,7 @@ static OTP_BASE_RET dq_otp_syn_lock_temp_pwd(uint8_t *pdata)
 				{
 					for (j = 0; j < 5; j++)
 					{
-						data[j] = g_dq_app_pwd_info[i].app_pwd[j];
+						_data[j] = g_dq_app_pwd_info[i].app_pwd[j];
 					}
 					break;
 				}
@@ -1879,7 +1882,7 @@ static OTP_BASE_RET dq_otp_syn_lock_temp_pwd(uint8_t *pdata)
 		{
 			for (j = 0; j < 5; j++)
 			{
-				data[j + 5] = g_dq_app_pwd_info[i].app_pwd[j];
+				_data[j + 5] = g_dq_app_pwd_info[i].app_pwd[j];
 			}
 			break;
 		}
@@ -1887,7 +1890,7 @@ static OTP_BASE_RET dq_otp_syn_lock_temp_pwd(uint8_t *pdata)
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
-	dq_otp_send_data_reply(0x02, 0x15, OTP_BASE_SUCESS, (uint8_t *)data, 10);
+	dq_otp_send_data_reply(0x02, 0x15, OTP_BASE_SUCESS, (uint8_t *)_data, 10);
 	return OTP_BASE_SUCESS;
 }
 
@@ -1981,7 +1984,7 @@ return :
 	none
 */
 //0221 5C9A0030 5D134A30 00 60 FFFF FF 99
-static OTP_BASE_RET dq_otp_add_lock_fp(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_add_lock_fp(uint8_t *p_data)
 {
 	uint8_t result = 0;
 	uint8_t fp_time[4];
@@ -1996,21 +1999,21 @@ static OTP_BASE_RET dq_otp_add_lock_fp(uint8_t *pdata)
 	memset(fp_time, 0x00, sizeof(fp_time));
 	for (i = 0; i < 4; i++)
 	{
-		fp_time[i] = pdata[i + 2];
+		fp_time[i] = p_data[i + 2];
 	}
 	g_dq_add_temp_start_time = dq_sdk_HexcharToInt(fp_time, 4);
 
 	memset(fp_time, 0x00, sizeof(fp_time));
 	for (i = 0; i < 4; i++)
 	{
-		fp_time[i] = pdata[i + 6];
+		fp_time[i] = p_data[i + 6];
 	}
 	g_dq_add_temp_end_time = dq_sdk_HexcharToInt(fp_time, 4);
 
 	memset(fp_time, 0x00, sizeof(fp_time));
 	for (i = 0; i < 2; i++)
 	{
-		fp_time[i] = pdata[i + 10];
+		fp_time[i] = p_data[i + 10];
 	}
 	delay_time = dq_sdk_HexcharToInt(fp_time, 2);
 
@@ -2069,7 +2072,7 @@ return :
 	none
 */
 //0222 8866 FFFF FFFF FFFF FFFF FFFF 8899
-static OTP_BASE_RET dq_otp_del_lock_fp(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_del_lock_fp(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	uint8_t fp_index[2];
@@ -2079,7 +2082,7 @@ static OTP_BASE_RET dq_otp_del_lock_fp(uint8_t *pdata)
 	memset(fp_index, 0x00, sizeof(fp_index));
 	for (i = 0; i < 2; i++)
 	{
-		fp_index[i] = pdata[i + 2];
+		fp_index[i] = p_data[i + 2];
 	}
 
 	index = dq_sdk_HexcharToInt(fp_index, 2);
@@ -2110,7 +2113,7 @@ return :
 	none
 */
 //0213 5C90 628C FFFF FFFF FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_clr_lock_fp(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_clr_lock_fp(uint8_t *p_data)
 {
 	uint8_t ret = 0;
 
@@ -2121,14 +2124,14 @@ static OTP_BASE_RET dq_otp_clr_lock_fp(uint8_t *pdata)
 	return OTP_BASE_SUCESS;
 }
 
-static OTP_BASE_RET dq_otp_syn_lock_fp(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_syn_lock_fp(uint8_t *p_data)
 {
 	uint8_t i = 0, j = 0;
-	uint8_t t = pdata[2];
+	uint8_t t = p_data[2];
 	uint8_t num = 0;
-	uint8_t data[10];
+	uint8_t _data[10];
 
-	memset(data, 0xFF, 10);
+	memset(_data, 0xFF, 10);
 	for (i = 0; i < DQ_OTP_APP_FP_NUM; i++)
 	{
 		if (dq_otp_check_lock_fp(i) == 0)
@@ -2136,8 +2139,8 @@ static OTP_BASE_RET dq_otp_syn_lock_fp(uint8_t *pdata)
 			num++;
 			if ((num > (t - 1) * 5) && (num <= t * 5))
 			{
-				data[j * 2] = 0;	 //((g_dq_app_fp_info[i].fp_index>>8)&0xFF);
-				data[j * 2 + 1] = i; //(g_dq_app_fp_info[i].fp_index&0xFF);
+				_data[j * 2] = 0;	 //((g_dq_app_fp_info[i].fp_index>>8)&0xFF);
+				_data[j * 2 + 1] = i; //(g_dq_app_fp_info[i].fp_index&0xFF);
 				j++;
 				if (j >= 5)
 					break;
@@ -2149,7 +2152,7 @@ static OTP_BASE_RET dq_otp_syn_lock_fp(uint8_t *pdata)
 		return OTP_BASE_FAIL;
 	}
 
-	dq_otp_send_data_reply(0x02, 0x24, OTP_BASE_SUCESS, (uint8_t *)data, 10);
+	dq_otp_send_data_reply(0x02, 0x24, OTP_BASE_SUCESS, (uint8_t *)_data, 10);
 	return OTP_BASE_SUCESS;
 }
 
@@ -2212,7 +2215,7 @@ void dq_otp_app_add_lock_rfid_result(uint8_t result_flag, uint16_t rfid_index)
 #endif
 		g_dq_app_rfid_info[rfid_index].rfid_start_time = g_dq_add_temp_start_time;
 		g_dq_app_rfid_info[rfid_index].rfid_end_time = g_dq_add_temp_end_time;
-		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
+//		g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 		mmi_dq_fs_free_storage(DQ_FS_MEM_APP_RFID, (void **)&g_dq_app_rfid_info);
 #endif
@@ -2246,7 +2249,7 @@ return :
 	none
 */
 //0231 5C9A0030 5D134A30 00 60 FFFF FF 99
-static OTP_BASE_RET dq_otp_add_lock_rfid(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_add_lock_rfid(uint8_t *p_data)
 {
 	uint8_t result = 0;
 	uint8_t rfid_time[4];
@@ -2261,21 +2264,21 @@ static OTP_BASE_RET dq_otp_add_lock_rfid(uint8_t *pdata)
 	memset(rfid_time, 0x00, sizeof(rfid_time));
 	for (i = 0; i < 4; i++)
 	{
-		rfid_time[i] = pdata[i + 2];
+		rfid_time[i] = p_data[i + 2];
 	}
 	g_dq_add_temp_start_time = dq_sdk_HexcharToInt(rfid_time, 4);
 
 	memset(rfid_time, 0x00, sizeof(rfid_time));
 	for (i = 0; i < 4; i++)
 	{
-		rfid_time[i] = pdata[i + 6];
+		rfid_time[i] = p_data[i + 6];
 	}
 	g_dq_add_temp_end_time = dq_sdk_HexcharToInt(rfid_time, 4);
 
 	memset(rfid_time, 0x00, sizeof(rfid_time));
 	for (i = 0; i < 2; i++)
 	{
-		rfid_time[i] = pdata[i + 10];
+		rfid_time[i] = p_data[i + 10];
 	}
 	delay_time = dq_sdk_HexcharToInt(rfid_time, 2);
 
@@ -2300,7 +2303,7 @@ void dq_otp_lock_rfid_app_clr_result(void)
 	}
 
 	g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_RFID, (void **)&g_dq_app_rfid_info);
 #endif
@@ -2319,7 +2322,7 @@ void dq_otp_lock_rfid_app_del_result(void)
 	//g_dq_app_rfid_info[i].rfid_index = 0xFFFF;
 
 	g_dq_cmd_repleys_status = OTP_BASE_SUCESS;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, dq_otp_fds_write_common_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_RFID, (void **)&g_dq_app_rfid_info);
 #endif
@@ -2332,7 +2335,7 @@ return :
 	none
 */
 //0232 8866 FFFF FFFF FFFF FFFF FFFF 8899
-static OTP_BASE_RET dq_otp_del_lock_rfid(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_del_lock_rfid(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	uint8_t rfid_index[2];
@@ -2342,7 +2345,7 @@ static OTP_BASE_RET dq_otp_del_lock_rfid(uint8_t *pdata)
 	memset(rfid_index, 0x00, sizeof(rfid_index));
 	for (i = 0; i < 2; i++)
 	{
-		rfid_index[i] = pdata[i + 2];
+		rfid_index[i] = p_data[i + 2];
 	}
 
 	index = dq_sdk_HexcharToInt(rfid_index, 2);
@@ -2373,7 +2376,7 @@ return :
 	none
 */
 //0233 FFFF FFFF FFFF FFFF FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_clr_lock_rfid(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_clr_lock_rfid(uint8_t *p_data)
 {
 	uint8_t ret = 0;
 
@@ -2383,14 +2386,14 @@ static OTP_BASE_RET dq_otp_clr_lock_rfid(uint8_t *pdata)
 	return OTP_BASE_SUCESS;
 }
 
-static OTP_BASE_RET dq_otp_syn_lock_rfid(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_syn_lock_rfid(uint8_t *p_data)
 {
 	uint8_t i = 0, j = 0;
-	uint8_t t = pdata[2];
+	uint8_t t = p_data[2];
 	uint8_t num = 0;
-	uint8_t data[10];
+	uint8_t _data[10];
 
-	memset(data, 0xFF, 10);
+	memset(_data, 0xFF, 10);
 	for (i = 0; i < DQ_OTP_APP_RFID_NUM; i++)
 	{
 		if (dq_otp_check_lock_rfid(i) == 0)
@@ -2398,8 +2401,8 @@ static OTP_BASE_RET dq_otp_syn_lock_rfid(uint8_t *pdata)
 			num++;
 			if ((num > (t - 1) * 5) && (num <= t * 5))
 			{
-				data[j * 2] = 0;	 //((g_dq_app_rfid_info[i].rfid_index>>8)&0xFF);
-				data[j * 2 + 1] = i; // (g_dq_app_rfid_info[i].rfid_index&0xFF);
+				_data[j * 2] = 0;	 //((g_dq_app_rfid_info[i].rfid_index>>8)&0xFF);
+				_data[j * 2 + 1] = i; // (g_dq_app_rfid_info[i].rfid_index&0xFF);
 				j++;
 				if (j >= 5)
 					break;
@@ -2411,79 +2414,79 @@ static OTP_BASE_RET dq_otp_syn_lock_rfid(uint8_t *pdata)
 		return OTP_BASE_FAIL;
 	}
 
-	dq_otp_send_data_reply(0x02, 0x34, OTP_BASE_SUCESS, (uint8_t *)data, 10);
+	dq_otp_send_data_reply(0x02, 0x34, OTP_BASE_SUCESS, (uint8_t *)_data, 10);
 	return OTP_BASE_SUCESS;
 }
 
-static OTP_BASE_RET dq_otp_add_lock_rfid_by_app(uint8_t *pdata)
+static OTP_BASE_RET dq_otp_add_lock_rfid_by_app(uint8_t *p_data)
 {
 	uint8_t rfid_time[4];
 	uint8_t i = 0;
 	//uint16_t delay_time = 0;
 	static uint8_t data_len = 0;
-	static uint8_t data[20] = {0};
+	static uint8_t _data[20] = {0};
 	static uint8_t data_flag = 0;
-	if (pdata[2] == 0)
+	if (p_data[2] == 0)
 	{
 		memset(rfid_time, 0x00, sizeof(rfid_time));
 		for (i = 0; i < 4; i++)
 		{
-			rfid_time[i] = pdata[i + 3];
+			rfid_time[i] = p_data[i + 3];
 		}
 		g_dq_add_temp_start_time = dq_sdk_HexcharToInt(rfid_time, 4);
 
 		memset(rfid_time, 0x00, sizeof(rfid_time));
 		for (i = 0; i < 4; i++)
 		{
-			rfid_time[i] = pdata[i + 7];
+			rfid_time[i] = p_data[i + 7];
 		}
 		g_dq_add_temp_end_time = dq_sdk_HexcharToInt(rfid_time, 4);
-		data_len = pdata[11];
+		data_len = p_data[11];
 		memset(rfid_time, 0x00, sizeof(rfid_time));
 		for (i = 0; i < 2; i++)
 		{
-			rfid_time[i] = pdata[i + 12];
+			rfid_time[i] = p_data[i + 12];
 		}
 		//	delay_time = dq_sdk_HexcharToInt(rfid_time, 2);
-		memset(data, 0, 20);
+		memset(_data, 0, 20);
 		data_flag = 0;
 
 		if (data_len > 20)
 		{
 			data_len = 0;
-			dq_otp_common_reply(pdata[0], pdata[1], OTP_BASE_FAIL);
+			dq_otp_common_reply(p_data[0], p_data[1], OTP_BASE_FAIL);
 		}
 		else
-			dq_otp_common_reply(pdata[0], pdata[1], OTP_BASE_SUCESS);
+			dq_otp_common_reply(p_data[0], p_data[1], OTP_BASE_SUCESS);
 	}
-	else if (pdata[2] == data_flag + 1)
+	else if (p_data[2] == data_flag + 1)
 	{
 		if (data_len > 12)
 		{
 			for (i = 0; i < 12; i++)
 			{
-				data[data_flag * 12 + i] = pdata[i + 3];
+				_data[data_flag * 12 + i] = p_data[i + 3];
 			}
 			data_len -= 12;
 			data_flag++;
-			dq_otp_common_reply(pdata[0], pdata[1], OTP_BASE_SUCESS);
+			dq_otp_common_reply(p_data[0], p_data[1], OTP_BASE_SUCESS);
 		}
 		else if (data_len > 0)
 		{
 			for (i = 0; i < data_len; i++)
 			{
-				data[data_flag * 12 + i] = pdata[i + 3];
+				_data[data_flag * 12 + i] = p_data[i + 3];
 			}
 			data_len = 0;
 			data_flag = 0;
 
-			g_dq_otp_init.add_lock_rfid_by_app(data);
+			g_dq_otp_init.add_lock_rfid_by_app(_data);
 		}
 		else
-			dq_otp_common_reply(pdata[0], pdata[1], OTP_BASE_FAIL);
+			dq_otp_common_reply(p_data[0], p_data[1], OTP_BASE_FAIL);
 	}
 	else
-		dq_otp_common_reply(pdata[0], pdata[1], OTP_BASE_FAIL);
+		dq_otp_common_reply(p_data[0], p_data[1], OTP_BASE_FAIL);
 
 	return OTP_BASE_SUCESS;
 }
@@ -2498,7 +2501,7 @@ return :
 //0401 FFFF FFFF FFFF FFFF FFFF FFFF FF 99
 static OTP_BASE_RET dq_otp_get_lock_config_info(uint8_t *pwd_num, uint8_t *fp_num, uint8_t *rf_num, uint16_t *lock_config)
 {
-	g_dq_otp_init.get_lock_mem_info(pwd_num, fp_num, rf_num, lock_config);
+//	g_dq_otp_init.get_lock_mem_info(pwd_num, fp_num, rf_num, lock_config);
 	*pwd_num = DQ_OTP_APP_PWD_NUM;
 	*fp_num = DQ_OTP_APP_FP_NUM;
 	*rf_num = DQ_OTP_APP_RFID_NUM;
@@ -2521,9 +2524,9 @@ void dq_otp_check_and_update_time_cb(void)
 	uint8_t reply_data[3];
 	dq_otp_app_return_idle();
 
-	g_dq_otp_init.get_lock_bat_level(&bat, &ret_val);
+//	g_dq_otp_init.get_lock_bat_level(&bat, &ret_val);
 
-	g_dq_otp_init.get_lock_ver_info(&sw, &ret_val);
+//	g_dq_otp_init.get_lock_ver_info(&sw, &ret_val);
 
 	memset(reply_data, 0xFF, sizeof(reply_data));
 
@@ -2535,7 +2538,7 @@ void dq_otp_check_and_update_time_cb(void)
 
 //0402 5D13 4A30 FFFF FFFF FFFF FFFF FF 99
 //0402 00 58 1001 FFFF FFFF FFFF FFFF FFFF FF 99
-static OTP_BASE_RET dq_otp_get_lock_base_info(uint8_t *pdata, uint8_t *bat_val, uint16_t *sw_ver)
+static OTP_BASE_RET dq_otp_get_lock_base_info(uint8_t *p_data, uint8_t *bat_val, uint16_t *sw_ver)
 {
 	uint8_t i = 0;
 	uint8_t sys_time[4];
@@ -2552,11 +2555,11 @@ static OTP_BASE_RET dq_otp_get_lock_base_info(uint8_t *pdata, uint8_t *bat_val, 
 
 	for (i = 0; i < 4; i++)
 	{
-		sys_time[i] = pdata[i + 2];
+		sys_time[i] = p_data[i + 2];
 	}
 
-	west_d = (pdata[7] << 8) + pdata[8];
-	east_d = (pdata[9] << 8) + pdata[10];
+	west_d = (p_data[7] << 8) + p_data[8];
+	east_d = (p_data[9] << 8) + p_data[10];
 
 	g_dq_otp_init.set_system_time_zone(west_d, east_d, &time_zone_update_flag);
 
@@ -2582,9 +2585,9 @@ static OTP_BASE_RET dq_otp_get_lock_base_info(uint8_t *pdata, uint8_t *bat_val, 
 		return OTP_BASE_BUSY;
 	}
 
-	g_dq_otp_init.get_lock_bat_level(&bat, &ret_val);
+//	g_dq_otp_init.get_lock_bat_level(&bat, &ret_val);
 
-	g_dq_otp_init.get_lock_ver_info(&sw, &ret_val);
+//	g_dq_otp_init.get_lock_ver_info(&sw, &ret_val);
 
 	*bat_val = bat;
 	*sw_ver = sw;
@@ -2603,11 +2606,11 @@ return :
 	none
 */
 //0403 FFFF FFFF FFFF FFFF FFFF FFFF FF 99
-static uint8_t dq_otp_get_lock_admin_status(uint8_t *pdata)
+static uint8_t dq_otp_get_lock_admin_status(uint8_t *p_data)
 {
 	uint8_t status;
 	uint8_t retval;
-	g_dq_otp_init.get_admin_status(&status, &retval);
+//	g_dq_otp_init.get_admin_status(&status, &retval);
 	return status;
 }
 
@@ -2618,7 +2621,7 @@ return :
 	none
 */
 //0404 0060 FFFF FFFF FFFF FFFF FFFF 8899
-static uint8_t dq_otp_check_lock_admin_pwd_fp(uint8_t *pdata)
+static uint8_t dq_otp_check_lock_admin_pwd_fp(uint8_t *p_data)
 {
 	uint8_t i = 0;
 	uint8_t time[2];
@@ -2628,7 +2631,7 @@ static uint8_t dq_otp_check_lock_admin_pwd_fp(uint8_t *pdata)
 	memset(time, 0xFF, sizeof(time));
 	for (i = 0; i < 2; i++)
 	{
-		time[i] = pdata[i + 2];
+		time[i] = p_data[i + 2];
 	}
 	delay_time = dq_sdk_HexcharToInt(time, 2);
 
@@ -2659,12 +2662,12 @@ void dq_otp_check_lock_admin_pwd_fp_ret(uint8_t result)
 void dq_otp_sys_get_time(void)
 {
 	time_t time = dq_otp_get_sys_time_sec();
-	uint8_t data[4] = {0};
-	data[0] = (time >> 24) & 0xFF;
-	data[1] = (time >> 16) & 0xFF;
-	data[2] = (time >> 8) & 0xFF;
-	data[3] = time & 0xFF;
-	dq_otp_send_data_reply(0x04, 0x07, OTP_BASE_SUCESS, data, 4);
+	uint8_t _data[4] = {0};
+	_data[0] = (time >> 24) & 0xFF;
+	_data[1] = (time >> 16) & 0xFF;
+	_data[2] = (time >> 8) & 0xFF;
+	_data[3] = time & 0xFF;
+	dq_otp_send_data_reply(0x04, 0x07, OTP_BASE_SUCESS, _data, 4);
 }
 
 void dq_otp_sys_enter_dfu(void)
@@ -2721,22 +2724,22 @@ void dq_otp_cmd_dataOperation(uint8_t *p_data, uint16_t data_len)
 #ifndef __WIN32_ENV_SUPPORT__
 	for (i = 0; i < data_len; i++)
 	{
-		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation data_ret[%d] = 0x%x \n", i, data_ret[i]);
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation data_ret[%d] = 0x%x \n", i, data_ret[i]);
 	}
-	NRF_LOG_PRINTF_DEBUG("dq_otp_get_cmd_type otp_type = 0x%x \n", g_dq_otp_type);
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_get_cmd_type otp_type = 0x%x \n", g_dq_otp_type);
 #endif
 
 	if (g_dq_otp_type == CMD_OTP_GET_LOCK_BASE_INFO || g_dq_otp_type == CMD_OTP_SYN_AES_16)
 	{
-		uint8_t data;
-		dq_otp_lock_random_vector_generate(&data, 1);
-		serialId = data % 50;
-		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation CMD_OTP_GET_LOCK_BASE_INFO serialID= 0x%x  0x%x \n", serialId, data);
+		uint8_t _data;
+		dq_otp_lock_random_vector_generate(&_data, 1);
+		serialId = _data % 50;
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation CMD_OTP_GET_LOCK_BASE_INFO serialID= 0x%x  0x%x \n", serialId, _data);
 	}
 	else if (data_ret[15] != serialId)
 	{
 
-		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation error serialID= 0x%x data_ret 0x%x \n", serialId, data_ret[15]);
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_cmd_dataOperation error serialID= 0x%x data_ret 0x%x \n", serialId, data_ret[15]);
 		dq_otp_common_reply(data_ret[0], data_ret[1], OTP_BASE_FAIL);
 		return;
 	}
@@ -2746,7 +2749,7 @@ void dq_otp_cmd_dataOperation(uint8_t *p_data, uint16_t data_len)
 	case CMD_OTP_SYN_AES_16:
 		retval = dq_otp_syn_aes_16_key(data_ret);
 #ifndef __WIN32_ENV_SUPPORT__
-		NRF_LOG_PRINTF_DEBUG("dq_otp_syn_aes_16_key retval = %d \n", retval);
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_syn_aes_16_key retval = %d \n", retval);
 #endif
 		if (retval == OTP_BASE_SUCESS)
 		{
@@ -2996,7 +2999,7 @@ void dq_otp_fds_write_common_cb(void)
 			break;
 	}
 #ifndef __WIN32_ENV_SUPPORT__
-	NRF_LOG_PRINTF_DEBUG("dq_otp_fds_write_common_cb g_dq_cmd_repleys_status = 0x%x,cmd_info[%d].cmd_h  = 0x%x,cmd_info[%d].cmd_l = 0x%x,g_dq_fp_index = %d\n", g_dq_cmd_repleys_status, i, cmd_info[i].cmd_h, i, cmd_info[i].cmd_l, g_dq_fp_index);
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_fds_write_common_cb g_dq_cmd_repleys_status = 0x%x,cmd_info[%d].cmd_h  = 0x%x,cmd_info[%d].cmd_l = 0x%x,g_dq_fp_index = %d\n", g_dq_cmd_repleys_status, i, cmd_info[i].cmd_h, i, cmd_info[i].cmd_l, g_dq_fp_index);
 #endif
 	if (g_dq_otp_type == CMD_OTP_INIT_SUCESS)
 	{
@@ -3097,7 +3100,7 @@ void dq_otp_fds_clear_init_set_param(dq_otp_write_data_cb write_data_cb)
 	unsigned char ret = 0;
 	dq_dev_key_flag = 0;
 	memset(&otp_set_info, 0xFF, sizeof(otp_set_info));
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_SET, (unsigned char *)&otp_set_info, sizeof(otp_base_setting_info), &ret, write_data_cb);
 	return;
 }
 /*
@@ -3121,7 +3124,7 @@ void dq_otp_fds_clear_app_pwd(dq_otp_write_data_cb write_data_cb)
 		g_dq_app_pwd_info[i].pwd_flag = 0xFF;
 		g_dq_app_pwd_info[i].pwd_type = 0xFF;
 	}
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, write_data_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
@@ -3233,7 +3236,7 @@ void dq_otp_fds_clear_app_pwd_by_password(void)
 			break;
 		}
 	}
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, NULL);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, NULL);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
 #endif
@@ -3262,7 +3265,7 @@ void dq_otp_fds_clear_log(dq_otp_write_data_cb write_data_cb)
 	otp_log_head = 0;
 	otp_log_end = 0;
 	//LOG
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, write_data_cb);
 	return;
 }
 /*
@@ -3285,7 +3288,7 @@ void dq_otp_fds_clear_app_fp(dq_otp_write_data_cb write_data_cb)
 		//g_dq_app_fp_info[i].fp_index = 0xFFFF;
 	}
 	//LOG
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_FP, (unsigned char *)g_dq_app_fp_info, sizeof(otp_base_app_fp_info) * DQ_OTP_APP_FP_NUM, &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_FP, (unsigned char *)g_dq_app_fp_info, sizeof(otp_base_app_fp_info) * DQ_OTP_APP_FP_NUM, &ret, write_data_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_FP, (void **)&g_dq_app_fp_info);
 #endif
@@ -3311,7 +3314,7 @@ void dq_otp_fds_clear_app_rf(dq_otp_write_data_cb write_data_cb)
 		//g_dq_app_rfid_info[i].rfid_index = 0xFFFF;
 	}
 	//LOG
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_RFID, (unsigned char *)g_dq_app_rfid_info, sizeof(otp_base_app_rfid_info) * DQ_OTP_APP_RFID_NUM, &ret, write_data_cb);
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_RFID, (void **)&g_dq_app_rfid_info);
 #endif
@@ -3658,7 +3661,7 @@ void dq_otp_save_open_log(dq_otp_write_data_cb write_data_cb)
 {
 	unsigned char ret = 0;
 
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, write_data_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, write_data_cb);
 	return;
 }
 
@@ -3667,7 +3670,7 @@ void dq_otp_send_log(void)
 #if 1
 	unsigned char i;
 	unsigned char index = dq_otp_get_log_index();
-	unsigned char data[10] = {0};
+	unsigned char _data[10] = {0};
 	uint32_t time = 0;
 
 	if (index == 0xFF)
@@ -3676,7 +3679,7 @@ void dq_otp_send_log(void)
 		if (dq_otp_lock_save_log_state())
 		{
 			g_dq_cmd_repleys_status = OTP_BASE_EMPTY;
-			g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, dq_otp_fds_write_common_cb);
+//			g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_LOG, (unsigned char *)&otp_lock_log, sizeof(otp_base_log_info) * DQ_OTP_LOG_NUM, &ret, dq_otp_fds_write_common_cb);
 		}
 		else
 			dq_otp_common_reply(0x03, 0x01, OTP_BASE_EMPTY);
@@ -3684,18 +3687,18 @@ void dq_otp_send_log(void)
 	}
 
 	time = otp_lock_log[index].sys_time;
-	data[0] = otp_lock_log[index].type;
-	data[1] = (time >> 24) & 0xFF;
-	data[2] = (time >> 16) & 0xFF;
-	data[3] = (time >> 8) & 0xFF;
-	data[4] = time & 0xFF;
+	_data[0] = otp_lock_log[index].type;
+	_data[1] = (time >> 24) & 0xFF;
+	_data[2] = (time >> 16) & 0xFF;
+	_data[3] = (time >> 8) & 0xFF;
+	_data[4] = time & 0xFF;
 
 	for (i = 0; i < 5; i++)
 	{
-		data[5 + i] = otp_lock_log[index].app_pwd[i];
+		_data[5 + i] = otp_lock_log[index].app_pwd[i];
 	}
 
-	dq_otp_send_data_reply(0x03, 0x01, OTP_BASE_SUCESS, (uint8_t *)data, 10);
+	dq_otp_send_data_reply(0x03, 0x01, OTP_BASE_SUCESS, (uint8_t *)_data, 10);
 
 	otp_lock_log[index].sys_time = 0xFFFFFFFF;
 	otp_lock_log[index].type = 0xFF;
@@ -3774,7 +3777,7 @@ unsigned char dq_otp_save_temp_pwd(unsigned char *in_pwd, OTP_PWD_TYPE type)
 
 	//save pwd info
 	dq_app_pwd_flag = 1;
-	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_app_pwd_save_cb);
+//	g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_app_pwd_save_cb);
 
 #ifdef __LOCK_USE_MALLOC__
 	mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
@@ -3950,7 +3953,7 @@ return :
 void dq_otp_fds_reset_ekey_record_cb(void)
 {
 #ifndef __WIN32_ENV_SUPPORT__
-	NRF_LOG_PRINTF_DEBUG("#### dq_otp_fds_reset_ekey_record_cb \n");
+//	NRF_LOG_PRINTF_DEBUG("#### dq_otp_fds_reset_ekey_record_cb \n");
 #endif
 }
 
@@ -4191,7 +4194,7 @@ unsigned char dq_otp_check_password_for_open(unsigned char *password, unsigned c
 			{
 				g_dq_app_pwd_info[i].pwd_flag = 1;
 				dq_app_pwd_flag = 1;
-				g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_app_pwd_save_cb);
+//				g_dq_otp_init.fds_write(DQ_OTP_FILE_ID_PWD_APP, (unsigned char *)g_dq_app_pwd_info, sizeof(otp_base_app_pwd_info) * DQ_OTP_APP_PWD_NUM, &ret, dq_otp_app_pwd_save_cb);
 			}
 #ifdef __LOCK_USE_MALLOC__
 			mmi_dq_fs_free_storage(DQ_FS_MEM_APP_PWD, (void **)&g_dq_app_pwd_info);
@@ -4304,9 +4307,9 @@ unsigned char dq_otp_get_sys_time_hour(unsigned short *sys_hour)
 
 	*sys_hour = sec_time / 3600;
 
-	NRF_LOG_PRINTF_DEBUG("otp_set_info.otp_start_hour %d\n", otp_set_info.otp_start_hour);
+//	NRF_LOG_PRINTF_DEBUG("otp_set_info.otp_start_hour %d\n", otp_set_info.otp_start_hour);
 
-	NRF_LOG_PRINTF_DEBUG("sec_timer %d\n", sec_time);
+//	NRF_LOG_PRINTF_DEBUG("sec_timer %d\n", sec_time);
 
 	return 1;
 }
@@ -4339,7 +4342,7 @@ unsigned char dq_otp_check_time_by_hour(unsigned char *in_pwd, unsigned char len
 	pwd_hour = dq_otp_get_pwd_time_hour(in_pwd, len, 1);
 	ret_val = dq_otp_get_sys_time_hour(&sys_hour);
 
-	NRF_LOG_PRINTF_DEBUG("dq_otp_check_time_by_hour %d  %d\n", pwd_hour, sys_hour);
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_check_time_by_hour %d  %d\n", pwd_hour, sys_hour);
 
 	if (ret_val == 1)
 	{
@@ -4376,7 +4379,7 @@ unsigned char dq_otp_check_per_pwd_verify(unsigned char *dec_pwd, unsigned char 
 	unsigned char ret_val = 0;
 	unsigned char new_pwd_flag = 0;
 
-	NRF_LOG_PRINTF_DEBUG("dq_otp_check_per_pwd_verify\n");
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_check_per_pwd_verify\n");
 	if (dec_pwd[0] != 0x09)
 		return 0;
 
@@ -4474,7 +4477,7 @@ uint32_t dq_otp_get_sin_pwd_endtime(unsigned char *dec_pwd,unsigned char len)
 unsigned char dq_otp_check_sin_pwd_verify(unsigned char *dec_pwd, unsigned char *pwd_in, unsigned char len)
 {
 	unsigned char ret_val = 0;
-	NRF_LOG_PRINTF_DEBUG("dq_otp_check_sin_pwd_verify\n");
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_check_sin_pwd_verify\n");
 
 	if (dec_pwd[0] != 0x08)
 		return 0;
@@ -4591,7 +4594,7 @@ uint32_t dq_otp_get_lim_pwd_end_time(unsigned char *dec_pwd, unsigned char len)
 		return 0;
 
 	hour_time = dq_otp_get_pwd_time_hour(dec_pwd, 5, 0);
-	dq_otp_get_pwd_time_ymd(hour_time, &time_y, &time_m, &time_d, &time_h);
+//	dq_otp_get_pwd_time_ymd(hour_time, &time_y, &time_m, &time_d, &time_h);
 	pwd_time_sec = dq_otp_get_pwd_time_sec(time_y, time_m, time_d, time_h);
 
 	if (len == 8)
@@ -4655,7 +4658,7 @@ unsigned char dq_otp_check_lim_pwd_verify(unsigned char *dec_pwd, unsigned char 
 	time_t sys_time_sec;
 	time_t end_time_sec;
 
-	NRF_LOG_PRINTF_DEBUG("dq_otp_check_lim_pwd_verify\n");
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_check_lim_pwd_verify\n");
 	if (dec_pwd[0] > 5)
 		return 0;
 
@@ -4715,7 +4718,7 @@ unsigned char dq_otp_check_lim_pwd_verify(unsigned char *dec_pwd, unsigned char 
 		}
 		else if (dec_pwd[5] == 9) //900-999 for month
 		{
-			dq_otp_get_pwd_time_ymd(hour_time, &time_y, &time_m, &time_d, &time_h);
+//			dq_otp_get_pwd_time_ymd(hour_time, &time_y, &time_m, &time_d, &time_h);
 			pwd_time_sec = dq_otp_get_pwd_time_sec(time_y, time_m, time_d, time_h);
 
 			for (i = 0; i < 2; i++)
@@ -4825,7 +4828,7 @@ unsigned char dq_otp_check_loop_pwd_verify(unsigned char *dec_pwd, unsigned char
 	uint32_t pwd_sec = 0;
 	unsigned char new_pwd_flag = 0;
 
-	NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify\n");
+//	NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify\n");
 
 	if (dec_pwd[0] != 0x06)
 		return 0;
@@ -4864,11 +4867,11 @@ unsigned char dq_otp_check_loop_pwd_verify(unsigned char *dec_pwd, unsigned char
 		g_dq_otp_init.time_zone_pro(&pwd_sec);
 		pwd_hour2 = (pwd_sec / 3600) % 24;
 		dq_otp_get_local_sys_time_hour(&sys_hour2);
-		NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify pwd_hour2 %d  ; sys_hour2 %d ;   end_time %d\n", pwd_hour2, sys_hour2, end_time);
+//		NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify pwd_hour2 %d  ; sys_hour2 %d ;   end_time %d\n", pwd_hour2, sys_hour2, end_time);
 		if ((sys_hour2 >= pwd_hour2) && (sys_hour2 <= end_time))
 		{
-			week = dq_otp_get_sys_local_time_week();
-			NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify week %d\n", week);
+			// week = dq_otp_get_sys_local_time_week();
+			// NRF_LOG_PRINTF_DEBUG("dq_otp_check_loop_pwd_verify week %d\n", week);
 
 			ret_val = dq_otp_loop_pwd_check_week_verify(week_info, week);
 		}
@@ -4915,7 +4918,7 @@ uint8_t dq_otp_temp_pwd_check(unsigned char *pwd_in, unsigned char len)
 
 		for (i = 0; i < len; i++)
 		{
-			NRF_LOG_PRINTF_DEBUG("dq_otp_temp_pwd_check [%d]=  %d\n", i, dec_pwd_char[i]);
+//			NRF_LOG_PRINTF_DEBUG("dq_otp_temp_pwd_check [%d]=  %d\n", i, dec_pwd_char[i]);
 		}
 
 		if (dec_pwd_char[0] <= 5)

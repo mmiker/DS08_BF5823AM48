@@ -4,6 +4,7 @@
 #include "mmi_sys.h"
 #include "mmi_rfid.h"
 #include "mmi_com.h"
+#include "mcu02_sfr.h"
 
 extern unsigned char get_index;
 typedef enum
@@ -366,7 +367,8 @@ unsigned char mmi_dq_fs_get_business_flag(void);
  ************************************************************************************/
 void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val);
 unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len);
-
+uint8_t mmi_dq_fs_check_app_admin_password(unsigned char *password);
+void mmi_dq_fs_time_zone_pro(uint32_t *time);
 /************************************************************************************
  * 							     	 End function							        *
  ************************************************************************************/

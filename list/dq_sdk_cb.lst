@@ -1,0 +1,1459 @@
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQ_SDK_CB
+OBJECT MODULE PLACED IN .\output\dq_sdk_cb.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\dq_sdk_cb.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\include
+                    -;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd_
+                    -rfid;.\mmi_inc) DEBUG PRINT(.\list\dq_sdk_cb.lst) TABS(2) OBJECT(.\output\dq_sdk_cb.obj)
+
+line level    source
+
+   1          #ifndef __DQ_SDK_CB_C__
+   2          #define __DQ_SDK_CB_C__
+   3          #include "mmi_feature.h"
+   4          #ifdef __LOCK_VIRTUAL_PASSWORD__
+   5          #include "dq_sdk_cb.h"
+   6          #ifndef __WIN32_ENV_SUPPORT__
+   7          // #include "ble_nus.h"
+   8          #include "mmi_fs.h"
+   9          // #include "nrf_log.h"
+  10          #include "mmi_sys.h"
+  11          #include "mmi_ms.h"
+  12          #include "mmi_rtc.h"
+  13          //#include "mmi_cal.h"
+  14          // #include "mmi_fp.h"
+  15          #include "mmi_feature.h"
+  16          // #include "mmi_aud.h"
+  17          #include "mmi_rfid.h"
+  18          #endif
+  19          static uint8_t *p_data_buf;
+  20          static dq_otp_write_data_cb g_write_data_cb;
+  21          static uint16_t p_data_len;
+  22          static uint8_t g_app_write_flag = 0;
+  23          #ifndef __WIN32_ENV_SUPPORT__
+  24          static mid_fds_file_id g_file_id;
+  25          #else
+              static unsigned short g_file_id;
+              #endif
+  28          
+  29          
+  30          extern void FP_PowerOn(void);
+  31          extern void power_init(void);
+  32          
+  33          /*
+  34          parameter: 
+  35            file_id   the id for the file to write
+  36            p_data:   the data to write
+  37            data_len: the data len to write
+  38            result:   return the operte result,0 for sucess, 1 for fail
+  39          return :
+  40            none
+  41          */
+  42          void dq_otp_fds_write_cb(uint16_t file_id,uint8_t * p_data,uint16_t data_len,uint8_t *result,dq_otp_write_
+             -data_cb cb)
+  43          {
+  44   1      // #ifndef __WIN32_ENV_SUPPORT__
+  45   1      //  BASE_RET retval = BASE_SUCESS;
+  46   1      
+  47   1      //  if(file_id == DQ_OTP_FILE_ID_SET)
+  48   1      //  {
+  49   1      //    retval = mmi_dq_mid_fds_write((mid_fds_file_id)MID_FDS_APP_FILE_APP_SET,(unsigned char *)p_data,data_
+             -len,0,(fs_write_data_callback)cb);
+  50   1      //  }
+  51   1      //  else if(file_id == DQ_OTP_FILE_ID_PWD_APP)
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 2   
+
+  52   1      //  {
+  53   1      //    g_file_id = MID_FDS_APP_FILE_APP_PWD_1;
+  54   1      //    p_data_buf = p_data;
+  55   1      //    g_write_data_cb = cb;
+  56   1      //    p_data_len = data_len;
+  57   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_PWD_1);
+  58   1      //  }
+  59   1      //  else if(file_id == DQ_OTP_FILE_ID_LOG)
+  60   1      //  {
+  61   1      //    g_file_id = MID_FDS_APP_FILE_LOG_1;
+  62   1      //    p_data_buf = p_data;
+  63   1      //    g_write_data_cb = cb;
+  64   1      //    p_data_len = data_len;
+  65   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_LOG_1);
+  66   1      //  }
+  67   1      //  else if(file_id == DQ_OTP_FILE_ID_FP)
+  68   1      //  {
+  69   1      //    retval = mmi_dq_mid_fds_write((mid_fds_file_id)MID_FDS_APP_FILE_APP_FP,(unsigned char *)p_data,data_l
+             -en,0,(fs_write_data_callback)cb);
+  70   1      //  }
+  71   1      //  else if(file_id == DQ_OTP_FILE_ID_RFID)
+  72   1      //  {
+  73   1      //    retval = mmi_dq_mid_fds_write((mid_fds_file_id)MID_FDS_APP_FILE_APP_RF,(unsigned char *)p_data,data_l
+             -en,0,(fs_write_data_callback)cb);
+  74   1      //  }
+  75   1        
+  76   1      //  if(retval == BASE_SUCESS)
+  77   1      //  {
+  78   1          
+  79   1      //  }
+  80   1      // #endif
+  81   1      //  return;
+  82   1      }
+*** WARNING C280 IN LINE 42 OF mmi_src\dq_sdk_cb.c: 'file_id': unreferenced local variable
+*** WARNING C280 IN LINE 42 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 42 OF mmi_src\dq_sdk_cb.c: 'data_len': unreferenced local variable
+*** WARNING C280 IN LINE 42 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+*** WARNING C280 IN LINE 42 OF mmi_src\dq_sdk_cb.c: 'cb': unreferenced local variable
+  83          /*
+  84          parameter: 
+  85            none
+  86          return :
+  87            none
+  88          */
+  89          
+  90          //#include "Nrf_delay.h"
+  91          void dq_otp_fds_write_pwd_ekey_cb(void)
+  92          {
+  93   1      // #ifndef __WIN32_ENV_SUPPORT__
+  94   1      //  if(g_file_id == MID_FDS_APP_FILE_APP_PWD_1)
+  95   1      //  {
+  96   1      //    g_file_id = MID_FDS_APP_FILE_APP_PWD_2;
+  97   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_PWD_2);
+  98   1      //    return;
+  99   1      //  }
+ 100   1      //  else if(g_file_id == MID_FDS_APP_FILE_APP_PWD_2)
+ 101   1      //  {
+ 102   1      //    g_file_id = MID_FDS_APP_FILE_APP_PWD_3;
+ 103   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_PWD_3);
+ 104   1      //    return;
+ 105   1      //  }
+ 106   1      //  else if(g_file_id == MID_FDS_APP_FILE_APP_PWD_3)
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 3   
+
+ 107   1      //  {
+ 108   1      //    g_file_id = MID_FDS_APP_FILE_APP_PWD_4;
+ 109   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_PWD_4);
+ 110   1      //    return;
+ 111   1      //  }
+ 112   1      //  else
+ 113   1      //    return;
+ 114   1      // #endif
+ 115   1      }
+ 116          
+ 117          /*
+ 118          parameter: 
+ 119            none
+ 120          return :
+ 121            none
+ 122          */
+ 123          void dq_otp_fds_write_pwd_ekey(void)
+ 124          {
+ 125   1      // #ifndef __WIN32_ENV_SUPPORT__
+ 126   1      //  BASE_RET retval = BASE_SUCESS;
+ 127   1      //  fs_write_data_callback cb;
+ 128   1      //  if(g_file_id == MID_FDS_APP_FILE_APP_PWD_1)
+ 129   1      //  {
+ 130   1      //    cb =  dq_otp_fds_write_pwd_ekey_cb;
+ 131   1      //  }
+ 132   1      //  else if(g_file_id == MID_FDS_APP_FILE_APP_PWD_2)
+ 133   1      //  {
+ 134   1      //    p_data_buf += p_data_len/4;
+ 135   1      //    cb =  dq_otp_fds_write_pwd_ekey_cb;
+ 136   1      //  }
+ 137   1      //  else if(g_file_id == MID_FDS_APP_FILE_APP_PWD_3)
+ 138   1      //  {
+ 139   1      //    p_data_buf += p_data_len/4;
+ 140   1      //    cb =  dq_otp_fds_write_pwd_ekey_cb;
+ 141   1      //  }
+ 142   1      //  else if(g_file_id == MID_FDS_APP_FILE_APP_PWD_4)
+ 143   1      //  {
+ 144   1      //    p_data_buf += p_data_len/4;
+ 145   1      //    cb =  g_write_data_cb;
+ 146   1      //  }
+ 147   1      //  retval = mmi_dq_mid_fds_write((mid_fds_file_id)g_file_id,(unsigned char *)p_data_buf,p_data_len/4,0,cb
+             -);
+ 148   1      //  if(retval == BASE_SUCESS)
+ 149   1      //  {
+ 150   1      //  }
+ 151   1      // #endif
+ 152   1      //  return;
+ 153   1      }
+ 154          /*
+ 155          parameter: 
+ 156            none
+ 157          return :
+ 158            none
+ 159          */
+ 160          void dq_otp_fds_write_log_cb(void)
+ 161          {
+ 162   1      // #ifndef __WIN32_ENV_SUPPORT__
+ 163   1      //  if(g_file_id == MID_FDS_APP_FILE_LOG_1)
+ 164   1      //  {
+ 165   1      //    g_file_id = MID_FDS_APP_FILE_LOG_2;
+ 166   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_LOG_2);
+ 167   1      //    return;
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 4   
+
+ 168   1      //  }
+ 169   1      //  else if(g_file_id == MID_FDS_APP_FILE_LOG_2)
+ 170   1      //  {
+ 171   1      //    g_file_id = MID_FDS_APP_FILE_LOG_3;
+ 172   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_LOG_3);
+ 173   1      //    return;
+ 174   1      //  }
+ 175   1      //  else if(g_file_id == MID_FDS_APP_FILE_LOG_3)
+ 176   1      //  {
+ 177   1      //    g_file_id = MID_FDS_APP_FILE_LOG_4;
+ 178   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_APP_LOG_4);
+ 179   1      //    return;
+ 180   1      //  }
+ 181   1      //  else
+ 182   1      //    return;
+ 183   1      // #endif
+ 184   1      }
+ 185          
+ 186          /*
+ 187          parameter: 
+ 188            none
+ 189          return :
+ 190            none
+ 191          */
+ 192          void dq_otp_fds_write_log(void)
+ 193          {
+ 194   1      // #ifndef __WIN32_ENV_SUPPORT__
+ 195   1      //  BASE_RET retval = BASE_SUCESS;
+ 196   1      //  fs_write_data_callback cb;
+ 197   1      //  if(g_file_id == MID_FDS_APP_FILE_LOG_1)
+ 198   1      //  {
+ 199   1      //    cb =  dq_otp_fds_write_log_cb;
+ 200   1      //  }
+ 201   1      //  else if(g_file_id == MID_FDS_APP_FILE_LOG_2)
+ 202   1      //  {
+ 203   1      //    p_data_buf += p_data_len/4;
+ 204   1      //    cb =  dq_otp_fds_write_log_cb;
+ 205   1      //  }
+ 206   1      //  else if(g_file_id == MID_FDS_APP_FILE_LOG_3)
+ 207   1      //  {
+ 208   1      //    p_data_buf += p_data_len/4;
+ 209   1      //    cb =  dq_otp_fds_write_log_cb;
+ 210   1      //  }
+ 211   1      //  else if(g_file_id == MID_FDS_APP_FILE_LOG_4)
+ 212   1      //  {
+ 213   1      //    p_data_buf += p_data_len/4;
+ 214   1      //    cb =  g_write_data_cb;
+ 215   1      //  }
+ 216   1      //  retval = mmi_dq_mid_fds_write((mid_fds_file_id)g_file_id,(unsigned char *)p_data_buf,p_data_len/4,0,cb
+             -);
+ 217   1      //  if(retval == BASE_SUCESS)
+ 218   1      //  {
+ 219   1      //  }
+ 220   1      // #endif
+ 221   1      //  return;
+ 222   1      }
+ 223          
+ 224          
+ 225          /*
+ 226          parameter: 
+ 227            file_id:  the id for the file to read
+ 228            p_data:   the buffer for file read
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 5   
+
+ 229            data_len: the data len to write
+ 230            result:   return the operte result,0 for sucess, 1 for fail
+ 231          return :
+ 232            none
+ 233          */
+ 234          void dq_otp_fds_read_cb(uint16_t file_id,uint8_t * p_data,uint16_t data_len,uint8_t *result)
+ 235          {
+ 236   1      // #ifndef __WIN32_ENV_SUPPORT__
+ 237   1      //  BASE_RET retval = BASE_SUCESS;
+ 238   1      //  if(file_id == DQ_OTP_FILE_ID_PWD_APP)
+ 239   1      //  {
+ 240   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_PWD_1,(unsigned char *)p_data,data_len/4);
+ 241   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_PWD_2,(unsigned char *)p_data+data_len/4,data_len/4
+             -);
+ 242   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_PWD_3,(unsigned char *)p_data+data_len/2,data_len/4
+             -);
+ 243   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_PWD_4,(unsigned char *)p_data+(data_len*3)/4,data_l
+             -en/4);
+ 244   1      //  }
+ 245   1      //  else if(file_id == DQ_OTP_FILE_ID_FP)
+ 246   1      //  {
+ 247   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_FP,(unsigned char *)p_data,data_len);
+ 248   1      //  }
+ 249   1      //  else if(file_id == DQ_OTP_FILE_ID_SET)
+ 250   1      //  {
+ 251   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_SET,(unsigned char *)p_data,data_len);
+ 252   1      //  }
+ 253   1      //  else if(file_id == DQ_OTP_FILE_ID_RFID)
+ 254   1      //  {
+ 255   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_APP_RF,(unsigned char *)p_data,data_len);
+ 256   1      //  }
+ 257   1      //  else if(file_id == DQ_OTP_FILE_ID_LOG)
+ 258   1      //  {
+ 259   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_LOG_1,(unsigned char *)p_data,data_len/4);
+ 260   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_LOG_2,(unsigned char *)p_data+data_len/4,data_len/4);
+ 261   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_LOG_3,(unsigned char *)p_data+data_len/2,data_len/4);
+ 262   1      //    retval = mmi_dq_mid_fds_read(MID_FDS_APP_FILE_LOG_4,(unsigned char *)p_data+(data_len*3)/4,data_len/4
+             -);
+ 263   1      //  }
+ 264   1      //  if(retval == BASE_SUCESS)
+ 265   1      //  {
+ 266   1          
+ 267   1      //  }
+ 268   1      // #else
+ 269   1      // #endif
+ 270   1      //  return;
+ 271   1      }
+*** WARNING C280 IN LINE 234 OF mmi_src\dq_sdk_cb.c: 'file_id': unreferenced local variable
+*** WARNING C280 IN LINE 234 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 234 OF mmi_src\dq_sdk_cb.c: 'data_len': unreferenced local variable
+*** WARNING C280 IN LINE 234 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 272          
+ 273          /*
+ 274          Function: this function for data to be sent by bt
+ 275          parameter: 
+ 276            p_data:   the buffer for data to be sent
+ 277            data_len: the length for the data to be sent
+ 278            result:   return the operte result,0 for sucess, 1 for fail,255 for not support
+ 279          return :
+ 280            none
+ 281          */
+ 282          #ifndef __WIN32_ENV_SUPPORT__
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 6   
+
+ 283          // extern void nus_data_get_para(ble_nus_t *pus);
+ 284          #endif
+ 285          void dq_otp_data_send_by_bt_cb(uint8_t * p_data,uint16_t data_len,uint32_t *result)
+ 286          {
+ 287   1      // #ifndef __WIN32_ENV_SUPPORT__
+ 288   1      //  ble_nus_t ble_nus;
+ 289   1      //  uint32_t ret_val = 0;
+ 290   1      //  //BASE_STATUS_MACHINE cur_ms;
+ 291   1      
+ 292   1      //  memset(&ble_nus,0x00,sizeof(ble_nus_t));
+ 293   1      //  nus_data_get_para(&ble_nus);  
+ 294   1        
+ 295   1      //  ret_val = ble_nus_string_send(&ble_nus,p_data,data_len);
+ 296   1      //  *result = ret_val;
+ 297   1      //  #if 0
+ 298   1      //  cur_ms = mmi_dq_ms_get_machine_status();
+ 299   1      //  if(cur_ms != BASE_STATUS_M_IDLE)
+ 300   1      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_IDLE);
+ 301   1      //  #endif
+ 302   1      // #endif
+ 303   1      }
+*** WARNING C280 IN LINE 285 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 285 OF mmi_src\dq_sdk_cb.c: 'data_len': unreferenced local variable
+*** WARNING C280 IN LINE 285 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 304          /*
+ 305          Function: this function for data to be sent by nb
+ 306          parameter: 
+ 307            p_data:   the buffer for data to be sent
+ 308            data_len: the length for the data to be sent
+ 309            result:   return the operte result,0 for sucess, 1 for fail,255 for not support
+ 310          return :
+ 311            none
+ 312          */
+ 313          void dq_otp_data_send_by_nb_cb(uint8_t * p_data,uint16_t data_len,uint8_t *result)
+ 314          {
+ 315   1        
+ 316   1      }
+*** WARNING C280 IN LINE 313 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 313 OF mmi_src\dq_sdk_cb.c: 'data_len': unreferenced local variable
+*** WARNING C280 IN LINE 313 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 317          /*
+ 318          Function:   set the lock password by app
+ 319          parameter: 
+ 320            p_data:   the password for lock to set
+ 321            data_len: the password length
+ 322            result:   the result for save lock password.
+ 323                  0 for sucess, 1 for fail,255 for not support
+ 324          return :
+ 325            none
+ 326          */
+ 327          void dq_otp_app_set_operate_lock_flag(uint8_t flag)
+ 328          {
+ 329   1        g_app_write_flag = flag;
+ 330   1        return;
+ 331   1      }
+ 332          
+ 333          /*
+ 334          Function:   set the lock password by app
+ 335          parameter: 
+ 336            p_data:   the password for lock to set
+ 337            data_len: the password length
+ 338            result:   the result for save lock password.
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 7   
+
+ 339                  0 for sucess, 1 for fail,255 for not support
+ 340          return :
+ 341            none
+ 342          */
+ 343          uint8_t dq_otp_app_get_operate_lock_flag(void)
+ 344          {
+ 345   1        return g_app_write_flag;
+ 346   1      }
+ 347          
+ 348          
+ 349          /*
+ 350          Function:   set the lock password by app
+ 351          parameter: 
+ 352            p_data:   the password for lock to set
+ 353            data_len: the password length
+ 354            result:   the result for save lock password.
+ 355                  0 for sucess, 1 for fail,255 for not support
+ 356          return :
+ 357            none
+ 358          */
+ 359          void dq_otp_set_lock_pwd_cb(uint8_t * p_data,uint16_t data_len,uint8_t *result)
+ 360          {
+ 361   1        
+ 362   1      }
+*** WARNING C280 IN LINE 359 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 359 OF mmi_src\dq_sdk_cb.c: 'data_len': unreferenced local variable
+*** WARNING C280 IN LINE 359 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 363          
+ 364          /*
+ 365          Function:   set the lock rfid by app
+ 366          parameter: 
+ 367            data_index: set the fp in lock return the index
+ 368            result:   the result for save lock fp
+ 369                  0 for sucess, 1 for fail,255 for not support
+ 370          return :
+ 371            none
+ 372          */
+ 373          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 374          
+ 375          #if defined (__LOCK_FP_SUPPORT2__)||defined (__LOCK_FP_SUPPORT1_2__)
+              void mmi_dq_otp_lock_rfid_uart_callback(uint8_t type,uint8_t *reply,uint16_t reply_len)
+              {
+                if(type == 0x80)
+                {
+                  if(reply[0] == 0)
+                  {
+                    mmi_dq_fp_light(FP_NONE_COLOR);
+                    mmi_dq_fp_set_fp_uart_handle_cb(NULL);
+                  }
+                
+                } 
+              }
+              
+              #endif
+ 390          
+ 391          void dq_otp_set_lock_rfid_cb(uint16_t delay_time,uint8_t *result)
+ 392          {
+ 393   1        BASE_STATUS_MACHINE state;
+ 394   1        if(mmi_dq_rfid_get_init_state() != 0)
+*** WARNING C206 IN LINE 394 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_rfid_get_init_state': missing function-prototype
+ 395   1        {
+ 396   2          dq_otp_app_add_lock_rfid_result(5,0);
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 8   
+
+ 397   2          return;
+ 398   2        }
+ 399   1        
+ 400   1        dq_otp_app_set_operate_lock_flag(1);
+ 401   1        mmi_dq_sys_wake_up();
+ 402   1        state = mmi_dq_ms_get_machine_status();
+*** WARNING C206 IN LINE 402 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_ms_get_machine_status': missing function-prototype
+ 403   1          if(state == BASE_STATUS_M_IDLE||state == BASE_STATUS_M_IDLE_INPUT_PWD)
+ 404   1          {
+ 405   2        
+ 406   2      #if defined (__LOCK_FP_SUPPORT__)
+                mmi_dq_fp_light(FP_NONE_COLOR);
+              #elif defined (__LOCK_FP_SUPPORT2__)
+                if(mmi_dq_fp_get_fp_mode() != BTL_M_FREE)
+                  mmi_dq_fp_mode_free(mmi_dq_otp_lock_rfid_uart_callback);
+                else
+                {
+                  mmi_dq_fp_light(FP_NONE_COLOR);
+                  mmi_dq_fp_set_fp_uart_handle_cb(NULL);
+                }
+              
+              #elif defined (__LOCK_FP_SUPPORT1_2__)
+                if(mmi_dq_fp_get_type() == FP_BTL)
+                {
+                  if(mmi_dq_fp_get_fp_mode() != BTL_M_FREE)
+                    mmi_dq_fp_mode_free(mmi_dq_otp_lock_rfid_uart_callback);
+                  else
+                  {
+                    mmi_dq_fp_light(FP_NONE_COLOR);
+                    mmi_dq_fp_set_fp_uart_handle_cb(NULL);
+                  }
+                }
+                else if(mmi_dq_fp_get_type() == FP_LT5X)
+                {
+                  mmi_dq_fp_light(FP_NONE_COLOR);
+                }
+              
+              
+              #endif
+ 435   2        #ifndef __WIN32_ENV_SUPPORT__
+ 436   2      //  mmi_dq_ms_set_machine_status(BASE_STATUS_M_ADD_RFID);
+ 437   2        #endif
+ 438   2          }
+ 439   1          else
+ 440   1            dq_otp_app_add_lock_rfid_result(4,0);
+ 441   1        return;
+ 442   1      }
+*** WARNING C280 IN LINE 391 OF mmi_src\dq_sdk_cb.c: 'delay_time': unreferenced local variable
+*** WARNING C280 IN LINE 391 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 443          #else
+              void dq_otp_set_lock_rfid_cb(uint16_t delay_time,uint8_t *result)
+              {
+                return;
+              }
+              #endif
+ 449          
+ 450          /*
+ 451          Function:   set the lock fp by app
+ 452          parameter: 
+ 453            data_index: set the fp in lock return the index
+ 454            result:   the result for save lock fp
+ 455                  0 for sucess, 1 for fail,255 for not support
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 9   
+
+ 456          return :
+ 457            none
+ 458          */
+ 459          #if defined (__LOCK_FP_SUPPORT__) || defined (__LOCK_FP_SUPPORT2__)||defined(__LOCK_FP_SUPPORT1_2__)
+              
+              void dq_otp_set_lock_fp_cb(uint16_t delay_time,uint8_t *result)
+              {
+              #ifdef __LOCK_FP_SUPPORT1_2__
+                if(mmi_dq_fp_get_type() == FP_NONE)
+                {
+                  dq_otp_app_add_lock_fp_result(5,0);
+                  return;
+                }
+              #endif
+                dq_otp_app_set_operate_lock_flag(1);
+                mmi_dq_sys_wake_up();
+                {
+                    
+                  BASE_STATUS_MACHINE state = mmi_dq_ms_get_machine_status();
+                  if(state == BASE_STATUS_M_IDLE||state == BASE_STATUS_M_IDLE_INPUT_PWD)
+                  {
+                    mmi_dq_fp_light(FP_NONE_COLOR);
+              #ifndef __WIN32_ENV_SUPPORT__
+                mmi_dq_ms_set_machine_status(BASE_STATUS_M_ADD_FP);
+              #endif
+                  }
+                  else
+                    dq_otp_app_add_lock_fp_result(4,0);
+                }
+                return;
+              }
+              #else
+ 488          void dq_otp_set_lock_fp_cb(uint16_t delay_time,uint8_t *result)
+ 489          {
+ 490   1        return;
+ 491   1      }
+*** WARNING C280 IN LINE 488 OF mmi_src\dq_sdk_cb.c: 'delay_time': unreferenced local variable
+*** WARNING C280 IN LINE 488 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 492          
+ 493          
+ 494          #endif
+ 495          
+ 496          #if defined (__LOCK_FP_SUPPORT__) || defined (__LOCK_FP_SUPPORT2__)||defined(__LOCK_FP_SUPPORT1_2__)
+              
+              void dq_otp_stop_set_lock_fp_cb(uint8_t *result)
+              {
+              #ifndef __WIN32_ENV_SUPPORT__
+                BASE_STATUS_MACHINE state = mmi_dq_ms_get_machine_status();
+              
+                if(state == BASE_STATUS_M_ADD_FP||state == BASE_STATUS_M_ADD_FP_AGAIN||state == BASE_STATUS_M_ADD_FP_PRES
+             -S_1||state == BASE_STATUS_M_ADD_FP_PRESS_2 ||state ==BASE_STATUS_M_ADD_FP_END)
+                {
+                  //mmi_dq_ms_set_machine_status(BASE_STATUS_M_ADD_FP_STAR);
+                  mmi_dq_entry_sleep_normal_time();
+                  dq_otp_app_add_lock_fp_result(3,0);
+                  mmi_dq_enter_sleep_timer_stop();
+                  mmi_dq_sys_timeout_sleep_aud_pro();
+                }
+              #endif
+                return;
+              }
+              #else
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 10  
+
+ 515          void dq_otp_stop_set_lock_fp_cb(uint8_t *result)
+ 516          {
+ 517   1        return;
+ 518   1      }
+*** WARNING C280 IN LINE 515 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 519          
+ 520          #endif
+ 521          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 522          void dq_otp_stop_set_lock_rfid_cb(uint8_t *result)
+ 523          {
+ 524   1      #ifndef __WIN32_ENV_SUPPORT__
+ 525   1        BASE_STATUS_MACHINE state = mmi_dq_ms_get_machine_status();
+ 526   1        
+ 527   1        if(state == BASE_STATUS_M_ADD_RFID||state == BASE_STATUS_M_ADD_RFID_AGAIN||state ==BASE_STATUS_M_ADD_RFID
+             -_PRESS_1||state ==BASE_STATUS_M_ADD_RFID_PRESS_2)
+ 528   1        {
+ 529   2          //mmi_dq_ms_set_machine_status(BASE_STATUS_M_RFID_STAR);
+ 530   2          mmi_dq_entry_sleep_normal_time();
+*** WARNING C206 IN LINE 530 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_entry_sleep_normal_time': missing function-prototype
+ 531   2          dq_otp_app_add_lock_rfid_result(3,0);
+ 532   2          mmi_dq_enter_sleep_timer_stop();
+*** WARNING C206 IN LINE 532 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_enter_sleep_timer_stop': missing function-prototype
+ 533   2          mmi_dq_sys_timeout_sleep_aud_pro();
+*** WARNING C206 IN LINE 533 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_timeout_sleep_aud_pro': missing function-prototype
+ 534   2        }
+ 535   1      #endif
+ 536   1        return;
+ 537   1      }
+*** WARNING C280 IN LINE 522 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 538          #else
+              void dq_otp_stop_set_lock_rfid_cb(uint8_t *result)
+              {
+                return;
+              }
+              
+              #endif
+ 545          
+ 546          /*
+ 547          Function: clear the lock password by app
+ 548          parameter: 
+ 549            result:   the result for clear lock password
+ 550                  0 for sucess, 1 for fail,255 for not support
+ 551          return :
+ 552            none
+ 553          */
+ 554          void dq_otp_clear_lock_pwd_cb(uint8_t *result)
+ 555          {
+ 556   1        
+ 557   1      }
+*** WARNING C280 IN LINE 554 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 558          
+ 559          /*
+ 560          Function: clear the lock fp by app
+ 561          parameter: 
+ 562            result:   the result for clear lock fp
+ 563                  0 for sucess, 1 for fail,255 for not support
+ 564          return :
+ 565            none
+ 566          */
+ 567          #if defined (__LOCK_FP_SUPPORT__) || defined (__LOCK_FP_SUPPORT2__)||defined(__LOCK_FP_SUPPORT1_2__)
+              
+              void dq_otp_clear_lock_fp_cb(uint8_t *result)
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 11  
+
+              {
+                uint16_t ret;
+              
+              #ifdef __LOCK_FP_SUPPORT1_2__
+                if(mmi_dq_fp_get_type() == FP_NONE)
+                {
+                  dq_otp_lock_fp_app_fail_result();
+                  return;
+                }
+              #endif
+              
+                
+                if(mmi_dq_sys_is_sleep()==true)
+                {
+                  power_init();
+                  FP_PowerOn();
+                }
+                else
+                {
+                  mmi_dq_enter_sleep_timer_start();
+                }
+              #if defined(__LOCK_FP_SUPPORT__)
+                ret = mmi_dq_fs_clr_fp(dq_otp_lock_fp_app_clr_result);
+              #elif defined (__LOCK_FP_SUPPORT2__)
+              
+                if(mmi_dq_fp_get_fp_mode() == 0)
+                {
+                  *result = 1;
+                  if(mmi_dq_sys_is_sleep()==true)
+                    mmi_dq_sys_enter_sleep();
+                  return;
+                }
+              
+              
+                ret = mmi_dq_fs_clr_fp(dq_otp_lock_fp_app_clr_result, dq_otp_lock_fp_app_fail_result);
+              #elif defined(__LOCK_FP_SUPPORT1_2__)
+                FP_TYPE fp = mmi_dq_fp_get_type();
+              
+                if(fp == FP_LT5X) 
+                {
+                  ret = mmi_dq_fs_clr_fp(dq_otp_lock_fp_app_clr_result);
+                }
+                else if(fp == FP_BTL)
+                {
+                  if(mmi_dq_fp_get_fp_mode() == 0)
+                  {
+                    *result = 1;
+                    if(mmi_dq_sys_is_sleep()==true)
+                      mmi_dq_sys_enter_sleep();
+                    return;
+                  }
+              
+                  ret = mmi_dq_fs_clr_fp_with_btl(dq_otp_lock_fp_app_clr_result, dq_otp_lock_fp_app_fail_result);
+              
+                }
+                
+              #endif
+                *result = ret;
+                return;
+              }
+              #else
+ 631          
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 12  
+
+ 632          void dq_otp_clear_lock_fp_cb(uint8_t *result)
+ 633          {
+ 634   1      //  *result = BASE_FAIL;
+ 635   1        return;
+ 636   1      }
+*** WARNING C280 IN LINE 632 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 637          
+ 638          
+ 639          #endif
+ 640          /*
+ 641          Funciton: clear the lock rf by app
+ 642          parameter: 
+ 643            result:   the result for clear lock rf
+ 644                  0 for sucess, 1 for fail,255 for not support
+ 645          return :
+ 646            none
+ 647          */
+ 648          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 649          
+ 650          void dq_otp_clear_lock_rf_cb(uint8_t *result)
+ 651          {
+ 652   1        uint16_t ret = 1;
+ 653   1        if(mmi_dq_rfid_get_init_state() != 0)
+ 654   1      //    *result = BASE_FAIL
+ 655   1        ;
+ 656   1        else
+ 657   1        {
+ 658   2      //    ret = mmi_dq_fs_clr_rfid(dq_otp_lock_rfid_app_clr_result);
+ 659   2      //    *result = ret;
+ 660   2        }
+ 661   1        return;
+ 662   1      }
+*** WARNING C280 IN LINE 650 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 663          #else
+              void dq_otp_clear_lock_rf_cb(uint8_t *result)
+              {
+                *result = BASE_FAIL;
+                return;
+              }
+              
+              #endif
+ 671          /*
+ 672          Function: the index for password in lock
+ 673          parameter: 
+ 674            id:   the server id for password
+ 675            index:  the index for password in lock
+ 676            result:   return the operte result,0 for sucess, 1 for fail,255 for not support
+ 677          return :
+ 678            none
+ 679          */
+ 680          void dq_otp_del_lock_pwd_cb(uint8_t *p_data,uint8_t *result)
+ 681          {
+ 682   1        
+ 683   1      }
+*** WARNING C280 IN LINE 680 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+*** WARNING C280 IN LINE 680 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 684          
+ 685          /*
+ 686          Function: the index for password in lock
+ 687          parameter: 
+ 688            id:   the server id for password
+ 689            index:  the index for password in lock
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 13  
+
+ 690            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+ 691          return :
+ 692            none
+ 693          */
+ 694          #if defined (__LOCK_FP_SUPPORT__) || defined (__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+              uint16_t lock_del_fp_index=0;
+              #if defined (__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+              void dq_otp_del_lock_fp_callback(uint8_t type,uint8_t *reply,uint16_t reply_len)
+              {
+                if(type== 0x84)
+                {
+                  if(reply[0]==0)
+                  {
+                    mmi_dq_fs_del_fp(lock_del_fp_index,FDS_PWD_TYPE_USER,dq_otp_lock_fp_app_del_result);
+                    return;
+                  }
+                  else
+                  {
+                    //mmi_dq_fp_delete(lock_del_fp_index,dq_otp_del_lock_fp_callback);
+                    dq_otp_lock_fp_app_fail_result();
+                  }
+                }
+              
+              }
+              #endif
+              
+              void dq_otp_del_lock_fp_cb(uint16_t index,uint8_t *result)
+              {
+                uint16_t ret = 0;
+              #ifdef __LOCK_FP_SUPPORT1_2__
+                if(mmi_dq_fp_get_type() == FP_NONE)
+                {
+                  *result = BASE_FAIL;
+                  return;
+                }
+              #endif
+                
+                if(mmi_dq_sys_is_sleep()==true)
+                {
+                  power_init();
+                  FP_PowerOn();
+                }
+                else
+                {
+                  mmi_dq_enter_sleep_timer_start();
+                }
+              #ifdef __LOCK_FP_SUPPORT__
+                ret = mmi_dq_fp_delete(index);
+              
+                if(ret == 0)
+                {
+                  lock_del_fp_index = index;
+                  ret = mmi_dq_fs_del_fp(index,FDS_PWD_TYPE_USER,dq_otp_lock_fp_app_del_result);
+                }
+                else
+                {
+                  if(mmi_dq_sys_is_sleep()==true)
+                    mmi_dq_sys_enter_sleep();
+                }
+              #elif defined(__LOCK_FP_SUPPORT2__)
+              
+                if(mmi_dq_fp_get_fp_mode() == 0)
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 14  
+
+                {
+                  *result = 1;
+                  if(mmi_dq_sys_is_sleep()==true)
+                    mmi_dq_sys_enter_sleep();
+                  return;
+                }
+                lock_del_fp_index = index;
+                mmi_dq_fp_delete(index,dq_otp_del_lock_fp_callback);
+              #elif defined (__LOCK_FP_SUPPORT1_2__)
+                FP_TYPE fp = mmi_dq_fp_get_type();
+              
+                if(fp == FP_LT5X) 
+                {
+                  ret = mmi_dq_fp_delete(index);
+                  
+                  if(ret == 0)
+                  {
+                    lock_del_fp_index = index;
+                    ret = mmi_dq_fs_del_fp(index,FDS_PWD_TYPE_USER,dq_otp_lock_fp_app_del_result);
+                  }
+                  else
+                  {
+                    if(mmi_dq_sys_is_sleep()==true)
+                      mmi_dq_sys_enter_sleep();
+                  }
+                }
+                else if(fp == FP_BTL)
+                {
+                  if(mmi_dq_fp_get_fp_mode() == 0)
+                  {
+                    *result = 1;
+                    if(mmi_dq_sys_is_sleep()==true)
+                      mmi_dq_sys_enter_sleep();
+                    return;
+                  }
+                  lock_del_fp_index = index;
+                  mmi_dq_fp_delete_btl(index,dq_otp_del_lock_fp_callback);
+              
+                }
+              
+                
+              #endif
+              
+                *result = ret;
+                return;
+              }
+              #else
+ 799          void dq_otp_del_lock_fp_cb(uint16_t index,uint8_t *result)
+ 800          {
+ 801   1      //  *result = BASE_FAIL;
+ 802   1        return;
+ 803   1      }
+*** WARNING C280 IN LINE 799 OF mmi_src\dq_sdk_cb.c: 'index': unreferenced local variable
+*** WARNING C280 IN LINE 799 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+ 804          
+ 805          
+ 806          #endif
+ 807          /*
+ 808          Function: the index for rf in lock
+ 809          parameter: 
+ 810            id:   the server id for rf
+ 811            index:  the index for rf in lock
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 15  
+
+ 812            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+ 813          return :
+ 814            none
+ 815          */
+ 816          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 817          
+ 818          uint16_t lock_del_rf_index=0;
+ 819          void dq_otp_del_lock_rf_cb(uint16_t index,uint8_t *result)
+ 820          {
+ 821   1        uint16_t ret = 0;
+ 822   1        if(mmi_dq_rfid_get_init_state() != 0)
+ 823   1        {
+ 824   2      //    *result = BASE_FAIL;
+ 825   2          return;
+ 826   2        }
+ 827   1      
+ 828   1        lock_del_rf_index = index;
+ 829   1      //  ret = mmi_dq_fs_del_rfid(index ,dq_otp_lock_rfid_app_del_result);
+ 830   1      
+ 831   1        *result = ret;
+ 832   1        return;
+ 833   1      }
+ 834          #else
+              void dq_otp_del_lock_rf_cb(uint16_t index,uint8_t *result)
+              {
+                *result = BASE_FAIL;
+                return;
+              }
+                
+              #endif
+ 842          #if defined (__LOCK_FP_SUPPORT__) || defined (__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+              
+              uint8_t dq_otp_check_lock_fp(uint16_t index)
+              {
+                uint8_t ret = 0;
+              #ifdef __LOCK_FP_SUPPORT1_2__
+                if(mmi_dq_fp_get_type() == FP_NONE)
+                  return BASE_FAIL;
+              #endif
+                
+                ret = mmi_dq_fs_check_fp(index,FDS_PWD_TYPE_USER);
+                return ret;
+              }
+              #else
+ 856          uint8_t dq_otp_check_lock_fp(uint16_t index)
+ 857          {
+ 858   1        //return BASE_FAIL;
+ 859   1        return 0x01;
+ 860   1      }
+*** WARNING C280 IN LINE 856 OF mmi_src\dq_sdk_cb.c: 'index': unreferenced local variable
+ 861          
+ 862          #endif
+ 863          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 864          
+ 865          uint8_t dq_otp_check_lock_rfid(uint16_t index)
+ 866          {
+ 867   1        uint8_t ret = 0;
+ 868   1      
+ 869   1        if(mmi_dq_rfid_get_init_state() != 0)
+ 870   1        {
+ 871   2      //    return BASE_FAIL;
+ 872   2        }
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 16  
+
+ 873   1        
+ 874   1      //  ret = mmi_dq_fs_check_rfid(index,FDS_PWD_TYPE_USER);
+ 875   1        return ret;
+ 876   1      }
+*** WARNING C280 IN LINE 865 OF mmi_src\dq_sdk_cb.c: 'index': unreferenced local variable
+ 877          #else
+              uint8_t dq_otp_check_lock_rfid(uint16_t index)
+              {
+                return BASE_FAIL;
+              }
+              #endif
+ 883          
+ 884          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 885          extern unsigned short g_rfid_index ;
+ 886          
+ 887          void dq_otp_add_lock_rfid_by_app_callback(void)
+ 888          {
+ 889   1        dq_otp_app_add_lock_rfid_result(0,g_rfid_index);
+ 890   1      
+ 891   1      }
+ 892          
+ 893          void dq_otp_add_lock_rfid_by_app_cb(uint8_t* p_data)
+ 894          {
+ 895   1        // uint8_t retval = 0;
+ 896   1        // BASE_STATUS_MACHINE state;
+ 897   1        
+ 898   1        // if(mmi_dq_rfid_get_init_state() != 0)
+ 899   1        // {
+ 900   1        //  dq_otp_app_add_lock_rfid_result(5,0);
+ 901   1        //  return;
+ 902   1        // }
+ 903   1      
+ 904   1        // mmi_dq_sys_wake_up();
+ 905   1        // state = mmi_dq_ms_get_machine_status();
+ 906   1        // if(state == BASE_STATUS_M_IDLE||state == BASE_STATUS_M_IDLE_INPUT_PWD)
+ 907   1        // {
+ 908   1        //  if(mmi_dq_fs_get_index_by_secdata(p_data) != 0xFF)
+ 909   1        //  {
+ 910   1        //    dq_otp_app_add_lock_rfid_result(3,0);
+ 911   1        //    return;
+ 912   1        //  }
+ 913   1        
+ 914   1        //  g_rfid_index = mmi_dq_fs_get_rfid_free_index();
+ 915   1        //  if(g_rfid_index == 0xFF)
+ 916   1        //  {
+ 917   1        //    dq_otp_app_add_lock_rfid_result(2,0);
+ 918   1        //    return;
+ 919   1        //  }
+ 920   1      
+ 921   1        //  retval = mmi_dq_fs_add_rfid(g_rfid_index, FDS_PWD_TYPE_USER, data, dq_otp_add_lock_rfid_by_app_callba
+             -ck);
+ 922   1        //  if(retval != BASE_SUCESS)
+ 923   1        //  {
+ 924   1        //    dq_otp_app_add_lock_rfid_result(4,0);
+ 925   1        //    return;
+ 926   1        //  }
+ 927   1        // }
+ 928   1        // else
+ 929   1        //  dq_otp_app_add_lock_rfid_result(4,0);
+ 930   1      
+ 931   1      }
+*** WARNING C280 IN LINE 893 OF mmi_src\dq_sdk_cb.c: 'p_data': unreferenced local variable
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 17  
+
+ 932          
+ 933          #else
+              void dq_otp_add_lock_rfid_by_app_cb(uint8_t* data)
+              {
+                //dq_otp_app_add_lock_rfid_result(4,0);
+              }
+              #endif
+ 939          
+ 940          void dq_otp_app_return_idle(void)
+ 941          {
+ 942   1        if(mmi_dq_sys_is_sleep()==true)
+*** WARNING C206 IN LINE 942 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_is_sleep': missing function-prototype
+ 943   1        {
+ 944   2          mmi_dq_enter_sleep_timer_stop();
+ 945   2      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_ENTER_SLEEP);
+ 946   2        }
+ 947   1        else
+ 948   1        //  mmi_dq_ms_set_machine_status(BASE_STATUS_M_IDLE)
+ 949   1        ;
+ 950   1      
+ 951   1      }
+ 952          /*
+ 953          Function: get the battery info from lock
+ 954          parameter: 
+ 955            level:  return the battery level
+ 956            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+ 957          return :
+ 958            none
+ 959          */
+ 960          extern uint16_t VBAT_Last_Value;
+ 961          void dq_otp_get_lock_bat_info_cb(uint8_t *level,uint8_t *result)
+ 962          {
+ 963   1        
+ 964   1        if(VBAT_Last_Value>=533)//6)
+ 965   1          *level = 100;
+ 966   1        else if(VBAT_Last_Value>=515)//5.8
+ 967   1          *level = 95;//+(VBAT_Last_Value-515)*5/18;
+ 968   1        else if(VBAT_Last_Value>=489)//5.5
+ 969   1          *level = 90;//+(VBAT_Last_Value-489)*5/26;
+ 970   1        else if(VBAT_Last_Value >=444) //5
+ 971   1          *level = 70+((VBAT_Last_Value-444)*20/45)/5*5;
+ 972   1        else if(VBAT_Last_Value>=391)//4.4)
+ 973   1          *level = 50+((VBAT_Last_Value-391)*20/53)/5*5;
+ 974   1        else if(VBAT_Last_Value>=373)//4.2
+ 975   1          *level = 20+((VBAT_Last_Value-373)*30/18)/5*5;
+ 976   1        else if(VBAT_Last_Value>=355)//4
+ 977   1          *level = ((VBAT_Last_Value-355)*20/18)/5*5;
+ 978   1        else if(VBAT_Last_Value>=0x90)
+ 979   1          *level = 0;
+ 980   1        else
+ 981   1          *level = 100;
+ 982   1      
+ 983   1        *result = 0;
+ 984   1        
+ 985   1      }
+ 986          
+ 987          /*
+ 988          Function: get the software version from lock
+ 989          parameter: 
+ 990            ver_info: return the lock software version info
+ 991            result:   return the operte result,0 for sucess, 1 for fail,255 for not support
+ 992          return :
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 18  
+
+ 993            none
+ 994          */
+ 995          void dq_otp_get_lock_ver_info_cb(uint16_t *ver_info,uint8_t *result)
+ 996          {
+ 997   1      //  *ver_info = DFU_VER_INFO;
+ 998   1        *result = 0;
+ 999   1        return;
+1000   1      }
+*** WARNING C280 IN LINE 995 OF mmi_src\dq_sdk_cb.c: 'ver_info': unreferenced local variable
+1001          
+1002          /*
+1003          Function: set the lock audio status when opening
+1004          parameter: 
+1005            flag: 0 for close the audio when opening the lock
+1006                1 for open the audio when opening the lock
+1007            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+1008          return :
+1009            none
+1010          */
+1011          void dq_otp_set_lock_open_aud_cb(uint8_t flag,uint8_t *result)
+1012          {
+1013   1        
+1014   1      }
+*** WARNING C280 IN LINE 1011 OF mmi_src\dq_sdk_cb.c: 'flag': unreferenced local variable
+*** WARNING C280 IN LINE 1011 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+1015          
+1016          /*
+1017          Function : get the lock memory info,password count , fp count ,rf count...
+1018          parameter: 
+1019            pwd_count:  the password count
+1020            fp_count: the fp count
+1021            rf_count: the rf count
+1022            result:   return the operte result,0 for sucess, 1 for fail,255 for not support
+1023          return :
+1024            none
+1025          */
+1026          void dq_otp_get_lock_mem_info_cb(uint8_t *pwd_count,uint8_t *fp_count,uint8_t *rf_count,uint16_t *lock_con
+             -fig)
+1027          {
+1028   1      #ifdef __WIN32_ENV_SUPPORT__
+                *pwd_count = 100;
+                *fp_count = 200;
+                *rf_count = 20;
+                *lock_config = 0x000F;
+              #else
+1034   1      //  mmi_dq_get_mem_info(pwd_count,fp_count,rf_count);
+1035   1      //  mmi_dq_sys_lock_config_info(lock_config);
+1036   1      #endif
+1037   1        return;
+1038   1      }
+*** WARNING C280 IN LINE 1026 OF mmi_src\dq_sdk_cb.c: 'pwd_count': unreferenced local variable
+*** WARNING C280 IN LINE 1026 OF mmi_src\dq_sdk_cb.c: 'fp_count': unreferenced local variable
+*** WARNING C280 IN LINE 1026 OF mmi_src\dq_sdk_cb.c: 'rf_count': unreferenced local variable
+*** WARNING C280 IN LINE 1026 OF mmi_src\dq_sdk_cb.c: 'lock_config': unreferenced local variable
+1039          
+1040          /*
+1041          Function : get the admin status,for example:password only,fp only,password+fp
+1042          parameter: 
+1043            status: 0 for password only
+1044                1 for fp only
+1045                2 for password+fp
+1046            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 19  
+
+1047          return :
+1048            none
+1049          */
+1050          void dq_otp_get_admin_status_cb(uint8_t *status,uint8_t *result)
+1051          {
+1052   1      #if 1
+1053   1      //q1  xjc
+1054   1      #ifndef __WIN32_ENV_SUPPORT__
+1055   1        if(mmi_dq_fs_get_admin_status() == 0)
+1056   1        {
+1057   2          *result = 0;
+1058   2          *status = 0;
+1059   2        }
+1060   1      #if defined (__LOCK_FP_SUPPORT__)||defined(__LOCK_FP_SUPPORT2__) || defined (__LOCK_FP_SUPPORT1_2__)
+                else if(mmi_dq_ms_check_admin_fp_exist() == 0)
+                {
+                  *result = 0;
+                  *status = 1;
+                }
+              #endif
+1067   1        else
+1068   1        {
+1069   2          *result = 0;
+1070   2          *status = 3;
+1071   2        }
+1072   1      #endif
+1073   1      
+1074   1      #else
+                *status = 3;
+                *result = 0;
+              #endif
+1078   1        return;
+1079   1      }
+1080          
+1081          /*
+1082          Function : get the admin status,for example:password only,fp only,password+fp
+1083          parameter: 
+1084            status: 0 for password only
+1085                1 for fp only
+1086                2 for password+fp
+1087            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+1088          return :
+1089            none
+1090          */
+1091          void dq_otp_verify_admin_status_cb(uint16_t delay_time,uint8_t *result)
+1092          {
+1093   1        if(mmi_dq_fs_get_admin_status() != 0)
+1094   1        {
+1095   2          BASE_STATUS_MACHINE state;
+1096   2          *result = 0; 
+1097   2          dq_otp_app_set_operate_lock_flag(1);
+1098   2          mmi_dq_sys_wake_up();
+1099   2          state = mmi_dq_ms_get_machine_status();
+1100   2          if(state==BASE_STATUS_M_IDLE||state == BASE_STATUS_M_IDLE_INPUT_PWD)
+1101   2          {
+1102   3      //      mmi_dq_ms_set_machine_status(BASE_STATUS_M_IDLE_SYS_MENU_START);
+1103   3          }
+1104   2          else
+1105   2          {
+1106   3            dq_otp_app_set_operate_lock_flag(0);
+1107   3            *result = 1;
+1108   3          }
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 20  
+
+1109   2        }
+1110   1        else
+1111   1          *result = 1;
+1112   1      }
+*** WARNING C280 IN LINE 1091 OF mmi_src\dq_sdk_cb.c: 'delay_time': unreferenced local variable
+1113          
+1114          
+1115          void dq_otp_stop_verify_admin_status_cb(uint8_t *result)
+1116          {
+1117   1        BASE_STATUS_MACHINE state = mmi_dq_ms_get_machine_status();
+1118   1        if((dq_otp_app_get_operate_lock_flag()==1) &&(state == BASE_STATUS_M_IDLE_SYS_MENU_START||state ==BASE_ST
+             -ATUS_M_IDLE_SYS_MENU_INPUT))
+1119   1        {
+1120   2          dq_otp_app_set_operate_lock_flag(0);
+1121   2      #ifdef __LOCK_AUDIO_SUPPORT__
+1122   2      //    mmi_dq_aud_play_with_id(AUD_BASE_ID_SET_FAIL,NULL);
+1123   2      #endif
+1124   2      //    mmi_dq_ms_set_machine_status(BASE_STATUS_M_IDLE);
+1125   2        }
+1126   1        
+1127   1      }
+*** WARNING C280 IN LINE 1115 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+1128          
+1129          /*
+1130          Function: set the system time
+1131          parameter: 
+1132            time_s: current time with second
+1133            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+1134          return :
+1135            none
+1136          */
+1137          void dq_otp_set_system_time_cb(uint32_t time_s,uint8_t *result)
+1138          {
+1139   1      #ifndef __WIN32_ENV_SUPPORT__
+1140   1      //  NRF_LOG_PRINTF_DEBUG("dq_otp_set_system_time_cb get time:%d\n",mmi_dq_rtc_get_sys_sec_info());
+1141   1        //NRF_LOG_PRINTF_DEBUG("dq_otp_set_system_time_cb set time:%d\n",time_s);
+1142   1        
+1143   1        mmi_dq_rtc_get_time_by_sec(time_s);
+1144   1      #endif
+1145   1      }
+*** WARNING C280 IN LINE 1137 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+1146          
+1147          void dq_otp_set_system_time_zone_cb(uint16_t w_time_zone,uint16_t e_time_zone,uint8_t *result)
+1148          {
+1149   1      //  *result = mmi_dq_fs_set_time_zone(w_time_zone,e_time_zone);
+1150   1      }
+*** WARNING C280 IN LINE 1147 OF mmi_src\dq_sdk_cb.c: 'w_time_zone': unreferenced local variable
+*** WARNING C280 IN LINE 1147 OF mmi_src\dq_sdk_cb.c: 'e_time_zone': unreferenced local variable
+*** WARNING C280 IN LINE 1147 OF mmi_src\dq_sdk_cb.c: 'result': unreferenced local variable
+1151          
+1152          
+1153          
+1154          extern void dq_otp_check_and_update_time_cb(void);
+1155          
+1156          
+1157          void dq_otp_update_time(void)
+1158          {
+1159   1      //  mmi_dq_fs_set_time(dq_otp_check_and_update_time_cb);
+1160   1      }
+1161          
+1162          /*
+1163          Function: get the system time
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 21  
+
+1164          parameter: 
+1165            time_s: lock system with second
+1166            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+1167          return :
+1168            none
+1169          */
+1170          void dq_otp_get_system_time_cb(uint32_t *time_s,uint8_t *result)
+1171          {
+1172   1        *time_s = mmi_dq_rtc_get_sys_sec_info();
+1173   1      
+1174   1        *result = 0;
+1175   1        
+1176   1      }
+1177          
+1178          /*
+1179          Function: get the system time
+1180          parameter: 
+1181            time_s: lock system with second
+1182            result: return the operte result,0 for sucess, 1 for fail,255 for not support
+1183          return :
+1184            none
+1185          */
+1186          void dq_otp_get_lock_time_info_cb(struct tm *sys_tm)
+1187          {
+1188   1      #ifndef __WIN32_ENV_SUPPORT__
+1189   1        mmi_dq_rtc_get_time(sys_tm);
+1190   1      #else
+              {
+                time_t sys_time;
+                struct tm *sys_tm1;
+                sys_time = time(0); 
+                sys_tm1 = localtime (&sys_time);
+              
+                memcpy(sys_tm,sys_tm1,sizeof(struct tm));
+              }
+              #endif
+1200   1        return;
+1201   1      }
+1202          
+1203          
+1204          
+1205          /*
+1206          parameter: 
+1207            none
+1208          return :
+1209            none
+1210          */
+1211          #ifndef __WIN32_ENV_SUPPORT__
+1212          extern void advertising_init(unsigned char flag);
+1213          #endif
+1214          void dq_otp_set_init_sucess_cb(unsigned char flag)
+1215          {
+1216   1      #ifndef __WIN32_ENV_SUPPORT__
+1217   1        advertising_init(flag);
+1218   1      #endif
+1219   1      }
+1220          
+1221          /*
+1222          parameter: 
+1223            none
+1224          return :
+1225            none
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 22  
+
+1226          */
+1227          void dq_otp_set_init_sucess_reset_lock_cb(void)
+1228          {
+1229   1      #ifndef __WIN32_ENV_SUPPORT__
+1230   1        mmi_dq_sys_app_init_sucess();
+*** WARNING C206 IN LINE 1230 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_app_init_sucess': missing function-prototype
+1231   1      #endif
+1232   1      }
+1233          
+1234          uint8_t dq_otp_get_lock_state(void)
+1235          {
+1236   1      
+1237   1        if(mmi_dq_sys_get_lock_state())
+*** WARNING C206 IN LINE 1237 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_get_lock_state': missing function-prototype
+1238   1          return 1;
+1239   1        else
+1240   1        {
+1241   2          BASE_STATUS_MACHINE m=mmi_dq_ms_get_machine_status();
+1242   2          
+1243   2          if(m == BASE_STATUS_M_ENTER_SLEEP ||m == BASE_STATUS_M_IDLE||m==BASE_STATUS_M_IDLE_INPUT_PWD||m==BASE_ST
+             -ATUS_M_IDLE_SYS_MENU_START||m==BASE_STATUS_M_IDLE_SYS_MENU_INPUT)
+1244   2            return 0;
+1245   2          else
+1246   2            return 1;
+1247   2        }
+1248   1      
+1249   1      }
+1250          
+1251          uint8_t dq_otp_lock_save_log_state(void)
+1252          {
+1253   1        BASE_STATUS_MACHINE status = mmi_dq_ms_get_machine_status();
+1254   1        if(status == BASE_STATUS_M_IDLE || status == BASE_STATUS_M_ENTER_SLEEP||status==BASE_STATUS_M_IDLE_INPUT_
+             -PWD||status==BASE_STATUS_M_IDLE_SYS_MENU_START||status==BASE_STATUS_M_IDLE_SYS_MENU_INPUT)
+1255   1          return 1;
+1256   1        else
+1257   1          return 0;
+1258   1      
+1259   1      }
+1260          
+1261          void dq_otp_set_lock_open(void)
+1262          {
+1263   1        mmi_dq_sys_wake_up();
+1264   1      #ifndef __WIN32_ENV_SUPPORT__
+1265   1        mmi_dq_sys_open_lock();
+*** WARNING C206 IN LINE 1265 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_open_lock': missing function-prototype
+1266   1      #endif
+1267   1      }
+1268          
+1269          
+1270          
+1271          uint8_t dq_otp_lock_check_admin_pwd(unsigned char *password)
+1272          {
+1273   1        return mmi_dq_fs_check_app_admin_password(password);
+1274   1      }
+1275          
+1276          uint8_t dq_otp_lock_check_lock_state(void)
+1277          {
+1278   1      
+1279   1        if(mmi_dq_sys_get_lock_state() == 1)
+1280   1        {
+1281   2          return 1;
+1282   2        }
+C51 COMPILER V9.59.0.0   DQ_SDK_CB                                                         04/28/2021 17:37:43 PAGE 23  
+
+1283   1        
+1284   1        if(mmi_dq_sys_get_vbat_state() == 2)
+*** WARNING C206 IN LINE 1284 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_get_vbat_state': missing function-prototype
+1285   1        {
+1286   2          mmi_dq_sys_vbat_low_wake_up();
+*** WARNING C206 IN LINE 1286 OF mmi_src\dq_sdk_cb.c: 'mmi_dq_sys_vbat_low_wake_up': missing function-prototype
+1287   2          return 2;
+1288   2        }
+1289   1        return 0;
+1290   1      }
+1291          
+1292          
+1293          void dq_otp_lock_input_pwd_cb(unsigned char ret_val)
+1294          {
+1295   1        mmi_dq_fs_check_input_pwd_from_app_cb(ret_val);
+1296   1      
+1297   1      }
+1298          
+1299          void dq_otp_lock_time_zone_pro(uint32_t * time)
+1300          {
+1301   1        mmi_dq_fs_time_zone_pro(time);
+1302   1      
+1303   1      }
+1304          
+1305          uint8_t dq_otp_lock_random_vector_generate(uint8_t * p_buff, uint8_t size)
+1306          {
+1307   1        return mmi_dq_lock_random_vector_generate(p_buff,size);
+1308   1      }
+1309          
+1310          #endif
+1311          #endif//__DQ_SDK_CB_C__
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1371    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     12     160
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  58 WARNING(S),  0 ERROR(S)

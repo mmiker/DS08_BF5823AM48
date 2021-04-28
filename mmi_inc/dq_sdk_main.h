@@ -2,7 +2,7 @@
 #define __DQ_SDK_MAIN_H__
 #include "mmi_feature.h"
 #ifdef __LOCK_VIRTUAL_PASSWORD__
-
+#include "mcu02_sfr.h"
 //#include <stdbool.h>
 //#include <stdint.h>
 #include <string.h>
@@ -358,6 +358,6 @@ unsigned char dq_otp_get_lock_sys_time_state(void);
 uint8_t dq_otp_get_dfu_permit(void);
 void dq_otp_set_dfu_permit(uint8_t permit);
 
-#endif //__LOCK_VIRTUAL_PASSWORD__
+#endif
 #endif//__DQ_SDK_MAIN_H__
 

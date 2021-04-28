@@ -1,0 +1,49 @@
+C51 COMPILER V9.59.0.0   DQ_SDK_CRC                                                        04/28/2021 16:41:30 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQ_SDK_CRC
+OBJECT MODULE PLACED IN .\output\dq_sdk_crc.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\dq_sdk_crc.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\includ
+                    -e;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd
+                    -_rfid;.\mmi_inc) DEBUG PRINT(.\list\dq_sdk_crc.lst) TABS(2) OBJECT(.\output\dq_sdk_crc.obj)
+
+line level    source
+
+   1          
+   2          #include "dq_sdk_crc.h"
+   3          
+   4          unsigned short CRC16_CCITT_FALSE(unsigned char *puchMsg, unsigned int usDataLen) {
+   5   1          unsigned short wCRCin = 0xFFFF;
+   6   1          unsigned short wCPoly = 0x1021;
+   7   1          unsigned char wChar = 0;
+   8   1        int i = 0;
+   9   1          while (usDataLen--) {
+  10   2              wChar = *(puchMsg++);
+  11   2              wCRCin = wCRCin ^ (wChar << 8);
+  12   2              for(i = 0;i < 8;i++) {
+  13   3                  if(wCRCin & 0x8000)
+  14   3                      wCRCin = (wCRCin << 1) ^ wCPoly;
+  15   3                  else
+  16   3                      wCRCin = wCRCin << 1;
+  17   3              }
+  18   2          }
+  19   1          return (wCRCin) ;
+  20   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    128    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       8
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -3,16 +3,16 @@
 #include "mmi_feature.h"
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 
-#include "nrf_drv_timer.h"
-#include "nrf_drv_rtc.h"
-#include "nrf_drv_clock.h"
-#include "app_util_platform.h"
-#include "nrf_log.h"
+// #include "nrf_drv_timer.h"
+// #include "nrf_drv_rtc.h"
+// #include "nrf_drv_clock.h"
+// #include "app_util_platform.h"
+// #include "nrf_log.h"
 #include "mmi_rtc.h"
 #include "mmi_ms.h"
 #include "mmi_sys.h"
 //#include "mmi_cal.h"
-#include "mmi_oled.h"
+// #include "mmi_oled.h"
 
 static unsigned char RTC_time_update = 0;
 //static unsigned char RTC_Refresh_flag = 0;

@@ -376,18 +376,12 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			{
 				input_key_1[key_len++] = key_val;
 			}
-			else if (opt_time == OPT_TWO_TIME)
-			{
-				input_key_2[key_len++] = key_val;
-			}
 		}
 
 		if (key_val == KEY_S)
 		{
 			if (opt_time == OPT_ONE_TIME)
 				input_key_1[key_len--] = 0xFF;
-			else if (opt_time == OPT_TWO_TIME)
-				input_key_2[key_len--] = 0xFF;
 
 			if (key_len == 0)
 			{
@@ -395,12 +389,6 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				{
 #ifdef __LOCK_AUDIO_SUPPORT__
 					mmi_dq_aud_play_with_id(AUD_ID_INPUT_68_PWD);
-#endif
-				}
-				else if (opt_time == OPT_TWO_TIME)
-				{
-#ifdef __LOCK_AUDIO_SUPPORT__
-					mmi_dq_aud_play_with_id(AUD_ID_PWD_INPUT_AGAIN);
 #endif
 				}
 			}
@@ -415,94 +403,75 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				key_len = 0;
 				if (opt_time == OPT_ONE_TIME)
 					memset(input_key_1, 0xFF, sizeof(input_key_1));
-				else if (opt_time == OPT_TWO_TIME)
-					memset(input_key_2, 0xFF, sizeof(input_key_2));
 			}
 			else
 			{
 				if (opt_time == OPT_ONE_TIME)
 				{
-#ifdef __LOCK_AUDIO_SUPPORT__
-					mmi_dq_aud_play_with_id(AUD_ID_PWD_INPUT_AGAIN);
-#endif
-					opt_time = OPT_TWO_TIME;
-					key_len = 0;
-					memset(input_key_2, 0xFF, sizeof(input_key_2));
-				}
-				else if (opt_time == OPT_TWO_TIME)
-				{
-					if (0 == memcmp(input_key_1, input_key_2, PWD_INPUT_DECODE_RANDOM))
+					decode_check_code(input_key_1, 15);
+					if (get_decode.chk_key_2[0] == input_key_1[13] && get_decode.chk_key_2[1] == input_key_1[14])
 					{
-						decode_check_code(input_key_1);
-						if (get_decode.chk_key_2[0] == input_key_1[13] && get_decode.chk_key_2[1] == input_key_1[14])
+						unsigned char i, j;
+						unsigned char a[10][5] = {
+							{0x26, 0x41, 0x53, 0x89, 0x70},
+							{0x43, 0x16, 0x98, 0x25, 0x07},
+							{0x92, 0x35, 0x64, 0x70, 0x81},
+							{0x72, 0x59, 0x03, 0x18, 0x46},
+							{0x02, 0x85, 0x19, 0x63, 0x74},
+							{0x12, 0x05, 0x69, 0x43, 0x87},
+							{0x18, 0x95, 0x42, 0x76, 0x30},
+							{0x09, 0x58, 0x26, 0x17, 0x34},
+							{0x10, 0x63, 0x52, 0x74, 0x89},
+							{0x21, 0x69, 0x50, 0x37, 0x84},
+						};
+
+						for (i = 0; i < 10; i++)
 						{
-							unsigned char i, j;
-							unsigned char a[10][5] = {
-								{0x26, 0x41, 0x53, 0x89, 0x70},
-								{0x43, 0x16, 0x98, 0x25, 0x07},
-								{0x92, 0x35, 0x64, 0x70, 0x81},
-								{0x72, 0x59, 0x03, 0x18, 0x46},
-								{0x02, 0x85, 0x19, 0x63, 0x74},
-								{0x12, 0x05, 0x69, 0x43, 0x87},
-								{0x18, 0x95, 0x42, 0x76, 0x30},
-								{0x09, 0x58, 0x26, 0x17, 0x34},
-								{0x10, 0x63, 0x52, 0x74, 0x89},
-								{0x21, 0x69, 0x50, 0x37, 0x84},
-							};
-
-							for (i = 0; i < 10; i++)
+							for (j = 0; j < 5; j++)
 							{
-								for (j = 0; j < 5; j++)
-								{
-									g_pwd_signed_data[i].exchg_num[j] = a[i][j];
-								}
+								g_pwd_signed_data[i].exchg_num[j] = a[i][j];
 							}
+						}
 
-							//解码
-							mmi_dq_decode_app_random_code(input_key_1);
-							decode_time_stamp_10num(input_key_1, 10, get_decode.sec_key_10, get_decode.exg_key_10);
+						//解码
+						mmi_dq_decode_app_random_code(input_key_1);
+						decode_time_stamp_10num(input_key_1, 15, get_decode.sec_key_10, get_decode.exg_key_10);
 
-							//写flash
-							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
-							{
-								//时间戳转时间
-								ntp(get_decode.tim_key_10, &t);
+						//写flash
+						if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
+						{
+							//时间戳转时间
+							localtime(get_decode.tim_key_10, &t);
 
-								dqiot_drv_uart0A_init();
-								printf("flash is success\n");
-								printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
-								dqiot_drv_uart0B_init();
+							dqiot_drv_uart0A_init();
+							printf("flash is success\n");
+							printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
+							dqiot_drv_uart0B_init();
 #ifdef __LOCK_AUDIO_SUPPORT__
-								mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+							mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
 #endif
-							}
-							else
-							{
-#ifdef __LOCK_AUDIO_SUPPORT__
-								mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-#endif
-								dqiot_drv_uart0A_init();
-								printf("flash is error\n");
-								dqiot_drv_uart0B_init();
-							}
-
-							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
 						else
 						{
-							dqiot_drv_uart0A_init();
-							printf("check is error\n");
-							dqiot_drv_uart0B_init();
+#ifdef __LOCK_AUDIO_SUPPORT__
 							mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
-							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+#endif
+							dqiot_drv_uart0A_init();
+							printf("flash is error\n");
+							dqiot_drv_uart0B_init();
 						}
+
+						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 					}
 					else
 					{
-#ifdef __LOCK_AUDIO_SUPPORT__
-						mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_SAME_RETRY);
-#endif
+						dqiot_drv_uart0A_init();
+						printf("check is error\n");
+						dqiot_drv_uart0B_init();
+						mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 					}
+
 					mmi_ms_pwd_init_var();
 				}
 			}
@@ -638,7 +607,7 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 				}
 			}
 		}
-		else if ((key_val == KEY_H) || (key_len == PWD_INPUT_MAX_LEN))
+		else if (key_val == KEY_H) //|| (key_len == PWD_INPUT_MAX_LEN))
 		{
 			if (key_len < PWD_INPUT_MIN_LEN)
 			{
@@ -651,26 +620,26 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 						mmi_dq_wifi_cmd_add_del();
 					else if (key_len == 1 && input_key_1[0] == KEY_6) //6 设置拍照/录像开关
 						mmi_dq_wifi_pv_switch();
-					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
-					// 	mmi_dq_wifi_open_by_key();
-					// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
-					// 	mmi_dq_wifi_close_over_time();
-					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
-					// 	mmi_dq_wifi_via_alarm();
-					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
-					// 	mmi_dq_wifi_sleep();
-					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
-					// 	mmi_dq_wifi_wakeup();
-					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
-					// 	mmi_dq_wifi_take_photos();
-					// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
-					// 	mmi_dq_wifi_take_videos();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
-					// 	mmi_dq_wifi_check_net();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
-					// 	mmi_dq_wifi_arikiss_con();
-					// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
-					// 	mmi_dq_wifi_code_con();
+						// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_8) //18 应急钥匙开门成功
+						// 	mmi_dq_wifi_open_by_key();
+						// else if (key_len == 2 && input_key_1[0] == KEY_1 && input_key_1[1] == KEY_9) //19 门未关
+						// 	mmi_dq_wifi_close_over_time();
+						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_0) //20 震动报警
+						// 	mmi_dq_wifi_via_alarm();
+						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_5) //25 睡眠
+						// 	mmi_dq_wifi_sleep();
+						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_6) //26 唤醒
+						// 	mmi_dq_wifi_wakeup();
+						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_7) //27 拍照
+						// 	mmi_dq_wifi_take_photos();
+						// else if (key_len == 2 && input_key_1[0] == KEY_2 && input_key_1[1] == KEY_8) //28 录像
+						// 	mmi_dq_wifi_take_videos();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_0) //30 查询网络状态
+						// 	mmi_dq_wifi_check_net();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_1) //31 Airkiss配网(admin 8)
+						// 	mmi_dq_wifi_arikiss_con();
+						// else if (key_len == 2 && input_key_1[0] == KEY_3 && input_key_1[1] == KEY_2) //32 二维码配网(admin 9)
+						// 	mmi_dq_wifi_code_con();
 #endif
 #ifdef __LOCK_BUS_SUPPORT__
 					else if (key_len == 2 && input_key_1[0] == KEY_0 && input_key_1[1] == KEY_1) //01
@@ -715,54 +684,18 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 			}
 			else
 			{
-#ifdef __LOCK_VIRTUAL_PASSWORD__
-				if (1) //测试与APP是否连接成功
+				if (key_len < PWD_INPUT_MAX_LEN)
 				{
-
-					mmi_dq_fs_check_input_pwd_from_app(input_key_1, key_len);
-					key_len = 0;
-					// return SUCESS;
-				}
-				else
-#endif //__LOCK_VIRTUAL_PASSWORD__
 					if (status == SYS_STATUS_INPUT_PWD)
-				{
-					//if(mmi_dq_fs_check_input_pwd(input_key_1,key_len,FDS_USE_TYPE_ALL) == 0xFF)
-					unsigned char ret = 0;
-					ret = mmi_dq_fs_check_input_pwd_for_open(input_key_1, key_len);
-					//printf("check input ret: %d",(unsigned int)ret);
-					if (ret == 0xFF)
-						mmi_dq_sys_door_open_fail(SYS_OPEN_BY_PASSWORD);
-#ifdef __LOCK_BUS_SUPPORT__
-					else if (ret == 0xFE && mmi_dq_fs_get_business_flag() == 1)
 					{
-						mmi_dq_fs_set_business_flag(0);
-#ifdef __LOCK_AUDIO_SUPPORT__
-						mmi_dq_aud_play_with_id(AUD_ID_OUT_CLOSED);
-#endif
-						mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-					}
-#endif
-#ifdef __LOCK_110_SUPPORT__
-					else if (ret == 1)
-						mmi_dq_sys_door_open(SYS_OPEN_BY_110_PASSWORD);
-#endif
-					else
-						mmi_dq_sys_door_open(SYS_OPEN_BY_PASSWORD);
-					key_len = 0;
-					memset(input_key_1, 0xFF, sizeof(input_key_1));
-				}
-				else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
-				{
-					if (mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == 0xFF)
-#ifdef __LOCK_AUDIO_SUPPORT__
-						mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY)
-#endif
-							;
-					else
-					{
+						//if(mmi_dq_fs_check_input_pwd(input_key_1,key_len,FDS_USE_TYPE_ALL) == 0xFF)
+						unsigned char ret = 0;
+						ret = mmi_dq_fs_check_input_pwd_for_open(input_key_1, key_len);
+						//printf("check input ret: %d",(unsigned int)ret);
+						if (ret == 0xFF)
+							mmi_dq_sys_door_open_fail(SYS_OPEN_BY_PASSWORD);
 #ifdef __LOCK_BUS_SUPPORT__
-						if (admin_check_type == 1)
+						else if (ret == 0xFE && mmi_dq_fs_get_business_flag() == 1)
 						{
 							mmi_dq_fs_set_business_flag(0);
 #ifdef __LOCK_AUDIO_SUPPORT__
@@ -770,181 +703,285 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 #endif
 							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
-						else
 #endif
-						{
-							mmi_dq_sys_set_menu_father_id(STR_ID_SYSTEM);
-							mmi_dq_sys_show_cur_menu_list();
-						}
+#ifdef __LOCK_110_SUPPORT__
+						else if (ret == 1)
+							mmi_dq_sys_door_open(SYS_OPEN_BY_110_PASSWORD);
+#endif
+						else
+							mmi_dq_sys_door_open(SYS_OPEN_BY_PASSWORD);
+						key_len = 0;
+						memset(input_key_1, 0xFF, sizeof(input_key_1));
 					}
-					key_len = 0;
-					memset(input_key_1, 0xFF, sizeof(input_key_1));
-				}
-				else // if((status == SYS_STATUS_ADD_PWD)||(status == SYS_STATUS_DEL_PWD)||(status == SYS_STATUS_ADD_ADMIN_PWD)||(status == SYS_STATUS_CHG_ADMIN_PWD)||(status == SYS_STATUS_ADD_110_PWD))
-				{
-					if (opt_time == OPT_ONE_TIME)
+					else if (status == SYS_STATUS_INPUT_ADMIN_PWD)
 					{
+						if (mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == 0xFF)
 #ifdef __LOCK_AUDIO_SUPPORT__
-						if (status == SYS_STATUS_ADD_PWD || status == SYS_STATUS_ADD_110_PWD)
-							mmi_dq_aud_play_with_id(AUD_ID_PWD_INPUT_AGAIN);
-						else if (status == SYS_STATUS_DEL_PWD)
-							mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_PWD_AGAIN);
-						else if (status == SYS_STATUS_ADD_ADMIN_PWD)
-							mmi_dq_aud_play_with_id(AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN);
-						else if (status == SYS_STATUS_CHG_ADMIN_PWD)
-							mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN);
+							mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY)
+#endif
+								;
+						else
+						{
+#ifdef __LOCK_BUS_SUPPORT__
+							if (admin_check_type == 1)
+							{
+								mmi_dq_fs_set_business_flag(0);
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_ID_OUT_CLOSED);
+#endif
+								mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+							}
+							else
+#endif
+							{
+								mmi_dq_sys_set_menu_father_id(STR_ID_SYSTEM);
+								mmi_dq_sys_show_cur_menu_list();
+							}
+						}
+						key_len = 0;
+						memset(input_key_1, 0xFF, sizeof(input_key_1));
+					}
+					else // if((status == SYS_STATUS_ADD_PWD)||(status == SYS_STATUS_DEL_PWD)||(status == SYS_STATUS_ADD_ADMIN_PWD)||(status == SYS_STATUS_CHG_ADMIN_PWD)||(status == SYS_STATUS_ADD_110_PWD))
+					{
+						if (opt_time == OPT_ONE_TIME)
+						{
+#ifdef __LOCK_AUDIO_SUPPORT__
+							if (status == SYS_STATUS_ADD_PWD || status == SYS_STATUS_ADD_110_PWD)
+								mmi_dq_aud_play_with_id(AUD_ID_PWD_INPUT_AGAIN);
+							else if (status == SYS_STATUS_DEL_PWD)
+								mmi_dq_aud_play_with_id(AUD_ID_INPUT_DEL_PWD_AGAIN);
+							else if (status == SYS_STATUS_ADD_ADMIN_PWD)
+								mmi_dq_aud_play_with_id(AUD_ID_INPUT_ADMIN_PWD_INIT_AGAIN);
+							else if (status == SYS_STATUS_CHG_ADMIN_PWD)
+								mmi_dq_aud_play_with_id(AUD_ID_INPUT_NEW_ADMIN_PWD_AGAIN);
 #endif
 
-						opt_time = OPT_TWO_TIME;
-						key_len = 0;
-						memset(input_key_2, 0xFF, sizeof(input_key_2));
-					}
-					else if (opt_time == OPT_TWO_TIME)
-					{
-						if (0 == memcmp(input_key_1, input_key_2, PWD_INPUT_MAX_LEN))
+							opt_time = OPT_TWO_TIME;
+							key_len = 0;
+							memset(input_key_2, 0xFF, sizeof(input_key_2));
+						}
+						else if (opt_time == OPT_TWO_TIME)
 						{
-							if (status == SYS_STATUS_DEL_PWD)
+							if (0 == memcmp(input_key_1, input_key_2, PWD_INPUT_MAX_LEN))
 							{
-								unsigned char del_index = mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_USER);
-								if (del_index == 0xFF)
+								if (status == SYS_STATUS_DEL_PWD)
+								{
+									unsigned char del_index = mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_USER);
+									if (del_index == 0xFF)
 #ifdef __LOCK_AUDIO_SUPPORT__
-									mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_EXIST)
+										mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_EXIST)
+#endif
+											;
+									else
+									{
+										if (mmi_dq_fs_del_pwd(del_index, FDS_USE_TYPE_USER) == RET_SUCESS)
+										{
+											get_index = del_index;
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+											mmi_dq_wifi_del_password(get_index);
+#endif
+											// printfV("get_index", (int)get_index);
+										}
+										else
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
+#endif
+												;
+										mmi_dq_sys_del_pwd_con();
+									}
+								}
+								else if (mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_ALL) != 0xFF)
+#ifdef __LOCK_AUDIO_SUPPORT__
+									mmi_dq_aud_play_with_id(AUD_ID_PWD_EXIST)
 #endif
 										;
 								else
 								{
-									if (mmi_dq_fs_del_pwd(del_index, FDS_USE_TYPE_USER) == RET_SUCESS)
+									if (status == SYS_STATUS_ADD_PWD)
 									{
-										get_index = del_index;
+										if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_USER) == RET_FAIL)
 #ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_DEL_PWD_SUCESS);
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
+#endif
+												;
+										else
+										{
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
 #endif
 #ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_del_password(get_index);
+											mmi_dq_wifi_add_password(get_index);
 #endif
-										// printfV("get_index", (int)get_index);
+											// printfV("get_index", (int)get_index);
+										}
+#ifdef __LOCK_WIFI_SUPPORT__
+										if (wifi_add_flag == 1)
+										{
+											wifi_add_flag = 0xff;
+											mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
+										}
+										else
+#endif
+											mmi_dq_sys_add_pwd_con();
 									}
-									else
+									else if (status == SYS_STATUS_ADD_ADMIN_PWD)
+									{
+										if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == RET_FAIL)
 #ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_DEL_FAIL)
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
 #endif
-											;
-									mmi_dq_sys_del_pwd_con();
+												;
+										else
+										{
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS);
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+											mmi_dq_wifi_add_password(get_index);
+#endif
+											// printfV("get_index", (int)get_index);
+										}
+#ifdef __LOCK_FP_SUPPORT__
+										mmi_dq_sys_chg_admin_fp_No1();
+#else
+										if (0 == mmi_dq_fs_get_admin_status())
+											mmi_dq_sys_lock_add_admin_suc();
+										else
+											mmi_dq_sys_show_cur_menu_list();
+#endif
+									}
+									else if (status == SYS_STATUS_CHG_ADMIN_PWD)
+									{
+										if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == RET_FAIL)
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
+#endif
+												;
+										else
+										{
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_CHG_ADMIN_PWD_SUCESS);
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+											mmi_dq_wifi_add_password(get_index);
+#endif
+											// printfV("get_index", (int)get_index);
+										}
+										mmi_dq_sys_show_cur_menu_list();
+									}
+#ifdef __LOCK_110_SUPPORT__
+									else if (status == SYS_STATUS_ADD_110_PWD)
+									{
+										if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_110) == RET_FAIL)
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
+#endif
+												;
+										else
+										{
+#ifdef __LOCK_WIFI_SUPPORT__
+											mmi_dq_wifi_set_110();
+#endif
+#ifdef __LOCK_AUDIO_SUPPORT__
+											mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
+#endif
+#ifdef __LOCK_WIFI_SUPPORT__
+											mmi_dq_wifi_add_password(get_index);
+#endif
+											// printfV("get_index", (int)get_index);
+										}
+										mmi_dq_sys_show_cur_menu_list();
+									}
+#endif
 								}
 							}
-							else if (mmi_dq_fs_check_input_pwd(input_key_1, key_len, FDS_USE_TYPE_ALL) != 0xFF)
-#ifdef __LOCK_AUDIO_SUPPORT__
-								mmi_dq_aud_play_with_id(AUD_ID_PWD_EXIST)
-#endif
-									;
 							else
 							{
-								if (status == SYS_STATUS_ADD_PWD)
-								{
-									if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_USER) == RET_FAIL)
 #ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
-#endif
-											;
-									else
-									{
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
-#endif
-#ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_add_password(get_index);
-#endif
-										// printfV("get_index", (int)get_index);
-									}
-#ifdef __LOCK_WIFI_SUPPORT__
-									if (wifi_add_flag == 1)
-									{
-										wifi_add_flag = 0xff;
-										mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
-									}
-									else
-#endif
-										mmi_dq_sys_add_pwd_con();
-								}
-								else if (status == SYS_STATUS_ADD_ADMIN_PWD)
-								{
-									if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == RET_FAIL)
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
-#endif
-											;
-									else
-									{
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_ADMIN_PWD_INIT_SUCESS);
-#endif
-#ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_add_password(get_index);
-#endif
-										// printfV("get_index", (int)get_index);
-									}
-#ifdef __LOCK_FP_SUPPORT__
-									mmi_dq_sys_chg_admin_fp_No1();
-#else
-									if (0 == mmi_dq_fs_get_admin_status())
-										mmi_dq_sys_lock_add_admin_suc();
-									else
-										mmi_dq_sys_show_cur_menu_list();
-#endif
-								}
-								else if (status == SYS_STATUS_CHG_ADMIN_PWD)
-								{
-									if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_ADMIN) == RET_FAIL)
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
-#endif
-											;
-									else
-									{
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_CHG_ADMIN_PWD_SUCESS);
-#endif
-#ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_add_password(get_index);
-#endif
-										// printfV("get_index", (int)get_index);
-									}
-									mmi_dq_sys_show_cur_menu_list();
-								}
-#ifdef __LOCK_110_SUPPORT__
-								else if (status == SYS_STATUS_ADD_110_PWD)
-								{
-									if (mmi_dq_fs_set_pwd(input_key_1, key_len, FDS_USE_TYPE_110) == RET_FAIL)
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_FAIL)
-#endif
-											;
-									else
-									{
-#ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_set_110();
-#endif
-#ifdef __LOCK_AUDIO_SUPPORT__
-										mmi_dq_aud_play_with_id(AUD_ID_ADD_PWD_SUCESS);
-#endif
-#ifdef __LOCK_WIFI_SUPPORT__
-										mmi_dq_wifi_add_password(get_index);
-#endif
-										// printfV("get_index", (int)get_index);
-									}
-									mmi_dq_sys_show_cur_menu_list();
-								}
+								mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_SAME_RETRY);
 #endif
 							}
+							mmi_ms_pwd_init_var();
+						}
+					}
+				}
+				else
+				{
+					if (key_len == PWD_INPUT_VIRTUAL_PWD || key_len == PWD_INPUT_MAX_LEN)
+					{
+						mmi_dq_fs_check_input_pwd_from_app(input_key_1, key_len);
+						key_len = 0;
+					}
+					else if (key_len == PWD_INPUT_SYNC_TIM_STAMP)
+					{
+						decode_check_code(input_key_1, 10);
+						if (get_decode.chk_key_2[0] == input_key_1[8] && get_decode.chk_key_2[1] == input_key_1[9])
+						{
+							unsigned char i, j;
+							unsigned char a[10][5] = {
+								{0x26, 0x41, 0x53, 0x89, 0x70},
+								{0x43, 0x16, 0x98, 0x25, 0x07},
+								{0x92, 0x35, 0x64, 0x70, 0x81},
+								{0x72, 0x59, 0x03, 0x18, 0x46},
+								{0x02, 0x85, 0x19, 0x63, 0x74},
+								{0x12, 0x05, 0x69, 0x43, 0x87},
+								{0x18, 0x95, 0x42, 0x76, 0x30},
+								{0x09, 0x58, 0x26, 0x17, 0x34},
+								{0x10, 0x63, 0x52, 0x74, 0x89},
+								{0x21, 0x69, 0x50, 0x37, 0x84},
+							};
+
+							for (i = 0; i < 10; i++)
+							{
+								for (j = 0; j < 5; j++)
+								{
+									g_pwd_signed_data[i].exchg_num[j] = a[i][j];
+								}
+							}
+
+							//解码
+							decode_time_stamp_10num(input_key_1, 10, get_decode.sec_key_10, get_decode.exg_key_10);
+
+							//写flash
+							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
+							{
+								//时间戳转时间
+								localtime(get_decode.tim_key_10, &t);
+
+								dqiot_drv_uart0A_init();
+								printf("flash is success\n");
+								printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
+								dqiot_drv_uart0B_init();
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_SUCCESS);
+#endif
+							}
+							else
+							{
+#ifdef __LOCK_AUDIO_SUPPORT__
+								mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+#endif
+								dqiot_drv_uart0A_init();
+								printf("flash is error\n");
+								dqiot_drv_uart0B_init();
+							}
+
+							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
 						else
 						{
-#ifdef __LOCK_AUDIO_SUPPORT__
-							mmi_dq_aud_play_with_id(AUD_ID_PWD_NOT_SAME_RETRY);
-#endif
+							dqiot_drv_uart0A_init();
+							printf("check is error\n");
+							dqiot_drv_uart0B_init();
+							mmi_dq_aud_play_with_id(AUD_BASE_ID_FAIL);
+							mmi_dq_ms_set_sys_state(SYS_STATUS_IDLE);
 						}
-						mmi_ms_pwd_init_var();
 					}
+					else
+						mmi_dq_aud_play_with_id(AUD_ID_PWD_WRONG_TRY);
 				}
 			}
 			return;

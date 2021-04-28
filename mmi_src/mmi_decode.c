@@ -24,17 +24,21 @@ static void dq_sdk_ByteToHexStr(const unsigned char *source, char *dest, int sou
 
 /**
   * @brief  校验码解码
-  * @param  随机码数组
+  * @param  random_code 随机码数组
+  * @param  len 长度
   * @return status
   * @note   none
   * @see    none
   */
-void decode_check_code(unsigned char *random_code)
+void decode_check_code(unsigned char *random_code, unsigned char len)
 {
     unsigned char i;
     unsigned int value = 0;
     unsigned int temp = 0;
-    for (i = 0; i < 13; i++)
+    unsigned char len_b2 = 0;
+
+    len_b2 = len - 2;
+    for (i = 0; i < len_b2; i++)
     {
         if (i % 2 == 0)
             value += random_code[i] * 2;
@@ -119,11 +123,23 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
 
     CharToInt_2long(sec_key, &high_sec_key, &low_sec_key);
 
-    for (j = 0, i = 3; i < 13; i++)
+    if (len == 10)
     {
-        pwd_char[j] = pwd[i];
-        j++;
+        for (i = 0; i < 10; i++)
+        {
+            pwd_char[i] = pwd[i];
+        }
     }
+    else if (len == 15)
+    {
+        for (j = 0, i = 3; i < 13; i++)
+        {
+            pwd_char[j] = pwd[i];
+            j++;
+        }
+    }
+    else
+        return;
 
     for (i = 0; i < 59; i++)
     {
@@ -143,7 +159,7 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
         memset(sec_char, 0x00, sizeof(sec_char));
         IntToByteStr_2long(high_pwd, low_pwd, (char *)sec_char, 5, 5);
         memset(pwd_char, 0x00, sizeof(pwd_char));
-        for (j = 0; j < len; j++)
+        for (j = 0; j < 10; j++)
         {
             pwd_char[exg_key_char[j] - 1] = sec_char[j];
         }
@@ -154,7 +170,7 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
     memset(exchange_char, 0x00, sizeof(exchange_char));
     dq_sdk_CharToHexByte((const unsigned char *)g_pwd_signed_data[exchange_id].exchg_num, (char *)exchange_char, 5);
 
-    for (i = 0; i < len; i++)
+    for (i = 0; i < 10; i++)
     {
         if (i == 2)
         {
@@ -172,12 +188,12 @@ void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned cha
             }
         }
     }
-    for (i = 2; i < len; i++)
+    for (i = 2; i < 10; i++)
     {
         sec_char[i] = sec_char[i + 1];
     }
-    sec_char[len - 1] = exchange_id;
-    memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, len);
+    sec_char[10 - 1] = exchange_id;
+    memcpy((char *)get_decode.tim_key_10, (const char *)sec_char, 10);
 
     dqiot_drv_uart0A_init();
     for (i = 0; i < 10; i++)

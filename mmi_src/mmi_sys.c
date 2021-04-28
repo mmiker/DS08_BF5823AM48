@@ -14,6 +14,7 @@
 #include "mmi_wifi.h"
 #include "mmi_decode.h"
 #include <stdio.h>
+#include "mmi_rtc.h"
 
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "mmi_rtc.h"
@@ -1832,6 +1833,23 @@ void mmi_dq_show_msg_timer_start(uint32_t time_msec)
 	//	nrf_drv_timer_extended_compare(&TIMER2_MMI_TIMER, NRF_TIMER_CC_CHANNEL1, time_ticks, NRF_TIMER_SHORT_COMPARE1_CLEAR_MASK, true);
 	//	nrf_drv_timer_enable(&TIMER2_MMI_TIMER);
 	return;
+}
+
+uint8_t mmi_dq_lock_random_vector_generate(uint8_t * p_buff, uint8_t size)
+{
+        uint8_t available,length;
+        uint32_t err_code;
+        // err_code = nrf_drv_rng_bytes_available(&available);
+        // APP_ERROR_CHECK(err_code);
+        length = (size<available) ? size : available;
+        // err_code = nrf_drv_rng_rand(p_buff,length);
+        // APP_ERROR_CHECK(err_code);
+        return length;
+}
+
+unsigned char  mmi_dq_sys_is_sleep(void)
+{
+      return 0; //g_sleep_mode;
 }
 
 #endif //__LOCK_VIRTUAL_PASSWORD__

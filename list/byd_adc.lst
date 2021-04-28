@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 1   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE BYD_ADC
@@ -62,7 +62,7 @@ line level    source
   51   1        ADC_SAMP_SET(255);             /* adc sample time:0~255*/
   52   1      
   53   1        ADC_VREF_IN_SEL(ADC_VREF_IN_1);       /* input vref vol*/
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 2   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 2   
 
   54   1        ADC_VREF_VOL_SEL(ADC_VREF_VOL_OUT_1);   /* output vref vol*/
   55   1        ADC_VREF_SIGNAL_SEL(ADC_VREF_SIGNAL_OUT_0); /* output vref signal*/
@@ -126,7 +126,7 @@ line level    source
  113   1      
  114   1      #endif
  115   1      
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 3   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 3   
 
  116   1        adc_data = ((uint16_t)(ADC_RDATAH & 0x0F) << 8) | (uint16_t)ADC_RDATAL;
  117   1      
@@ -190,7 +190,7 @@ line level    source
  175          #if ADC_MODE == 0
               void adc_isr(void) interrupt 11
               {
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 4   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 4   
 
                 INT_ADC_CLR();
                 g_bAdcIntFlag = 1;
@@ -254,7 +254,7 @@ line level    source
                   {
                     if (adc_differ <= ADC_NOISE_THRESHOLD)
                     {
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 5   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 5   
 
                       avg_cnt++;
                       average += g_ucAdcRawdata[i];
@@ -318,7 +318,7 @@ line level    source
  297              \brief      adc work example
  298              \param[in]  none
  299              \param[out] none
-C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 10:45:50 PAGE 6   
+C51 COMPILER V9.59.0.0   BYD_ADC                                                           04/28/2021 16:09:57 PAGE 6   
 
  300              \retval     none
  301          */

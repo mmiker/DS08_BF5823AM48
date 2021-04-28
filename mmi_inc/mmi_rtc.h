@@ -7,8 +7,7 @@
 //#include <stdbool.h>
 #include <string.h>
 //#include <time.h>
-
-#include "mmi_feature.h"
+#include "mmi_time.h"
 
 
 #define UPDATA_SEC    	1   //second
@@ -82,7 +81,7 @@ parameter:
 return :
 	none
 */
-//time_t mmi_dq_rtc_get_sys_sec_info(void);
+time_t mmi_dq_rtc_get_sys_sec_info(void);
 
 /*
 parameter: 

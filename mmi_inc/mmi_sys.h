@@ -5,6 +5,7 @@
 #include "mmi_audio.h"
 #include "mmi_feature.h"
 #include "mmi_ms.h"
+#include "mcu02_sfr.h"
 
 typedef enum
 {
@@ -277,5 +278,7 @@ void mmi_dq_sys_chg_admin_fp_No2(void);
 void mmi_dq_sys_chg_admin_pwd(void);
 
 void mmi_dq_sys_restore_lock(void);
+
+uint8_t mmi_dq_lock_random_vector_generate(uint8_t * p_buff, uint8_t size);
 
 #endif //__MMI_SYS_H__

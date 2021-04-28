@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_FS
@@ -24,145 +24,147 @@ line level    source
   13          #include "mmi_ms.h"
   14          #include "dq_otp.h"
   15          #ifdef __LOCK_VIRTUAL_PASSWORD__
-              #include "dq_sdk_main.h"
-              #endif
+  16          #include "dq_sdk_main.h"
+  17          #endif
   18          #ifdef __LOCK_DECODE_SUPPORT__
   19          #include "mmi_decode.h"
   20          #endif
   21          
-  22          unsigned char get_index = 0xff;
+  22          extern void printfS(char *show, char *status);
   23          
-  24          mmi_fs_setting data g_dq_fs_init_set;
+  24          unsigned char get_index = 0xff;
   25          
-  26          #define MMI_DQ_FS_PWD_MAX_NUM 100
-  27          mmi_fs_pwd g_dq_fs_pwd[MMI_DQ_FS_PWD_MAX_NUM];
-  28          
-  29          #if defined(__LOCK_FP_SUPPORT__)
+  26          mmi_fs_setting data g_dq_fs_init_set;
+  27          
+  28          #define MMI_DQ_FS_PWD_MAX_NUM 100
+  29          mmi_fs_pwd g_dq_fs_pwd[MMI_DQ_FS_PWD_MAX_NUM];
+  30          
+  31          #if defined(__LOCK_FP_SUPPORT__)
               #define MMI_DQ_FS_FP_MAX_NUM 30
               mmi_fs_fp g_dq_fs_fp[MMI_DQ_FS_FP_MAX_NUM];
               #endif
-  33          
-  34          #ifdef __LOCK_RFID_CARD_SUPPORT__
-  35          #define MMI_DQ_FS_RFID_MAX_NUM 10
-  36          mmi_fs_rfid g_dq_fs_rfid[MMI_DQ_FS_RFID_MAX_NUM];
-  37          #endif
-  38          
-  39          #define FP_ADMIN_NUM 2
-  40          #define FP_110_NUM 3
-  41          
-  42          #define PWD_ADMIN_NUM 1
-  43          #define PWD_110_NUM 1
-  44          
-  45          static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_size)
-  46          {
-  47   1        uint16_t i;
-  48   1      
-  49   1        switch (file)
-  50   1        {
-  51   2        case MID_FDS_FILE_SET:
-  52   2          eeprom_select(0);
-  53   2          for (i = 0; i < r_size; i++)
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 2   
+  35          
+  36          #ifdef __LOCK_RFID_CARD_SUPPORT__
+  37          #define MMI_DQ_FS_RFID_MAX_NUM 10
+  38          mmi_fs_rfid g_dq_fs_rfid[MMI_DQ_FS_RFID_MAX_NUM];
+  39          #endif
+  40          
+  41          #define FP_ADMIN_NUM 2
+  42          #define FP_110_NUM 3
+  43          
+  44          #define PWD_ADMIN_NUM 1
+  45          #define PWD_110_NUM 1
+  46          
+  47          static void mmi_dq_fds_read(mid_fds_file_id file, uint8_t *r_data, uint16_t r_size)
+  48          {
+  49   1        uint16_t i;
+  50   1      
+  51   1        switch (file)
+  52   1        {
+  53   2        case MID_FDS_FILE_SET:
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 2   
 
-  54   2          {
-  55   3            r_data[i] = eeprom_read_byte(0, i); //读第一页
-  56   3          }
-  57   2          break;
-  58   2        case MID_FDS_FILE_PWD:
-  59   2          eeprom_select(0);
-  60   2          for (i = 0; i < r_size; i++)
-  61   2          {
-  62   3            r_data[i] = eeprom_read_byte(0, i + 24); //读第一页
-  63   3          }
-  64   2          break;
-  65   2      #ifdef __LOCK_FP_SUPPORT__
+  54   2          eeprom_select(0);
+  55   2          for (i = 0; i < r_size; i++)
+  56   2          {
+  57   3            r_data[i] = eeprom_read_byte(0, i); //读第一页
+  58   3          }
+  59   2          break;
+  60   2        case MID_FDS_FILE_PWD:
+  61   2          eeprom_select(0);
+  62   2          for (i = 0; i < r_size; i++)
+  63   2          {
+  64   3            r_data[i] = eeprom_read_byte(0, i + 24); //读第一页
+  65   3          }
+  66   2          break;
+  67   2      #ifdef __LOCK_FP_SUPPORT__
                 case MID_FDS_FILE_FP:
                   eeprom_select(1);
                   eeprom_nvr_read_page(r_data, 0, 0, r_size);
                   break;
               #endif
-  71   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
-  72   2        case MID_FDS_FILE_RF:
-  73   2          eeprom_select(1);
-  74   2          eeprom_nvr_read_page(r_data, 1, 0, r_size);
-  75   2          break;
-  76   2      #endif
-  77   2      #ifdef __LOCK_DECODE_SUPPORT__
-  78   2        case MID_FDS_FILE_DECODE:
-  79   2          eeprom_select(0);
-  80   2          for (i = 0; i < r_size; i++)
-  81   2          {
-  82   3            r_data[i] = eeprom_read_byte(0, i + 532); //读第一页
-  83   3          }
-  84   2          break;
-  85   2      #endif
-  86   2        default:
-  87   2          break;
-  88   2        }
-  89   1      }
-  90          
-  91          static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t w_size)
-  92          {
-  93   1        uint16_t i;
-  94   1        ErrStatus ret;
-  95   1        eeprom_erase_time(9);
-  96   1        switch (file)
-  97   1        {
-  98   2        case MID_FDS_FILE_SET:
-  99   2        {
- 100   3          uint8_t *w_data2 = (uint8_t *)g_dq_fs_pwd;
- 101   3          uint16_t w_size2 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
- 102   3          eeprom_select(0);
- 103   3          eeprom_erase_page(0); //擦除1K
- 104   3          for (i = 0; i < w_size; i++)
- 105   3          {
- 106   4            ret = eeprom_write_byte(0, i, w_data[i]); //读第一页
- 107   4            if (ret == ERROR)
- 108   4            {
- 109   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 110   5              return RET_FAIL;
- 111   5            }
- 112   4          }
- 113   3          for (i = 0; i < w_size2; i++)
- 114   3          {
- 115   4            ret = eeprom_write_byte(0, i + 24, w_data2[i]); //读第一页
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 3   
+  73   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
+  74   2        case MID_FDS_FILE_RF:
+  75   2          eeprom_select(1);
+  76   2          eeprom_nvr_read_page(r_data, 1, 0, r_size);
+  77   2          break;
+  78   2      #endif
+  79   2      #ifdef __LOCK_DECODE_SUPPORT__
+  80   2        case MID_FDS_FILE_DECODE:
+  81   2          eeprom_select(0);
+  82   2          for (i = 0; i < r_size; i++)
+  83   2          {
+  84   3            r_data[i] = eeprom_read_byte(0, i + 532); //读第一页
+  85   3          }
+  86   2          break;
+  87   2      #endif
+  88   2        default:
+  89   2          break;
+  90   2        }
+  91   1      }
+  92          
+  93          static RET_VAL mmi_dq_fds_write(mid_fds_file_id file, uint8_t *w_data, uint16_t w_size)
+  94          {
+  95   1        uint16_t i;
+  96   1        ErrStatus ret;
+  97   1        eeprom_erase_time(9);
+  98   1        switch (file)
+  99   1        {
+ 100   2        case MID_FDS_FILE_SET:
+ 101   2        {
+ 102   3          uint8_t *w_data2 = (uint8_t *)g_dq_fs_pwd;
+ 103   3          uint16_t w_size2 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
+ 104   3          eeprom_select(0);
+ 105   3          eeprom_erase_page(0); //擦除1K
+ 106   3          for (i = 0; i < w_size; i++)
+ 107   3          {
+ 108   4            ret = eeprom_write_byte(0, i, w_data[i]); //读第一页
+ 109   4            if (ret == ERROR)
+ 110   4            {
+ 111   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 112   5              return RET_FAIL;
+ 113   5            }
+ 114   4          }
+ 115   3          for (i = 0; i < w_size2; i++)
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 3   
 
- 116   4            if (ret == ERROR)
- 117   4            {
- 118   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 119   5              return RET_FAIL;
- 120   5            }
- 121   4          }
- 122   3        }
- 123   2        break;
- 124   2        case MID_FDS_FILE_PWD:
- 125   2        {
- 126   3          uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
- 127   3          uint16_t w_size2 = sizeof(mmi_fs_setting);
- 128   3          eeprom_select(0);
- 129   3          eeprom_erase_page(0); //擦除1K
- 130   3          for (i = 0; i < w_size2; i++)
- 131   3          {
- 132   4            ret = eeprom_write_byte(0, i, w_data2[i]); //读第一页
- 133   4            if (ret == ERROR)
- 134   4            {
- 135   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 136   5              return RET_FAIL;
- 137   5            }
- 138   4          }
- 139   3          for (i = 0; i < w_size; i++)
- 140   3          {
- 141   4            ret = eeprom_write_byte(0, i + 24, w_data[i]); //读第一页
- 142   4            if (ret == ERROR)
- 143   4            {
- 144   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 145   5              return RET_FAIL;
- 146   5            }
- 147   4          }
- 148   3        }
- 149   2        break;
- 150   2      #ifdef __LOCK_FP_SUPPORT__
+ 116   3          {
+ 117   4            ret = eeprom_write_byte(0, i + 24, w_data2[i]); //读第一页
+ 118   4            if (ret == ERROR)
+ 119   4            {
+ 120   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 121   5              return RET_FAIL;
+ 122   5            }
+ 123   4          }
+ 124   3        }
+ 125   2        break;
+ 126   2        case MID_FDS_FILE_PWD:
+ 127   2        {
+ 128   3          uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
+ 129   3          uint16_t w_size2 = sizeof(mmi_fs_setting);
+ 130   3          eeprom_select(0);
+ 131   3          eeprom_erase_page(0); //擦除1K
+ 132   3          for (i = 0; i < w_size2; i++)
+ 133   3          {
+ 134   4            ret = eeprom_write_byte(0, i, w_data2[i]); //读第一页
+ 135   4            if (ret == ERROR)
+ 136   4            {
+ 137   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 138   5              return RET_FAIL;
+ 139   5            }
+ 140   4          }
+ 141   3          for (i = 0; i < w_size; i++)
+ 142   3          {
+ 143   4            ret = eeprom_write_byte(0, i + 24, w_data[i]); //读第一页
+ 144   4            if (ret == ERROR)
+ 145   4            {
+ 146   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 147   5              return RET_FAIL;
+ 148   5            }
+ 149   4          }
+ 150   3        }
+ 151   2        break;
+ 152   2      #ifdef __LOCK_FP_SUPPORT__
                 case MID_FDS_FILE_FP:
                   eeprom_select(1);
                   eeprom_erase_page(0); //擦除512byte
@@ -177,568 +179,568 @@ line level    source
                   }
                   break;
               #endif
- 165   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
- 166   2        case MID_FDS_FILE_RF:
- 167   2          eeprom_select(1);
- 168   2          eeprom_erase_page(1); //擦除512byte
- 169   2          for (i = 0; i < w_size; i++)
- 170   2          {
- 171   3            ret = eeprom_write_byte(1, i, w_data[i]);
- 172   3            if (ret == ERROR)
- 173   3            {
- 174   4              //printf("mmi_dq_fds_write  error  %d\n",i);
- 175   4              return RET_FAIL;
- 176   4            }
- 177   3          }
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 4   
+ 167   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 168   2        case MID_FDS_FILE_RF:
+ 169   2          eeprom_select(1);
+ 170   2          eeprom_erase_page(1); //擦除512byte
+ 171   2          for (i = 0; i < w_size; i++)
+ 172   2          {
+ 173   3            ret = eeprom_write_byte(1, i, w_data[i]);
+ 174   3            if (ret == ERROR)
+ 175   3            {
+ 176   4              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 177   4              return RET_FAIL;
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 4   
 
- 178   2          break;
- 179   2      #endif
- 180   2      #ifdef __LOCK_DECODE_SUPPORT__
- 181   2        case MID_FDS_FILE_DECODE:
- 182   2        {
- 183   3          uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
- 184   3          uint16_t w_size2 = sizeof(mmi_fs_setting);
- 185   3          uint8_t *w_data3 = (uint8_t *)g_dq_fs_pwd;
- 186   3          uint16_t w_size3 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
- 187   3          eeprom_select(0);
- 188   3          eeprom_erase_page(0); //擦除1K
- 189   3          for (i = 0; i < w_size2; i++)
- 190   3          {
- 191   4            ret = eeprom_write_byte(0, i, w_data2[i]); //读第一页
- 192   4            if (ret == ERROR)
- 193   4            {
- 194   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 195   5              return RET_FAIL;
- 196   5            }
- 197   4          }
- 198   3          for (i = 0; i < w_size3; i++)
- 199   3          {
- 200   4            ret = eeprom_write_byte(0, i + 24, w_data3[i]); //读第一页
- 201   4            if (ret == ERROR)
- 202   4            {
- 203   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 204   5              return RET_FAIL;
- 205   5            }
- 206   4          }
- 207   3          for (i = 0; i < w_size; i++)
- 208   3          {
- 209   4            ret = eeprom_write_byte(0, i + 532, w_data[i]); //读第一页
- 210   4            if (ret == ERROR)
- 211   4            {
- 212   5              //printf("mmi_dq_fds_write  error  %d\n",i);
- 213   5              return RET_FAIL;
- 214   5            }
- 215   4          }
- 216   3        }
- 217   2        break;
- 218   2      #endif
- 219   2        default:
- 220   2          return RET_FAIL;
- 221   2        }
- 222   1        //printf("mmi_dq_fds_write  suc\n");
- 223   1        return RET_SUCESS;
- 224   1      }
- 225          
- 226          /*
- 227          parameter: 
- 228            none
- 229          return :
+ 178   4            }
+ 179   3          }
+ 180   2          break;
+ 181   2      #endif
+ 182   2      #ifdef __LOCK_DECODE_SUPPORT__
+ 183   2        case MID_FDS_FILE_DECODE:
+ 184   2        {
+ 185   3          uint8_t *w_data2 = (uint8_t *)&g_dq_fs_init_set;
+ 186   3          uint16_t w_size2 = sizeof(mmi_fs_setting);
+ 187   3          uint8_t *w_data3 = (uint8_t *)g_dq_fs_pwd;
+ 188   3          uint16_t w_size3 = sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_NUM;
+ 189   3          eeprom_select(0);
+ 190   3          eeprom_erase_page(0); //擦除1K
+ 191   3          for (i = 0; i < w_size2; i++)
+ 192   3          {
+ 193   4            ret = eeprom_write_byte(0, i, w_data2[i]); //读第一页
+ 194   4            if (ret == ERROR)
+ 195   4            {
+ 196   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 197   5              return RET_FAIL;
+ 198   5            }
+ 199   4          }
+ 200   3          for (i = 0; i < w_size3; i++)
+ 201   3          {
+ 202   4            ret = eeprom_write_byte(0, i + 24, w_data3[i]); //读第一页
+ 203   4            if (ret == ERROR)
+ 204   4            {
+ 205   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 206   5              return RET_FAIL;
+ 207   5            }
+ 208   4          }
+ 209   3          for (i = 0; i < w_size; i++)
+ 210   3          {
+ 211   4            ret = eeprom_write_byte(0, i + 532, w_data[i]); //读第一页
+ 212   4            if (ret == ERROR)
+ 213   4            {
+ 214   5              //printf("mmi_dq_fds_write  error  %d\n",i);
+ 215   5              return RET_FAIL;
+ 216   5            }
+ 217   4          }
+ 218   3        }
+ 219   2        break;
+ 220   2      #endif
+ 221   2        default:
+ 222   2          return RET_FAIL;
+ 223   2        }
+ 224   1        //printf("mmi_dq_fds_write  suc\n");
+ 225   1        return RET_SUCESS;
+ 226   1      }
+ 227          
+ 228          /*
+ 229          parameter: 
  230            none
- 231          */
- 232          void mmi_dq_fs_init(void)
- 233          {
- 234   1        mmi_dq_fds_read(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 235   1        if (FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
- 236   1        {
- 237   2          unsigned char i = 0;
- 238   2          mmi_dq_fds_read(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_N
-             -UM);
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 5   
+ 231          return :
+ 232            none
+ 233          */
+ 234          void mmi_dq_fs_init(void)
+ 235          {
+ 236   1        mmi_dq_fds_read(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 237   1        if (FDS_INIT_LOCK_SUC == g_dq_fs_init_set.init_flag || FDS_INIT_APP_SUC == g_dq_fs_init_set.init_flag)
+ 238   1        {
+ 239   2          unsigned char i = 0;
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 5   
 
- 239   2      #ifdef __LOCK_FP_SUPPORT__
+ 240   2          mmi_dq_fds_read(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_N
+             -UM);
+ 241   2      #ifdef __LOCK_FP_SUPPORT__
                   mmi_dq_fds_read(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
               #endif
- 242   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
- 243   2          mmi_dq_fds_read(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX
+ 244   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 245   2          mmi_dq_fds_read(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX
              -_NUM);
- 244   2      #endif
- 245   2          if (g_dq_fs_init_set.admin_status > 0)
- 246   2          {
- 247   3            for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 248   3            {
- 249   4              if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
- 250   4                break;
- 251   4            }
- 252   3            if (i >= MMI_DQ_FS_PWD_MAX_NUM)
- 253   3            {
- 254   4              g_dq_fs_init_set.admin_status = 0;
- 255   4              mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 256   4            }
- 257   3          }
- 258   2        }
- 259   1        else
- 260   1        {
- 261   2          //printf("mmi_dq_fs_init init error");
- 262   2          memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
- 263   2          mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_
+ 246   2      #endif
+ 247   2          if (g_dq_fs_init_set.admin_status > 0)
+ 248   2          {
+ 249   3            for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 250   3            {
+ 251   4              if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
+ 252   4                break;
+ 253   4            }
+ 254   3            if (i >= MMI_DQ_FS_PWD_MAX_NUM)
+ 255   3            {
+ 256   4              g_dq_fs_init_set.admin_status = 0;
+ 257   4              mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 258   4            }
+ 259   3          }
+ 260   2        }
+ 261   1        else
+ 262   1        {
+ 263   2          //printf("mmi_dq_fs_init init error");
+ 264   2          memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
+ 265   2          mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_
              -NUM);
- 264   2      
- 265   2      #ifdef __LOCK_FP_SUPPORT__
+ 266   2      
+ 267   2      #ifdef __LOCK_FP_SUPPORT__
                   memset(g_dq_fs_fp, 0xFF, sizeof(g_dq_fs_fp));
                   mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM)
              -;
               
                   mmi_dq_fp_empty();
               #endif
- 271   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
- 272   2          memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
- 273   2          mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MA
+ 273   2      #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 274   2          memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
+ 275   2          mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MA
              -X_NUM);
- 274   2      #endif
- 275   2          g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
- 276   2          g_dq_fs_init_set.open_pro_sound = 1;
- 277   2          g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
- 278   2          g_dq_fs_init_set.admin_status = 0;
- 279   2          g_dq_fs_init_set.factory_flag = 0;
- 280   2          g_dq_fs_init_set.wifi_flag = 0;
- 281   2          mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 282   2        }
- 283   1      }
- 284          
- 285          /**
- 286            * @brief  手动初始化
- 287            * @param  none
- 288            * @return none
- 289            * @note   none
- 290            * @see    none
- 291            */
- 292          RET_VAL mmi_dq_fs_clr_set(void)
- 293          {
- 294   1        g_dq_fs_init_set.open_pro_sound = 1;
- 295   1        g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
- 296   1      
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 6   
+ 276   2      #endif
+ 277   2          g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
+ 278   2          g_dq_fs_init_set.open_pro_sound = 1;
+ 279   2          g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
+ 280   2          g_dq_fs_init_set.admin_status = 0;
+ 281   2          g_dq_fs_init_set.factory_flag = 0;
+ 282   2          g_dq_fs_init_set.wifi_flag = 0;
+ 283   2          mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 284   2        }
+ 285   1      }
+ 286          
+ 287          /**
+ 288            * @brief  手动初始化
+ 289            * @param  none
+ 290            * @return none
+ 291            * @note   none
+ 292            * @see    none
+ 293            */
+ 294          RET_VAL mmi_dq_fs_clr_set(void)
+ 295          {
+ 296   1        g_dq_fs_init_set.open_pro_sound = 1;
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 6   
 
- 297   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 298   1      }
- 299          
- 300          /**
- 301            * @brief  复位初始化
- 302            * @param  none
- 303            * @return none
- 304            * @note   none
- 305            * @see    none
- 306            */
- 307          RET_VAL mmi_dq_fs_reset(void)
- 308          {
- 309   1        memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
- 310   1        mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_N
+ 297   1        g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
+ 298   1      
+ 299   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 300   1      }
+ 301          
+ 302          /**
+ 303            * @brief  复位初始化
+ 304            * @param  none
+ 305            * @return none
+ 306            * @note   none
+ 307            * @see    none
+ 308            */
+ 309          RET_VAL mmi_dq_fs_reset(void)
+ 310          {
+ 311   1        memset(g_dq_fs_pwd, 0xFF, sizeof(g_dq_fs_pwd));
+ 312   1        mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PWD_MAX_N
              -UM);
- 311   1      #ifdef __LOCK_FP_SUPPORT__
+ 313   1      #ifdef __LOCK_FP_SUPPORT__
                 memset(g_dq_fs_fp, 0xFF, sizeof(g_dq_fs_fp));
                 mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_MAX_NUM);
               
                 mmi_dq_fp_empty();
               #endif
- 317   1      #ifdef __LOCK_RFID_CARD_SUPPORT__
- 318   1        memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
- 319   1        mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX
+ 319   1      #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 320   1        memset(g_dq_fs_rfid, 0xFF, sizeof(g_dq_fs_rfid));
+ 321   1        mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_RFID_MAX
              -_NUM);
- 320   1      #endif
- 321   1        g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
- 322   1        g_dq_fs_init_set.open_pro_sound = 1;
- 323   1        g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
- 324   1        g_dq_fs_init_set.admin_status = 0;
- 325   1        g_dq_fs_init_set.wifi_flag = 0;
- 326   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 327   1      }
- 328          
- 329          /*
- 330          parameter: 
- 331            none
- 332          return :
+ 322   1      #endif
+ 323   1        g_dq_fs_init_set.init_flag = FDS_INIT_LOCK_SUC;
+ 324   1        g_dq_fs_init_set.open_pro_sound = 1;
+ 325   1        g_dq_fs_init_set.open_mode = SYS_OPEN_MODE_SIN;
+ 326   1        g_dq_fs_init_set.admin_status = 0;
+ 327   1        g_dq_fs_init_set.wifi_flag = 0;
+ 328   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 329   1      }
+ 330          
+ 331          /*
+ 332          parameter: 
  333            none
- 334          */
- 335          void mmi_dq_fs_pwd_string_to_byte(unsigned char *input_pwd, unsigned char pwd_len, unsigned char *output_p
+ 334          return :
+ 335            none
+ 336          */
+ 337          void mmi_dq_fs_pwd_string_to_byte(unsigned char *input_pwd, unsigned char pwd_len, unsigned char *output_p
              -wd)
- 336          {
- 337   1        unsigned char i = 0;
- 338   1        unsigned char bit_l = 0;
- 339   1        unsigned char bit_h = 0;
- 340   1      
- 341   1        for (i = 0; i < pwd_len; i++)
- 342   1        {
- 343   2          bit_l = *(input_pwd + i) & 0x0F;
- 344   2          i++;
- 345   2          if (i < pwd_len)
- 346   2            bit_h = *(input_pwd + i) & 0x0F;
- 347   2          else
- 348   2            bit_h = 0xF;
- 349   2          *output_pwd++ = bit_l << 4 | bit_h;
- 350   2        }
- 351   1        return;
- 352   1      }
- 353          /*
- 354          parameter: 
- 355            none
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 7   
+ 338          {
+ 339   1        unsigned char i = 0;
+ 340   1        unsigned char bit_l = 0;
+ 341   1        unsigned char bit_h = 0;
+ 342   1      
+ 343   1        for (i = 0; i < pwd_len; i++)
+ 344   1        {
+ 345   2          bit_l = *(input_pwd + i) & 0x0F;
+ 346   2          i++;
+ 347   2          if (i < pwd_len)
+ 348   2            bit_h = *(input_pwd + i) & 0x0F;
+ 349   2          else
+ 350   2            bit_h = 0xF;
+ 351   2          *output_pwd++ = bit_l << 4 | bit_h;
+ 352   2        }
+ 353   1        return;
+ 354   1      }
+ 355          /*
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 7   
 
- 356          return :
+ 356          parameter: 
  357            none
- 358          */
- 359          unsigned char mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd, unsigned char *output_pwd)
- 360          {
- 361   1        unsigned char i = 0;
- 362   1        unsigned char pwd = 0;
- 363   1        unsigned char len = 0;
- 364   1        for (i = 0; i < 4; i++)
- 365   1        {
- 366   2          pwd = *(input_pwd + i);
- 367   2          if (pwd == 0xFF)
- 368   2            break;
- 369   2          else
- 370   2          {
- 371   3            *output_pwd++ = (pwd & 0xF0) >> 4;
- 372   3            len++;
- 373   3          }
- 374   2          if ((pwd & 0x0F) == 0x0F)
- 375   2            break;
- 376   2          else
- 377   2          {
- 378   3            *output_pwd++ = pwd & 0x0F;
- 379   3            len++;
- 380   3          }
- 381   2        }
- 382   1        return len;
- 383   1      }
- 384          
- 385          /*
- 386          parameter: 
- 387            none
- 388          return :
+ 358          return :
+ 359            none
+ 360          */
+ 361          unsigned char mmi_dq_fs_pwd_byte_to_string(unsigned char *input_pwd, unsigned char *output_pwd)
+ 362          {
+ 363   1        unsigned char i = 0;
+ 364   1        unsigned char pwd = 0;
+ 365   1        unsigned char len = 0;
+ 366   1        for (i = 0; i < 4; i++)
+ 367   1        {
+ 368   2          pwd = *(input_pwd + i);
+ 369   2          if (pwd == 0xFF)
+ 370   2            break;
+ 371   2          else
+ 372   2          {
+ 373   3            *output_pwd++ = (pwd & 0xF0) >> 4;
+ 374   3            len++;
+ 375   3          }
+ 376   2          if ((pwd & 0x0F) == 0x0F)
+ 377   2            break;
+ 378   2          else
+ 379   2          {
+ 380   3            *output_pwd++ = pwd & 0x0F;
+ 381   3            len++;
+ 382   3          }
+ 383   2        }
+ 384   1        return len;
+ 385   1      }
+ 386          
+ 387          /*
+ 388          parameter: 
  389            none
- 390          */
- 391          unsigned char mmi_dq_fs_get_pwd_unuse_index(void)
- 392          {
- 393   1        unsigned char i = PWD_ADMIN_NUM;
- 394   1      #ifdef __LOCK_110_SUPPORT__
- 395   1        i += PWD_110_NUM;
- 396   1      #endif
- 397   1        for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 398   1        {
- 399   2          if (g_dq_fs_pwd[i].flag == 0xFF)
- 400   2            break;
- 401   2        }
- 402   1      
- 403   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
- 404   1          return i;
- 405   1        else
- 406   1          return 0xFF;
- 407   1      }
- 408          
- 409          /*
- 410          parameter: 
- 411            none
- 412          return :
+ 390          return :
+ 391            none
+ 392          */
+ 393          unsigned char mmi_dq_fs_get_pwd_unuse_index(void)
+ 394          {
+ 395   1        unsigned char i = PWD_ADMIN_NUM;
+ 396   1      #ifdef __LOCK_110_SUPPORT__
+ 397   1        i += PWD_110_NUM;
+ 398   1      #endif
+ 399   1        for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 400   1        {
+ 401   2          if (g_dq_fs_pwd[i].flag == 0xFF)
+ 402   2            break;
+ 403   2        }
+ 404   1      
+ 405   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
+ 406   1          return i;
+ 407   1        else
+ 408   1          return 0xFF;
+ 409   1      }
+ 410          
+ 411          /*
+ 412          parameter: 
  413            none
- 414          */
- 415          unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd, unsigned char len, fds_use_type type)
- 416          {
- 417   1        unsigned char i = 0;
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 8   
+ 414          return :
+ 415            none
+ 416          */
+ 417          unsigned char mmi_dq_fs_check_input_pwd(unsigned char *input_pwd, unsigned char len, fds_use_type type)
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 8   
 
- 418   1        unsigned char k = 0;
- 419   1        unsigned char password[4];
- 420   1        unsigned char ret_val = 0xFF;
- 421   1      
- 422   1        memset(password, 0xFF, sizeof(password));
- 423   1        mmi_dq_fs_pwd_string_to_byte(input_pwd, len, password);
- 424   1      
- 425   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 426   1        {
- 427   2          if (g_dq_fs_pwd[i].flag != 0xFF)
- 428   2          {
- 429   3            for (k = 0; k < 4; k++)
- 430   3            {
- 431   4              if (password[k] != g_dq_fs_pwd[i].key_pwd[k])
- 432   4                break;
- 433   4            }
- 434   3            if (k == 4)
- 435   3            {
- 436   4              break;
- 437   4            }
- 438   3          }
- 439   2        }
- 440   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
- 441   1        {
- 442   2          if ((g_dq_fs_pwd[i].flag == type) || (type == FDS_USE_TYPE_ALL))
- 443   2            ret_val = i;
- 444   2          else
- 445   2            ret_val = 0xFF;
- 446   2        }
- 447   1        else
- 448   1          ret_val = 0xFF;
- 449   1      
- 450   1        return ret_val;
- 451   1      }
- 452          
- 453          /*
- 454          parameter: 
- 455            none
- 456          return :
+ 418          {
+ 419   1        unsigned char i = 0;
+ 420   1        unsigned char k = 0;
+ 421   1        unsigned char password[4];
+ 422   1        unsigned char ret_val = 0xFF;
+ 423   1      
+ 424   1        memset(password, 0xFF, sizeof(password));
+ 425   1        mmi_dq_fs_pwd_string_to_byte(input_pwd, len, password);
+ 426   1      
+ 427   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 428   1        {
+ 429   2          if (g_dq_fs_pwd[i].flag != 0xFF)
+ 430   2          {
+ 431   3            for (k = 0; k < 4; k++)
+ 432   3            {
+ 433   4              if (password[k] != g_dq_fs_pwd[i].key_pwd[k])
+ 434   4                break;
+ 435   4            }
+ 436   3            if (k == 4)
+ 437   3            {
+ 438   4              break;
+ 439   4            }
+ 440   3          }
+ 441   2        }
+ 442   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
+ 443   1        {
+ 444   2          if ((g_dq_fs_pwd[i].flag == type) || (type == FDS_USE_TYPE_ALL))
+ 445   2            ret_val = i;
+ 446   2          else
+ 447   2            ret_val = 0xFF;
+ 448   2        }
+ 449   1        else
+ 450   1          ret_val = 0xFF;
+ 451   1      
+ 452   1        return ret_val;
+ 453   1      }
+ 454          
+ 455          /*
+ 456          parameter: 
  457            none
- 458          */
- 459          unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd, unsigned char len)
- 460          {
- 461   1        unsigned char i = 0, n = 0;
- 462   1        unsigned char k, j;
- 463   1        unsigned char password[8];
- 464   1        unsigned char passlen = 0;
- 465   1        unsigned char ret_val = 0xFF;
- 466   1      
- 467   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 468   1        {
- 469   2          if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_INVALID)
- 470   2            continue;
- 471   2          memset(password, 0xFF, sizeof(password));
- 472   2          passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[i].key_pwd, password);
- 473   2          for (k = 0; k + passlen <= len; k++)
- 474   2          {
- 475   3            for (j = 0; j < passlen; j++)
- 476   3            {
- 477   4              if (password[j] != input_pwd[k + j])
- 478   4                break;
- 479   4            }
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 9   
+ 458          return :
+ 459            none
+ 460          */
+ 461          unsigned char mmi_dq_fs_check_input_pwd_for_open(unsigned char *input_pwd, unsigned char len)
+ 462          {
+ 463   1        unsigned char i = 0, n = 0;
+ 464   1        unsigned char k, j;
+ 465   1        unsigned char password[8];
+ 466   1        unsigned char passlen = 0;
+ 467   1        unsigned char ret_val = 0xFF;
+ 468   1      
+ 469   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 470   1        {
+ 471   2          if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_INVALID)
+ 472   2            continue;
+ 473   2          memset(password, 0xFF, sizeof(password));
+ 474   2          passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[i].key_pwd, password);
+ 475   2          for (k = 0; k + passlen <= len; k++)
+ 476   2          {
+ 477   3            for (j = 0; j < passlen; j++)
+ 478   3            {
+ 479   4              if (password[j] != input_pwd[k + j])
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 9   
 
- 480   3            if (j == passlen)
- 481   3              break;
- 482   3          }
- 483   2          if (j == passlen)
- 484   2            break;
- 485   2        }
- 486   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
- 487   1        {
- 488   2          //printf("check input return i: %d",(unsigned int)i);
- 489   2          get_index = i;
- 490   2          return i;
- 491   2        }
- 492   1        else
- 493   1        {
- 494   2          unsigned char adminword[8];
- 495   2          unsigned char checkCode_out[8];
- 496   2          unsigned char pass = 0;
- 497   2          memset(adminword, 0xFF, sizeof(adminword));
- 498   2          passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[0].key_pwd, adminword);
- 499   2          for (i = 0; i < 8; i++)
- 500   2          {
- 501   3            if (adminword[i] == 0xFF)
- 502   3              adminword[i] = 0;
- 503   3            else
- 504   3              adminword[i] += '0';
- 505   3      
- 506   3            if (input_pwd[i] == 0xFF)
- 507   3              password[i] = 0;
- 508   3            else
- 509   3              password[i] = input_pwd[i] + '0';
- 510   3          }
- 511   2          pass = dq_check_otp((char *)password, (char *)adminword, g_dq_fs_init_set.check_data, checkCode_out);
- 512   2          if (pass > 0)
- 513   2          {
- 514   3            memcpy(g_dq_fs_init_set.check_data, checkCode_out, 8);
- 515   3            mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 516   3            return 0xFE;
- 517   3          }
- 518   2        }
- 519   1        //printf("check input return 0xFF");
- 520   1        return 0xFF;
- 521   1      }
- 522          
- 523          /*
- 524          parameter: 
- 525            none
- 526          return :
+ 480   4                break;
+ 481   4            }
+ 482   3            if (j == passlen)
+ 483   3              break;
+ 484   3          }
+ 485   2          if (j == passlen)
+ 486   2            break;
+ 487   2        }
+ 488   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
+ 489   1        {
+ 490   2          //printf("check input return i: %d",(unsigned int)i);
+ 491   2          get_index = i;
+ 492   2          return i;
+ 493   2        }
+ 494   1        else
+ 495   1        {
+ 496   2          unsigned char adminword[8];
+ 497   2          unsigned char checkCode_out[8];
+ 498   2          unsigned char pass = 0;
+ 499   2          memset(adminword, 0xFF, sizeof(adminword));
+ 500   2          passlen = mmi_dq_fs_pwd_byte_to_string(g_dq_fs_pwd[0].key_pwd, adminword);
+ 501   2          for (i = 0; i < 8; i++)
+ 502   2          {
+ 503   3            if (adminword[i] == 0xFF)
+ 504   3              adminword[i] = 0;
+ 505   3            else
+ 506   3              adminword[i] += '0';
+ 507   3      
+ 508   3            if (input_pwd[i] == 0xFF)
+ 509   3              password[i] = 0;
+ 510   3            else
+ 511   3              password[i] = input_pwd[i] + '0';
+ 512   3          }
+ 513   2          pass = dq_check_otp((char *)password, (char *)adminword, g_dq_fs_init_set.check_data, checkCode_out);
+ 514   2          if (pass > 0)
+ 515   2          {
+ 516   3            memcpy(g_dq_fs_init_set.check_data, checkCode_out, 8);
+ 517   3            mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 518   3            return 0xFE;
+ 519   3          }
+ 520   2        }
+ 521   1        //printf("check input return 0xFF");
+ 522   1        return 0xFF;
+ 523   1      }
+ 524          
+ 525          /*
+ 526          parameter: 
  527            none
- 528          */
- 529          RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd, unsigned char pwd_size, fds_use_type type)
- 530          {
- 531   1        unsigned char i = 0;
- 532   1        unsigned char password[4];
- 533   1      
- 534   1        if (type == FDS_USE_TYPE_ADMIN)
- 535   1          i = 0;
- 536   1      #ifdef __LOCK_110_SUPPORT__
- 537   1        else if (type == FDS_USE_TYPE_110)
- 538   1          i = 1;
- 539   1      #endif
- 540   1        else
- 541   1        {
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 10  
+ 528          return :
+ 529            none
+ 530          */
+ 531          RET_VAL mmi_dq_fs_set_pwd(unsigned char *pwd, unsigned char pwd_size, fds_use_type type)
+ 532          {
+ 533   1        unsigned char i = 0;
+ 534   1        unsigned char password[4];
+ 535   1      
+ 536   1        if (type == FDS_USE_TYPE_ADMIN)
+ 537   1          i = 0;
+ 538   1      #ifdef __LOCK_110_SUPPORT__
+ 539   1        else if (type == FDS_USE_TYPE_110)
+ 540   1          i = 1;
+ 541   1      #endif
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 10  
 
- 542   2      #ifdef __LOCK_110_SUPPORT__
- 543   2          i = PWD_ADMIN_NUM + PWD_110_NUM;
- 544   2      #else
+ 542   1        else
+ 543   1        {
+ 544   2      #ifdef __LOCK_110_SUPPORT__
+ 545   2          i = PWD_ADMIN_NUM + PWD_110_NUM;
+ 546   2      #else
                   i = PWD_ADMIN_NUM;
               #endif
- 547   2          for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 548   2          {
- 549   3            if (g_dq_fs_pwd[i].flag == 0xFF)
- 550   3              break;
- 551   3          }
- 552   2        }
- 553   1      
- 554   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
- 555   1        {
- 556   2          get_index = i;
- 557   2          memset(password, 0xFF, sizeof(password));
- 558   2          //g_dq_fs_pwd[i].index = i;
- 559   2          mmi_dq_fs_pwd_string_to_byte(pwd, pwd_size, password);
- 560   2          memcpy((char *)g_dq_fs_pwd[i].key_pwd, (const char *)password, 4);
- 561   2          g_dq_fs_pwd[i].flag = type;
- 562   2          return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_P
+ 549   2          for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 550   2          {
+ 551   3            if (g_dq_fs_pwd[i].flag == 0xFF)
+ 552   3              break;
+ 553   3          }
+ 554   2        }
+ 555   1      
+ 556   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
+ 557   1        {
+ 558   2          get_index = i;
+ 559   2          memset(password, 0xFF, sizeof(password));
+ 560   2          //g_dq_fs_pwd[i].index = i;
+ 561   2          mmi_dq_fs_pwd_string_to_byte(pwd, pwd_size, password);
+ 562   2          memcpy((char *)g_dq_fs_pwd[i].key_pwd, (const char *)password, 4);
+ 563   2          g_dq_fs_pwd[i].flag = type;
+ 564   2          return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_P
              -WD_MAX_NUM);
- 563   2        }
- 564   1        return RET_FAIL;
- 565   1      }
- 566          
- 567          /*
- 568          parameter: 
- 569            none
- 570          return :
+ 565   2        }
+ 566   1        return RET_FAIL;
+ 567   1      }
+ 568          
+ 569          /*
+ 570          parameter: 
  571            none
- 572          */
- 573          RET_VAL mmi_dq_fs_del_pwd(unsigned char index, fds_use_type type)
- 574          {
- 575   1        if (index < MMI_DQ_FS_PWD_MAX_NUM && g_dq_fs_pwd[index].flag == type)
- 576   1        {
- 577   2          g_dq_fs_pwd[index].flag = FDS_USE_TYPE_INVALID;
- 578   2          //g_dq_fs_pwd[index].index = 0xFF;
- 579   2          memset(g_dq_fs_pwd[index].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[index].key_pwd));
- 580   2          return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_P
+ 572          return :
+ 573            none
+ 574          */
+ 575          RET_VAL mmi_dq_fs_del_pwd(unsigned char index, fds_use_type type)
+ 576          {
+ 577   1        if (index < MMI_DQ_FS_PWD_MAX_NUM && g_dq_fs_pwd[index].flag == type)
+ 578   1        {
+ 579   2          g_dq_fs_pwd[index].flag = FDS_USE_TYPE_INVALID;
+ 580   2          //g_dq_fs_pwd[index].index = 0xFF;
+ 581   2          memset(g_dq_fs_pwd[index].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[index].key_pwd));
+ 582   2          return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_P
              -WD_MAX_NUM);
- 581   2        }
- 582   1        return RET_FAIL;
- 583   1      }
- 584          
- 585          /*
- 586          parameter: 
- 587            none
- 588          return :
+ 583   2        }
+ 584   1        return RET_FAIL;
+ 585   1      }
+ 586          
+ 587          /*
+ 588          parameter: 
  589            none
- 590          */
- 591          RET_VAL mmi_dq_fs_clr_pwd(void)
- 592          {
- 593   1        unsigned char i = PWD_ADMIN_NUM;
- 594   1      #ifdef __LOCK_110_SUPPORT__
- 595   1        i += PWD_110_NUM;
- 596   1      #endif
- 597   1        for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
- 598   1        {
- 599   2          if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_USER)
- 600   2          {
- 601   3            g_dq_fs_pwd[i].flag = FDS_USE_TYPE_INVALID;
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 11  
+ 590          return :
+ 591            none
+ 592          */
+ 593          RET_VAL mmi_dq_fs_clr_pwd(void)
+ 594          {
+ 595   1        unsigned char i = PWD_ADMIN_NUM;
+ 596   1      #ifdef __LOCK_110_SUPPORT__
+ 597   1        i += PWD_110_NUM;
+ 598   1      #endif
+ 599   1        for (; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+ 600   1        {
+ 601   2          if (g_dq_fs_pwd[i].flag == FDS_USE_TYPE_USER)
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 11  
 
- 602   3            //g_dq_fs_pwd[i].index = 0xFF;
- 603   3            memset(g_dq_fs_pwd[i].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[i].key_pwd));
- 604   3          }
- 605   2        }
- 606   1        return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PW
+ 602   2          {
+ 603   3            g_dq_fs_pwd[i].flag = FDS_USE_TYPE_INVALID;
+ 604   3            //g_dq_fs_pwd[i].index = 0xFF;
+ 605   3            memset(g_dq_fs_pwd[i].key_pwd, 0xFF, sizeof(g_dq_fs_pwd[i].key_pwd));
+ 606   3          }
+ 607   2        }
+ 608   1        return mmi_dq_fds_write(MID_FDS_FILE_PWD, (unsigned char *)g_dq_fs_pwd, sizeof(mmi_fs_pwd) * MMI_DQ_FS_PW
              -D_MAX_NUM);
- 607   1      }
- 608          
- 609          #if defined(__LOCK_DECODE_SUPPORT__)
- 610          /**
- 611            * @brief  解码记录flash
- 612            * @param  type 用户类型
- 613            * @return status
- 614            * @note   none
- 615            * @see    none
- 616            */
- 617          RET_VAL mmi_dq_fs_set_decode(fds_use_type type)
- 618          {
- 619   1        if (type == FDS_USE_TYPE_ADMIN)
- 620   1          return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)&get_decode, sizeof(get_decode));
- 621   1        else
- 622   1          return RET_FAIL;
- 623   1      }
- 624          
- 625          // unsigned char mmi_dq_fs_check_input_decode(unsigned char *input_pwd, unsigned char len, fds_use_type ty
+ 609   1      }
+ 610          
+ 611          #if defined(__LOCK_DECODE_SUPPORT__)
+ 612          /**
+ 613            * @brief  解码记录flash
+ 614            * @param  type 用户类型
+ 615            * @return status
+ 616            * @note   none
+ 617            * @see    none
+ 618            */
+ 619          RET_VAL mmi_dq_fs_set_decode(fds_use_type type)
+ 620          {
+ 621   1        if (type == FDS_USE_TYPE_ADMIN)
+ 622   1          return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)&get_decode, sizeof(get_decode));
+ 623   1        else
+ 624   1          return RET_FAIL;
+ 625   1      }
+ 626          
+ 627          // unsigned char mmi_dq_fs_check_input_decode(unsigned char *input_pwd, unsigned char len, fds_use_type ty
              -pe)
- 626          // {
- 627          //  unsigned char i = 0;
- 628          //  unsigned char k = 0;
- 629          //  unsigned char decode[5];
- 630          //  unsigned char ret_val = 0xFF;
- 631          
- 632          //  memset(decode, 0xFF, sizeof(decode));
- 633          //  mmi_dq_fs_pwd_string_to_byte(input_pwd, len, decode);
- 634          
- 635          //  for (i = 0; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
- 636          //  {
- 637          //    if (g_dq_fs_decode[i].flag != 0xFF)
- 638          //    {
- 639          //      for (k = 0; k < 5; k++)
- 640          //      {
- 641          //        if (decode[k] != g_dq_fs_decode[i].decode[k])
- 642          //          break;
- 643          //      }
- 644          //      if (k == 5)
- 645          //      {
- 646          //        break;
- 647          //      }
- 648          //    }
- 649          //  }
- 650          //  if (i < MMI_DQ_FS_DECODE_MAX_NUM)
- 651          //  {
- 652          //    if ((g_dq_fs_decode[i].flag == type) || (type == FDS_USE_TYPE_ADMIN))
- 653          //      ret_val = i;
- 654          //    else
- 655          //      ret_val = 0xFF;
- 656          //  }
- 657          //  else
- 658          //    ret_val = 0xFF;
- 659          
- 660          //  return ret_val;
- 661          // }
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 12  
+ 628          // {
+ 629          //  unsigned char i = 0;
+ 630          //  unsigned char k = 0;
+ 631          //  unsigned char decode[5];
+ 632          //  unsigned char ret_val = 0xFF;
+ 633          
+ 634          //  memset(decode, 0xFF, sizeof(decode));
+ 635          //  mmi_dq_fs_pwd_string_to_byte(input_pwd, len, decode);
+ 636          
+ 637          //  for (i = 0; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
+ 638          //  {
+ 639          //    if (g_dq_fs_decode[i].flag != 0xFF)
+ 640          //    {
+ 641          //      for (k = 0; k < 5; k++)
+ 642          //      {
+ 643          //        if (decode[k] != g_dq_fs_decode[i].decode[k])
+ 644          //          break;
+ 645          //      }
+ 646          //      if (k == 5)
+ 647          //      {
+ 648          //        break;
+ 649          //      }
+ 650          //    }
+ 651          //  }
+ 652          //  if (i < MMI_DQ_FS_DECODE_MAX_NUM)
+ 653          //  {
+ 654          //    if ((g_dq_fs_decode[i].flag == type) || (type == FDS_USE_TYPE_ADMIN))
+ 655          //      ret_val = i;
+ 656          //    else
+ 657          //      ret_val = 0xFF;
+ 658          //  }
+ 659          //  else
+ 660          //    ret_val = 0xFF;
+ 661          
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 12  
 
- 662          
- 663          // RET_VAL mmi_dq_fs_del_decode(unsigned char index, fds_use_type type)
- 664          // {
- 665          //  if (index < MMI_DQ_FS_DECODE_MAX_NUM && g_dq_fs_decode[index].flag == type)
- 666          //  {
- 667          //    g_dq_fs_decode[index].flag = FDS_USE_TYPE_INVALID;
- 668          //    //g_dq_fs_pwd[index].index = 0xFF;
- 669          //    memset(g_dq_fs_decode[index].decode, 0xFF, sizeof(g_dq_fs_decode[index].decode));
- 670          //    return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) *
+ 662          //  return ret_val;
+ 663          // }
+ 664          
+ 665          // RET_VAL mmi_dq_fs_del_decode(unsigned char index, fds_use_type type)
+ 666          // {
+ 667          //  if (index < MMI_DQ_FS_DECODE_MAX_NUM && g_dq_fs_decode[index].flag == type)
+ 668          //  {
+ 669          //    g_dq_fs_decode[index].flag = FDS_USE_TYPE_INVALID;
+ 670          //    //g_dq_fs_pwd[index].index = 0xFF;
+ 671          //    memset(g_dq_fs_decode[index].decode, 0xFF, sizeof(g_dq_fs_decode[index].decode));
+ 672          //    return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) *
              - MMI_DQ_FS_DECODE_MAX_NUM);
- 671          //  }
- 672          //  return RET_FAIL;
- 673          // }
- 674          
- 675          // RET_VAL mmi_dq_fs_clr_decode(void)
- 676          // {
- 677          //  unsigned char i = 0;
- 678          
- 679          //  for (; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
- 680          //  {
- 681          //    if (g_dq_fs_decode[i].flag == FDS_USE_TYPE_ADMIN)
- 682          //    {
- 683          //      g_dq_fs_decode[i].flag = FDS_USE_TYPE_INVALID;
- 684          //      // g_dq_fs_pwd[i].index = 0xFF;
- 685          //      memset(g_dq_fs_decode[i].decode, 0xFF, sizeof(g_dq_fs_decode[i].decode));
- 686          //    }
- 687          //  }
- 688          
- 689          //  return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) * 
+ 673          //  }
+ 674          //  return RET_FAIL;
+ 675          // }
+ 676          
+ 677          // RET_VAL mmi_dq_fs_clr_decode(void)
+ 678          // {
+ 679          //  unsigned char i = 0;
+ 680          
+ 681          //  for (; i < MMI_DQ_FS_DECODE_MAX_NUM; i++)
+ 682          //  {
+ 683          //    if (g_dq_fs_decode[i].flag == FDS_USE_TYPE_ADMIN)
+ 684          //    {
+ 685          //      g_dq_fs_decode[i].flag = FDS_USE_TYPE_INVALID;
+ 686          //      // g_dq_fs_pwd[i].index = 0xFF;
+ 687          //      memset(g_dq_fs_decode[i].decode, 0xFF, sizeof(g_dq_fs_decode[i].decode));
+ 688          //    }
+ 689          //  }
+ 690          
+ 691          //  return mmi_dq_fds_write(MID_FDS_FILE_DECODE, (unsigned char *)g_dq_fs_decode, sizeof(mmi_fs_decode) * 
              -MMI_DQ_FS_DECODE_MAX_NUM);
- 690          // }
- 691          
- 692          #endif
+ 692          // }
  693          
- 694          #if defined(__LOCK_FP_SUPPORT__)
+ 694          #endif
+ 695          
+ 696          #if defined(__LOCK_FP_SUPPORT__)
               /*
               parameter: 
                 none
@@ -764,10 +766,10 @@ line level    source
               #ifdef __LOCK_110_SUPPORT__
               /*
               parameter: 
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 13  
+
                 none
               return :
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 13  
-
                 none
               */
               unsigned char mmi_dq_fs_get_fp_110_unuse_index(void)
@@ -828,10 +830,10 @@ line level    source
                   g_dq_fs_fp[fp_index].flag = FDS_USE_TYPE_INVALID;
                   g_dq_fs_fp[fp_index].fp_index = 0xFF;
                   return mmi_dq_fds_write(MID_FDS_FILE_FP, (unsigned char *)g_dq_fs_fp, sizeof(mmi_fs_fp) * MMI_DQ_FS_FP_M
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 14  
+
              -AX_NUM);
                 }
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 14  
-
                 return RET_FAIL;
               }
               
@@ -865,293 +867,293 @@ line level    source
               }
               
               #endif
- 813          
- 814          #ifdef __LOCK_RFID_CARD_SUPPORT__
  815          
- 816          /*
- 817          parameter: 
- 818            none
- 819          return :
+ 816          #ifdef __LOCK_RFID_CARD_SUPPORT__
+ 817          
+ 818          /*
+ 819          parameter: 
  820            none
- 821          */
- 822          unsigned char mmi_dq_fs_get_rfid_unuse_index(void)
- 823          {
- 824   1        unsigned char i = 0;
- 825   1      
- 826   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
- 827   1        {
- 828   2          if (g_dq_fs_rfid[i].index == 0xFF)
- 829   2            break;
- 830   2        }
- 831   1      
- 832   1        if (i >= MMI_DQ_FS_RFID_MAX_NUM)
- 833   1          return 0xFF;
- 834   1        return i;
- 835   1      }
- 836          
- 837          /*
- 838          parameter: 
- 839            none
- 840          return :
+ 821          return :
+ 822            none
+ 823          */
+ 824          unsigned char mmi_dq_fs_get_rfid_unuse_index(void)
+ 825          {
+ 826   1        unsigned char i = 0;
+ 827   1      
+ 828   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
+ 829   1        {
+ 830   2          if (g_dq_fs_rfid[i].index == 0xFF)
+ 831   2            break;
+ 832   2        }
+ 833   1      
+ 834   1        if (i >= MMI_DQ_FS_RFID_MAX_NUM)
+ 835   1          return 0xFF;
+ 836   1        return i;
+ 837   1      }
+ 838          
+ 839          /*
+ 840          parameter: 
  841            none
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 15  
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 15  
 
- 842          */
- 843          unsigned char mmi_dq_fs_check_rfid(unsigned char *sec_data, fds_use_type type)
- 844          {
- 845   1        unsigned char i = 0, j = 0;
- 846   1      
- 847   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
- 848   1        {
- 849   2          for (j = 0; j < RFID_SEC_DATA_LEN; j++)
- 850   2          {
- 851   3            if (g_dq_fs_rfid[i].sec_data[j] != sec_data[j])
- 852   3              break;
- 853   3          }
- 854   2          if (j == RFID_SEC_DATA_LEN)
- 855   2            break;
- 856   2        }
- 857   1        if (i < MMI_DQ_FS_RFID_MAX_NUM && ((g_dq_fs_rfid[i].flag == type) || (type == FDS_USE_TYPE_ALL)))
- 858   1        {
- 859   2          return i;
- 860   2        }
- 861   1        else
- 862   1        {
- 863   2          return 0xFF;
- 864   2        }
- 865   1      }
- 866          
- 867          /*
- 868          parameter: 
- 869            none
- 870          return :
+ 842          return :
+ 843            none
+ 844          */
+ 845          unsigned char mmi_dq_fs_check_rfid(unsigned char *sec_data, fds_use_type type)
+ 846          {
+ 847   1        unsigned char i = 0, j = 0;
+ 848   1      
+ 849   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
+ 850   1        {
+ 851   2          for (j = 0; j < RFID_SEC_DATA_LEN; j++)
+ 852   2          {
+ 853   3            if (g_dq_fs_rfid[i].sec_data[j] != sec_data[j])
+ 854   3              break;
+ 855   3          }
+ 856   2          if (j == RFID_SEC_DATA_LEN)
+ 857   2            break;
+ 858   2        }
+ 859   1        if (i < MMI_DQ_FS_RFID_MAX_NUM && ((g_dq_fs_rfid[i].flag == type) || (type == FDS_USE_TYPE_ALL)))
+ 860   1        {
+ 861   2          return i;
+ 862   2        }
+ 863   1        else
+ 864   1        {
+ 865   2          return 0xFF;
+ 866   2        }
+ 867   1      }
+ 868          
+ 869          /*
+ 870          parameter: 
  871            none
- 872          */
- 873          RET_VAL mmi_dq_fs_set_rfid(unsigned char *sec_data, fds_use_type type)
- 874          {
- 875   1        unsigned char i = 0, j = 0;
- 876   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
- 877   1        {
- 878   2          if (g_dq_fs_rfid[i].index == 0xFF)
- 879   2            break;
- 880   2        }
- 881   1        if (i < MMI_DQ_FS_RFID_MAX_NUM)
- 882   1        {
- 883   2          get_index = i;
- 884   2          g_dq_fs_rfid[i].index = i;
- 885   2          g_dq_fs_rfid[i].flag = type;
- 886   2          for (j = 0; j < RFID_SEC_DATA_LEN; j++)
- 887   2          {
- 888   3            g_dq_fs_rfid[i].sec_data[j] = sec_data[j];
- 889   3          }
- 890   2          return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_
+ 872          return :
+ 873            none
+ 874          */
+ 875          RET_VAL mmi_dq_fs_set_rfid(unsigned char *sec_data, fds_use_type type)
+ 876          {
+ 877   1        unsigned char i = 0, j = 0;
+ 878   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
+ 879   1        {
+ 880   2          if (g_dq_fs_rfid[i].index == 0xFF)
+ 881   2            break;
+ 882   2        }
+ 883   1        if (i < MMI_DQ_FS_RFID_MAX_NUM)
+ 884   1        {
+ 885   2          get_index = i;
+ 886   2          g_dq_fs_rfid[i].index = i;
+ 887   2          g_dq_fs_rfid[i].flag = type;
+ 888   2          for (j = 0; j < RFID_SEC_DATA_LEN; j++)
+ 889   2          {
+ 890   3            g_dq_fs_rfid[i].sec_data[j] = sec_data[j];
+ 891   3          }
+ 892   2          return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_
              -RFID_MAX_NUM);
- 891   2        }
- 892   1        return RET_FAIL;
- 893   1      }
- 894          
- 895          /*
- 896          parameter: 
- 897            none
- 898          return :
+ 893   2        }
+ 894   1        return RET_FAIL;
+ 895   1      }
+ 896          
+ 897          /*
+ 898          parameter: 
  899            none
- 900          */
- 901          RET_VAL mmi_dq_fs_del_rfid(unsigned char rfid_index)
- 902          {
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 16  
+ 900          return :
+ 901            none
+ 902          */
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 16  
 
- 903   1        if (rfid_index < MMI_DQ_FS_RFID_MAX_NUM && g_dq_fs_rfid[rfid_index].index == rfid_index)
- 904   1        {
- 905   2          g_dq_fs_rfid[rfid_index].index = 0xFF;
- 906   2          g_dq_fs_rfid[rfid_index].flag = FDS_USE_TYPE_INVALID;
- 907   2          memset(g_dq_fs_rfid[rfid_index].sec_data, 0xFF, sizeof(g_dq_fs_rfid[rfid_index].sec_data));
- 908   2          return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_
+ 903          RET_VAL mmi_dq_fs_del_rfid(unsigned char rfid_index)
+ 904          {
+ 905   1        if (rfid_index < MMI_DQ_FS_RFID_MAX_NUM && g_dq_fs_rfid[rfid_index].index == rfid_index)
+ 906   1        {
+ 907   2          g_dq_fs_rfid[rfid_index].index = 0xFF;
+ 908   2          g_dq_fs_rfid[rfid_index].flag = FDS_USE_TYPE_INVALID;
+ 909   2          memset(g_dq_fs_rfid[rfid_index].sec_data, 0xFF, sizeof(g_dq_fs_rfid[rfid_index].sec_data));
+ 910   2          return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_
              -RFID_MAX_NUM);
- 909   2        }
- 910   1        return RET_FAIL;
- 911   1      }
- 912          
- 913          /*
- 914          parameter: 
- 915            none
- 916          return :
+ 911   2        }
+ 912   1        return RET_FAIL;
+ 913   1      }
+ 914          
+ 915          /*
+ 916          parameter: 
  917            none
- 918          */
- 919          RET_VAL mmi_dq_fs_clr_rfid(void)
- 920          {
- 921   1        unsigned char i = 0;
- 922   1      
- 923   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
- 924   1        {
- 925   2          g_dq_fs_rfid[i].flag = FDS_USE_TYPE_INVALID;
- 926   2          g_dq_fs_rfid[i].index = 0xFF;
- 927   2          memset(g_dq_fs_rfid[i].sec_data, 0xFF, sizeof(g_dq_fs_rfid[i].sec_data));
- 928   2        }
- 929   1        return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_R
+ 918          return :
+ 919            none
+ 920          */
+ 921          RET_VAL mmi_dq_fs_clr_rfid(void)
+ 922          {
+ 923   1        unsigned char i = 0;
+ 924   1      
+ 925   1        for (i = 0; i < MMI_DQ_FS_RFID_MAX_NUM; i++)
+ 926   1        {
+ 927   2          g_dq_fs_rfid[i].flag = FDS_USE_TYPE_INVALID;
+ 928   2          g_dq_fs_rfid[i].index = 0xFF;
+ 929   2          memset(g_dq_fs_rfid[i].sec_data, 0xFF, sizeof(g_dq_fs_rfid[i].sec_data));
+ 930   2        }
+ 931   1        return mmi_dq_fds_write(MID_FDS_FILE_RF, (unsigned char *)g_dq_fs_rfid, sizeof(mmi_fs_rfid) * MMI_DQ_FS_R
              -FID_MAX_NUM);
- 930   1      }
- 931          
- 932          #endif
+ 932   1      }
  933          
- 934          #ifdef __LOCK_DECODE_SUPPORT__
- 935          /**
- 936            * @brief  检查发flash是否为空
- 937            * @param  none
- 938            * @return status
- 939            * @note   none
- 940            * @see    none
- 941            */
- 942          unsigned char mmi_dq_fs_get_decode_unuse_index(void)
- 943          {
- 944   1        unsigned char i;
- 945   1        unsigned char getdata[66];
- 946   1      
- 947   1        memset(&getdata, 0xff, sizeof(getdata));
- 948   1        mmi_dq_fds_read(MID_FDS_FILE_DECODE, getdata, 66);
- 949   1      
- 950   1        // dqiot_drv_uart0A_init();
- 951   1        // for (i = 0; i < 66; i++)
- 952   1        //  printf("getdata is %d\n", (int)getdata[i]);
- 953   1        // dqiot_drv_uart0B_init();
- 954   1      
- 955   1        for (i = 0; i < 66; i++)
- 956   1        {
- 957   2          if (getdata[i] == 0xFF)
- 958   2            return 0;
- 959   2        }
- 960   1      
- 961   1        return 0xFF;
- 962   1      }
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 17  
+ 934          #endif
+ 935          
+ 936          #ifdef __LOCK_DECODE_SUPPORT__
+ 937          /**
+ 938            * @brief  检查发flash是否为空
+ 939            * @param  none
+ 940            * @return status
+ 941            * @note   none
+ 942            * @see    none
+ 943            */
+ 944          unsigned char mmi_dq_fs_get_decode_unuse_index(void)
+ 945          {
+ 946   1        unsigned char i;
+ 947   1        unsigned char getdata[66];
+ 948   1      
+ 949   1        memset(&getdata, 0xff, sizeof(getdata));
+ 950   1        mmi_dq_fds_read(MID_FDS_FILE_DECODE, getdata, 66);
+ 951   1      
+ 952   1        // dqiot_drv_uart0A_init();
+ 953   1        // for (i = 0; i < 66; i++)
+ 954   1        //  printf("getdata is %d\n", (int)getdata[i]);
+ 955   1        // dqiot_drv_uart0B_init();
+ 956   1      
+ 957   1        for (i = 0; i < 66; i++)
+ 958   1        {
+ 959   2          if (getdata[i] == 0xFF)
+ 960   2            return 0;
+ 961   2        }
+ 962   1      
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 17  
 
- 963          #endif
- 964          
- 965          /*
- 966          parameter: 
- 967            none
- 968          return :
+ 963   1        return 0xFF;
+ 964   1      }
+ 965          #endif
+ 966          
+ 967          /*
+ 968          parameter: 
  969            none
- 970          */
- 971          RET_VAL mmi_dq_fs_set_open_mode(sys_open_mode mode)
- 972          {
- 973   1        if (g_dq_fs_init_set.open_mode == mode)
- 974   1          return RET_SUCESS;
- 975   1      
- 976   1        g_dq_fs_init_set.open_mode = mode;
- 977   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
- 978   1      }
- 979          /*
- 980          parameter: 
- 981            none
- 982          return :
+ 970          return :
+ 971            none
+ 972          */
+ 973          RET_VAL mmi_dq_fs_set_open_mode(sys_open_mode mode)
+ 974          {
+ 975   1        if (g_dq_fs_init_set.open_mode == mode)
+ 976   1          return RET_SUCESS;
+ 977   1      
+ 978   1        g_dq_fs_init_set.open_mode = mode;
+ 979   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+ 980   1      }
+ 981          /*
+ 982          parameter: 
  983            none
- 984          */
- 985          sys_open_mode mmi_dq_fs_get_open_mode(void)
- 986          {
- 987   1        return g_dq_fs_init_set.open_mode;
- 988   1      }
- 989          
- 990          /*
- 991          parameter: 
- 992            none
- 993          return :
+ 984          return :
+ 985            none
+ 986          */
+ 987          sys_open_mode mmi_dq_fs_get_open_mode(void)
+ 988          {
+ 989   1        return g_dq_fs_init_set.open_mode;
+ 990   1      }
+ 991          
+ 992          /*
+ 993          parameter: 
  994            none
- 995          */
- 996          RET_VAL mmi_dq_fs_set_pro_sound(unsigned char flag)
- 997          {
- 998   1        if (g_dq_fs_init_set.open_pro_sound == flag)
- 999   1          return RET_SUCESS;
-1000   1      
-1001   1        g_dq_fs_init_set.open_pro_sound = flag;
-1002   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-1003   1      }
-1004          
-1005          /*
-1006          parameter: 
-1007            none
-1008          return :
+ 995          return :
+ 996            none
+ 997          */
+ 998          RET_VAL mmi_dq_fs_set_pro_sound(unsigned char flag)
+ 999          {
+1000   1        if (g_dq_fs_init_set.open_pro_sound == flag)
+1001   1          return RET_SUCESS;
+1002   1      
+1003   1        g_dq_fs_init_set.open_pro_sound = flag;
+1004   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+1005   1      }
+1006          
+1007          /*
+1008          parameter: 
 1009            none
-1010          */
-1011          unsigned char mmi_dq_fs_get_pro_sound_state(void)
-1012          {
-1013   1        return g_dq_fs_init_set.open_pro_sound;
-1014   1      }
-1015          
-1016          /*
-1017          parameter: 
-1018            none
-1019          return :
+1010          return :
+1011            none
+1012          */
+1013          unsigned char mmi_dq_fs_get_pro_sound_state(void)
+1014          {
+1015   1        return g_dq_fs_init_set.open_pro_sound;
+1016   1      }
+1017          
+1018          /*
+1019          parameter: 
 1020            none
-1021          */
-1022          unsigned char mmi_dq_fs_get_init_flag(void)
-1023          {
-1024   1        return g_dq_fs_init_set.init_flag;
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 18  
+1021          return :
+1022            none
+1023          */
+1024          unsigned char mmi_dq_fs_get_init_flag(void)
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 18  
 
-1025   1      }
-1026          
-1027          /*
-1028          parameter: 
-1029            none
-1030          return :
+1025          {
+1026   1        return g_dq_fs_init_set.init_flag;
+1027   1      }
+1028          
+1029          /*
+1030          parameter: 
 1031            none
-1032          */
-1033          RET_VAL mmi_dq_fs_set_init_flag(unsigned char flag)
-1034          {
-1035   1        g_dq_fs_init_set.init_flag = flag;
-1036   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-1037   1      }
-1038          
-1039          /*
-1040          parameter: 
-1041            none
-1042          return :
+1032          return :
+1033            none
+1034          */
+1035          RET_VAL mmi_dq_fs_set_init_flag(unsigned char flag)
+1036          {
+1037   1        g_dq_fs_init_set.init_flag = flag;
+1038   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+1039   1      }
+1040          
+1041          /*
+1042          parameter: 
 1043            none
-1044          */
-1045          RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag)
-1046          {
-1047   1        g_dq_fs_init_set.factory_flag = flag;
-1048   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-1049   1      }
-1050          
-1051          /*
-1052          parameter: 
-1053            none
-1054          return :
+1044          return :
+1045            none
+1046          */
+1047          RET_VAL mmi_dq_fs_set_factory_flag(unsigned char flag)
+1048          {
+1049   1        g_dq_fs_init_set.factory_flag = flag;
+1050   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+1051   1      }
+1052          
+1053          /*
+1054          parameter: 
 1055            none
-1056          */
-1057          unsigned char mmi_dq_fs_get_factory_flag(void)
-1058          {
-1059   1        return g_dq_fs_init_set.factory_flag;
-1060   1      }
-1061          
-1062          /*
-1063          parameter: 
-1064            none
-1065          return :
+1056          return :
+1057            none
+1058          */
+1059          unsigned char mmi_dq_fs_get_factory_flag(void)
+1060          {
+1061   1        return g_dq_fs_init_set.factory_flag;
+1062   1      }
+1063          
+1064          /*
+1065          parameter: 
 1066            none
-1067          */
-1068          unsigned char mmi_dq_fs_get_admin_status(void)
-1069          {
-1070   1        return g_dq_fs_init_set.admin_status;
-1071   1      }
-1072          
-1073          /*
-1074          parameter: 
-1075            none
-1076          return :
+1067          return :
+1068            none
+1069          */
+1070          unsigned char mmi_dq_fs_get_admin_status(void)
+1071          {
+1072   1        return g_dq_fs_init_set.admin_status;
+1073   1      }
+1074          
+1075          /*
+1076          parameter: 
 1077            none
-1078          */
-1079          RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
-1080          {
-1081   1        g_dq_fs_init_set.admin_status = status;
-1082   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-1083   1      }
-1084          
-1085          #if 0
-              /*
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 19  
+1078          return :
+1079            none
+1080          */
+1081          RET_VAL mmi_dq_fs_set_admin_status(unsigned char status)
+1082          {
+1083   1        g_dq_fs_init_set.admin_status = status;
+1084   1        return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+1085   1      }
+1086          
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 19  
 
+1087          #if 0
+              /*
               parameter: 
                 none
               return :
@@ -1174,130 +1176,131 @@ line level    source
                 return g_dq_fs_init_set.wifi_flag;
               }
               #endif
-1109          
-1110          /*
-1111          parameter: 
-1112            none
-1113          return :
+1111          
+1112          /*
+1113          parameter: 
 1114            none
-1115          */
-1116          RET_VAL mmi_dq_fs_set_business_flag(unsigned char flag)
-1117          {
-1118   1      #if 1
-1119   1        if (flag != g_dq_fs_init_set.business_flag)
-1120   1        {
-1121   2          g_dq_fs_init_set.business_flag = flag;
-1122   2          return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
-1123   2        }
-1124   1      #else
+1115          return :
+1116            none
+1117          */
+1118          RET_VAL mmi_dq_fs_set_business_flag(unsigned char flag)
+1119          {
+1120   1      #if 1
+1121   1        if (flag != g_dq_fs_init_set.business_flag)
+1122   1        {
+1123   2          g_dq_fs_init_set.business_flag = flag;
+1124   2          return mmi_dq_fds_write(MID_FDS_FILE_SET, (unsigned char *)&g_dq_fs_init_set, sizeof(mmi_fs_setting));
+1125   2        }
+1126   1      #else
                 g_dq_fs_init_set.business_flag = flag;
               #endif
-1127   1        return RET_SUCESS;
-1128   1      }
-1129          
-1130          /*
-1131          parameter: 
-1132            none
-1133          return :
+1129   1        return RET_SUCESS;
+1130   1      }
+1131          
+1132          /*
+1133          parameter: 
 1134            none
-1135          */
-1136          unsigned char mmi_dq_fs_get_business_flag(void)
-1137          {
-1138   1        return g_dq_fs_init_set.business_flag;
-1139   1      }
-1140          
-1141          /************************************************************************************
-1142           *                     Own function                     *
-1143           ************************************************************************************/
-1144          #ifdef __LOCK_VIRTUAL_PASSWORD__
-              #ifdef __LOCK_VIRTUAL_PASSWORD__
-              uint8_t input_empty_pwd_len = 0;
-              unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
-              {
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 20  
+1135          return :
+1136            none
+1137          */
+1138          unsigned char mmi_dq_fs_get_business_flag(void)
+1139          {
+1140   1        return g_dq_fs_init_set.business_flag;
+1141   1      }
+1142          
+1143          /************************************************************************************
+1144           *                     Own function                     *
+1145           ************************************************************************************/
+1146          #ifdef __LOCK_VIRTUAL_PASSWORD__
+1147          #ifdef __LOCK_VIRTUAL_PASSWORD__
+1148          uint8_t input_empty_pwd_len = 0;
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 20  
 
-                unsigned char ret_val = 0xFF;
-                unsigned char admin_pwd[4];
-                unsigned char admin_password[8];
-                uint8_t admin_len = 0;
-                uint8_t i, k;
-              
-              #ifdef __LOCK_USE_MALLOC__
+1149          unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
+1150          {
+1151   1        unsigned char ret_val = 0xFF;
+1152   1        unsigned char admin_pwd[4];
+1153   1        unsigned char admin_password[8];
+1154   1        uint8_t admin_len = 0;
+1155   1        uint8_t i, k;
+1156   1      
+1157   1      #ifdef __LOCK_USE_MALLOC__
                 uint8_t ret;
                 g_dq_fs_pwd = (mmi_fs_pwd *)mmi_dq_fs_get_storage(DQ_FS_MEM_PWD, &ret);
               #endif
-              
-                memset(admin_password, 0xFF, 8);
-                for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
-                {
-                  if (g_dq_fs_pwd[i].flag != 0xFF && g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
-                  {
-                    for (k = 0; k < 4; k++)
-                    {
-                      admin_pwd[k] = g_dq_fs_pwd[i].key_pwd[k];
-                    }
-                    break;
-                  }
-                }
-              #ifdef __LOCK_USE_MALLOC__
+1161   1      
+1162   1        memset(admin_password, 0xFF, 8);
+1163   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+1164   1        {
+1165   2          if (g_dq_fs_pwd[i].flag != 0xFF && g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN)
+1166   2          {
+1167   3            for (k = 0; k < 4; k++)
+1168   3            {
+1169   4              admin_pwd[k] = g_dq_fs_pwd[i].key_pwd[k];
+1170   4            }
+1171   3            break;
+1172   3          }
+1173   2        }
+1174   1      
+1175   1      #ifdef __LOCK_USE_MALLOC__
                 mmi_dq_fs_free_storage(DQ_FS_MEM_PWD, (void **)&g_dq_fs_pwd);
               #endif
-              
-                mmi_dq_fs_pwd_byte_to_string(admin_pwd, admin_password);
-                for (i = 0; i < 8; i++)
-                {
-                  if (admin_password[i] == 0xFF)
-                    break;
-                }
-                admin_len = i;
-                if (len >= admin_len)
-                {
-                  for (i = 0; i <= len - admin_len; i++)
-                  {
-                    for (k = 0; k < admin_len; k++)
-                    {
-                      if (input_pwd[i + k] != admin_password[k])
-                        break;
-                    }
-                    if (k == admin_len)
-                    {
-                      // dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
-                      // mmi_dq_fs_check_input_pwd_from_app_cb(1);
-                      return 0;
-                    }
-                  }
-                }
-              
-                if (len == 8)
-                  input_empty_pwd_len = 1;
-                else
-                  input_empty_pwd_len = 0;
-              
-                for (i = 9; i >= 6; i--)
-                {
-                  if (len < i)
-                    continue;
-                  for (k = 0; k <= len - i; k++)
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 21  
+1178   1      
+1179   1        mmi_dq_fs_pwd_byte_to_string(admin_pwd, admin_password);
+1180   1        for (i = 0; i < 8; i++)
+1181   1        {
+1182   2          if (admin_password[i] == 0xFF)
+1183   2            break;
+1184   2        }
+1185   1        admin_len = i;
+1186   1        if (len >= admin_len)
+1187   1        {
+1188   2          for (i = 0; i <= len - admin_len; i++)
+1189   2          {
+1190   3            for (k = 0; k < admin_len; k++)
+1191   3            {
+1192   4              if (input_pwd[i + k] != admin_password[k])
+1193   4                break;
+1194   4            }
+1195   3      
+1196   3            if (k == admin_len)
+1197   3            {
+1198   4              dq_otp_add_temp_open_log(0, DQ_OPEN_LOG_ADMIN_PASSWORD, admin_pwd, 4);
+1199   4              mmi_dq_fs_check_input_pwd_from_app_cb(1);
+1200   4              return 0;
+1201   4            }
+1202   3          }
+1203   2        }
+1204   1      
+1205   1        if (len == 8)
+1206   1          input_empty_pwd_len = 1;
+1207   1        else
+1208   1          input_empty_pwd_len = 0;
+1209   1      
+1210   1        for (i = 9; i >= 6; i--)
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 21  
 
-                  {
-                    unsigned char password[5];
-                    memset(password, 0xFF, sizeof(password));
-                    // mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
-                    // ret_val = dq_otp_check_password_for_open(password, i);
-                    if (ret_val != 0)
-                    {
-                      return 0;
-                    }
-                  }
-                }
-              
-                //  mmi_dq_ms_idle_input_with_app_result(0xFF);
-              
-                return 0;
-              }
-              
-              #else
+1211   1        {
+1212   2          if (len < i)
+1213   2            continue;
+1214   2          for (k = 0; k <= len - i; k++)
+1215   2          {
+1216   3            unsigned char password[5];
+1217   3            memset(password, 0xFF, sizeof(password));
+1218   3            mmi_dq_fs_pwd_string_to_byte(input_pwd + k, i, password);
+1219   3            ret_val = dq_otp_check_password_for_open(password, i);
+1220   3            if (ret_val != 0)
+1221   3            {
+1222   4              return 0;
+1223   4            }
+1224   3          }
+1225   2        }
+1226   1      
+1227   1        //  mmi_dq_ms_idle_input_with_app_result(0xFF);
+1228   1      
+1229   1        return 0;
+1230   1      }
+1231          #else
               unsigned char mmi_dq_fs_check_input_pwd_from_app(unsigned char *input_pwd, unsigned char len)
               {
                 unsigned char password[5];
@@ -1323,49 +1326,95 @@ line level    source
                 return 0;
               }
               #endif
-              
-              //extern void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_val);
-              void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
-              {
-                if (ret_val != 1 && ret_val != 2 && ret_val != 4 && ret_val != 5 && ret_val != 6)
-                  ret_val = 0xFF;
-              
-                if (ret_val != 0xFF && ret_val != 4 && ret_val != 6)
-                  printfS("mmi_dq_fs_check_input_pwd_from_app", "right");
-                else
-                  printfS("mmi_dq_fs_check_input_pwd_from_app", "wrong");
-              
-              #ifdef __LOCK_VIRTUAL_PASSWORD__
+1257          
+1258          //extern void mmi_dq_ms_idle_input_with_app_result(unsigned char ret_val);
+1259          void mmi_dq_fs_check_input_pwd_from_app_cb(unsigned char ret_val)
+1260          {
+1261   1        if (ret_val != 1 && ret_val != 2 && ret_val != 4 && ret_val != 5 && ret_val != 6)
+1262   1          ret_val = 0xFF;
+1263   1      
+1264   1        if (ret_val != 0xFF && ret_val != 4 && ret_val != 6)
+1265   1          printfS("mmi_dq_fs_check_input_pwd_from_app", "right");
+1266   1        else
+1267   1          printfS("mmi_dq_fs_check_input_pwd_from_app", "wrong");
+1268   1      
+1269   1      #ifdef __LOCK_VIRTUAL_PASSWORD__1
               
                   // if (ret_val != 0xFF)
                   //  mmi_dq_ms_idle_input_with_app_result(ret_val);
-              #else
-                mmi_dq_ms_idle_input_with_app_result(ret_val);
-              #endif
-C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 11:59:07 PAGE 22  
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 22  
 
-              }
-              
-              unsigned char mmi_dq_fs_app_init_sucess(void)
-              {
-                if (g_dq_fs_init_set.init_flag == FDS_INIT_APP_SUC)
-                  return 1;
-                else
-                  return 0;
-              }
-              
-              #endif //__LOCK_VIRTUAL_PASSWORD__
-1284          /************************************************************************************
-1285           *                     End function                     *
-1286           ************************************************************************************/
-1287          
-1288          #endif
+              #else
+1274   1        // mmi_dq_ms_idle_input_with_app_result(ret_val);
+1275   1      #endif
+1276   1      }
+1277          
+1278          unsigned char mmi_dq_fs_app_init_sucess(void)
+1279          {
+1280   1        if (g_dq_fs_init_set.init_flag == FDS_INIT_APP_SUC)
+1281   1          return 1;
+1282   1        else
+1283   1          return 0;
+1284   1      }
+1285          
+1286          uint8_t mmi_dq_fs_check_app_admin_password(unsigned char *password)
+1287          {
+1288   1        uint8_t i, k;
+1289   1        uint8_t ret_val = 0xFF;
+1290   1      #ifdef __LOCK_USE_MALLOC__
+                uint8_t ret = 0;
+                g_dq_fs_pwd = (mmi_fs_pwd *)mmi_dq_fs_get_storage(DQ_FS_MEM_PWD, &ret);
+              #endif
+1294   1        for (i = 0; i < MMI_DQ_FS_PWD_MAX_NUM; i++)
+1295   1        {
+1296   2          if (g_dq_fs_pwd[i].flag != 0xFF)
+1297   2          {
+1298   3            for (k = 0; k < 4; k++)
+1299   3            {
+1300   4              if (password[k] != g_dq_fs_pwd[i].key_pwd[k])
+1301   4                break;
+1302   4            }
+1303   3            if (k == 4)
+1304   3            {
+1305   4              break;
+1306   4            }
+1307   3          }
+1308   2        }
+1309   1        if (i < MMI_DQ_FS_PWD_MAX_NUM)
+1310   1        {
+1311   2          if ((g_dq_fs_pwd[i].flag == FDS_USE_TYPE_ADMIN))
+1312   2            ret_val = i;
+1313   2          else
+1314   2            ret_val = 0xFF;
+1315   2        }
+1316   1        else
+1317   1          ret_val = 0xFF;
+1318   1      #ifdef __LOCK_USE_MALLOC__
+                mmi_dq_fs_free_storage(DQ_FS_MEM_PWD, (void **)&g_dq_fs_pwd);
+              #endif
+1321   1        return ret_val;
+1322   1      }
+1323          
+1324          void mmi_dq_fs_time_zone_pro(uint32_t *time)
+1325          {
+1326   1        // *time += (g_dq_fs_init_set.e_time_zone - g_dq_fs_init_set.w_time_zone);
+1327   1      }
+*** WARNING C280 IN LINE 1324 OF mmi_src\mmi_fs.c: 'time': unreferenced local variable
+1328          
+1329          #endif //__LOCK_VIRTUAL_PASSWORD__1
+1330          /************************************************************************************
+1331           *                     End function                     *
+1332           ************************************************************************************/
+1333          
+C51 COMPILER V9.59.0.0   MMI_FS                                                            04/28/2021 17:03:28 PAGE 23  
+
+1334          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   3998    ----
-   CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =    641     174
+   CODE SIZE        =   4833    ----
+   CONSTANT SIZE    =     47    ----
+   XDATA SIZE       =    642     206
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     15    ----
    IDATA SIZE       =   ----    ----
@@ -1377,4 +1426,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

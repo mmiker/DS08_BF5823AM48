@@ -40,7 +40,7 @@ extern otp_exchg_num g_pwd_signed_data[10];
 extern decode_data get_decode;
 extern decode_cmd exec_cmd;
 
-void decode_check_code(unsigned char *random_code);
+void decode_check_code(unsigned char *random_code, unsigned char len);
 void mmi_dq_decode_app_random_code(unsigned char *random_code);
 void decode_time_stamp_10num(unsigned char *pwd, unsigned char len, unsigned char *sec_key, unsigned char *exg_key);
 decode_status dq_otp_syn_start_time(unsigned char *p_data);

@@ -1,0 +1,14 @@
+C51 COMPILER V9.59.0.0   DQ_SDK_AES                                                        04/28/2021 16:43:43 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DQ_SDK_AES
+OBJECT MODULE PLACED IN .\output\dq_sdk_aes.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE mmi_src\dq_sdk_aes.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.\includ
+                    -e;.\Library\byd_standard_peripheral\include;.\byd_api\byd_key\include;.\byd_api\byd_mifare\include;.\byd_tool_comm;.\byd
+                    -_rfid;.\mmi_inc) DEBUG PRINT(.\list\dq_sdk_aes.lst) TABS(2) OBJECT(.\output\dq_sdk_aes.obj)
+
+line level    source
+
+*** ERROR C318 OF mmi_src\dq_sdk_aes.c: can't open file 'mmi_src\dq_sdk_aes.c'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
