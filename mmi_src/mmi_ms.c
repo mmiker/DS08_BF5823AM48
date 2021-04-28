@@ -465,8 +465,6 @@ void mmi_ms_pwd_opt_fun(unsigned char key_val)
 							//写flash
 							if (mmi_dq_fs_set_decode(FDS_USE_TYPE_ADMIN) == RET_SUCESS)
 							{
-								struct tm t;
-
 								//时间戳转时间
 								ntp(get_decode.tim_key_10, &t);
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 10:45:56 PAGE 1   
+C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 11:41:48 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MMI_TIME
@@ -19,268 +19,269 @@ line level    source
    8          #include "dqiot_drv.h"
    9          
   10          unsigned char temp_data[10] = {0xff};
-  11          
-  12          const char Days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  13          static time_t mon_yday[2][12] =
-  14              {
-  15                  {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
-  16                  {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335},
-  17          };
-  18          
-  19          /**
-  20            * @brief  时间戳除法取整
-  21            * @param  data 数组
-  22            * @param  x 除数
-  23            * @param  len 长度
-  24            * @param  dest 存入数组
-  25            * @return status
-  26            * @note   none
-  27            * @see    none
-  28            */
-  29          unsigned char division_int(unsigned char *p_data, unsigned int x, unsigned char len, unsigned char *dest)
-  30          {
-  31   1          unsigned char i, j;
-  32   1          unsigned long temp_int = 0, temp_rem = 0; //temp_int整数，temp_rem余数
-  33   1          unsigned char d_data[10];
-  34   1          unsigned char p_data_len = 10;
-  35   1      
-  36   1          /* 获取数据包长度 */
-  37   1          for (i = 0; i < len; i++)
-  38   1          {
-  39   2              if (p_data[i] == 0xff)
-  40   2              {
-  41   3                  p_data_len = i;
-  42   3                  break;
-  43   3              }
-  44   2          }
-  45   1      
-  46   1          memset(&d_data, 0xff, sizeof(d_data));
-  47   1          /* 计算除数 */
-  48   1          for (j = 0, i = 0; i < p_data_len; i++)
-  49   1          {
-  50   2              temp_int = (temp_rem * 10 + p_data[i]) / x;
-  51   2              temp_rem = (temp_rem * 10 + p_data[i]) % x;
-  52   2      
-  53   2              d_data[j] = temp_int;
-C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 10:45:56 PAGE 2   
+  11          tm t;
+  12          
+  13          const char Days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  14          static time_t mon_yday[2][12] =
+  15              {
+  16                  {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
+  17                  {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335},
+  18          };
+  19          
+  20          /**
+  21            * @brief  时间戳除法取整
+  22            * @param  data 数组
+  23            * @param  x 除数
+  24            * @param  len 长度
+  25            * @param  dest 存入数组
+  26            * @return status
+  27            * @note   none
+  28            * @see    none
+  29            */
+  30          unsigned char division_int(unsigned char *p_data, unsigned int x, unsigned char len, unsigned char *dest)
+  31          {
+  32   1          unsigned char i, j;
+  33   1          unsigned long temp_int = 0, temp_rem = 0; //temp_int整数，temp_rem余数
+  34   1          unsigned char d_data[10];
+  35   1          unsigned char p_data_len = 10;
+  36   1      
+  37   1          /* 获取数据包长度 */
+  38   1          for (i = 0; i < len; i++)
+  39   1          {
+  40   2              if (p_data[i] == 0xff)
+  41   2              {
+  42   3                  p_data_len = i;
+  43   3                  break;
+  44   3              }
+  45   2          }
+  46   1      
+  47   1          memset(&d_data, 0xff, sizeof(d_data));
+  48   1          /* 计算除数 */
+  49   1          for (j = 0, i = 0; i < p_data_len; i++)
+  50   1          {
+  51   2              temp_int = (temp_rem * 10 + p_data[i]) / x;
+  52   2              temp_rem = (temp_rem * 10 + p_data[i]) % x;
+  53   2      
+C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 11:41:48 PAGE 2   
 
-  54   2              j++;
-  55   2          }
-  56   1      
-  57   1          /* 去除开头的0 */
-  58   1          for (i = 0; i < len; i++)
-  59   1          {
-  60   2              if (d_data[i] != 0)
-  61   2                  break;
-  62   2          }
-  63   1      
-  64   1          /* 赋值  */
-  65   1          for (j = 0; j < len; j++)
-  66   1          {
-  67   2              if (i < len)
-  68   2              {
-  69   3                  dest[j] = d_data[i];
-  70   3                  i++;
-  71   3              }
-  72   2              else
-  73   2                  dest[j] = 0xff;
-  74   2          }
-  75   1      
-  76   1          // printf("p_data_len is %d\n", (int)p_data_len);
-  77   1          // for (i = 0; i < 10; i++)
-  78   1          //     printf("dest is %d\n", (int)dest[i]);
-  79   1          // printf("############\n");
-  80   1      
-  81   1          return 0;
-  82   1      }
-  83          
-  84          /**
-  85            * @brief  时间戳除法取余
-  86            * @param  data 数组
-  87            * @param  x 除数
-  88            * @param  len 长度
-  89            * @return status
-  90            * @note   none
-  91            * @see    none
-  92            */
-  93          unsigned long division_rem(unsigned char *p_data, unsigned int x, unsigned char len)
-  94          {
-  95   1          unsigned char i;
-  96   1          unsigned long temp_int = 0, temp_rem = 0; //temp_int整数，temp_rem余数
-  97   1          unsigned char p_data_len = 10;
-  98   1      
-  99   1          /* 获取数据包长度 */
- 100   1          for (i = 0; i < len; i++)
- 101   1          {
- 102   2              if (p_data[i] == 0xff)
- 103   2              {
- 104   3                  p_data_len = i;
- 105   3                  break;
- 106   3              }
- 107   2          }
- 108   1      
- 109   1          /* 计算除数 */
- 110   1          for (i = 0; i < p_data_len; i++)
- 111   1          {
- 112   2              temp_int = (temp_rem * 10 + p_data[i]) / x;
- 113   2              temp_rem = (temp_rem * 10 + p_data[i]) % x;
- 114   2          }
- 115   1      
-C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 10:45:56 PAGE 3   
+  54   2              d_data[j] = temp_int;
+  55   2              j++;
+  56   2          }
+  57   1      
+  58   1          /* 去除开头的0 */
+  59   1          for (i = 0; i < len; i++)
+  60   1          {
+  61   2              if (d_data[i] != 0)
+  62   2                  break;
+  63   2          }
+  64   1      
+  65   1          /* 赋值  */
+  66   1          for (j = 0; j < len; j++)
+  67   1          {
+  68   2              if (i < len)
+  69   2              {
+  70   3                  dest[j] = d_data[i];
+  71   3                  i++;
+  72   3              }
+  73   2              else
+  74   2                  dest[j] = 0xff;
+  75   2          }
+  76   1      
+  77   1          // printf("p_data_len is %d\n", (int)p_data_len);
+  78   1          // for (i = 0; i < 10; i++)
+  79   1          //     printf("dest is %d\n", (int)dest[i]);
+  80   1          // printf("############\n");
+  81   1      
+  82   1          return 0;
+  83   1      }
+  84          
+  85          /**
+  86            * @brief  时间戳除法取余
+  87            * @param  data 数组
+  88            * @param  x 除数
+  89            * @param  len 长度
+  90            * @return status
+  91            * @note   none
+  92            * @see    none
+  93            */
+  94          unsigned long division_rem(unsigned char *p_data, unsigned int x, unsigned char len)
+  95          {
+  96   1          unsigned char i;
+  97   1          unsigned long temp_int = 0, temp_rem = 0; //temp_int整数，temp_rem余数
+  98   1          unsigned char p_data_len = 10;
+  99   1      
+ 100   1          /* 获取数据包长度 */
+ 101   1          for (i = 0; i < len; i++)
+ 102   1          {
+ 103   2              if (p_data[i] == 0xff)
+ 104   2              {
+ 105   3                  p_data_len = i;
+ 106   3                  break;
+ 107   3              }
+ 108   2          }
+ 109   1      
+ 110   1          /* 计算除数 */
+ 111   1          for (i = 0; i < p_data_len; i++)
+ 112   1          {
+ 113   2              temp_int = (temp_rem * 10 + p_data[i]) / x;
+ 114   2              temp_rem = (temp_rem * 10 + p_data[i]) % x;
+ 115   2          }
+C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 11:41:48 PAGE 3   
 
- 116   1          return temp_rem;
- 117   1      }
- 118          
- 119          /**
- 120            * @brief  时间戳转换时间
- 121            * @param  decode_time 时间戳
- 122            * @param  t 存放地址
- 123            * @return none
- 124            * @note   none
- 125            * @see    none
- 126            */
- 127          void ntp(unsigned char *decode_time, struct tm *t)
- 128          {
- 129   1          unsigned long time = 0;
- 130   1          unsigned long Pass4year;
- 131   1          int hours_per_year;
- 132   1      
- 133   1          //取秒时间
- 134   1          t->tm_sec = division_rem(decode_time, 60, 10);
- 135   1          division_int(decode_time, 60, 10, temp_data);
- 136   1      
- 137   1          //取分钟时间
- 138   1          t->tm_min = division_rem(temp_data, 60, 10);
- 139   1          division_int(temp_data, 60, 10, temp_data);
- 140   1          time = CharToInt_long(temp_data, 10);
- 141   1      
- 142   1          //取过去多少个四年，每四年有 1461*24 小时
- 143   1          Pass4year = (time / (1461L * 24L));
- 144   1      
- 145   1          //计算年份
- 146   1          t->tm_year = (Pass4year << 2) + 1970;
- 147   1      
- 148   1          //四年中剩下的小时数
- 149   1          time %= 1461L * 24L;
- 150   1      
- 151   1          //校正闰年影响的年份，计算一年中剩下的小时数
- 152   1          for (;;)
- 153   1          {
- 154   2              /* 一年的小时数 */
- 155   2              hours_per_year = 365 * 24;
- 156   2              /* 判断闰年 */
- 157   2              if ((t->tm_year & 3) == 0)
- 158   2              {
- 159   3                  /* 是闰年，一年则多24小时，即一天 */
- 160   3                  hours_per_year += 24;
- 161   3              }
- 162   2              if (time < hours_per_year)
- 163   2              {
- 164   3                  break;
- 165   3              }
- 166   2              t->tm_year++;
- 167   2              time -= hours_per_year;
- 168   2          }
- 169   1      
- 170   1          /* 小时数 */
- 171   1          t->tm_hour = (int)(time % 24);
- 172   1          /* 一年中剩下的天数 */
- 173   1          time /= 24;
- 174   1          /* 假定为闰年 */
- 175   1          time++;
- 176   1          /* 校正闰年的误差，计算月份，日期 */
- 177   1          if ((t->tm_year & 3) == 0)
-C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 10:45:56 PAGE 4   
+ 116   1      
+ 117   1          return temp_rem;
+ 118   1      }
+ 119          
+ 120          /**
+ 121            * @brief  时间戳转换时间
+ 122            * @param  decode_time 时间戳
+ 123            * @param  t 存放地址
+ 124            * @return none
+ 125            * @note   none
+ 126            * @see    none
+ 127            */
+ 128          void ntp(unsigned char *decode_time, struct tm *t)
+ 129          {
+ 130   1          unsigned long time = 0;
+ 131   1          unsigned long Pass4year;
+ 132   1          int hours_per_year;
+ 133   1      
+ 134   1          //取秒时间
+ 135   1          t->tm_sec = division_rem(decode_time, 60, 10);
+ 136   1          division_int(decode_time, 60, 10, temp_data);
+ 137   1      
+ 138   1          //取分钟时间
+ 139   1          t->tm_min = division_rem(temp_data, 60, 10);
+ 140   1          division_int(temp_data, 60, 10, temp_data);
+ 141   1          time = CharToInt_long(temp_data, 10);
+ 142   1      
+ 143   1          //取过去多少个四年，每四年有 1461*24 小时
+ 144   1          Pass4year = (time / (1461L * 24L));
+ 145   1      
+ 146   1          //计算年份
+ 147   1          t->tm_year = (Pass4year << 2) + 1970;
+ 148   1      
+ 149   1          //四年中剩下的小时数
+ 150   1          time %= 1461L * 24L;
+ 151   1      
+ 152   1          //校正闰年影响的年份，计算一年中剩下的小时数
+ 153   1          for (;;)
+ 154   1          {
+ 155   2              /* 一年的小时数 */
+ 156   2              hours_per_year = 365 * 24;
+ 157   2              /* 判断闰年 */
+ 158   2              if ((t->tm_year & 3) == 0)
+ 159   2              {
+ 160   3                  /* 是闰年，一年则多24小时，即一天 */
+ 161   3                  hours_per_year += 24;
+ 162   3              }
+ 163   2              if (time < hours_per_year)
+ 164   2              {
+ 165   3                  break;
+ 166   3              }
+ 167   2              t->tm_year++;
+ 168   2              time -= hours_per_year;
+ 169   2          }
+ 170   1      
+ 171   1          /* 小时数 */
+ 172   1          t->tm_hour = (int)(time % 24);
+ 173   1          /* 一年中剩下的天数 */
+ 174   1          time /= 24;
+ 175   1          /* 假定为闰年 */
+ 176   1          time++;
+ 177   1          /* 校正闰年的误差，计算月份，日期 */
+C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 11:41:48 PAGE 4   
 
- 178   1          {
- 179   2              if (time > 60)
- 180   2              {
- 181   3                  time--;
- 182   3              }
- 183   2              else
- 184   2              {
- 185   3                  if (time == 60)
- 186   3                  {
- 187   4                      t->tm_mon = 1;
- 188   4                      t->tm_mday = 29;
- 189   4                      return;
- 190   4                  }
- 191   3              }
- 192   2          }
- 193   1          /* 计算月日 */
- 194   1          for (t->tm_mon = 0; Days[t->tm_mon] < time; t->tm_mon++)
- 195   1          {
- 196   2              time -= Days[t->tm_mon];
- 197   2          }
- 198   1      
- 199   1          t->tm_mday = (int)(time);
- 200   1      
- 201   1          // printf("A %d-%d-%d %d:%d:%d\r\n", t->tm_year, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->
+ 178   1          if ((t->tm_year & 3) == 0)
+ 179   1          {
+ 180   2              if (time > 60)
+ 181   2              {
+ 182   3                  time--;
+ 183   3              }
+ 184   2              else
+ 185   2              {
+ 186   3                  if (time == 60)
+ 187   3                  {
+ 188   4                      t->tm_mon = 1;
+ 189   4                      t->tm_mday = 29;
+ 190   4                      return;
+ 191   4                  }
+ 192   3              }
+ 193   2          }
+ 194   1          /* 计算月日 */
+ 195   1          for (t->tm_mon = 0; Days[t->tm_mon] < time; t->tm_mon++)
+ 196   1          {
+ 197   2              time -= Days[t->tm_mon];
+ 198   2          }
+ 199   1      
+ 200   1          t->tm_mday = (int)(time);
+ 201   1      
+ 202   1          // printf("A %d-%d-%d %d:%d:%d\r\n", t->tm_year, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->
              -tm_sec);
- 202   1          // printf("############\n");
- 203   1      
- 204   1          return;
- 205   1      }
- 206          
- 207          /**
- 208            * @brief  计算秒数
- 209            * @param  年
- 210            * @return 秒数
- 211            * @note   none
- 212            * @see    none
- 213            */
- 214          int isleap(int year)
- 215          {
- 216   1          return (year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0);
- 217   1      }
- 218          
- 219          /**
- 220            * @brief  时间转化成时间戳
- 221            * @param  时间
- 222            * @return 时间戳
- 223            * @note   none
- 224            * @see    none
- 225            */
- 226          time_t mktime(struct tm dt)
- 227          {
- 228   1          time_t result;
- 229   1          int i = 0;
- 230   1          // 以平年时间计算的秒数
- 231   1          result = (dt.tm_year - 1970) * 365 * 24 * 3600 +
- 232   1                   (mon_yday[isleap(dt.tm_year)][dt.tm_mon - 1] + dt.tm_mday - 1) * 24 * 3600 +
- 233   1                   dt.tm_hour * 3600 + dt.tm_min * 60 + dt.tm_sec;
- 234   1          // 加上闰年的秒数
- 235   1          for (i = 1970; i < dt.tm_year; i++)
- 236   1          {
- 237   2              if (isleap(i))
- 238   2              {
-C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 10:45:56 PAGE 5   
+ 203   1          // printf("############\n");
+ 204   1      
+ 205   1          return;
+ 206   1      }
+ 207          
+ 208          /**
+ 209            * @brief  计算秒数
+ 210            * @param  年
+ 211            * @return 秒数
+ 212            * @note   none
+ 213            * @see    none
+ 214            */
+ 215          int isleap(int year)
+ 216          {
+ 217   1          return (year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0);
+ 218   1      }
+ 219          
+ 220          /**
+ 221            * @brief  时间转化成时间戳
+ 222            * @param  时间
+ 223            * @return 时间戳
+ 224            * @note   none
+ 225            * @see    none
+ 226            */
+ 227          time_t mktime(struct tm dt)
+ 228          {
+ 229   1          time_t result;
+ 230   1          int i = 0;
+ 231   1          // 以平年时间计算的秒数
+ 232   1          result = (dt.tm_year - 1970) * 365 * 24 * 3600 +
+ 233   1                   (mon_yday[isleap(dt.tm_year)][dt.tm_mon - 1] + dt.tm_mday - 1) * 24 * 3600 +
+ 234   1                   dt.tm_hour * 3600 + dt.tm_min * 60 + dt.tm_sec;
+ 235   1          // 加上闰年的秒数
+ 236   1          for (i = 1970; i < dt.tm_year; i++)
+ 237   1          {
+ 238   2              if (isleap(i))
+C51 COMPILER V9.59.0.0   MMI_TIME                                                          04/28/2021 11:41:48 PAGE 5   
 
- 239   3                  result += 24 * 3600;
- 240   3              }
- 241   2          }
- 242   1          return (result);
- 243   1      }
- 244          
- 245          // /* 使用方法 */
- 246          // void main()
- 247          // {
- 248          //     struct tm t;
- 249          //     get_decode.tim_key_10 = 1619063988;
- 250          //     ntp(get_decode.tim_key_10, &t);
- 251          //     printf("A %d-%d-%d %d:%d:%d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm
+ 239   2              {
+ 240   3                  result += 24 * 3600;
+ 241   3              }
+ 242   2          }
+ 243   1          return (result);
+ 244   1      }
+ 245          
+ 246          // /* 使用方法 */
+ 247          // void main()
+ 248          // {
+ 249          //     struct tm t;
+ 250          //     get_decode.tim_key_10 = 1619063988;
+ 251          //     ntp(get_decode.tim_key_10, &t);
+ 252          //     printf("A %d-%d-%d %d:%d:%d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm
              -_sec);
- 252          //     return;
- 253          // }
- 254          
- 255          #endif //__LOCK_DECODE_SUPPORT__
- 256          #endif
+ 253          //     return;
+ 254          // }
+ 255          
+ 256          #endif //__LOCK_DECODE_SUPPORT__
+ 257          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   2091    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     70      74
+   XDATA SIZE       =     82      74
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

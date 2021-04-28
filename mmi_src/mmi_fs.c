@@ -947,10 +947,10 @@ unsigned char mmi_dq_fs_get_decode_unuse_index(void)
 	memset(&getdata, 0xff, sizeof(getdata));
 	mmi_dq_fds_read(MID_FDS_FILE_DECODE, getdata, 66);
 
-	dqiot_drv_uart0A_init();
-	for (i = 0; i < 66; i++)
-		printf("getdata is %d\n", (int)getdata[i]);
-	dqiot_drv_uart0B_init();
+	// dqiot_drv_uart0A_init();
+	// for (i = 0; i < 66; i++)
+	// 	printf("getdata is %d\n", (int)getdata[i]);
+	// dqiot_drv_uart0B_init();
 
 	for (i = 0; i < 66; i++)
 	{

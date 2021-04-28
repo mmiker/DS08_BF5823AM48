@@ -13,7 +13,7 @@
 #include "mmi_motor.h"
 #include "mmi_wifi.h"
 #include "mmi_decode.h"
-// #include <stdio.h>
+#include <stdio.h>
 
 #ifdef __LOCK_VIRTUAL_PASSWORD__
 #include "mmi_rtc.h"
@@ -44,6 +44,9 @@ static unsigned char g_timer2_flag = 0;
 static unsigned char g_wifi_check_flag = 0;
 static unsigned char g_wifi_check_count = 0;
 static unsigned char g_wifi_check_type = 0;
+
+/* clock */
+static unsigned char g_clock_flag = 0;
 
 /* RFID */
 static unsigned char g_rfid_flag = 0;
@@ -441,6 +444,107 @@ void System_timer_event_handler(void)
 	SYS_BASE_STATUS state = mmi_dq_ms_get_sys_state();
 
 	g_rfid_flag = 1; /* RFID */
+
+	/* clock */
+	g_clock_flag++;
+	if (g_clock_flag == 10)
+	{
+		g_clock_flag = 0;
+		/* 秒 */
+		if (t.tm_sec < 59)
+			t.tm_sec++;
+		else
+		{
+			t.tm_sec = 0;
+			/* 分 */
+			if (t.tm_min < 59)
+				t.tm_min++;
+			else
+			{
+				t.tm_min = 0;
+				/* 时 */
+				if (t.tm_hour < 23)
+					t.tm_hour++;
+				else
+				{
+					t.tm_hour = 0;
+					/* 日 */
+					if (t.tm_mon == 1 || t.tm_mon == 3 || t.tm_mon == 5 || t.tm_mon == 7 || t.tm_mon == 8 || t.tm_mon == 10 || t.tm_mon == 12)
+					{
+						if (t.tm_mday < 30)
+							t.tm_mday++;
+						else
+						{
+							t.tm_mday = 1;
+							/* 月 */
+							if (t.tm_mon < 11)
+								t.tm_mon++;
+							else
+							{
+								t.tm_mon = 1;
+								t.tm_year++;
+							}
+						}
+					}
+					else if (t.tm_mon == 4 || t.tm_mon == 6 || t.tm_mon == 9 || t.tm_mon == 11)
+					{
+						if (t.tm_mday < 29)
+							t.tm_mday++;
+						else
+						{
+							t.tm_mday = 1;
+							/* 月 */
+							if (t.tm_mon < 11)
+								t.tm_mon++;
+							else
+							{
+								t.tm_mon = 1;
+								t.tm_year++;
+							}
+						}
+					}
+					else if (t.tm_mon == 2)
+					{
+						//判断闰年 1.能被4整除而不能被100整除。2.能被100整除也能被400整除。
+						if ((t.tm_year % 4 == 0 && t.tm_year % 100 > 0) || (t.tm_year % 100 == 0 && t.tm_year % 400 == 0))
+						{
+							if (t.tm_mday < 28)
+								t.tm_mday++;
+							else
+							{
+								t.tm_mday = 1;
+								/* 月 */
+								if (t.tm_mon < 11)
+									t.tm_mon++;
+								else
+								{
+									t.tm_mon = 1;
+									t.tm_year++;
+								}
+							}
+						}
+						else
+						{
+							if (t.tm_mday < 27)
+								t.tm_mday++;
+							else
+							{
+								t.tm_mday = 1;
+								/* 月 */
+								if (t.tm_mon < 11)
+									t.tm_mon++;
+								else
+								{
+									t.tm_mon = 1;
+									t.tm_year++;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	if (g_timer2_flag == 1)
 	{
@@ -1060,6 +1164,11 @@ static void mmi_dq_sys_clear_rf(void)
   */
 void mmi_dq_sys_add_decode(void)
 {
+	dqiot_drv_uart0A_init();
+	printf("###############\n");
+	printf("A %04d-%02d-%02d %02d:%02d:%02d\r\n", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour + 8, t.tm_min, t.tm_sec);
+	dqiot_drv_uart0B_init();
+
 	if (mmi_dq_fs_get_decode_unuse_index() == 0xFF)
 	{
 #ifdef __LOCK_AUDIO_SUPPORT__

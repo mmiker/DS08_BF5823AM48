@@ -8,6 +8,7 @@
 #include "dqiot_drv.h"
 
 unsigned char temp_data[10] = {0xff};
+tm t;
 
 const char Days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 static time_t mon_yday[2][12] =

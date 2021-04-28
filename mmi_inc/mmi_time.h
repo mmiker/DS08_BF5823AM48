@@ -7,7 +7,7 @@
 typedef unsigned int time_t;
 extern unsigned char temp_data[10];
 
-struct tm
+typedef struct tm
 {
     int tm_sec;  /* 秒 – 取值区间为[0,59] */
     int tm_min;  /* 分 - 取值区间为[0,59] */
@@ -15,7 +15,8 @@ struct tm
     int tm_mday; /* 一个月中的日期 - 取值区间为[1,31] */
     int tm_mon;  /* 月份（从一月开始，0代表一月） - 取值区间为[0,11] */
     int tm_year; /* 年份，其值等于实际年份减去1900 */
-};
+} tm;
+extern tm t;
 
 unsigned char division_int(unsigned char *p_data, unsigned int x, unsigned char len, unsigned char *dest);
 unsigned long division_rem(unsigned char *p_data, unsigned int x, unsigned char len);
